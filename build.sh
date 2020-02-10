@@ -177,6 +177,9 @@ makedist()
 
 	echo Copying ximc.h
 	cp $DL/macosx/ximc.h $DISTLIB/
+	
+	echo Copying license
+	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
 	for example in testapp testappeasy testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks; do
