@@ -8,16 +8,24 @@ import re
 
 if sys.version_info >= (3,0):
     import urllib.parse
+
+# Dependences
     
+# For correct usage of the library libximc,
+# you need to add the file pyximc.py wrapper with the structures of the library to python path.
 cur_dir = os.path.abspath(os.path.dirname(__file__))
 ximc_dir = os.path.join(cur_dir, "..", "..", "ximc")
 ximc_package_dir = os.path.join(ximc_dir, "crossplatform", "wrappers", "python")
-sys.path.append(ximc_package_dir)  # add ximc.py wrapper to python path
+sys.path.append(ximc_package_dir)  # add pyximc.py wrapper to python path
 
+# Depending on your version of Windows, add the path to the required DLLs to the environment variable
+# bindy.dll
+# libximc.dll
+# xiwrapper.dll
 if platform.system() == "Windows":
     arch_dir = "win64" if "64" in platform.architecture()[0] else "win32"
     libdir = os.path.join(ximc_dir, arch_dir)
-    os.environ["Path"] = libdir + ";" + os.environ["Path"]  # add dll
+    os.environ["Path"] = libdir + ";" + os.environ["Path"]  # add dll path into an environment variable
 
 try: 
     from pyximc import *

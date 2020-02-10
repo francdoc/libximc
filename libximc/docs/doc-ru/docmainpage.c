@@ -330,6 +330,7 @@
  * \section howtouse_python_sec Python
  *
  * Измените текущую директорию на examples/testpython.
+ * Для корректного использования библиотеки libximc, в примере используется файл обертка, crossplatform\wrappers\python\pyximc.py с описанием структур библиотеки.
  *
  * Перед запуском:
  *
@@ -341,7 +342,8 @@
  * export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
  * \endcode
  *
- * На Windows: перед запуском ничего делать не нужно
+ * На Windows: перед запуском ничего делать не нужно. Все необходимые связи и зависимости прописаны в коде примера.
+ * Используются библиотеки: bindy.dll, libximc.dll, xiwrapper.dll. Расположенные в папке для соответствующих версий Windows.
  *
  * Запустите Python 2 или Python 3:
  * \code

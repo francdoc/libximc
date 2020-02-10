@@ -332,6 +332,7 @@
  * \section howtouse_python_sec Python
  *
  * Change current directory to the examples/testpython.
+ * For correct usage of the library libximc, the example uses the file wrapper, crossplatform\wrappers\python\pyximc.py with a description of the structures of the library.
  *
  * Before launch:
  *
@@ -343,7 +344,8 @@
  * export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
  * \endcode
  *
- * On Windows before the start nothing needs to be done
+ * On Windows before the start nothing needs to be done. All necessary communication and dependencies are registered in the example code.
+ * Libraries used: bindy.dll libximc.dll xiwrapper.dll. Located in the folder for the respective versions of Windows.
  *
  * Launch Python 2 or Python 3:
  * \code
