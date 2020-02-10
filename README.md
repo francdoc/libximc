@@ -1,1 +1,0 @@
-xidcusb-git
