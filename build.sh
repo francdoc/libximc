@@ -226,7 +226,7 @@ makedist()
 	done
 
 	echo Fetching sources
-	CURREV=`$GIT show-ref --hash HEAD`
+	CURREV=`$GIT show-ref --hash --head HEAD`
 	if [ -z "$CURREV" ] ; then
 		echo Can\'t determine current revision
 		exit 1
