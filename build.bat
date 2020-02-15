@@ -1,4 +1,5 @@
 @if 'x%MERCURIAL%'=='x' set MERCURIAL=hg
+@if 'x%GIT%'=='x' set GIT=git
 :: reset errorrevel
 @cmd /C exit 0
 
@@ -59,10 +60,8 @@ exit /B 1
 :: ----------------------------
 :: ---------- clean -----------
 :CLEAN
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR%
 @if not %errorlevel% == 0 goto FAIL
-::  %MERCURIAL% update -c
-::  @if not %errorlevel% == 0 goto FAIL
 @if exist %DISTDIR% rmdir /S /Q %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 goto :eof
@@ -197,7 +196,7 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @echo Building libximc for %ARCH%...
 @set BINDIR=%CONFIGURATION%-%ARCH%
 
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -227,7 +226,7 @@ copy libximc\include\ximc.h %DISTARCH%
 @set DISTARCH=%DISTDIR%\%1
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
 
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -250,7 +249,7 @@ copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 @echo Generating pascal wrapper
 @set DISTARCH=%DISTDIR%\win32
 
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
 msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
@@ -274,7 +273,7 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 @set GENDIR=wrappers\java\gen
 @set BINDIR=%CONFIGURATION%-%ARCH%\
 
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
 @if not exist %GENDIR% mkdir %GENDIR%
@@ -346,7 +345,7 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ------------------------------
 :: ---------- examples ---------- 
 :EXAMPLES
-%MERCURIAL% purge -a -X %DEPSDIR%
+%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
 @set NAME=testapp

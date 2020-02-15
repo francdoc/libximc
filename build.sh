@@ -2,6 +2,7 @@
 set -e
 
 [ -n "$MERCURIAL" ] || MERCURIAL=hg
+[ -n "$GIT" ] || GIT=git
 BASEROOT=`pwd`
 LOCAL=`pwd`/dist/local
 DEPS=`pwd`/deps
@@ -222,14 +223,15 @@ makedist()
 	done
 
 	echo Fetching sources
-	CURREV=`$MERCURIAL identify -i | sed 's#+$##'`
+	CURREV=`$GIT show-ref --hash HEAD`
 	if [ -z "$CURREV" ] ; then
-		echo Can\'t determine current hg revision
+		echo Can\'t determine current revision
 		exit 1
 	fi
 	echo Using revision $CURREV
-	$MERCURIAL clone -u $CURREV . dist/ximc-$VER-src
-	rm -rf dist/ximc-$VER-src/.hg* dist/ximc-$VER-src/docs
+	$GIT clone . dist/ximc-$VER-src
+	$GIT -C dist/ximc-$VER-src checkout $CURREV
+	rm -rf dist/ximc-$VER-src/.hg* dist/ximc-$VER-src/.git* dist/ximc-$VER-src/docs
 
 	find dist/ximc-$VER* \( -name .DS_Store -or -name \*.swp -or -name '._*' \) -print -delete
 
@@ -246,16 +248,11 @@ clean()
 
 clean_all_modified()
 {
-	echo ATTENTION! Cleaning all modified files!
-	$MERCURIAL purge -h > /dev/null
-	if [ "$?" != "0" ] ; then
-		echo No hg purge extension found
-		exit 1
-	fi
-	echo Purging hg stale files...
-	$MERCURIAL purge -a
-	echo Dumping hg stat...
-	$MERCURIAL status
+	echo ATTENTION! Cleaning all modified and new files!
+	$GIT reset --hard
+	$GIT clean -xdf
+	echo Dumping stat...
+	$GIT status
 }
 
 build_to_local()

@@ -35,14 +35,14 @@ makedist()
 # ---------------------
 # entry point
 
-[ -n "$MERCURIAL" ] || MERCURIAL=hg
+[ -n "$GIT" ] || GIT=git
 
 echo Using jenkins at $JENKINS_HOME, node $NODE_NAME
 echo Using parameters $NODE_LABELS, starter $0, command line $*
-echo Use hg revision $XIMC_REVISION
+echo Use git revision $XIMC_REVISION
 
-echo hgup effective version:
-$MERCURIAL identify
+echo git effective version:
+$GIT log -1 HEAD
 
 # dist override all other
 if [ "$1" = "dist" ] ; then
