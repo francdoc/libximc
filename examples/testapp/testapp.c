@@ -175,6 +175,7 @@ int main (int argc, char* argv[])
 	emf_settings_t emf_settings;
 	engine_advansed_setup_t eas_settings;
 	extended_settings_t est_settings;
+	(void)est_settings;
 
 
 	int names_count;
