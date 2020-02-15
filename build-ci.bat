@@ -1,9 +1,9 @@
 @echo Using jenkins at %JENKINS_HOME%, node %NODE_NAME%
 @echo Using parameters %NODE_LABELS%
-@echo Use hg revision %XIMC_REVISION%
+@echo Use git revision %XIMC_REVISION%
 @echo Use JDK %JDK_HOME%
 
-@if 'x%MERCURIAL%'=='x' set MERCURIAL=hg
+@if 'x%GIT%'=='x' set GIT=git
 @if "x%JDK_HOME%"=='x' goto FAIL
 
 set BASEDIR=%CD%
@@ -11,22 +11,15 @@ set BASEDIR=%CD%
 @cmd /C exit 0
 
 :: Build hash could be specified by jenkins
-@if 'x%XIMC_REVISION%' NEQ 'x' @set MERCURIAL_SUFFIX=-r %XIMC_REVISION%
-@echo Using checkout command: hg update -c %MERCURIAL_SUFFIX%
+@if 'x%XIMC_REVISION%' NEQ 'x' @set GIT_SUFFIX=%XIMC_REVISION%
 @if 'x%SKIP_CLEAN_CHECKOUT%' NEQ 'x' goto SKIP_CLEAN_CHECKOUT
-:: pull again because working copy often contain only one branch
-%MERCURIAL% pull
-@if not %errorlevel% == 0 goto FAIL
-:: update -c fails on uncommited changes
-%MERCURIAL% update -c %MERCURIAL_SUFFIX%
+%GIT% checkout -f %GIT_SUFFIX%
 @if not %errorlevel% == 0 goto FAIL
 
 :SKIP_CLEAN_CHECKOUT
-:: purge drop all non-added files
-%MERCURIAL% purge -a
+:: drop all non-added files
+%GIT% clean -xdf
 @if not %errorlevel% == 0 goto FAIL
-::  %MERCURIAL% update -c
-::  @if not %errorlevel% == 0 goto FAIL
 @if exist %DISTDIR% rmdir /S /Q %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
