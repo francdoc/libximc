@@ -7,7 +7,8 @@
 @set DISTDIR=ximc
 @set DEPSDIR=deps
 
-@set GIT="%ProgramFiles%\Git\bin\git.exe" 
+:: set by CI
+:: @set GIT="%ProgramFiles%\Git\bin\git.exe"
 @set CMAKE="%ProgramFiles(x86)%\CMake\bin\cmake.exe" 
 
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
