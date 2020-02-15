@@ -3,7 +3,7 @@
 @echo Use git revision %XIMC_REVISION%
 @echo Use JDK %JDK_HOME%
 
-@if 'x%GIT%'=='x' set GIT=git
+@if "x%GIT%"=='x' set GIT=git
 @if "x%JDK_HOME%"=='x' goto FAIL
 
 set BASEDIR=%CD%
