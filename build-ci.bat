@@ -13,12 +13,12 @@ set BASEDIR=%CD%
 :: Build hash could be specified by jenkins
 @if 'x%XIMC_REVISION%' NEQ 'x' @set GIT_SUFFIX=%XIMC_REVISION%
 @if 'x%SKIP_CLEAN_CHECKOUT%' NEQ 'x' goto SKIP_CLEAN_CHECKOUT
-%GIT% checkout -f %GIT_SUFFIX%
+"%GIT%" checkout -f %GIT_SUFFIX%
 @if not %errorlevel% == 0 goto FAIL
 
 :SKIP_CLEAN_CHECKOUT
 :: drop all non-added files
-%GIT% clean -xdf
+"%GIT%" clean -xdf
 @if not %errorlevel% == 0 goto FAIL
 @if exist %DISTDIR% rmdir /S /Q %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL

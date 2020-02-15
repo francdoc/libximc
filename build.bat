@@ -61,7 +61,7 @@ exit /B 1
 :: ----------------------------
 :: ---------- clean -----------
 :CLEAN
-%GIT% clean -xdf --exclude %DEPSDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if exist %DISTDIR% rmdir /S /Q %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -112,17 +112,17 @@ mkdir %DISTARCH%\bindy
 @set URL="https://github.com/EPC-MSU/Bindy.git"
 ::@set URL=%USERPROFILE%\Documents\bindy
 
-%GIT% clone --recursive %URL% %DISTARCH%\bindy
+"%GIT%" clone --recursive %URL% %DISTARCH%\bindy
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\bindy
-%GIT% checkout %BINDYVER%
+"%GIT%" checkout %BINDYVER%
 @if not %errorlevel% == 0 goto FAIL
-%GIT% submodule update --init --recursive
+"%GIT%" submodule update --init --recursive
 @if not %errorlevel% == 0 goto FAIL
-%GIT% submodule update --recursive
+"%GIT%" submodule update --recursive
 @if not %errorlevel% == 0 goto FAIL
 
-%GIT% --no-pager show --stat %BINDYVER%
+"%GIT%" --no-pager show --stat %BINDYVER%
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 %CMAKE% -G "%GENERATOR%" .
@@ -197,7 +197,7 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @echo Building libximc for %ARCH%...
 @set BINDIR=%CONFIGURATION%-%ARCH%
 
-%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -227,7 +227,7 @@ copy libximc\include\ximc.h %DISTARCH%
 @set DISTARCH=%DISTDIR%\%1
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
 
-%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -250,7 +250,7 @@ copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 @echo Generating pascal wrapper
 @set DISTARCH=%DISTDIR%\win32
 
-%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
 msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
@@ -274,7 +274,7 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 @set GENDIR=wrappers\java\gen
 @set BINDIR=%CONFIGURATION%-%ARCH%\
 
-%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
 @if not exist %GENDIR% mkdir %GENDIR%
@@ -346,7 +346,7 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ------------------------------
 :: ---------- examples ---------- 
 :EXAMPLES
-%GIT% clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
+"%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
 @set NAME=testapp
