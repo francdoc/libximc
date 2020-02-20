@@ -173,13 +173,7 @@ int main (int argc, char* argv[])
 	edges_settings_t edges_settings;
 	motor_settings_t motor_settings;
 	emf_settings_t emf_settings;
-<<<<<<< HEAD
-	engine_advansed_setup_t eas_settings;
-	extended_settings_t est_settings;
-	(void)est_settings;
 
-=======
->>>>>>> parent of ca883e6... Added command EAS EST
 
 	int names_count;
 	char device_name[256];
