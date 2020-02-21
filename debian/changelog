@@ -1,20 +1,9 @@
-libximc7 (2.11.6-1) unstable; urgency=low
+libximc7 (2.12.0-1) unstable; urgency=low
 
   * Version bump
-  * Bug #35625 errors opening a virtual device.
-  * Bug #33285 Make documentation for all calibration functions.
+  * Feature #35244: License changed to BSD 2-Clause
 
- -- XIMC <info@ximc.ru>  Thu, 26 Dec 2019 10:30:27 +0300
-
-libximc7 (2.11.5-1) unstable; urgency=low
-
-  * Version bump
-  * Feature #31119: Edit Matlab example
-  * Added description _calb functions
-  * Bug #33302: Bringing the function description
-  * Changes to the Python example
-
- -- XIMC <info@ximc.ru>  Tue, 17 Dec 2019 14:21:03 +0300
+ -- XIMC <info@ximc.ru>  Sun, 15 Dec 2019 10:33:55 +0300
 
 libximc7 (2.11.4-1) unstable; urgency=low
 

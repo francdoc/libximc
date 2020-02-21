@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.11.6
+Version: 2.12.0
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -75,17 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Thu Dec 26 2019 XIMC <info@ximc.ru> - 2.11.6
+* Sun Dec 15 2019 XIMC <info@ximc.ru> - 2.12.0
 - version bump
-- Bug #35625 errors opening a virtual device.
-- Bug #33285 Make documentation for all calibration functions.
-
-* Tue Dec 17 2019 XIMC <info@ximc.ru> - 2.11.5
-- version bump
-- Feature #31119: Edit Matlab example
-- Added description _calb functions
-- Bug #33302: Bringing the function description
-- Changes to the Python example
+- Feature #35244: License changed to BSD 2-Clause
 
 * Fri Sep 06 2019 XIMC <info@ximc.ru> - 2.11.4
 - version bump

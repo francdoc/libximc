@@ -1,16 +1,7 @@
-libximc (2.11.6-1)
-  * Released: Thu, 26 Dec 2019 10:30:27 +0300
+libximc (2.12.0-1)
+  * Released: Sun, 15 Dec 2019 10:33:55 +0300
   * Version bump
-  * Bug #35625 errors opening a virtual device.
-  * Bug #33285 Make documentation for all calibration functions.
-
-libximc (2.11.5-1)
-  * Released: Tue, 17 Dec 2019 14:21:03 +0300
-  * Version bump
-  * Feature #31119: Edit Matlab example
-  * Added description _calb functions
-  * Bug #33302: Bringing the function description
-  * Changes to the Python example
+  * Feature #35244: License changed to BSD 2-Clause
 
 libximc (2.11.4-1)
   * Released: Fri, 06 Sep 2019 10:40:34 +0300
