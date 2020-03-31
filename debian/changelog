@@ -1,3 +1,10 @@
+libximc7 (2.12.1-1) unstable; urgency=low
+
+  * Version bump
+  * Changed the Protocol version to 20.1
+
+ -- XIMC <info@ximc.ru>  Thu, 19 Mar 2020 15:10:47 +0300
+
 libximc7 (2.12.0-1) unstable; urgency=low
 
   * Version bump

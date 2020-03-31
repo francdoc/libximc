@@ -1,3 +1,8 @@
+libximc (2.12.1-1)
+  * Released: Thu, 19 Mar 2020 15:10:47 +0300
+  * Version bump
+  * Changed the Protocol version to 20.1
+
 libximc (2.12.0-1)
   * Released: Sun, 15 Dec 2019 10:33:55 +0300
   * Version bump
