@@ -78,6 +78,8 @@ rm -rf $RPM_BUILD_ROOT
 * Sun Dec 15 2019 XIMC <info@ximc.ru> - 2.12.0
 - version bump
 - Feature #35244: License changed to BSD 2-Clause
+- Updated version of the Protocol
+- Feature #36920: Create 2 new configuration structures in libximc
 
 * Fri Sep 06 2019 XIMC <info@ximc.ru> - 2.11.4
 - version bump
