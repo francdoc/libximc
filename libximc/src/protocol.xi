@@ -1,4 +1,4 @@
-protocol "v18.4"
+protocol "v18.5"
 defaults with crc, answer, public
 
 /** \english
@@ -96,11 +96,6 @@ STATE_OVERLOAD_USB_CURRENT		= 0x00004000	/**< \english USB current exceeds safe 
 STATE_BORDERS_SWAP_MISSET		= 0x00008000	/**< \english Engine stuck at the wrong edge. \endenglish \russian Достижение неверной границы. \endrussian */
 STATE_LOW_POWER_VOLTAGE			= 0x00010000	/**< \english Power voltage is lower than Low Voltage Protection limit \endenglish \russian Напряжение на силовой части ниже чем напряжение Low Voltage Protection \endrussian */
 STATE_H_BRIDGE_FAULT			= 0x00020000	/**< \english Signal from the driver that fault happened \endenglish \russian Получен сигнал от драйвера о неисправности \endrussian */
-STATE_CURRENT_MOTOR_BITS		= 0x000C0000	/**< \english Bits indicating the current operating motor on boards with multiple outputs for engine mounting. \endenglish \russian Биты, показывающие текущий рабочий мотор на платах с несколькими выходами для двигателей. \endrussian */
-STATE_CURRENT_MOTOR0			= 0x00000000	/**< \english Motor 0. \endenglish \russian Мотор 0. \endrussian */
-STATE_CURRENT_MOTOR1			= 0x00040000	/**< \english Motor 1. \endenglish \russian Мотор 1. \endrussian */
-STATE_CURRENT_MOTOR2			= 0x00080000	/**< \english Motor 2. \endenglish \russian Мотор 2. \endrussian */
-STATE_CURRENT_MOTOR3			= 0x000C0000	/**< \english Motor 3. \endenglish \russian Мотор 3. \endrussian */
 STATE_WINDING_RES_MISMATCH		= 0x00100000	/**< \english The difference between winding resistances is too large \endenglish \russian Сопротивления обмоток отличаются друг от друга слишком сильно \endrussian */
 STATE_ENCODER_FAULT 			= 0x00200000	/**< \english Signal from the encoder that fault happened \endenglish \russian Получен сигнал от энкодера о неисправности \endrussian */
 STATE_MOTOR_CURRENT_LIMIT		= 0x00400000	/**< \english Current limit exceeded \endenglish \russian Превышен предел по току \endrussian */
@@ -3652,28 +3647,6 @@ fields:
 command "service_command_reset_impl" writer "rest" (4) reader "rest" (0)
 without answer, public, crc
 
-/** $XIW
-	* \english
-	* Change motor - command for switching output relay.
-	* @param id an identifier of device
-	* \endenglish
-	* \russian
-	* Сменить двигатель - команда для переключения выходного реле.
-        * @param id идентификатор устройства
-	* \endrussian
-	*/
-/** $XIS
-        * \english
-        * Change motor - command for switching output relay.
-        * \endenglish
-        * \russian
-        * Сменить двигатель - команда для переключения выходного реле.
-        * \endrussian
-        */
-command "command_change_motor" writer "chmt" (22)
-fields:
-	int8u Motor /**< \english Motor number which it should be switch relay on [0..1] \endenglish \russian Номер мотора, на который следует переключить реле [0..1] \endrussian */
-	reserved 15
 
 //@}
 
