@@ -1,3 +1,9 @@
+libximc (2.10.7-1)
+  * Released: Mon, 13 Apr 2020 16:28:22 +0300
+  * Version bump
+  * Changing the Protocol version 18.5
+  * Feature #37941 Remove the change_motor command from libximc
+
 libximc (2.10.6-1)
   * Released: Tue, 29 Oct 2019 15:04:16 +0300
   * Version bump

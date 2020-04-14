@@ -1,3 +1,11 @@
+libximc7 (2.10.7-1) unstable; urgency=low
+
+  * Version bump
+  * Changing the Protocol version 18.5
+  * Feature #37941 Remove the change_motor command from libximc
+
+ -- XIMC <info@ximc.ru>  Mon, 13 Apr 2020 16:28:22 +0300
+
 libximc7 (2.10.6-1) unstable; urgency=low
 
   * Version bump
