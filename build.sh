@@ -150,6 +150,7 @@ makedist()
 	for arch in win32 win64 ; do
 		cp -R $DL/$arch/libximc.* $DISTLIB/$arch/
 		cp -R $DL/$arch/bindy.dll $DISTLIB/$arch/
+		cp -R $DL/$arch/bindy.lib $DISTLIB/$arch/
 		cp -R $DL/$arch/xiwrapper.dll $DISTLIB/$arch/
 		cp -R $DL/$arch/keyfile.sqlite $DISTLIB/$arch/
 		if [ -f $DL/$arch/libjximc.dll ] ; then
