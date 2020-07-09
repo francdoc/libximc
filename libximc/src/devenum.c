@@ -8,6 +8,16 @@
 #include "platform.h"
 #include "protosup.h"
 #include "wrapper.h"
+#include <errno.h>
+
+#if defined(WIN32) || defined(WIN64)
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+
+
+
 
 /*
  * Types
@@ -477,8 +487,20 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 result_t XIMC_API set_bindy_key(const char* keyfilepath)
 {
-	if ( ! bindy_setkey(keyfilepath) ) {
-		log_error( L"network layer setkey failed" );
+#if defined(WIN32) || defined(WIN64)
+	if (_access(keyfilepath, 0) != -1)
+#else
+	if (access(keyfilepath, 0) != -1)
+#endif
+	{
+		if (!bindy_setkey(keyfilepath)) {
+			log_error(L"network layer setkey failed");
+			return result_error;
+		}
+	}
+	else
+	{
+		log_error(L"Bindi key file not found");
 		return result_error;
 	}
 	return result_ok;
