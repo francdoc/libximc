@@ -174,8 +174,6 @@ int main (int argc, char* argv[])
 	motor_settings_t motor_settings;
 	emf_settings_t emf_settings;
 	engine_advansed_setup_t eas_settings;
-	extended_settings_t est_settings;
-	(void)est_settings;
 
 
 	int names_count;
@@ -183,8 +181,8 @@ int main (int argc, char* argv[])
 	int i;
 	int device_specified = 0;
 	const int probe_flags = ENUMERATE_PROBE | ENUMERATE_NETWORK;
-	const char* enumerate_hints = "addr=192.168.1.1,172.16.2.3";
-	// const char* enumerate_hints = "addr="; // this hint will use broadcast enumeration, if ENUMERATE_NETWORK flag is enabled
+	const char* enumerate_hints = "addr=";
+	// const char* enumerate_hints =  "addr=192.168.1.1,172.16.2.3";// this hint will use broadcast enumeration, if ENUMERATE_NETWORK flag is enabled
 	char ximc_version_str[32];
 
 	device_enumeration_t devenum;
@@ -215,7 +213,11 @@ int main (int argc, char* argv[])
 //  Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
 //  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
 //  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-	set_bindy_key( "keyfile.sqlite" );
+	result = set_bindy_key("keyfile.sqlite");
+	if (result != result_ok)
+		wprintf(L"error set_bindy_key\n");
+	else
+		wprintf(L"set_bindy_key OK\n");
 
 	devenum = enumerate_devices( probe_flags, enumerate_hints );
 	if (!devenum)
