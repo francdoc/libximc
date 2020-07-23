@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.12.1
+Version: 2.12.2
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -74,6 +74,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Thu Jul 23 2020 XIMC <info@ximc.ru> - 2.12.2
+- version bump
+- Bug #28005: Add a file check to set_bindy_key
+- Deploying libximc on Github
+- Feature #40580: Added a detailed Python example
 
 * Thu Mar 19 2020 XIMC <info@ximc.ru> - 2.12.1
 - version bump
