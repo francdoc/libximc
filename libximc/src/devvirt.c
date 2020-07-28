@@ -72,6 +72,7 @@ typedef struct{
 
 	move_cmd_str MOVE;
 	movr_cmd_str MOVR;
+	gpos_cmd_str GPOS; /* Holds information about current position. */
 	gets_cmd_str GETS; /* Holds current information about device. */
 	getc_cmd_str GETC; /* Holds motor currents and voltages. */
 	rdan_cmd_str RDAN; /* Analog data in ADC counts */
@@ -187,6 +188,44 @@ int sgn(double val)
 double ximc_dmin(double a, double b)
 {
 	return a < b ? a : b;
+}
+
+/* Calculate current full position of the virtual engine */
+static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
+										   seng_cmd_str seng,
+										   gets_cmd_str gets_value,
+										   move_cmd_str move,
+										   uint64_t last_tick)
+{
+	uint64_t this_tick;
+	get_wallclock_us(&this_tick);
+	/* declared as double to have less problems with implicit type conversion */
+	double micromult = (1 << (seng.MicrostepMode-1));
+	double diff = (this_tick - last_tick)*
+				  (smov.Speed + (smov.uSpeed / micromult))/powi(10,6);
+
+	double new_pos = gets_value.CurPosition + gets_value.uCurPosition / micromult;
+	double tgt_pos = move.Position + move.uPosition / micromult;
+	if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_RIGHT) {
+		new_pos += diff;
+	} else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_LEFT) {
+		new_pos -= diff;
+	} else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVE ||
+			   (gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVR) {
+		if (new_pos != tgt_pos)
+			new_pos -= ximc_dmin(fabs(diff), fabs(new_pos-tgt_pos)) *
+					   sgn(new_pos-tgt_pos);
+		else {
+			gets_value.MvCmdSts &= ~MVCMD_RUNNING;
+			gets_value.CurSpeed = 0;
+			gets_value.uCurSpeed = 0;
+		}
+	}
+	
+	gets_value.CurPosition = (uint32_t)(long long)new_pos;		
+	gets_value.uCurPosition = (int16_t)((new_pos - (long long)new_pos)*micromult);
+	
+	return gets_value;
 }
 
 
@@ -403,39 +442,12 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		   all->BCDRamParams.GETS.Uusb = rand_range(480, 520);
 		   all->BCDRamParams.GETS.Iusb = rand_range(180, 210);
 		   all->BCDRamParams.GETS.CurT = 366;
-
-		   smov_cmd_str smov = all->BCDFlashParams.SMOV;
-		   seng_cmd_str seng = all->BCDFlashParams.SENG;
-		   gets_cmd_str gets_value = all->BCDRamParams.GETS;
-		   move_cmd_str move = all->BCDRamParams.MOVE;
-		   uint64_t this_tick;
-		   get_wallclock_us(&this_tick);
-		   /* declared as double to have less problems with implicit type conversion */
-		   double micromult = (1 << (seng.MicrostepMode-1));
-		   double diff = (this_tick - all->last_tick)*
-			   (smov.Speed + (smov.uSpeed / micromult))/powi(10,6);
-
-		   double new_pos = gets_value.CurPosition + gets_value.uCurPosition / micromult;
-		   double tgt_pos = move.Position + move.uPosition / micromult;
-		   if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_RIGHT) {
-			   new_pos += diff;
-		   } else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_LEFT) {
-			   new_pos -= diff;
-		   } else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVE
-				   || (gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVR) {
-			   if (new_pos != tgt_pos)
-				   new_pos -= ximc_dmin(fabs(diff), fabs(new_pos-tgt_pos)) *
-					   sgn(new_pos-tgt_pos);
-			   else {
-				   gets_value.MvCmdSts &= ~MVCMD_RUNNING;
-				   gets_value.CurSpeed = 0;
-				   gets_value.uCurSpeed = 0;
-			   }
-		   }
-		   gets_value.CurPosition = (uint32_t)(long long)new_pos;		
-		   gets_value.uCurPosition = (int16_t)((new_pos - (long long)new_pos)*micromult);
-
-		   all->BCDRamParams.GETS = gets_value;
+           
+		   all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+										   all->BCDFlashParams.SENG,
+										   all->BCDRamParams.GETS,
+										   all->BCDRamParams.MOVE,
+										   all->last_tick);
 		   get_wallclock_us(&all->last_tick);
 
 		   WRITE_STRUCTURE(all->BCDRamParams.GETS);
@@ -478,7 +490,20 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		case READ_CMD: break;
 		case EESV_CMD: break;
 		case EERD_CMD: break;
-		case GPOS_CMD: break;
+		case GPOS_CMD: 
+		{
+			all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+										   all->BCDFlashParams.SENG,
+										   all->BCDRamParams.GETS,
+										   all->BCDRamParams.MOVE,
+										   all->last_tick);
+			
+			all->BCDRamParams.GPOS.Position    = all->BCDRamParams.GETS.CurPosition;
+			all->BCDRamParams.GPOS.uPosition   = all->BCDRamParams.GETS.uCurPosition;
+			
+			WRITE_STRUCTURE(all->BCDRamParams.GPOS);
+			break;
+		}
 		case GFWV_CMD: break;
 		case GBLV_CMD: break;
 		case DBGR_CMD: break;
