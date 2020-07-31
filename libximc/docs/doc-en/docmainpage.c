@@ -281,7 +281,7 @@
  * \section howtouse_dotnet_sec .NET
  * 
  * Wrapper assembly for libximc.dll is wrappers/csharp/ximcnet.dll.
- * It is provided with two different architectures and depends on .NET 2.0.
+ * It is provided with two different architectures. Supports the platform .NET from 2.0. to 4.0.
  *
  * Test .NET applications for Visual Studio 2013 is located at testcs (for C#) and testvbnet (for VB.NET) respectively.
  * Open solutions and build.
