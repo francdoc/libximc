@@ -2591,6 +2591,7 @@ command "command_stop" writer "stop" (4)
 	*/
 
 command "command_add_sync_in_action" writer "asia" (22)
+without public
 fields:
 	calb float Position							/**< \english Desired position or shift. \endenglish \russian Желаемая позиция или смещение. \endrussian */
 	normal int32s Position						/**< \english Desired position or shift (full steps) \endenglish \russian Желаемая позиция или смещение (в полных шагах) \endrussian */
@@ -3180,7 +3181,7 @@ fields:
 	int16s CurT							/**< \english Temperature in tenths of degrees C. \endenglish \russian Температура процессора в десятых долях градусов цельсия. \endrussian */
 	int32u flag Flags of StateFlags		/**< \english Set of flags specify motor shaft movement algorithm and list of limitations. \endenglish \russian Флаги состояний. \endrussian */
 	int32u flag GPIOFlags of GPIOFlags	/**< \english Set of flags of gpio states \endenglish \russian Флаги состояний GPIO входов. \endrussian */
-	int8u CmdBufFreeSpace				/**< \english This field shows the amount of free cells buffer synchronization chain. \endenglish \russian Это поле показывает количество свободных ячеек буфера цепочки синхронизации. \endrussian */
+	int8u CmdBufFreeSpace				/**< \english This field is a service field. It shows the amount of free cells buffer synchronization chain. \endenglish \russian Данное поле служебное. Оно показывает количество свободных ячеек буфера цепочки синхронизации. \endrussian */
 	reserved 4
 
 /** $XIW
