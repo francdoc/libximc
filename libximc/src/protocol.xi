@@ -23,7 +23,6 @@ ENUMERATE_NETWORK	= 0x04	/**< \english Check network devices \endenglish \russia
 	* Возвращаются командой get_status.
 	* \endrussian
 	* @see get_status
-	* @see status_t::move_state
 	*/
 flagset MoveState:
 MOVE_STATE_MOVING		= 0x01	/**< \english This flag indicates that controller is trying to move the motor. Don't use this flag for waiting of completion of the movement command. Use MVCMD_RUNNING flag from the MvCmdSts field instead. \endenglish \russian Если флаг установлен, то контроллер пытается вращать двигателем. Не используйте этот флаг для ожидания завершения команды движения. Вместо него используйте MVCMD_RUNNING из поля MvCmdSts. \endrussian */
@@ -52,7 +51,6 @@ EEPROM_PRECEDENCE		= 0x01	/**< \english If the flag is set settings from externa
 	* @name Флаги состояния питания шагового мотора
 	* Возвращаются командой get_status.
 	* \endrussian
-	* @see status_t::power_state
 	* @see get_status
 	*/
 flagset PowerState:
@@ -73,7 +71,6 @@ PWR_STATE_MAX		= 0x05	/**< \english Motor windings are powered by maximum curren
 	* @name Флаги состояния
 	* Содержат бинарные значения состояния контроллера. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
-	* @see status_t::flags
 	* @see get_status
 	*/
 flagset StateFlags:
@@ -112,7 +109,6 @@ STATE_EXTIO_ALARM				= 0x01000000	/**< \english The error is caused by the input
 	* @name Флаги состояния GPIO входов
 	* Содержат бинарные значения состояния контроллера. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
-	* @see status_t::gpioflags
 	* @see get_status
 	*/
 flagset GPIOFlags:
@@ -140,7 +136,6 @@ STATE_ENC_B						= 0x00004000	/**< \english State of encoder B pin. \endenglish 
 	* @name Состояние энкодера
 	* Состояние энкодера, подключенного к контроллеру.
 	* \endrussian
-	* @see status_t::encsts
 	* @see get_status
 	*/
 flagset EncodeStatus:
@@ -159,7 +154,6 @@ ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \e
 	* @name Состояние обмоток
 	* Состояние обмоток двигателя, подключенного к контроллеру.
 	* \endrussian
-	* @see status_t::windsts
 	* @see get_status
 	*/
 flagset WindStatus:
@@ -183,7 +177,6 @@ WIND_B_STATE_OK			= 0x30	/**< \english Winding B is connected and working proper
 	* Состояние команды движения (касается command_move, command_movr, command_left, command_right, command_stop, command_home, command_loft, command_sstp)
 	* и статуса её выполнения (выполяется, завершено, ошибка)
 	* \endrussian
-	* @see status_t::mvcmdsts
 	* @see get_status
 	*/
 flagset MvcmdStatus:
@@ -211,7 +204,6 @@ MVCMD_RUNNING	= 0x80	/**< \english Move command state (0 - move command have fin
 	* Определяют настройки движения и работу ограничителей.
 	* Возращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
-	* @see engine_settings_t::flags
 	* @see set_engine_settings
 	* @see get_engine_settings
 	*/
@@ -304,7 +296,6 @@ DRIVER_TYPE_EXTERNAL		= 0x03	/**< \english External driver. \endenglish \russian
 	* @name Флаги параметров питания шагового мотора
 	* Возвращаются командой get_power_settings.
 	* \endrussian
-	* @see power_settings_t::flags
 	* @see get_power_settings
 	* @see set_power_settings
 	*/
@@ -322,7 +313,6 @@ POWER_SMOOTH_CURRENT	= 0x04	/**< \english Current ramp-up/down is performed smoo
 	* @name Флаги критических параметров.
 	* Возвращаются командой get_secure_settings.
 	* \endrussian
-	* @see secure_settings_t::flags
 	* @see get_secure_settings
 	* @see set_secure_settings
 	*/
@@ -392,9 +382,6 @@ FEEDBACK_ENC_TYPE_DIFFERENTIAL	= 0x80	/**< \english Differential encoder. \enden
 	* \russian
 	* @name Флаги настроек синхронизации входа
 	* \endrussian
-	* @see sync_settings_t::syncin_flags
-	* @see get_sync_settings
-	* @see set_sync_settings
 	*/
 flagset SyncInFlags:
 SYNCIN_ENABLED		= 0x01	/**< \english Synchronization in mode is enabled, if this flag is set. \endenglish \russian Включение необходимости импульса синхронизации для начала движения. \endrussian */
@@ -408,9 +395,6 @@ SYNCIN_GOTOPOSITION	= 0x04	/**< \english The engine is go to position specified 
 	* \russian
 	* @name Флаги настроек синхронизации выхода
 	* \endrussian
-	* @see sync_settings_t::syncout_flags
-	* @see get_sync_settings
-	* @see set_sync_settings
 	*/
 flagset SyncOutFlags:
 SYNCOUT_ENABLED		= 0x01	/**< \english Synchronization out pin follows the synchronization logic, if set. It governed by SYNCOUT_STATE flag otherwise. \endenglish \russian Синхронизация выхода работает согласно настройкам, если флаг установлен. В ином случае значение выхода фиксировано и подчиняется SYNCOUT_STATE. \endrussian */
@@ -428,7 +412,6 @@ SYNCOUT_ONPERIOD	= 0x40	/**< \english Generate synchronization pulse every SyncO
 	* \russian
 	* @name Флаги настройки работы внешнего ввода/вывода
 	* \endrussian
-	* @see extio_settings_t::setup_flags
 	* @see get_extio_settings
 	* @see set_extio_settings
 	*/
@@ -589,7 +572,7 @@ CTP_ERROR_CORRECTION    = 0x10 /**< \english Correct errors which appear when sl
 	* Определяют поведение для команды home.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
-	* @see get_home_setting	s
+	* @see get_home_settings
 	* @see set_home_settings
 	* @see command_home
 	*/
