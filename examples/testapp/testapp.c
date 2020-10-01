@@ -338,7 +338,7 @@ int main (int argc, char* argv[])
 	print_state( &state );
 
 	char* ch1 = "table.txt";
-	if ((result = load_correction_table(&device, ch1)) != result_ok)
+	if ((result = load_correction_table(device, ch1)) != result_ok)
 		wprintf(L"error load_calibration_table %ls\n", error_string(result));
 
 	if ((result = command_move_calb(device, 380, &calibration)) != result_ok)
@@ -380,7 +380,7 @@ int main (int argc, char* argv[])
 	if ((result = get_status( device, &state )) != result_ok)
 		wprintf( L"error getting status %ls\n", error_string( result ) );
 	print_state( &state );
-	if ((result = load_correction_table(&device, NULL)) != result_ok)
+	if ((result = load_correction_table(device, NULL)) != result_ok)
 		wprintf(L"error load_calibration_table %ls\n", error_string(result));
 	if ((result = get_status_calb(device, &state1, &calibration)) != result_ok)
 		wprintf(L"error getting status %ls\n", error_string(result));

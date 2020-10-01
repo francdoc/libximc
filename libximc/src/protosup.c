@@ -1303,21 +1303,21 @@ void creat_table(float** X, float** dX)
 extern "C" {
 #endif
 
-result_t XIMC_API load_correction_table(device_t* id, const char* namefile)
+result_t XIMC_API load_correction_table(device_t id, const char* namefile)
 {
 	device_metadata_t* dm;
 	FILE * fp = NULL;
 
-	if (*id == device_undefined)
+	if (id == device_undefined)
 	{
 		log_error(L"attempting to close already closed device");
 		return result_error;
 	}
-	dm = get_metadata(*id);
+	dm = get_metadata(id);
 	if (!dm)
 	{
 		log_error(L"could not extract metadata for device");
-		*id = device_undefined;
+		id = device_undefined;
 		return result_error;
 	}
 

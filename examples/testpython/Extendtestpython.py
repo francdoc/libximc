@@ -496,7 +496,7 @@ def gl_settings(lib, device_id):
         print("E or e keys - edges settings")
         print("S or s keys - micro step mode settings")
         print("U or u keys - user unit settings")
-        #print("L or l keys - load correction table")
+        print("L or l keys - load correction table")
         print("Selected settings.")
         key_press = getch()
         if ord(key_press) == 77 or ord(key_press) == 109:  # Press "M"
@@ -514,16 +514,20 @@ def gl_settings(lib, device_id):
         if ord(key_press) == 85 or ord(key_press) == 117:  # Press "U"
             test_user_unit_mode(lib, device_id)
         print(" ")
-        #if ord(key_press) == 76 or ord(key_press) == 108:  # Press "L"
-        #    print("\nLoad correction table")
-        #    print("You can use a short or full file name.")
-        #    namefile = input("Enter the file name:")
-        #    if type(namefile) is str:
-        #        namefile = namefile.encode()
-        #    print(b"E:\Corr_table_8MT173-25.tbl")
-        #    namefile = "table.txt".encode()
-        #    result = lib.load_correction_table(device_id, namefile)
+        if ord(key_press) == 76 or ord(key_press) == 108:  # Press "L"
+            print("\nLoad correction table")
+            print("You can use a short or full file name.")
+            namefile = input("Enter the file name:")
+            if type(namefile) is str:
+                namefile = namefile.encode("utf-8")
 
+            # name = "C:\\Work\\table.tbl"
+            # name = "table.tbl"
+            # name = str(name).encode()
+            
+            print(namefile)
+            result = lib.load_correction_table(device_id, namefile)  #
+            print(result)
 
 def motor_settings(lib, device_id):
     get_motor_settings(device_id, motor_settings_t * motor_settings)
