@@ -1,4 +1,4 @@
-protocol "v20.3"
+protocol "v20.4"
 defaults with crc, answer, public
 
 /** \english
@@ -444,7 +444,6 @@ EXTIO_SETUP_MODE_OUT_ON             = 0x10  /**< \english EXTIO pin always set i
 EXTIO_SETUP_MODE_OUT_MOVING         = 0x20  /**< \english EXTIO pin stays active during moving state. \endenglish \russian Ножка находится в активном состоянии при движении. \endrussian */
 EXTIO_SETUP_MODE_OUT_ALARM          = 0x30  /**< \english EXTIO pin stays active during Alarm state. \endenglish \russian Ножка находится в активном состоянии при нахождении в состоянии ALARM. \endrussian */
 EXTIO_SETUP_MODE_OUT_MOTOR_ON       = 0x40  /**< \english EXTIO pin stays active when windings are powered. \endenglish \russian Ножка находится в активном состоянии при подаче питания на обмотки. \endrussian */
-EXTIO_SETUP_MODE_OUT_MOTOR_FOUND    = 0x50  /**< \english EXTIO pin stays active when motor is connected (first winding). \endenglish \russian Ножка находится в активном состоянии при обнаружении подключенного двигателя (первой обмотки). \endrussian */
 
 /**
 	* \english
