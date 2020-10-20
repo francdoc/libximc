@@ -195,6 +195,23 @@ MVCMD_RUNNING	= 0x80	/**< \english Move command state (0 - move command have fin
 
 /**
 	* \english
+	* @name Flags of the motion parameters
+	* Specify motor shaft movement algorithm and list of limitations.
+	* Flags returned by query of get_move_settings.
+	* \endenglish
+	* \russian
+	* @name Флаги параметров движения
+	* Определяют настройки параметров движения.
+	* Возращаются командой get_move_settings.
+	* \endrussian
+	* @see set_move_settings
+	* @see get_move_settings
+	*/
+flagset MoveFlags:
+RPM_DIV_1000		= 0x01	/**< \english This flag indicates that the operating speed specified in the command is set in milli rpm. Applicable only for ENCODER feedback mode and only for BLDC motors. \endenglish \russian Флаг указывает на то что рабочая скорость указанная в команде задана в милли rpm. Применим только для режима обратной связи ENCODER и только для BLDC моторов. \endrussian */
+
+/**
+	* \english
 	* @name Flags of engine settings
 	* Specify motor shaft movement algorithm and list of limitations.
 	* Flags returned by query of engine settings. May be combined with bitwise OR.
@@ -954,7 +971,8 @@ fields:
 	calb float AntiplaySpeed	/**< \english Speed in antiplay mode. \endenglish \russian Скорость в режиме антилюфта. \endrussian */
 	normal int32u AntiplaySpeed	/**< \english Speed in antiplay mode, full steps/s(stepper motor) or RPM(DC). Range: 0..100000. \endenglish \russian Скорость в режиме антилюфта, заданная в целых шагах/c(ШД) или в оборотах/с(DC). Диапазон: 0..100000. \endrussian */
 	normal int8u uAntiplaySpeed	/**< \english Speed in antiplay mode, microsteps/s. Microstep size and the range of valid values for this field depend on selected step division mode (see MicrostepMode field in engine_settings). Used with stepper motor only. \endenglish \russian Скорость в режиме антилюфта, выраженная в микрошагах в секунду. Величина микрошага и диапазон допустимых значений для данного поля зависят от выбранного режима деления шага (см. поле MicrostepMode в engine_settings). Используется только с шаговым мотором. \endrussian */
-	reserved 10
+	int8u flag MoveFlags of MoveFlags	/**< \english Flags that control movement settings. \endenglish \russian Флаги, управляющие настройкой движения. \endrussian */
+	reserved 9
 
 /** $XIR
 	* \english
