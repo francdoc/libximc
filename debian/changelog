@@ -1,3 +1,13 @@
+libximc7 (2.12.5-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #41682 added flag indicating that the speed is entered in mili rpm
+  * Bug #41221 remove the mention of detecting the motor connection
+  * Feature #40845 improved the extended Python example
+  * Feature #42275 added a description file for the extended example
+
+ -- XIMC <info@ximc.ru>  Tue, 20 Oct 2020 14:30:29 +0300
+
 libximc7 (2.12.4-1) unstable; urgency=low
 
   * Version bump

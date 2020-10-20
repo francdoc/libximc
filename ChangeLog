@@ -1,3 +1,11 @@
+libximc (2.12.5-1)
+  * Released: Tue, 20 Oct 2020 14:30:29 +0300
+  * Version bump
+  * Feature #41682 added flag indicating that the speed is entered in mili rpm
+  * Bug #41221 remove the mention of detecting the motor connection
+  * Feature #40845 improved the extended Python example
+  * Feature #42275 added a description file for the extended example
+
 libximc (2.12.4-1)
   * Released: Mon, 17 Aug 2020 14:57:37 +0300
   * Version bump
