@@ -1,33 +1,64 @@
+"""
+This module is an extended example of using the libximc library to control 8SMC SERIES using the Python language.
+
+Warning: The keyboard module tracks clicks even if the window is not active. 
+    To avoid problems, do not change the focus until you finish working with the example.
+
+# Dependences
+  -Necessary Python packages:
+    netifaces
+    getpass
+    keyboard
+    getch for linux and macos, if the package keyboard is blocked due to lack of root user rights.
+    pyximc.py for correct usage of the library libximc you need to add the file  wrapper with the structures of the library to python path.
+
+  -To search for network devices, you must have a file keyfile.sqlite
+
+  -Required libraries for Windows:
+    bindy.dll
+    libximc.dll
+    xiwrapper.dll
+    
+  -Required libraries for Linux:
+    libbindy.so
+    libximc.so
+    libxiwrapper.so
+"""
+
 from ctypes import *
-# import time
 import os
 import sys
 import platform
-# import tempfile
-# import re
-from msvcrt import getch
+import netifaces
+import getpass
 
 if sys.version_info >= (3,0):
     import urllib.parse
 
-# Dependences
-
-# For correct usage of the library libximc,
-# you need to add the file pyximc.py wrapper with the structures of the library to python path.
 cur_dir = os.path.abspath(os.path.dirname(__file__))  # Specifies the current directory.
-ximc_dir = os.path.join(cur_dir, "..", "..", "ximc")  # Formation of the directory name with all dependencies. The dependencies for the examples are located in the ximc directory.
+ximc_dir = os.path.join(cur_dir, "..", "..", "ximc")  # Formation of the directory name with all dependencies. 
 ximc_package_dir = os.path.join(ximc_dir, "crossplatform", "wrappers", "python") # Formation of the directory name with python dependencies.
 sys.path.append(ximc_package_dir)  # add pyximc.py wrapper to python path
 
-# Depending on your version of Windows, add the path to the required DLLs to the environment variable
-# bindy.dll
-# libximc.dll
-# xiwrapper.dll
+user_name = "root"
+key_esc = "esc"
+
 if platform.system() == "Windows":
     # Determining the directory with dependencies for windows depending on the bit depth.
     arch_dir = "win64" if "64" in platform.architecture()[0] else "win32"  #
     libdir = os.path.join(ximc_dir, arch_dir)
     os.environ["Path"] = libdir + ";" + os.environ["Path"] # add dll path into an environment variable
+    # from msvcrt import getch as getch1
+    import keyboard
+else:
+    pass
+    user_name = getpass.getuser()
+    key_esc = "ctrl+u"
+    print(user_name)
+    if user_name == "root":
+        import keyboard
+    else:
+        from getch import getch as getch1
 
 try: 
     from pyximc import *
@@ -53,6 +84,52 @@ except OSError as err:
     exit()
 
 
+def getch_new():
+    """
+    Processing keystrokes by scancode. Provides work independent of the national layout.
+    """
+    
+    scan_key = {2:49, 3:50, 4:51, 5:52, 6:53, 7:54, 8:55, 9:56, 10:57, 11:48, 35:72,
+    19:82, 44:90, 32:68, 31:83, 21:89,16:81, 50:77, 46:67, 33:70, 18:69, 22:85,
+    38:76,23:73, 24:79}
+    
+    if 1:
+        s1 = keyboard.read_key(False)
+        s1 = keyboard.read_key(False)
+        a = keyboard.key_to_scan_codes(s1)[0]
+        try:
+            s = chr(scan_key[a])
+        except:
+            if len(s1) == 1:
+                s1 = "";
+            s = " "
+            print("Invalid key {}".format(s1))
+            
+        keyboard.send(key_esc, do_press=True, do_release=True)
+        return s
+
+
+def getch():
+    """
+    Select the type of keyboard processing depending on your rights.
+    """
+    
+    if user_name != "root":
+        return getch1()
+    else:
+        return getch_new()
+
+
+def input_new(s=""):
+    """
+    Wrapper for the data entry function.
+    
+    :param s:  Description of the input value(Default value = "")
+    """
+    
+    return input(s)
+
+
 # Create engine settings structure
 eng = engine_settings_t()
 # Create user unit settings structure
@@ -61,6 +138,13 @@ user_unit.A = 1;
 
 
 def test_info(lib, device_id):
+    """
+    Reading information about the device.
+    
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     print("\nGet device info")
     x_device_information = device_information_t()
     result = lib.get_device_information(device_id, byref(x_device_information))
@@ -81,6 +165,14 @@ def test_info(lib, device_id):
 
 
 def test_status(lib, device_id):
+    """
+    A function of reading status information from the device
+
+    You can use this function to get basic information about the device status.    
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id:  device id.
+    """
+    
     print("\nGet status")
     x_status = status_t()
     result = lib.get_status(device_id, byref(x_status))
@@ -93,6 +185,14 @@ def test_status(lib, device_id):
 
 
 def get_status(lib, device_id):
+    """
+    A function of reading status information from the device
+
+    You can use this function to get basic information about the device status.    
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id:  device id.
+    """
+    
     x_status = status_t()
     result = lib.get_status(device_id, byref(x_status))
     if result == Result.Ok:
@@ -102,6 +202,13 @@ def get_status(lib, device_id):
 
 
 def get_stage_information(lib, device_id):
+    """
+    Read information from the EEPROM of the progress bar if it is installed.
+    
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     x_stage_inf = stage_information_t()
     result = lib.get_stage_information(device_id, byref(x_stage_inf))
     if result == Result.Ok:
@@ -111,6 +218,13 @@ def get_stage_information(lib, device_id):
 
 
 def get_motor_settings (lib, device_id):
+    """
+    Receiving the configuration of the motor.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     x_motor_settings = motor_settings_t()
     result = lib.get_motor_settings(device_id, byref(x_motor_settings))
     if result == Result.Ok:
@@ -119,7 +233,18 @@ def get_motor_settings (lib, device_id):
         return None
 
 
-def test_get_position(lib, device_id, mode):
+def test_get_position(lib, device_id, mode=1):
+    """
+    Obtaining information about the position of the positioner.
+    
+    This function allows you to get information about the current positioner coordinates,
+    both in steps and in encoder counts, if it is set.
+    Also, depending on the state of the mode parameter, information can be obtained in user units.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param mode: mode in feedback counts or in user units. (Default value = 1)
+    """
+    
     # print("\nRead position")
     if mode:
         x_pos = get_position_t()
@@ -136,16 +261,41 @@ def test_get_position(lib, device_id, mode):
 
 
 def test_left(lib, device_id):
+    """
+    Move to the left.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     print("\nMoving left")
     result = lib.command_left(device_id)
 
 
 def test_right(lib, device_id):
+    """
+    Move to the right.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     print("\nMoving right")
     result = lib.command_right(device_id)
 
 
 def test_move(lib, device_id, distance, udistance, mode=1):
+    """
+    Move to the specified coordinate.
+
+    Depending on the mode parameter, you can set coordinates in steps or feedback counts, or in custom units.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param distance: the position of the destination.
+    :param udistance: destination position in micro steps if this mode is used.
+    :param mode:  mode in feedback counts or in user units. (Default value = 1)
+    """
+    
     if mode:
         print("\nGoing to {0} steps, {1} microsteps".format(distance, udistance))
         result = lib.command_move(device_id, distance, udistance)
@@ -156,6 +306,17 @@ def test_move(lib, device_id, distance, udistance, mode=1):
 
 
 def test_movr(lib, device_id, distance, udistance, mode=1):
+    """
+    The shift by the specified offset coordinates.
+    
+    Depending on the mode parameter, you can set coordinates in steps or feedback counts, or in custom units.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param distance: size of the offset in steps.
+    :param udistance: Size of the offset in micro steps.
+    :param mode:  (Default value = 1)
+    """
+    
     if mode:
         print("\nShift to {0} steps, {1} microsteps".format(distance, udistance))
         result = lib.command_movr(device_id, distance, udistance)
@@ -166,12 +327,27 @@ def test_movr(lib, device_id, distance, udistance, mode=1):
 
 
 def test_wait_for_stop(lib, device_id, interval):
+    """
+    Waiting for the movement to complete.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param interval: step of the check time in milliseconds.
+    """
+    
     print("\nWaiting for stop")
     result = lib.command_wait_for_stop(device_id, interval)
     print("Result: " + repr(result))
 
 
 def test_serial(lib, device_id):
+    """
+    Reading the device's serial number.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     # print("\nReading serial")
     x_serial = c_uint()
     result = lib.get_serial_number(device_id, byref(x_serial))
@@ -180,6 +356,14 @@ def test_serial(lib, device_id):
 
 
 def test_feedback_settings(lib, device_id):
+    """
+    View and change the feedback mode.
+    
+    To manage feedback, follow the prompts on the screen.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     # Get current feedback settings from controller
     fvst = feedback_settings_t()
     result = lib.get_feedback_settings(device_id, byref(fvst))
@@ -263,6 +447,15 @@ def test_feedback_settings(lib, device_id):
 
 
 def test_get_move_settings(lib, device_id, mvst, mode = 1):
+    """
+    Read the move settings.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param mvst: the structure with parameters of movement.
+    :param mode: data mode in feedback counts or in user units. (Default value = 1)
+    """
+    
     # Get current move settings from controller
     if mode:
         result = lib.get_move_settings(device_id, byref(mvst))
@@ -276,6 +469,15 @@ def test_get_move_settings(lib, device_id, mvst, mode = 1):
 
 
 def test_set_move_settings(lib, device_id, mvst, mode = 1):
+    """
+    Write the move settings.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param mvst: the structure with parameters of movement.
+    :param mode: data mode in feedback counts or in user units. (Default value = 1)
+    """
+    
     # Get current move settings from controller
     if mode:
         result = lib.set_move_settings(device_id, byref(mvst))
@@ -284,6 +486,15 @@ def test_set_move_settings(lib, device_id, mvst, mode = 1):
 
 
 def test_move_settings(lib, device_id, mode = 1):
+    """
+    Setting up movement parameters.
+    
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param mode: data mode in feedback counts or in user units. (Default value = 1)
+    """
+    
     # Create move settings structure
     print("\nGet motion settings")
     if mode:
@@ -295,13 +506,13 @@ def test_move_settings(lib, device_id, mode = 1):
     # Input settings
     try:
         if mode:
-            speed = int(input("Input speed:"))
-            asel = int(input("Input acceleration:"))
-            decel = int(input("Input deceleration:"))
+            speed = int(input_new("Input speed: "))
+            asel = int(input_new("Input acceleration: "))
+            decel = int(input_new("Input deceleration: "))
         else:
-            speed = float(input("Input speed:"))
-            asel = float(input("Input acceleration:"))
-            decel = float(input("Input deceleration:"))
+            speed = float(input_new("Input speed: "))
+            asel = float(input_new("Input acceleration: "))
+            decel = float(input_new("Input deceleration: "))
 
         # Filling in the structure move_settings_t
         mvst.Speed = speed
@@ -316,13 +527,19 @@ def test_move_settings(lib, device_id, mode = 1):
 
 
 def test_user_unit_mode(lib, device_id):
-    # User unit mode settings
-    # After setting this multiplier, you can use special commands with the suffix _calb
-    # to set the movement in mm or degrees.
+    """
+    User unit mode settings
+    
+    After setting this multiplier, you can use special commands with the suffix _calb to set the movement in mm or degrees.
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+
     print("\nUser unit mode settings.")
     print("User unit coordinate multiplier = {0} \n".format(user_unit.A) )
     try:
-        fl_val = float(input("Set new coordinate multiplier = "))
+        fl_val = float(input_new("Set new coordinate multiplier = "))
         user_unit.A = fl_val
         # user_unit.MicrostepMode the value is set together with eng.MicrostepMode
 
@@ -331,6 +548,14 @@ def test_user_unit_mode(lib, device_id):
 
 
 def test_microstep_mode(lib, device_id):
+    """
+    Setting the microstep mode. Works only for stepper motors
+    
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     print("\nMicrostep mode settings.")
     print("This setting is only available for stepper motors.")
     # Get current engine settings from controller
@@ -361,6 +586,7 @@ def test_microstep_mode(lib, device_id):
 
 
 def test_sync_settings(lib, device_id):
+
     sync_settings = sync_in_settings_t()
     result = lib.get_sync_in_settings(device_id, byref(sync_settings))
     sync_settings.Position = 500
@@ -369,6 +595,13 @@ def test_sync_settings(lib, device_id):
 
 
 def test_eeprom(lib, device_id):
+    """
+    Checks for the presence of EEPROM. If it is present, it displays information.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    """
+    
     print("Test EEPROM")
     status = get_status(lib, device_id)
     if status != None:
@@ -389,8 +622,15 @@ def test_eeprom(lib, device_id):
             print("EEPROM NO CONNECTED")
 
 
-# Function for entering flag values.
 def input_flags(flags, names_flags):
+    """
+    Function for entering flag values.
+    
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+
+    """
+    
     index = -1
     for val in names_flags:
         if index >= 0:
@@ -414,6 +654,15 @@ def input_flags(flags, names_flags):
 
 
 def test_edges_settings(lib, device_id):
+    """
+    View and configure the limit switch mode.
+    
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+
+    """
+    
 # Get current feedback settings from controller
     edgst = edges_settings_t()
     result = lib.get_edges_settings(device_id, byref(edgst))
@@ -478,14 +727,23 @@ def test_edges_settings(lib, device_id):
         if ord(key_press) == 89 or ord(key_press) == 121:  # Press "Y"
             print("Enter borders.")
             try:
-                edgst.LeftBorder = int(input("Enter the left border: "))
-                edgst.RightBorder = int(input("Enter the right border: "))
+                edgst.LeftBorder = int(input_new("Enter the left border: "))
+                edgst.RightBorder = int(input_new("Enter the right border: "))
             except:
                 print("Left border {0}, right border {1}".format(edgst.LeftBorder, edgst.RightBorder))
         result = lib.set_edges_settings(device_id, byref(edgst))
 
 
 def gl_settings(lib, device_id):
+    """
+    Manager of the controller settings.
+
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+
+    """
+    
     key_press = "1"
     while(ord(key_press) != 81 and ord(key_press) != 113): # Press "q" - quit        
         print("Select a group of settings:")
@@ -517,23 +775,38 @@ def gl_settings(lib, device_id):
         if ord(key_press) == 76 or ord(key_press) == 108:  # Press "L"
             print("\nLoad correction table")
             print("You can use a short or full file name.")
-            namefile = input("Enter the file name:")
+            namefile = input_new("Enter the file name: ")
             if type(namefile) is str:
                 namefile = namefile.encode("utf-8")
 
-            # name = "C:\\Work\\table.tbl"
-            # name = "table.tbl"
-            # name = str(name).encode()
-            
-            print(namefile)
-            result = lib.load_correction_table(device_id, namefile)  #
-            print(result)
+            result = lib.load_correction_table(byref(cast(device_id, POINTER(c_int))), namefile)  #
+            if result<0:
+                print("The table is not loaded, If the table was loaded, it is reset.")
+            else:
+                print("Table loaded successfully,")
+
 
 def motor_settings(lib, device_id):
+    """
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+
+    """
+    
     get_motor_settings(device_id, motor_settings_t * motor_settings)
 
 
 def test_extio(lib, device_id):
+    """
+    External input / output settings Manager.
+
+    Follow the on-screen instructions to change the settings.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+
+    """
+    
     print("Use output as input or output?")
     print("Press the case sensitive key:")
     print("I or i keys - input;")
@@ -595,6 +868,16 @@ def test_extio(lib, device_id):
 
 
 def device_selection_dialog():
+    """ 
+    Device selection Manager.
+    
+    Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
+    wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
+    relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
+    In Python make sure to pass byte-array object to this function (b"string literal").
+    Follow the on-screen instructions to change the settings.
+    """
+    
     print("What XIMC device do you plan to open?")
     print("Press the key:")
     print("1 - is COM;")
@@ -605,52 +888,68 @@ def device_selection_dialog():
     key_press = getch()
     port_name = None
     head_port = None
-    if ord(key_press) == 49: # Press "1" COM
+    if ord(key_press) == 49: #""" Press "1" COM """
         if platform.system() == "Windows":
             print("Enter the port number: COM")
             head_port = "xi-com:\\\.\COM"
         else:
             print("Enter the port number: dev/tty.s")
             head_port = "xi-com:/dev/tty.s"
-        port_name = input()
-    elif ord(key_press) == 50: # Press "2" virtual controller
+        port_name = input_new()
+    elif ord(key_press) == 50: #""" Press "2" virtual controller """
         print("Enter the name of the virtual device:")
         head_port = "xi-emu:///"
-        port_name = input()
-    elif ord(key_press) == 51: # Press "3" network controller
+        port_name = input_new()
+    elif ord(key_press) == 51: #""" Press "3" network controller """
         print("Enter the device's network address:")
         print("Example:192.168.0.1/89ABCDEF")
         lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
         head_port = "xi-net://"
-        port_name = input()
-    elif ord(key_press) == 52: # Press "4" search for all available devices
+        port_name = input_new()
+    elif ord(key_press) == 52: #Press "4" search for all available devices
         # Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
         # wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
         # relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
         # In Python make sure to pass byte-array object to this function (b"string literal").
         print("Wait for the search to complete...")
-        lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-
+        res = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
+        if res<0:
+            res = lib.set_bindy_key("keyfile.sqlite".encode("utf-8"))
+            if res<0:
+                print("The keyfile.sqlite file was not found. It is located in the ximc\win32 folder. Copy it to the current folder.")
+                exit(1)
         # This is device search and enumeration with probing. It gives more information about devices.
-        probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK
-        enum_hints = b"addr="
-        # enum_hints = b"addr=" # Use this hint string for broadcast enumerate
-        devenum = lib.enumerate_devices(probe_flags, enum_hints)
+        probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK # + EnumerateFlags.ENUMERATE_ALL_COM
+        print("Search on network interfaces")
+        interfaces = netifaces.interfaces()
+        device_set = set()
+        for interface in interfaces:
+            addrs = netifaces.ifaddresses(interface).get(netifaces.AF_INET)
+            if addrs is None:
+                continue
+            enum_hints = "addr=\nadapter_addr=" + addrs[0]["addr"]
+            
+            print(addrs[0]["addr"])
+            
+            if type(enum_hints) is str:
+                enum_hints = enum_hints.encode()
+                
+            devenum = lib.enumerate_devices(probe_flags, enum_hints)
 
-        dev_count = lib.get_device_count(devenum)
-
-        controller_name = controller_name_t()
-        for dev_ind in range(0, dev_count):
-            enum_name = lib.get_device_name(devenum, dev_ind)
-            result = lib.get_enumerate_device_controller_name(devenum, dev_ind, byref(controller_name))
-            if result == Result.Ok:
-                print("Enumerated device #{} name (port name): ".format(dev_ind) + repr(
-                    enum_name) + ". Friendly name: " + repr(controller_name.ControllerName) + ".")
+            dev_count = lib.get_device_count(devenum)
+            controller_name = controller_name_t()
+            for dev_ind in range(0, dev_count):
+                enum_name = lib.get_device_name(devenum, dev_ind)
+                device_set.add(enum_name)
+                
+        device_list = list(device_set)
+        for i in range(0, len(device_list)):
+            print("Enumerated device #{} name (port name){}: ".format(i, device_list[i]))
         print("Select the device number:#")
         key_press = getch()
         try:
-            if int(key_press) < dev_count:
-                head_port = lib.get_device_name(devenum, int(key_press))
+            if int(key_press) < len(device_list):
+                head_port = device_list[int(key_press)]
                 port_name = b""
             else:
                 print("A device with this number:#", int(key_press), " is not in the list.")
@@ -667,22 +966,42 @@ def device_selection_dialog():
     return dev_port
 
 
-def flex_wait_for_stop(lib, devise_id, msec, mode = 1):
+def flex_wait_for_stop(lib, device_id, msec, mode = 1):
+    """
+    This function performs dynamic output coordinate in the process of moving.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param msec: Pause between reading the coordinates.
+    :param mode: data mode in feedback counts or in user units. (Default value = 1)
+    """
+
     stat = status_t()
     stat.MvCmdSts |= 0x80
     while (stat.MvCmdSts & MvcmdStatus.MVCMD_RUNNING > 0):
-        result = lib.get_status(devise_id, byref(stat))
+        result = lib.get_status(device_id, byref(stat))
         if result == Result.Ok:
-            test_get_position(lib, devise_id, mode)
+            test_get_position(lib, device_id, mode)
             lib.msec_sleep(msec)
 
 
 # mode 0 - movement in user units.
 # mode 1 - movement in step or encoder unit
-def device_movement_actions_dialog(lib, devise_id, mode = 1):
+def device_movement_actions_dialog(lib, device_id, mode = 1):
+    """
+    The Manager motion control.
+
+    Allows you to move both in feedback counts and in user units.
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    :param mode: data mode in feedback counts or in user units. (Default value = 1)
+    
+    Follow the on-screen instructions to change the settings.
+    """
+    
     key_press = "1"
     #current_speed = test_get_speed(lib, device_id)
-    position, uposition = test_get_position(lib, devise_id, mode)
+    position, uposition = test_get_position(lib, device_id, mode)
     print("\n")
     while(ord(key_press) != 81 and ord(key_press) != 113): # Press "q" - quit
     #if 1:
@@ -700,31 +1019,31 @@ def device_movement_actions_dialog(lib, devise_id, mode = 1):
         if ord(key_press) == 77 or ord(key_press) == 109:  # Press "M"
             print("Enter a position:")
             if mode:
-                position = int(input())
+                position = int(input_new())
             else:
-                position = float(input())
-            test_move(lib, devise_id, position, 0, mode)
+                position = float(input_new())
+            test_move(lib, device_id, position, 0, mode)
             # Interactive output of coordinates.
-            flex_wait_for_stop(lib, devise_id, 10, mode)
+            flex_wait_for_stop(lib, device_id, 10, mode)
         elif ord(key_press) == 82 or ord(key_press) == 114:  # Press "R"
             print("Enter a shift position:")
             if mode:
-                sposition = int(input())
+                sposition = int(input_new())
             else:
-                sposition = float(input())
-            test_movr(lib, devise_id, sposition, 0, mode)
+                sposition = float(input_new())
+            test_movr(lib, device_id, sposition, 0, mode)
             # Interactive output of coordinates.
-            flex_wait_for_stop(lib, devise_id, 10, mode)
+            flex_wait_for_stop(lib, device_id, 10, mode)
         elif ord(key_press) == 52:  # Press "4" move to the left
             print("Move to the left:")
-            test_left(lib, devise_id)
+            test_left(lib, device_id)
             print("To stop, press any key.")
             while ord(key_press) == 52:
                 key_press = getch()
             lib.command_sstp(device_id)
         elif ord(key_press) == 54:  # Press "6" move to the left
             print("Move to the left:")
-            test_right(lib, devise_id)
+            test_right(lib, device_id)
             print("To stop, press any key.")
             while ord(key_press) == 54:
                 key_press = getch()
@@ -732,19 +1051,28 @@ def device_movement_actions_dialog(lib, devise_id, mode = 1):
         elif ord(key_press) == 72 or ord(key_press) == 104:  # Press "H"
             print("HOME position:")
             lib.command_home(device_id)
-            flex_wait_for_stop(lib, devise_id, 10, mode)
+            flex_wait_for_stop(lib, device_id, 10, mode)
         elif ord(key_press) == 90 or ord(key_press) == 122:  # Press "Z"
             print("Zero position:")
             lib.command_zero(device_id)
         elif ord(key_press) == 83 or ord(key_press) == 115:  # Press "S"
             test_move_settings(lib, device_id, mode)
         print("Wait for the movement to finish...")
-        test_wait_for_stop(lib, devise_id, 10)
-        position, uposition = test_get_position(lib, devise_id, mode)
+        test_wait_for_stop(lib, device_id, 10)
+        position, uposition = test_get_position(lib, device_id, mode)
         print("\n")
 
 
-def device_actions_dialog(lib, devise_id):
+def device_actions_dialog(lib, device_id):
+    """
+    The main Manager of the example.
+
+    :param lib: structure for accessing the functionality of the libximc library.
+    :param device_id: device id.
+    
+    Follow the on-screen instructions to change the settings.
+    """
+    
     key_press = "1"
     print(" ")
     while(ord(key_press) != 81 and ord(key_press) != 113): # Press "q" - quit
@@ -761,9 +1089,9 @@ def device_actions_dialog(lib, devise_id):
         key_press = getch()
         # print(str(key_press), ord(key_press))
         if ord(key_press) == 77 or ord(key_press) == 109:  # Press "M" movement
-            device_movement_actions_dialog(lib, devise_id)
+            device_movement_actions_dialog(lib, device_id)
         if ord(key_press) == 67 or ord(key_press) == 99:  # Press "C" movement
-            device_movement_actions_dialog(lib, devise_id, 0)
+            device_movement_actions_dialog(lib, device_id, 0)
         elif ord(key_press) == 73 or ord(key_press) == 105:  # Press "I" external I/O EXTIO
             test_extio(lib, device_id)
         elif ord(key_press) == 69 or ord(key_press) == 101:  # Press "E" EEPROM
@@ -773,43 +1101,53 @@ def device_actions_dialog(lib, devise_id):
         print(" ")
 
 
-# variable 'lib' points to a loaded library
-# note that ximc uses stdcall on win
-print("Library loaded")
+def main():
+    """
+    Main function of the example
+    
+    Starts Manager search for devices and the General Manager work with the device.
+    """
+    
+    print("Library loaded")
 
-sbuf = create_string_buffer(64)
-lib.ximc_version(sbuf)
-print("Library version: " + sbuf.raw.decode().rstrip("\0"))
+    sbuf = create_string_buffer(64)
+    lib.ximc_version(sbuf)
+    print("Library version: " + sbuf.raw.decode().rstrip("\0"))
 
-# The choice of dialogue of the working device.
-open_name = device_selection_dialog()
+    # The choice of dialogue of the working device.
+    open_name = device_selection_dialog()
 
-# Checking the correct device name.
-if not open_name:
-    exit(1)
+    # Checking the correct device name.
+    if not open_name:
+        exit(1)
 
-if type(open_name) is str:
-    open_name = open_name.encode()
+    if type(open_name) is str:
+        open_name = open_name.encode()
 
-# Open selected device
-print("\nOpen device " + repr(open_name))
-device_id = lib.open_device(open_name)
+    # Open selected device
+    print("\nOpen device " + repr(open_name))
+    device_id = lib.open_device(open_name)
 
-if device_id <= 0:
-    print("Error open device " )
-    exit(1)
-else:
-    print("Device id: " + repr(device_id))
+    if device_id <= 0:
+        print("Error open device " )
+        exit(1)
+    else:
+        print("Device id: " + repr(device_id))
 
-# Device info
-test_info(lib, device_id)
-test_serial(lib, device_id)
+    # Device info
+    test_info(lib, device_id)
+    test_serial(lib, device_id)
 
-result = lib.get_engine_settings(device_id, byref(eng))
-user_unit.MicrostepMode = eng.MicrostepMode
-# Dialog for selecting an action on the device
-device_actions_dialog(lib, device_id)
+    result = lib.get_engine_settings(device_id, byref(eng))
+    user_unit.MicrostepMode = eng.MicrostepMode
 
-print("\nClosing")
-lib.close_device(byref(cast(device_id, POINTER(c_int))))
-print("Done")
+    # Dialog for selecting an action on the device
+    device_actions_dialog(lib, device_id)
+
+    print("\nClosing")
+    lib.close_device(byref(cast(device_id, POINTER(c_int))))
+    print("Done")
+
+
+if __name__ == "__main__":
+    main()

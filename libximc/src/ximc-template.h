@@ -465,7 +465,7 @@ extern "C"
 		* @see edges_settings_calb_t
 		* \endrussian
 		*/
-	result_t XIMC_API load_correction_table(device_t id, const char* namefile);
+	result_t XIMC_API load_correction_table(device_t* id, const char* namefile);
 
 	/**
 		* \english
