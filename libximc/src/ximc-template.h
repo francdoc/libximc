@@ -500,22 +500,24 @@ extern "C"
 		* Enumerate all devices that looks like valid.
 		* @param[in] enumerate_flags enumerate devices flags
 		* @param[in] hints extended information
-		* hints is a string of form "key=value\nkey2=value2". Unrecognized key-value pairs are ignored.
+		* hints is a string of form "key=value \n key2=value2". Unrecognized key-value pairs are ignored.
 		* Key list: addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a remote host name or a comma-separated list of host names which contain the devices to be found, absent value means broadcast discovery.
 		* adapter_addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a IP address of network adapter. Remote ximc device must be on the same local network as the adapter.
+		* When using the adapter_addr key, you must install the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
 		* To enumerate network devices you must call {@link set_bindy_key} first.
 		* \endenglish
 		* \russian
 		* Перечисляет все XIMC-совместимые устройства.
 		* @param[in] enumerate_flags флаги поиска устройств
 		* @param[in] hints дополнительная информация для поиска
-		* hints это строка вида "ключ1=значение1\nключ2=значение2". Неизвестные пары ключ-значение игнорируются.
+		* hints это строка вида "ключ1=значение1 \n ключ2=значение2". Неизвестные пары ключ-значение игнорируются.
 		* Список ключей: addr - используется вместе с флагом ENUMERATE_NETWORK.
 		* Ненулевое значение это адрес или список адресов с перечислением через запятую удаленных хостов на которых происходит поиск устройств, отсутствующее значение это подключение посредством широковещательного запроса.
 		* adapter_addr - используется вместе с флагом ENUMERATE_NETWORK.
 		* Ненулевое значение это IP адрес сетевого адаптера. Сетевое устройство ximc должно быть в локальной сети, к которой подключён этот адаптер.
+		* При использование ключа adapter_addr обязательно установить ключ addr. Пример: "addr= \n adapter_addr=192.168.0.100".
 		* Для перечисления сетевых устройств обязательно нужно сначала вызвать функцию установки сетевого ключа {@link set_bindy_key}.
 		* \endrussian
 	 */
