@@ -8,6 +8,9 @@
  *
  * Libximc is cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
  *
+ * \warning
+ * The library opens the controller in exclusive access mode.
+ *
  * Full documentation about controllers is <a href="https://doc.xisupport.com">there</a>
  *
  * Full documentation about libximc API is available on the page <a href="https://libximc.xisupport.com/doc-en/ximc_8h.html">ximc.h.</a>

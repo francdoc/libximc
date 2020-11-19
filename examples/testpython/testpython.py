@@ -167,7 +167,9 @@ print("Library version: " + sbuf.raw.decode().rstrip("\0"))
 # wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
 # relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
 # In Python make sure to pass byte-array object to this function (b"string literal").
-lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
+result = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
+if result != Result.Ok:
+    lib.set_bindy_key("keyfile.sqlite".encode("utf-8")) # Search for the key file in the current directory.
 
 # This is device search and enumeration with probing. It gives more information about devices.
 probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK
@@ -187,6 +189,8 @@ for dev_ind in range(0, dev_count):
     if result == Result.Ok:
         print("Enumerated device #{} name (port name): ".format(dev_ind) + repr(enum_name) + ". Friendly name: " + repr(controller_name.ControllerName) + ".")
 
+flag_virtual = 0
+
 open_name = None
 if len(sys.argv) > 1:
     open_name = sys.argv[1]
@@ -201,6 +205,10 @@ elif sys.version_info >= (3,0):
     uri = urllib.parse.urlunparse(urllib.parse.ParseResult(scheme="file", \
             netloc=None, path=tempdir, params=None, query=None, fragment=None))
     open_name = re.sub(r'^file', 'xi-emu', uri).encode()
+    flag_virtual = 1
+    print("The real controller is not found or busy with another app.")
+    print("The virtual controller is opened to check the operation of the library.")
+    print("If you want to open a real controller, connect it or close the application that uses it.")
 
 if not open_name:
     exit(1)
@@ -231,3 +239,9 @@ test_serial(lib, device_id)
 print("\nClosing")
 lib.close_device(byref(cast(device_id, POINTER(c_int))))
 print("Done")
+
+if flag_virtual == 1:
+    print(" ")
+    print("The real controller is not found or busy with another app.")
+    print("The virtual controller is opened to check the operation of the library.")
+    print("If you want to open a real controller, connect it or close the application that uses it.")
