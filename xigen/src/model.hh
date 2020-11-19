@@ -235,21 +235,21 @@ namespace xigen
 	{
 		switch (type)
 		{
-			case VariableEnum::Int64u:	return "INT64U";
-			case VariableEnum::Int64s:	return "INT64S";
-			case VariableEnum::Int32u:	return "INT32U";
-			case VariableEnum::Int32s:	return "INT32S";
-			case VariableEnum::Int16u:	return "INT16U";
-			case VariableEnum::Int16s:	return "INT16S";
-			case VariableEnum::Int8u:		return "INT8U";
-			case VariableEnum::Int8s:		return "INT8S";
-			case VariableEnum::Float:		return "FLT32";
-			case VariableEnum::Double:	return "FLT64";
-			case VariableEnum::Char:		return "INT8U";
-			case VariableEnum::Byte:		return "INT8U";
-			case VariableEnum::CFloat:		return "FLT32";
-			case VariableEnum::CDFloat:		return "FLT32";
-			default:										throw std::runtime_error( "unserializable type" );
+			case VariableEnum::Int64u:	return "unsigned long long";
+			case VariableEnum::Int64s:	return "signed   long long";
+			case VariableEnum::Int32u:	return "unsigned long";
+			case VariableEnum::Int32s:	return "signed   long";
+			case VariableEnum::Int16u:	return "unsigned short";
+			case VariableEnum::Int16s:	return "signed   short";
+			case VariableEnum::Int8u:		return "unsigned char";
+			case VariableEnum::Int8s:		return "signed   char";
+			case VariableEnum::Float:		return "float";
+			case VariableEnum::Double:	return "double";
+			case VariableEnum::Char:		return "unsigned char";
+			case VariableEnum::Byte:		return "unsigned char";
+			case VariableEnum::CFloat:		return "float";
+			case VariableEnum::CDFloat:		return "float";
+			default:										throw std::runtime_error("unserializable type");
 		}
 	}
 
