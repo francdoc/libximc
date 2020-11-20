@@ -408,10 +408,14 @@ extern "C"
 		* \english
 		* Close specified device
 		* @param id an identifier of device
+		* \note
+		* The id parameter in this function is a C pointer, unlike most library functions that use this parameter
 		* \endenglish
 		* \russian
 		* Закрывает устройство
 		* @param id - идентификатор устройства
+		* \note
+		* Параметр id в данной функции является Си указателем, в отличие от большинства функций библиотеки использующих данный параметр
 		* \endrussian
 		*/
 	result_t XIMC_API close_device (device_t* id);
@@ -430,6 +434,8 @@ extern "C"
 		* Data is real, the point is a determiter.
 		* The first column is a coordinate. The second one is the deviation caused by a mechanical error.
 		* The maximum length of a table is 100 rows.
+		* \note
+		* The id parameter in this function is a C pointer, unlike most library functions that use this parameter
 		* @see command_move
 		* @see get_position_calb
 		* @see get_position_calb_t
@@ -443,17 +449,19 @@ extern "C"
 		* \russian
 		* Команда загрузки корректирующей таблицы из текстового файла.
 		* Таблица используется для коррекции положения в случае механических неточностей.
-		* Работает для некоторых параметров в _calb командах.		
+		* Работает для некоторых параметров в _calb командах.
 		* @param id - идентификатор устройства
-		* @param[in] namefile - имя файла должно быть полным. 
+		* @param[in] namefile - имя файла должно быть полным.
 		* Если используется короткое имя, файл должен находится в директории приложения.
 		* Если имя файла равно NULL таблица коррекции будет очищена.
-		* Формат файла: два столбца разделенных табуляцией. 
+		* Формат файла: два столбца разделенных табуляцией.
 		* Заголовки столбцов строковые.
 		* Данные действительные разделитель точка.
 		* Первый столбец координата. Второй - отклонение вызванное ошибкой механики.
 		* Между координатами отклонение расчитывается линейно. За диапазоном константа равная отклонению на границе.
-		* Максимальная длина таблицы 100 строк.
+		* Максимальная длина таблицы 100 строк.		
+		* \note
+		* Параметр id в данной функции является Си указателем, в отличие от большинства функций библиотеки использующих данный параметр
 		* @see command_move
 		* @see command_movr
 		* @see get_position_calb

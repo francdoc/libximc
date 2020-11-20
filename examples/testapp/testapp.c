@@ -338,6 +338,8 @@ int main (int argc, char* argv[])
 	print_state( &state );
 
 	char* ch1 = "table.txt";
+
+	// The device_t device parameter in this function is a C pointer, unlike most library functions that use this parameter
 	if ((result = load_correction_table(&device, ch1)) != result_ok)
 		wprintf(L"error load_calibration_table %ls\n", error_string(result));
 
@@ -388,6 +390,7 @@ int main (int argc, char* argv[])
 
 	msec_sleep( 2*1000 );
 
+	// The id parameter device_t device this function is a C pointer, unlike most library functions that use this parameter
 	if ((result = close_device( &device )) != result_ok)
 		wprintf( L"error closing device %ls\n", error_string( result ) );
 

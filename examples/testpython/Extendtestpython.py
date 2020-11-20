@@ -1,7 +1,8 @@
 """
 This module is an extended example of using the libximc library to control 8SMC SERIES using the Python language.
 
-Warning: The keyboard module tracks clicks even if the window is not active. 
+Warning: 
+    The keyboard module tracks clicks even if the window is not active. 
     To avoid problems, do not change the focus until you finish working with the example.
 
 # Dependences
@@ -168,7 +169,8 @@ def test_status(lib, device_id):
     """
     A function of reading status information from the device
 
-    You can use this function to get basic information about the device status.    
+    You can use this function to get basic information about the device status.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id:  device id.
     """
@@ -188,7 +190,8 @@ def get_status(lib, device_id):
     """
     A function of reading status information from the device
 
-    You can use this function to get basic information about the device status.    
+    You can use this function to get basic information about the device status.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id:  device id.
     """
@@ -240,6 +243,7 @@ def test_get_position(lib, device_id, mode=1):
     This function allows you to get information about the current positioner coordinates,
     both in steps and in encoder counts, if it is set.
     Also, depending on the state of the mode parameter, information can be obtained in user units.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     :param mode: mode in feedback counts or in user units. (Default value = 1)
@@ -289,6 +293,7 @@ def test_move(lib, device_id, distance, udistance, mode=1):
     Move to the specified coordinate.
 
     Depending on the mode parameter, you can set coordinates in steps or feedback counts, or in custom units.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     :param distance: the position of the destination.
@@ -310,6 +315,7 @@ def test_movr(lib, device_id, distance, udistance, mode=1):
     The shift by the specified offset coordinates.
     
     Depending on the mode parameter, you can set coordinates in steps or feedback counts, or in custom units.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     :param distance: size of the offset in steps.
@@ -360,6 +366,7 @@ def test_feedback_settings(lib, device_id):
     View and change the feedback mode.
     
     To manage feedback, follow the prompts on the screen.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     """
@@ -490,6 +497,7 @@ def test_move_settings(lib, device_id, mode = 1):
     Setting up movement parameters.
     
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     :param mode: data mode in feedback counts or in user units. (Default value = 1)
@@ -532,6 +540,7 @@ def test_user_unit_mode(lib, device_id):
     
     After setting this multiplier, you can use special commands with the suffix _calb to set the movement in mm or degrees.
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     """
@@ -552,6 +561,7 @@ def test_microstep_mode(lib, device_id):
     Setting the microstep mode. Works only for stepper motors
     
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     """
@@ -658,6 +668,7 @@ def test_edges_settings(lib, device_id):
     View and configure the limit switch mode.
     
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
 
@@ -737,13 +748,18 @@ def test_edges_settings(lib, device_id):
 def gl_settings(lib, device_id):
     """
     Manager of the controller settings.
-
+    
+    This function, among other settings, allows you to load the coordinate correction table.
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
+    
+    note:
+        The device_id parameter in this function is a C pointer, unlike most library functions that use this parameter
 
     """
-    
+
     key_press = "1"
     while(ord(key_press) != 81 and ord(key_press) != 113): # Press "q" - quit        
         print("Select a group of settings:")
@@ -800,8 +816,9 @@ def motor_settings(lib, device_id):
 def test_extio(lib, device_id):
     """
     External input / output settings Manager.
-
+    
     Follow the on-screen instructions to change the settings.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
 
@@ -992,6 +1009,7 @@ def device_movement_actions_dialog(lib, device_id, mode = 1):
     The Manager motion control.
 
     Allows you to move both in feedback counts and in user units.
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     :param mode: data mode in feedback counts or in user units. (Default value = 1)
@@ -1066,7 +1084,7 @@ def device_movement_actions_dialog(lib, device_id, mode = 1):
 def device_actions_dialog(lib, device_id):
     """
     The main Manager of the example.
-
+    
     :param lib: structure for accessing the functionality of the libximc library.
     :param device_id: device id.
     
@@ -1105,6 +1123,12 @@ def main():
     """
     Main function of the example
     
+    Main function opens the device search Manager.
+    You connect to the selected device, work with it, and disconnect from the device at the end of the program.
+    
+    note:
+        The device_id parameter in function close_device() is a C pointer, unlike most library functions that use this parameter
+
     Starts Manager search for devices and the General Manager work with the device.
     """
     
