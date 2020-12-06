@@ -422,10 +422,12 @@ ACTION=$1
 shift
 
 # configure env
-configure_dist
-if [ -z "$DISTNAME" ] ; then
-	echo Unknown dist
-	exit 1
+if [ "$ACTION" != "cleandist" ] && [ "$ACTION" != "clean" ] ; then
+	configure_dist
+	if [ -z "$DISTNAME" ] ; then
+		echo Unknown dist
+		exit 1
+	fi
 fi
 
 # determine action
