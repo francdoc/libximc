@@ -60,12 +60,10 @@ if [ "$1" = "dist" ] ; then
 	makedist
 
 elif [ "$1" = "docs" ] ; then
-	[ -n "$NODE_NAME" ] || NODE_NAME=docs
 	build_docs
 	tar cf results-dist-docs.tar ximc
 
 elif [ "$1" = "abicc-dump" ] ; then
-	[ -n "$NODE_NAME" ] || NODE_NAME=abicc-dump
 	./build.sh abicc-dump
 
 else
