@@ -37,7 +37,7 @@ makedist()
 
 [ -n "$GIT" ] || GIT=git
 
-echo Using jenkins at $JENKINS_HOME, node $NODE_NAME
+echo Using jenkins at $JENKINS_HOME, node $NODE_NAME, buildos $BUILDOS
 echo Using parameters $NODE_LABELS, starter $0, command line $*
 echo Use git revision $XIMC_REVISION
 
@@ -66,6 +66,21 @@ elif [ "$1" = "docs" ] ; then
 elif [ "$1" = "abicc-dump" ] ; then
 	./build.sh abicc-dump
 
+elif [ "$1" = "build" ] ; then
+	./build.sh cleandist
+	# modern CI build without using implicit labels
+	buildos=$BUILDOS
+	if [ "$buildos" = "debian64" ] || [ "$buildos" = "debian32" ] ; then
+		build_debian
+	elif [ "$buildos" = "suse64" ] || [ "$buildos" = "suse32" ] ; then
+		build_opensuse
+	elif [ "$buildos" = "osx" ] ; then
+		build_macosx
+	else
+		echo "No name in $BUILDOS"
+		exit 1
+	fi
+	tar cf results-dist-$buildos.tar ximc
 else
 	# usual build. node labels are passed by env variable
 	for label in $NODE_LABELS
