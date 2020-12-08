@@ -78,7 +78,10 @@ pipeline {
     } // stage
     
     stage('docs') {
-      // execute at master
+      // execute at debian machine (BSD does not work)
+      agent {
+        label "debian64"
+      }
       steps {
         // Just to be sure delete any local leftover files
         sh "rm -rf deps"
