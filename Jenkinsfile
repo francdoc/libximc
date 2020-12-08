@@ -126,10 +126,10 @@ pipeline {
   post {
     failure {
       echo "Failure, sending emails..."
-      //emailext body: '$DEFAULT_CONTENT',
-      //         to: '$DEFAULT_RECIPIENTS',
-      //         recipientProviders: [[$class: 'DevelopersRecipientProvider'],[$class: 'CulpritsRecipientProvider']],
-      //         subject: '$DEFAULT_SUBJECT'
+      emailext body: '$DEFAULT_CONTENT',
+               to: '$DEFAULT_RECIPIENTS',
+               recipientProviders: [[$class: 'DevelopersRecipientProvider'],[$class: 'CulpritsRecipientProvider']],
+               subject: '$DEFAULT_SUBJECT'
     }
     cleanup {
       // drop workspace for main job
