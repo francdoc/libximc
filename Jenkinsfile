@@ -3,6 +3,7 @@ pipeline {
 
   parameters {
     booleanParam(name: 'DEBUG', defaultValue: false, description: 'Build with debug symbols')
+    booleanParam(name: 'WITH_ARM', defaultValue: false, description: 'Enable build for ARM')
   }
 
   triggers {
@@ -38,7 +39,7 @@ pipeline {
         axes {
           axis {
             name 'BUILDOS'
-            values 'debian64', 'debian32', 'suse64', 'suse32', 'win', 'osx'
+            values 'debian64', 'debian32', 'debianarm', 'suse64', 'suse32', 'win', 'osx'
           }
         }
         stages {
@@ -52,7 +53,14 @@ pipeline {
 
           stage('build-unix') {
             // Build for Linux and OSX agents
-            when { expression { isUnix() } }
+            // Condition: !(buildos=debianarm) || with_arm
+            when { allOf {
+              expression { isUnix() };
+              anyOf {
+                expression { env.BUILDOS != 'debianarm' };
+                expression { params.WITH_ARM }
+              }
+            } }
             steps {
               sh "./build-ci build"
               stash name: "result-${BUILDOS}", includes: "results-dist-*.tar"
@@ -102,6 +110,11 @@ pipeline {
         unstash "result-win"
         unstash "result-osx"
         unstash "result-docs"
+        script {
+          if (params.WITH_ARM) {
+            unstash "result-debianarm"
+          }
+        }
         sh "ls"
         sh "./build-ci dist"
         archiveArtifacts artifacts: "dist/ximc*.tar.gz"
