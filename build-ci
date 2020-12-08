@@ -70,7 +70,7 @@ elif [ "$1" = "build" ] ; then
 	./build.sh cleandist
 	# modern CI build without using implicit labels
 	buildos=$BUILDOS
-	if [ "$buildos" = "debian64" ] || [ "$buildos" = "debian32" ] ; then
+	if [ "$buildos" = "debian64" ] || [ "$buildos" = "debian32" ] || [ "$buildos" = "debianarm" ] ; then
 		build_debian
 	elif [ "$buildos" = "suse64" ] || [ "$buildos" = "suse32" ] ; then
 		build_opensuse
