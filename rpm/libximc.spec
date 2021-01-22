@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.12.5
+Version: 2.12.6
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -74,6 +74,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Fri Jan 22 2021 XIMC <info@ximc.ru> - 2.12.6
+- version bump
+- Bug #42246 Release a new version of bindi
+- Bug #42286 In the SSNO and GSNO commands with ASIA
+- Bug #42738 Fix the device_id parameter in the load_correction_table
+- Feature #36618 Update the data types for the firmware in the xigen
+- Feature #42234 Update examples and site
+- Feature #42920 In bindi, make an enumerate with the address of network
 
 * Tue Oct 20 2020 XIMC <info@ximc.ru> - 2.12.5
 - version bump

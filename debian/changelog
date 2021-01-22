@@ -1,3 +1,15 @@
+libximc7 (2.12.6-1) unstable; urgency=low
+
+  * Version bump
+  * Bug #42246 Release a new version of bindi
+  * Bug #42286 In the SSNO and GSNO commands with ASIA
+  * Bug #42738 Fix the device_id parameter in the load_correction_table
+  * Feature #36618 Update the data types for the firmware in the xigen
+  * Feature #42234 Update examples and site
+  * Feature #42920 In bindi, make an enumerate with the address of network
+
+ -- XIMC <info@ximc.ru>  Fri, 22 Jan 2021 13:59:57 +0300
+
 libximc7 (2.12.5-1) unstable; urgency=low
 
   * Version bump
