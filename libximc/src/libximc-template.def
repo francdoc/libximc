@@ -11,6 +11,7 @@ EXPORTS
 	probe_device @507
 	enumerate_devices @508
 	free_enumerate_devices @509
+	loader_correction_table @510
 	reset_locks @511
 	msec_sleep @512
 	get_status @513

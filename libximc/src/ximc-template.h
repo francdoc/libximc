@@ -423,6 +423,7 @@ extern "C"
 	/**
 		* \english
 		* Command of loading a correction table from a text file.
+		* This function is deprecated. Use the function loader_correction_table(device_t id, const char* namefile).
 		* The correction table is used for position correction in case of mechanical inaccuracies.
 		* It works for some parameters in _calb commands.
 		* @param id an identifier the device
@@ -448,6 +449,7 @@ extern "C"
 		* \endenglish
 		* \russian
 		* Команда загрузки корректирующей таблицы из текстового файла.
+		* Данная функция устарела. Используйте функцию loader_correction_table(device_t id, const char* namefile).
 		* Таблица используется для коррекции положения в случае механических неточностей.
 		* Работает для некоторых параметров в _calb командах.
 		* @param id - идентификатор устройства
@@ -474,6 +476,57 @@ extern "C"
 		* \endrussian
 		*/
 	result_t XIMC_API load_correction_table(device_t* id, const char* namefile);
+
+	/**
+	* \english
+	* Command of loading a correction table from a text file.
+	* The correction table is used for position correction in case of mechanical inaccuracies.
+	* It works for some parameters in _calb commands.
+	* @param id an identifier the device
+	* @param[in] namefile - the file name must be fully qualified.
+	* If the short name is used, the file must be located in the application directory.
+	* If the file name is set to NULL, the correction table will be cleared.
+	* File format: two tab-separated columns.
+	* Column headers are string.
+	* Data is real, the point is a determiter.
+	* The first column is a coordinate. The second one is the deviation caused by a mechanical error.
+	* The maximum length of a table is 100 rows.
+	* @see command_move
+	* @see get_position_calb
+	* @see get_position_calb_t
+	* @see get_status_calb
+	* @see status_calb_t
+	* @see get_edges_settings_calb
+	* @see set_edges_settings_calb
+	* @see edges_settings_calb_t
+	*
+	* \endenglish
+	* \russian
+	* Команда загрузки корректирующей таблицы из текстового файла.
+	* Таблица используется для коррекции положения в случае механических неточностей.
+	* Работает для некоторых параметров в _calb командах.
+	* @param id - идентификатор устройства
+	* @param[in] namefile - имя файла должно быть полным.
+	* Если используется короткое имя, файл должен находится в директории приложения.
+	* Если имя файла равно NULL таблица коррекции будет очищена.
+	* Формат файла: два столбца разделенных табуляцией.
+	* Заголовки столбцов строковые.
+	* Данные действительные разделитель точка.
+	* Первый столбец координата. Второй - отклонение вызванное ошибкой механики.
+	* Между координатами отклонение расчитывается линейно. За диапазоном константа равная отклонению на границе.
+	* Максимальная длина таблицы 100 строк.
+	* @see command_move
+	* @see command_movr
+	* @see get_position_calb
+	* @see get_position_calb_t
+	* @see get_status_calb
+	* @see status_calb_t
+	* @see get_edges_settings_calb
+	* @see set_edges_settings_calb
+	* @see edges_settings_calb_t
+	* \endrussian
+	*/
+	result_t XIMC_API loader_correction_table(device_t id, const char* namefile)
 
 	/**
 		* \english
