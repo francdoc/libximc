@@ -1,6 +1,6 @@
 Eng.
 
-How to work with example on Windows.
+How to work with example.
 
 For run:
 1. Before launch:
@@ -19,7 +19,7 @@ The example code can be modified in MATLAB editor.
 
 Rus.
 
-Как работать с примером на Windows.
+Как работать с примером
  
 Для запуска примера:
 1. Перед запуском:

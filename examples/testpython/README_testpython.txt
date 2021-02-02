@@ -1,6 +1,6 @@
 Eng.
 
-How to work with example on Windows.
+How to work with example.
 
 For run:
 1. Change the current directory to examples/testpython. To use the libximc library correctly, the example uses
@@ -22,7 +22,7 @@ The example code can be modified in any text editor.
 
 Rus.
 
-Как работать с примером на Windows.
+Как работать с примером.
  
 Для запуска примера:
 1. Измените текущий каталог на examples/testpython. Для корректного использования библиотеки libximc в примере используется
