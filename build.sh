@@ -184,7 +184,7 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp testappeasy testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks; do
+	for example in testapp testappeasy testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks testlabwindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
