@@ -1,3 +1,11 @@
+libximc (2.12.7-1)
+  * Released: Wed, 10 Feb 2021 14:17:36 +0300
+  * Version bump
+  * Feature #44374 Add an example on labwindows to the libximc library
+  * Feature #19483 Unified COM device addressing scheme
+  * Feature #42234 To update the examples and the site
+  * Feature #42275 Make a readme for our examples
+
 libximc (2.12.6-1)
   * Released: Fri, 22 Jan 2021 13:59:57 +0300
   * Version bump
