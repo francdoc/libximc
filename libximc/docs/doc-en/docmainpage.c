@@ -8,9 +8,6 @@
  *
  * Libximc is cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
  *
- * \warning
- * The library opens the controller in exclusive access mode.
- *
  * Full documentation about controllers is <a href="https://doc.xisupport.com">there</a>
  *
  * Full documentation about libximc API is available on the page <a href="https://libximc.xisupport.com/doc-en/ximc_8h.html">ximc.h.</a>
@@ -26,6 +23,9 @@
  *
  * - Libximc manages hardware using interfaces: USB 2.0., RS232 and Ethernet, also uses a common and proven virtual serial port interface, so you can work with motor control modules through this library under almost all operating systems, including Windows, Linux and Mac OS X
  * - Libximc library supports plug/unplug on the fly. Each device can be controlled only by one program at once. Multiple processes (programs) that control one device simultaneously are not allowed.
+ *
+ * \warning
+ * Libximc library opens the controller in exclusive access mode. Any controller opened with libximc (XiLab also uses this library) needs to be closed before it may be used by another process. So at first check that you have closed XiLab or other software dealing with the controller before trying to reopen the controller.
  *
  * Please read the <a href="https://libximc.xisupport.com/doc-en/intro_sec.html">Introduction</a> to start work with library.
  *
