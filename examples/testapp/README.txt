@@ -2,7 +2,6 @@ Eng.
 
 A test application that shows the advanced features of working with the library, including user units and working with the correction table.
 
-How to work with example.
 
 For run:
 
@@ -17,7 +16,7 @@ In case of cross-compilation (target architecture differs from the current syste
 to compiler.
 Then launch the application as:
 $ make run
- * In Windows: testapp can be built using testapp.sln. Make sure that Microsoft Visual C++ Redistributable Package is installed.
+ * In Windows: testapp can be built using testapp.sln. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed.
 Open solution examples/testapp/testapp.sln, build and run from the IDE.
 
 
@@ -26,7 +25,6 @@ Rus.
 
 Тестовое приложение показывающее расширенные возможности работы с библиотекой, включая пользовательские единицы и работу с корректирующей таблицей.
 
-Как работать с примером
  
 Для запуска примера:
 
@@ -38,7 +36,7 @@ examples/testapp. Установите gcc. Тестовое приложени�
 $ make
 Выполнить приложение можно командой:
 $ make run
-* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package установлен. 
+* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
 Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll.
 Откройте пример /testapp/testapp.sln, создайте и запустите их из среды IDE.
 

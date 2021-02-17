@@ -2,7 +2,6 @@ Eng.
 
 How to work with example.
 
-For run:
 1. Before starting:
 * On OS X: copy ximc/macosx/libximc.framework, ximc/ximc.h to the directory
 examples/testcodeblocks. Install XCode compatible with CodeBlocks.
@@ -19,8 +18,7 @@ The example code can be modified in the CodeBlocks editor.
 Rus.
 
 Как работать с примером
- 
-Для запуска примера:
+
 1. Перед запуском:
 * На OS X: скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог
 examples/testcodeblocks. Установите XCode, совместимый с CodeBlocks.

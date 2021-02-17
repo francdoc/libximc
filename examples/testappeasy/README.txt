@@ -2,7 +2,6 @@ Eng.
 
 A simple test application to show the main features of the library.
 
-How to work with example.
 
 For run:
 
@@ -17,7 +16,7 @@ In case of cross-compilation (target architecture differs from the current syste
 to compiler.
 Then launch the application as:
 $ make run
- * In Windows: testappeasy can be built using testappeasy.sln. Make sure that Microsoft Visual C++ Redistributable Package is installed.
+ * In Windows: testappeasy can be built using testappeasy.sln. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed.
 Open solution examples/testappeasy/testappeasy.sln, build and run from the IDE.
 
 
@@ -26,7 +25,6 @@ Rus.
 
 Простое тестовое приложение для показа основных возможностей библиотеки.
 
-Как работать с примером
  
 Для запуска примера:
 
@@ -38,7 +36,7 @@ examples/testappeasy. Установите gcc. Тестовое приложе�
 $ make
 Выполнить приложение можно командой:
 $ make run
-* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package установлен. 
+* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
 Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll.
 Откройте пример /testappeasy/testappeasy.sln, создайте и запустите их из среды IDE.
 

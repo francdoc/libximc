@@ -2,7 +2,6 @@ Eng.
 
 This example shows how to work with a profile for a specific positioner in the user program.
 
-How to work with example.
 
 For run:
 
@@ -17,7 +16,7 @@ In case of cross-compilation (target architecture differs from the current syste
 to compiler.
 Then launch the application as:
 $ make run
- * In Windows: testcprofile can be built using testcprofile.sln. Make sure that Microsoft Visual C++ Redistributable Package is installed.
+ * In Windows: testcprofile can be built using testcprofile.sln. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed.
 Open solution examples/testcprofile/testcprofile.sln, build and run from the IDE.
 
 
@@ -26,7 +25,6 @@ Rus.
 
 Данный пример показывает как работать с профилем для конкретного позиционера в пользовательском приложении.
 
-Как работать с примером
  
 Для запуска примера:
 
@@ -38,7 +36,7 @@ examples/testcprofile. Установите gcc. Тестовое приложе
 $ make
 Выполнить приложение можно командой:
 $ make run
-* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package установлен. 
+* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
 Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll.
 Откройте пример /testcprofile/testcprofile.sln, создайте и запустите их из среды IDE.
 

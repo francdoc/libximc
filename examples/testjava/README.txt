@@ -1,6 +1,5 @@
 Eng.
 
-How to work with example on Windows.
 
 For run:
 1. Put files libjximc.jar, libjximc.dll, libximc.dll, bindy.dll, xiwrapper.dll, keyfile.sqlite next to testjava.jar
@@ -17,7 +16,6 @@ For modify:
 
 Rus.
 
-Как работать с примером на Windows.
  
 Для запуска примера:
 1. Поместите файлы libjximc.jar, libjximc.dll, libximc.dll, bindy.dll, xiwrapper.dll, keyfile.sqlite рядом с testjava.jar
