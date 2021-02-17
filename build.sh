@@ -133,6 +133,11 @@ makedist()
 	if [ -d "$DL/../c-profiles" ] ; then
 		cp -R $DL/../c-profiles $DISTLIB/
 	fi
+	
+	echo Copying python-profiles
+	if [ -d "$DL/../python-profiles" ] ; then
+		cp -R $DL/../python-profiles $DISTLIB/
+	fi
 
 	echo Copying libraries
 	for arch in deb rpm macosx win32 win64 ; do
