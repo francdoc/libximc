@@ -1400,7 +1400,7 @@ result_t XIMC_API load_correction_table(device_t* id, const char* namefile)
 	}
 }
 
-result_t XIMC_API loader_correction_table(device_t id, const char* namefile)
+result_t XIMC_API set_correction_table(device_t id, const char* namefile)
 {
 	device_metadata_t* dm;
 	FILE * fp = NULL;

@@ -797,7 +797,7 @@ def gl_settings(lib, device_id):
             
             # The device_t device parameter in this function is a C pointer, unlike most library functions that use this parameter
             # result = lib.load_correction_table(byref(cast(device_id, POINTER(c_int))), namefile)  # This function is deprecated. Use the function
-            result = lib.loader_correction_table(device_id, namefile)
+            result = lib.set_correction_table(device_id, namefile)
             if result<0:
                 print("The table is not loaded, If the table was loaded, it is reset.")
             else:

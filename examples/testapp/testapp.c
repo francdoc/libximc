@@ -340,7 +340,7 @@ int main (int argc, char* argv[])
 	char* ch1 = "table.txt";
 
 	// The device_t device parameter in this function is a C pointer, unlike most library functions that use this parameter
-	if ((result = loader_correction_table(device, ch1)) != result_ok)
+	if ((result = set_correction_table(device, ch1)) != result_ok)
 		wprintf(L"error load_calibration_table %ls\n", error_string(result));
 
 	if ((result = command_move_calb(device, 380, &calibration)) != result_ok)
@@ -382,7 +382,7 @@ int main (int argc, char* argv[])
 	if ((result = get_status( device, &state )) != result_ok)
 		wprintf( L"error getting status %ls\n", error_string( result ) );
 	print_state( &state );
-	if ((result = loader_correction_table(device, NULL)) != result_ok)
+	if ((result = set_correction_table(device, NULL)) != result_ok)
 		wprintf(L"error load_calibration_table %ls\n", error_string(result));
 	if ((result = get_status_calb(device, &state1, &calibration)) != result_ok)
 		wprintf(L"error getting status %ls\n", error_string(result));
