@@ -220,15 +220,33 @@ makedist()
 		echo Copying compiled example $example
 		mkdir -p $DISTEXAM/$example/compiled-win32
 		cp $DL/win32/$example.exe $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/libximc.* $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/bindy.dll $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/bindy.lib $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
 	done
 
 	for example in testjava ; do
 		echo Copying compiled example $example
 		mkdir -p $DISTEXAM/$example/compiled
+		mkdir -p $DISTEXAM/$example/compiled-win32
+		mkdir -p $DISTEXAM/$example/compiled-win64
 		# it's okay to get one of these jars but -source/-target was not specified
 		cp $DL/macosx/$example.jar $DISTEXAM/$example/compiled
-		cp $DL/macosx/java-README.txt $DISTEXAM/$example/compiled/README.txt
-		
+		cp $DL/macosx/$example.jar $DISTEXAM/$example/compiled-win32
+		cp $DL/macosx/$example.jar $DISTEXAM/$example/compiled-win64
+		cp $DL/macosx/java-README.txt $DISTEXAM/$example/README.txt
+		for arch in win32 win64 ; do
+			cp -R $DL/$arch/libximc.* $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/bindy.dll $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/bindy.lib $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/xiwrapper.dll $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/keyfile.sqlite $DISTEXAM/$example/compiled-$arch
+			if [ -f $DL/$arch/libjximc.dll ] ; then
+				cp -R $DL/$arch/libjximc.* $DISTEXAM/$example/compiled-$arch
+			fi
+		done		
 	done
 
 	echo Fetching sources

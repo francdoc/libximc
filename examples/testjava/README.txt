@@ -2,9 +2,9 @@ Eng.
 
 
 For run:
-1. Put files libjximc.jar, libjximc.dll, libximc.dll, bindy.dll, xiwrapper.dll, keyfile.sqlite next to testjava.jar
-2. Type in command line:
+1. Type in command line for win32 or win64:
  java -classpath libjximc.jar -classpath testjava.jar ru.ximc.TestJava
+2. For other platforms, use the compiled folder. You may need to copy some dependencies to it.
  
 For modify:
 1. Unpack jar:
@@ -18,9 +18,9 @@ Rus.
 
  
 Для запуска примера:
-1. Поместите файлы libjximc.jar, libjximc.dll, libximc.dll, bindy.dll, xiwrapper.dll, keyfile.sqlite рядом с testjava.jar
-2. Для запуска наберите в командной строке: 
+1. Для запуска примера для win32 или win64 наберите в командной строке: 
  java -classpath libjximc.jar -classpath testjava.jar ru.ximc.TestJava
+2. Для других платформ используйте папку compiled. Возможно в нее понадобится скопировть некоторые зависимости.
  
 Для модификации примера:
 1. Распакуйте jar командой:
