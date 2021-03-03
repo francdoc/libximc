@@ -1,3 +1,14 @@
+libximc7 (2.12.8-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #46939 Add dependencies to the collected libximc examples
+  * Feature #43812 Make a python profile
+  * Feature #42920 In bindi, make enumerate with the network adapter
+  * Feature #42234 To update the examples and the site
+  * Bug #46049 Rename the loader_correction_table function
+
+ -- XIMC <info@ximc.ru>  Tue, 02 Mar 2021 16:02:54 +0300
+
 libximc7 (2.12.7-1) unstable; urgency=low
 
   * Version bump

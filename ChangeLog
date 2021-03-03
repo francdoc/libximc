@@ -1,3 +1,12 @@
+libximc (2.12.8-1)
+  * Released: Tue, 02 Mar 2021 16:02:54 +0300
+  * Version bump
+  * Feature #46939 Add dependencies to the collected libximc examples
+  * Feature #43812 Make a python profile
+  * Feature #42920 In bindi, make enumerate with the network adapter
+  * Feature #42234 To update the examples and the site
+  * Bug #46049 Rename the loader_correction_table function
+
 libximc (2.12.7-1)
   * Released: Wed, 10 Feb 2021 14:17:36 +0300
   * Version bump
