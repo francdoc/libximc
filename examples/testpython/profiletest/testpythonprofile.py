@@ -103,14 +103,10 @@ flag_virtual = 0
 
 open_name = -1
 open_name = lib.get_device_name(devenum, 0)
-print("This port")
-print(open_name, type(open_name))
 if len(sys.argv) > 1:
     open_name = sys.argv[1]
 elif dev_count > 0:
     open_name = lib.get_device_name(devenum, 0)
-    print("This port")
-    print(open_name, type(open_name))
 elif sys.version_info >= (3,0):
     # use URI for virtual device when there is new urllib python3 API
     tempdir = tempfile.gettempdir() + "/testdevice.bin"

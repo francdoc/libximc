@@ -1,3 +1,10 @@
+libximc7 (2.12.10-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #47473 Refine it testpythonprofile and fix the folder structure
+
+ -- XIMC <info@ximc.ru>  Mon, 22 Mar 2021 15:10:24 +0300
+
 libximc7 (2.12.8-1) unstable; urgency=low
 
   * Version bump

@@ -1,3 +1,8 @@
+libximc (2.12.10-1)
+  * Released: Mon, 22 Mar 2021 15:10:24 +0300
+  * Version bump
+  * Feature #47473 Refine it testpythonprofile and fix the folder structure
+
 libximc (2.12.8-1)
   * Released: Tue, 02 Mar 2021 16:02:54 +0300
   * Version bump
