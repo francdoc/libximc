@@ -2,7 +2,7 @@ Eng.
 
 
 For run:
-1. Change the current directory to examples/testpython. To use the libximc library correctly, the example uses a file wrapper, /ximc/crossplatform/wrappers/python/pyximc.py with a description of the library structure.
+1. Change the current directory to examples/testpython/standardtest. To use the libximc library correctly, the example uses a file wrapper, /ximc/crossplatform/wrappers/python/pyximc.py with a description of the library structure.
 2. Configuring dependencies:
  * On OS X: copy the ximc/macosx/libximc library.add the framework to the current directory.
  * On Linux: You may need to set LD_LIBRARY_PATH so that Python can find libraries using RPATH. For example, using:
@@ -21,7 +21,7 @@ Rus.
 
  
 Для запуска примера:
-1. Измените текущий каталог на examples/testpython. Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
+1. Измените текущий каталог на examples/testpython/standardtest. Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
 2. Настройка зависимостей:
  * В OS X: скопируйте библиотеку ximc/macosx/libximc.framework в текущий каталог.
  * В Linux: возможно, вам потребуется установить LD_LIBRARY_PATH, чтобы Python мог находить библиотеки с помощью RPATH. Например, с помощью:

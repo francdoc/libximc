@@ -25,7 +25,7 @@ if not(confirm in {"y", "yes", "Y", "Yes"}):
 # For correct usage of the library libximc,
 # you need to add the file pyximc.py wrapper with the structures of the library to python path.
 cur_dir = os.path.abspath(os.path.dirname(__file__)) # Specifies the current directory.
-ximc_dir = os.path.join(cur_dir, "..", "..", "ximc") # Formation of the directory name with all dependencies. The dependencies for the examples are located in the ximc directory.
+ximc_dir = os.path.join(cur_dir, "..", "..", "..", "ximc") # Formation of the directory name with all dependencies. The dependencies for the examples are located in the ximc directory.
 ximc_package_dir = os.path.join(ximc_dir, "crossplatform", "wrappers", "python") # Formation of the directory name with python dependencies.
 sys.path.append(ximc_package_dir)  # add pyximc.py wrapper to python path
 

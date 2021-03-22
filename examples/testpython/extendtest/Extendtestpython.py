@@ -37,7 +37,7 @@ if sys.version_info >= (3,0):
     import urllib.parse
 
 cur_dir = os.path.abspath(os.path.dirname(__file__))  # Specifies the current directory.
-ximc_dir = os.path.join(cur_dir, "..", "..", "ximc")  # Formation of the directory name with all dependencies. 
+ximc_dir = os.path.join(cur_dir, "..", "..", "..", "ximc")  # Formation of the directory name with all dependencies. 
 ximc_package_dir = os.path.join(ximc_dir, "crossplatform", "wrappers", "python") # Formation of the directory name with python dependencies.
 sys.path.append(ximc_package_dir)  # add pyximc.py wrapper to python path
 
