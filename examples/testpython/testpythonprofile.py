@@ -9,6 +9,17 @@ import re
 if sys.version_info >= (3,0):
     import urllib.parse
 
+print("//***************************************************************//")
+print("// This example demonstrates loading a profile for a positioner. //")
+print("//           The example uses the profile 8MT173-25-MEn1.        //")
+print("//If you use a different positioner, these settings may break it.//")
+print("//***************************************************************//")
+print(" ")
+confirm = input("To continue with the example, press y/n and press Enter: ")
+
+if not(confirm in {"y", "yes", "Y", "Yes"}):
+    exit()
+
 # Dependences
     
 # For correct usage of the library libximc,
@@ -128,8 +139,6 @@ if set_profile_8MT173_25_MEn1(lib, device_id) == Result.Ok:
     print("Download profile has been successfully completed.")
 else:
     print("The profile was loaded with errors.")
-
-
 
 print("\nClosing")
 
