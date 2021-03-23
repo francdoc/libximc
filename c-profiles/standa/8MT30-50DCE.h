@@ -5,6 +5,14 @@
 
 #include "ximc.h"
 
+
+#define 8MT30_50DCE_BUILDER_VERSION_MAJOR  0
+#define 8MT30_50DCE_BUILDER_VERSION_MINOR  9
+#define 8MT30_50DCE_BUILDER_VERSION_BUGFIX 9
+#define 8MT30_50DCE_BUILDER_VERSION_SUFFIX ""
+#define 8MT30_50DCE_BUILDER_VERSION        "0.9.9"
+
+
 #if defined(_MSC_VER)
 #define inline __inline
 #endif
@@ -51,12 +59,13 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   move_settings_t move_settings;
   memset((void*)&move_settings, 0, sizeof(move_settings_t));
-  move_settings.Speed = 5261;
+  move_settings.Speed = 2630;
   move_settings.uSpeed = 0;
   move_settings.Accel = 18000;
   move_settings.Decel = 18000;
-  move_settings.AntiplaySpeed = 5261;
+  move_settings.AntiplaySpeed = 2630;
   move_settings.uAntiplaySpeed = 8;
+  move_settings.MoveFlags = 0;
   result = set_move_settings(id, &move_settings);
 
   if (result != result_ok)
@@ -74,7 +83,7 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
   engine_settings.NomSpeed = 5261;
   engine_settings.uNomSpeed = 0;
   engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_LIMIT_CURR | ENGINE_LIMIT_VOLT | ENGINE_ACCEL_ON | ENGINE_REVERSE;
-  engine_settings.Antiplay = -23950;
+  engine_settings.Antiplay = -4852;
   engine_settings.MicrostepMode = MICROSTEP_MODE_FULL;
   engine_settings.StepsPerRev = 1;
   result = set_engine_settings(id, &engine_settings);
@@ -122,12 +131,12 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
   memset((void*)&secure_settings, 0, sizeof(secure_settings_t));
   secure_settings.LowUpwrOff = 800;
   secure_settings.CriticalIpwr = 4000;
-  secure_settings.CriticalUpwr = 5000;
+  secure_settings.CriticalUpwr = 5500;
   secure_settings.CriticalT = 800;
   secure_settings.CriticalIusb = 450;
   secure_settings.CriticalUusb = 520;
   secure_settings.MinimumUusb = 420;
-  secure_settings.Flags = ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
+  secure_settings.Flags = ALARM_ENGINE_RESPONSE | ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
   result = set_secure_settings(id, &secure_settings);
 
   if (result != result_ok)
@@ -242,9 +251,9 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   control_settings_t control_settings;
   memset((void*)&control_settings, 0, sizeof(control_settings_t));
-  control_settings.MaxSpeed[0] = 52;
-  control_settings.MaxSpeed[1] = 526;
-  control_settings.MaxSpeed[2] = 5261;
+  control_settings.MaxSpeed[0] = 26;
+  control_settings.MaxSpeed[1] = 263;
+  control_settings.MaxSpeed[2] = 2630;
   control_settings.MaxSpeed[3] = 0;
   control_settings.MaxSpeed[4] = 0;
   control_settings.MaxSpeed[5] = 0;
@@ -325,10 +334,54 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 86, -122, 0, 0, 0, -122, 0, 0, 0, 0, 0, 0, 0, -122, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  emf_settings_t emf_settings;
+  memset((void*)&emf_settings, 0, sizeof(emf_settings_t));
+  emf_settings.L = 0;
+  emf_settings.R = 0;
+  emf_settings.Km = 0;
+  emf_settings.BackEMFFlags = 0;
+  result = set_emf_settings(id, &emf_settings);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  engine_advansed_setup_t engine_advansed_setup;
+  memset((void*)&engine_advansed_setup, 0, sizeof(engine_advansed_setup_t));
+  engine_advansed_setup.stepcloseloop_Kw = 50;
+  engine_advansed_setup.stepcloseloop_Kp_low = 1000;
+  engine_advansed_setup.stepcloseloop_Kp_high = 33;
+  result = set_engine_advansed_setup(id, &engine_advansed_setup);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  extended_settings_t extended_settings;
+  memset((void*)&extended_settings, 0, sizeof(extended_settings_t));
+  extended_settings.Param1 = 0;
+  result = set_extended_settings(id, &extended_settings);
 
   if (result != result_ok)
   {
@@ -354,7 +407,7 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   stage_information_t stage_information;
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
-  const int8_t stage_information_Manufacturer_temp[16] = {83, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
   const int8_t stage_information_PartNumber_temp[24] = {56, 77, 84, 51, 48, 45, 53, 48, 68, 67, 69, 0, 49, 0, 0, 0, 68, 67, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
@@ -371,15 +424,15 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
   stage_settings_t stage_settings;
   memset((void*)&stage_settings, 0, sizeof(stage_settings_t));
   stage_settings.LeadScrewPitch = 0.25;
-  const int8_t stage_settings_Units_temp[8] = {109, 109, 0, 114, 101, 101, 0, 0};
+  const int8_t stage_settings_Units_temp[8] = {0, 109, 0, 114, 101, 101, 0, 0};
   memcpy(stage_settings.Units, stage_settings_Units_temp, sizeof(int8_t) * 8);
   stage_settings.MaxSpeed = 5;
   stage_settings.TravelRange = 50;
-  stage_settings.SupplyVoltageMin = 12;
-  stage_settings.SupplyVoltageMax = 36;
+  stage_settings.SupplyVoltageMin = 0;
+  stage_settings.SupplyVoltageMax = 0;
   stage_settings.MaxCurrentConsumption = 0;
-  stage_settings.HorizontalLoadCapacity = 5;
-  stage_settings.VerticalLoadCapacity = 3;
+  stage_settings.HorizontalLoadCapacity = 0;
+  stage_settings.VerticalLoadCapacity = 0;
   result = set_stage_settings(id, &stage_settings);
 
   if (result != result_ok)
@@ -392,9 +445,9 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   motor_information_t motor_information;
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
-  const int8_t motor_information_Manufacturer_temp[16] = {77, 97, 120, 111, 110, 0, 99, 0, 111, 110, 116, 114, 111, 108, 32, 80};
+  const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t motor_information_PartNumber_temp[24] = {68, 67, 69, 32, 82, 69, 50, 53, 32, 51, 51, 57, 49, 53, 50, 0, 0, 50, 48, 48, 45, 88, 0, 0};
+  const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_motor_information(id, &motor_information);
 
@@ -408,29 +461,29 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   motor_settings_t motor_settings;
   memset((void*)&motor_settings, 0, sizeof(motor_settings_t));
-  motor_settings.MotorType = MOTOR_TYPE_DC | MOTOR_TYPE_UNKNOWN;
+  motor_settings.MotorType = MOTOR_TYPE_STEP | MOTOR_TYPE_UNKNOWN;
   motor_settings.ReservedField = 0;
-  motor_settings.Poles = 2;
+  motor_settings.Poles = 0;
   motor_settings.Phases = 0;
-  motor_settings.NominalVoltage = 24;
-  motor_settings.NominalCurrent = 1.5;
-  motor_settings.NominalSpeed = 9690;
-  motor_settings.NominalTorque = 30.399999618530273;
-  motor_settings.NominalPower = 20;
-  motor_settings.WindingResistance = 1.5299999713897705;
-  motor_settings.WindingInductance = 0.1860000044107437;
-  motor_settings.RotorInertia = 14.699999809265137;
-  motor_settings.StallTorque = 325;
+  motor_settings.NominalVoltage = 0;
+  motor_settings.NominalCurrent = 0;
+  motor_settings.NominalSpeed = 0;
+  motor_settings.NominalTorque = 0;
+  motor_settings.NominalPower = 0;
+  motor_settings.WindingResistance = 0;
+  motor_settings.WindingInductance = 0;
+  motor_settings.RotorInertia = 0;
+  motor_settings.StallTorque = 0;
   motor_settings.DetentTorque = 0;
-  motor_settings.TorqueConstant = 20.799999237060547;
-  motor_settings.SpeedConstant = 460;
-  motor_settings.SpeedTorqueGradient = 34;
-  motor_settings.MechanicalTimeConstant = 5.239999771118164;
+  motor_settings.TorqueConstant = 0;
+  motor_settings.SpeedConstant = 0;
+  motor_settings.SpeedTorqueGradient = 0;
+  motor_settings.MechanicalTimeConstant = 0;
   motor_settings.MaxSpeed = 14000;
-  motor_settings.MaxCurrent = 1.5;
+  motor_settings.MaxCurrent = 0;
   motor_settings.MaxCurrentTime = 0;
-  motor_settings.NoLoadCurrent = 0.03700000047683716;
-  motor_settings.NoLoadSpeed = 10900;
+  motor_settings.NoLoadCurrent = 0;
+  motor_settings.NoLoadSpeed = 0;
   result = set_motor_settings(id, &motor_settings);
 
   if (result != result_ok)
@@ -443,9 +496,9 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   encoder_information_t encoder_information;
   memset((void*)&encoder_information, 0, sizeof(encoder_information_t));
-  const int8_t encoder_information_Manufacturer_temp[16] = {77, 97, 120, 111, 110, 0, 84, 101, 99, 104, 46, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.Manufacturer, encoder_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t encoder_information_PartNumber_temp[24] = {69, 110, 99, 111, 100, 101, 114, 32, 77, 82, 32, 84, 121, 112, 101, 32, 77, 76, 0, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.PartNumber, encoder_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_encoder_information(id, &encoder_information);
 
@@ -460,9 +513,9 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
   encoder_settings_t encoder_settings;
   memset((void*)&encoder_settings, 0, sizeof(encoder_settings_t));
   encoder_settings.MaxOperatingFrequency = 200;
-  encoder_settings.SupplyVoltageMin = 4.699999809265137;
-  encoder_settings.SupplyVoltageMax = 5.199999809265137;
-  encoder_settings.MaxCurrentConsumption = 10;
+  encoder_settings.SupplyVoltageMin = 0;
+  encoder_settings.SupplyVoltageMax = 0;
+  encoder_settings.MaxCurrentConsumption = 0;
   encoder_settings.PPR = 1000;
   encoder_settings.EncoderSettings = 0;
   result = set_encoder_settings(id, &encoder_settings);
@@ -510,9 +563,9 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
 
   gear_information_t gear_information;
   memset((void*)&gear_information, 0, sizeof(gear_information_t));
-  const int8_t gear_information_Manufacturer_temp[16] = {77, 97, 120, 111, 110, 32, 109, 111, 116, 111, 114, 0, 43, 32, 83, 116};
+  const int8_t gear_information_Manufacturer_temp[16] = {0, 97, 120, 111, 110, 32, 109, 111, 116, 111, 114, 0, 0, 0, 0, 0};
   memcpy(gear_information.Manufacturer, gear_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t gear_information_PartNumber_temp[24] = {49, 52, 52, 48, 50, 55, 0, 52, 58, 49, 0, 105, 110, 32, 116, 111, 32, 98, 97, 115, 101, 41, 0, 0};
+  const int8_t gear_information_PartNumber_temp[24] = {0, 52, 52, 48, 50, 55, 0, 58, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(gear_information.PartNumber, gear_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_gear_information(id, &gear_information);
 
@@ -528,11 +581,11 @@ static inline result_t set_profile_8MT30_50DCE(device_t id)
   memset((void*)&gear_settings, 0, sizeof(gear_settings_t));
   gear_settings.ReductionIn = 57;
   gear_settings.ReductionOut = 13;
-  gear_settings.RatedInputTorque = 0.5;
+  gear_settings.RatedInputTorque = 0;
   gear_settings.RatedInputSpeed = 8000;
-  gear_settings.MaxOutputBacklash = 1;
-  gear_settings.InputInertia = 0.6000000238418579;
-  gear_settings.Efficiency = 84;
+  gear_settings.MaxOutputBacklash = 0;
+  gear_settings.InputInertia = 0;
+  gear_settings.Efficiency = 0;
   result = set_gear_settings(id, &gear_settings);
 
   if (result != result_ok)

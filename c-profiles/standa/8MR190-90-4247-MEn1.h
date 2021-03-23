@@ -5,6 +5,14 @@
 
 #include "ximc.h"
 
+
+#define 8MR190_90_4247_MEN1_BUILDER_VERSION_MAJOR  0
+#define 8MR190_90_4247_MEN1_BUILDER_VERSION_MINOR  9
+#define 8MR190_90_4247_MEN1_BUILDER_VERSION_BUGFIX 9
+#define 8MR190_90_4247_MEN1_BUILDER_VERSION_SUFFIX ""
+#define 8MR190_90_4247_MEN1_BUILDER_VERSION        "0.9.9"
+
+
 #if defined(_MSC_VER)
 #define inline __inline
 #endif
@@ -57,6 +65,7 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
   move_settings.Decel = 4000;
   move_settings.AntiplaySpeed = 1000;
   move_settings.uAntiplaySpeed = 0;
+  move_settings.MoveFlags = 0;
   result = set_move_settings(id, &move_settings);
 
   if (result != result_ok)
@@ -122,12 +131,12 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
   memset((void*)&secure_settings, 0, sizeof(secure_settings_t));
   secure_settings.LowUpwrOff = 800;
   secure_settings.CriticalIpwr = 4000;
-  secure_settings.CriticalUpwr = 5000;
+  secure_settings.CriticalUpwr = 5500;
   secure_settings.CriticalT = 800;
   secure_settings.CriticalIusb = 450;
   secure_settings.CriticalUusb = 520;
   secure_settings.MinimumUusb = 420;
-  secure_settings.Flags = ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
+  secure_settings.Flags = ALARM_ENGINE_RESPONSE | ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
   result = set_secure_settings(id, &secure_settings);
 
   if (result != result_ok)
@@ -161,9 +170,9 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
   pid_settings.KpU = 0;
   pid_settings.KiU = 0;
   pid_settings.KdU = 0;
-  pid_settings.Kpf = 0;
-  pid_settings.Kif = 0;
-  pid_settings.Kdf = 0;
+  pid_settings.Kpf = 0.003599999938160181;
+  pid_settings.Kif = 0.03799999877810478;
+  pid_settings.Kdf = 2.8000000384054147e-05;
   result = set_pid_settings(id, &pid_settings);
 
   if (result != result_ok)
@@ -325,10 +334,54 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 86, -122, 0, 0, 0, -122, 0, 0, 0, 0, 0, 0, 0, -122, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  emf_settings_t emf_settings;
+  memset((void*)&emf_settings, 0, sizeof(emf_settings_t));
+  emf_settings.L = 0;
+  emf_settings.R = 0;
+  emf_settings.Km = 0;
+  emf_settings.BackEMFFlags = 0;
+  result = set_emf_settings(id, &emf_settings);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  engine_advansed_setup_t engine_advansed_setup;
+  memset((void*)&engine_advansed_setup, 0, sizeof(engine_advansed_setup_t));
+  engine_advansed_setup.stepcloseloop_Kw = 50;
+  engine_advansed_setup.stepcloseloop_Kp_low = 1000;
+  engine_advansed_setup.stepcloseloop_Kp_high = 33;
+  result = set_engine_advansed_setup(id, &engine_advansed_setup);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  extended_settings_t extended_settings;
+  memset((void*)&extended_settings, 0, sizeof(extended_settings_t));
+  extended_settings.Param1 = 0;
+  result = set_extended_settings(id, &extended_settings);
 
   if (result != result_ok)
   {
@@ -354,7 +407,7 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
 
   stage_information_t stage_information;
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
-  const int8_t stage_information_Manufacturer_temp[16] = {83, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
   const int8_t stage_information_PartNumber_temp[24] = {56, 77, 82, 49, 57, 48, 45, 57, 48, 45, 52, 50, 52, 55, 45, 77, 69, 110, 49, 0, 0, 0, 0, 0};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
@@ -371,12 +424,12 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
   stage_settings_t stage_settings;
   memset((void*)&stage_settings, 0, sizeof(stage_settings_t));
   stage_settings.LeadScrewPitch = 3;
-  const int8_t stage_settings_Units_temp[8] = {100, 101, 103, 114, 101, 101, 0, 0};
+  const int8_t stage_settings_Units_temp[8] = {0, 101, 103, 114, 101, 101, 0, 0};
   memcpy(stage_settings.Units, stage_settings_Units_temp, sizeof(int8_t) * 8);
   stage_settings.MaxSpeed = 36;
   stage_settings.TravelRange = 360;
-  stage_settings.SupplyVoltageMin = 12;
-  stage_settings.SupplyVoltageMax = 36;
+  stage_settings.SupplyVoltageMin = 0;
+  stage_settings.SupplyVoltageMax = 0;
   stage_settings.MaxCurrentConsumption = 0;
   stage_settings.HorizontalLoadCapacity = 0;
   stage_settings.VerticalLoadCapacity = 0;
@@ -392,9 +445,9 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
 
   motor_information_t motor_information;
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
-  const int8_t motor_information_Manufacturer_temp[16] = {77, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
+  const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t motor_information_PartNumber_temp[24] = {70, 76, 52, 50, 83, 84, 72, 52, 55, 45, 49, 50, 48, 52, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_motor_information(id, &motor_information);
 
@@ -408,7 +461,7 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
 
   motor_settings_t motor_settings;
   memset((void*)&motor_settings, 0, sizeof(motor_settings_t));
-  motor_settings.MotorType = MOTOR_TYPE_UNKNOWN;
+  motor_settings.MotorType = MOTOR_TYPE_STEP | MOTOR_TYPE_UNKNOWN;
   motor_settings.ReservedField = 0;
   motor_settings.Poles = 0;
   motor_settings.Phases = 0;
@@ -426,7 +479,7 @@ static inline result_t set_profile_8MR190_90_4247_MEn1(device_t id)
   motor_settings.SpeedConstant = 0;
   motor_settings.SpeedTorqueGradient = 0;
   motor_settings.MechanicalTimeConstant = 0;
-  motor_settings.MaxSpeed = 0;
+  motor_settings.MaxSpeed = 5000;
   motor_settings.MaxCurrent = 0;
   motor_settings.MaxCurrentTime = 0;
   motor_settings.NoLoadCurrent = 0;

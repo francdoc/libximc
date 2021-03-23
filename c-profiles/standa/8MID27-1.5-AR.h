@@ -5,6 +5,14 @@
 
 #include "ximc.h"
 
+
+#define 8MID27_15_AR_BUILDER_VERSION_MAJOR  0
+#define 8MID27_15_AR_BUILDER_VERSION_MINOR  9
+#define 8MID27_15_AR_BUILDER_VERSION_BUGFIX 9
+#define 8MID27_15_AR_BUILDER_VERSION_SUFFIX ""
+#define 8MID27_15_AR_BUILDER_VERSION        "0.9.9"
+
+
 #if defined(_MSC_VER)
 #define inline __inline
 #endif
@@ -18,7 +26,7 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   memset((void*)&feedback_settings, 0, sizeof(feedback_settings_t));
   feedback_settings.IPS = 4000;
   feedback_settings.FeedbackType = FEEDBACK_NONE;
-  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_AUTO;
+  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_SINGLE_ENDED | FEEDBACK_ENC_TYPE_AUTO;
   feedback_settings.CountsPerTurn = 4000;
   result = set_feedback_settings(id, &feedback_settings);
 
@@ -51,12 +59,13 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
 
   move_settings_t move_settings;
   memset((void*)&move_settings, 0, sizeof(move_settings_t));
-  move_settings.Speed = 1600;
+  move_settings.Speed = 800;
   move_settings.uSpeed = 0;
-  move_settings.Accel = 6400;
-  move_settings.Decel = 9600;
-  move_settings.AntiplaySpeed = 1600;
+  move_settings.Accel = 3200;
+  move_settings.Decel = 4800;
+  move_settings.AntiplaySpeed = 800;
   move_settings.uAntiplaySpeed = 0;
+  move_settings.MoveFlags = 0;
   result = set_move_settings(id, &move_settings);
 
   if (result != result_ok)
@@ -74,7 +83,7 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   engine_settings.NomSpeed = 1600;
   engine_settings.uNomSpeed = 0;
   engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_ACCEL_ON | ENGINE_REVERSE;
-  engine_settings.Antiplay = 653;
+  engine_settings.Antiplay = 326;
   engine_settings.MicrostepMode = MICROSTEP_MODE_FRAC_256;
   engine_settings.StepsPerRev = 20;
   result = set_engine_settings(id, &engine_settings);
@@ -122,12 +131,12 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   memset((void*)&secure_settings, 0, sizeof(secure_settings_t));
   secure_settings.LowUpwrOff = 800;
   secure_settings.CriticalIpwr = 4000;
-  secure_settings.CriticalUpwr = 5000;
+  secure_settings.CriticalUpwr = 5500;
   secure_settings.CriticalT = 800;
   secure_settings.CriticalIusb = 450;
   secure_settings.CriticalUusb = 520;
   secure_settings.MinimumUusb = 420;
-  secure_settings.Flags = ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
+  secure_settings.Flags = ALARM_ENGINE_RESPONSE | ALARM_FLAGS_STICKING | ALARM_ON_BORDERS_SWAP_MISSET | H_BRIDGE_ALERT | ALARM_ON_DRIVER_OVERHEATING;
   result = set_secure_settings(id, &secure_settings);
 
   if (result != result_ok)
@@ -142,9 +151,9 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   memset((void*)&edges_settings, 0, sizeof(edges_settings_t));
   edges_settings.BorderFlags = BORDER_STOP_RIGHT | BORDER_STOP_LEFT;
   edges_settings.EnderFlags = ENDER_SW2_ACTIVE_LOW | ENDER_SW1_ACTIVE_LOW | ENDER_SWAP;
-  edges_settings.LeftBorder = -995;
+  edges_settings.LeftBorder = -970;
   edges_settings.uLeftBorder = 0;
-  edges_settings.RightBorder = -45;
+  edges_settings.RightBorder = 944;
   edges_settings.uRightBorder = 0;
   result = set_edges_settings(id, &edges_settings);
 
@@ -161,9 +170,9 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   pid_settings.KpU = 0;
   pid_settings.KiU = 0;
   pid_settings.KdU = 0;
-  pid_settings.Kpf = 0;
-  pid_settings.Kif = 0;
-  pid_settings.Kdf = 0;
+  pid_settings.Kpf = 0.003599999938160181;
+  pid_settings.Kif = 0.03799999877810478;
+  pid_settings.Kdf = 2.8000000384054147e-05;
   result = set_pid_settings(id, &pid_settings);
 
   if (result != result_ok)
@@ -242,9 +251,9 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
 
   control_settings_t control_settings;
   memset((void*)&control_settings, 0, sizeof(control_settings_t));
-  control_settings.MaxSpeed[0] = 16;
-  control_settings.MaxSpeed[1] = 160;
-  control_settings.MaxSpeed[2] = 1600;
+  control_settings.MaxSpeed[0] = 80;
+  control_settings.MaxSpeed[1] = 800;
+  control_settings.MaxSpeed[2] = 0;
   control_settings.MaxSpeed[3] = 0;
   control_settings.MaxSpeed[4] = 0;
   control_settings.MaxSpeed[5] = 0;
@@ -325,10 +334,54 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 86, -122, 0, 0, 0, -122, 0, 0, 0, 0, 0, 0, 0, -122, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  emf_settings_t emf_settings;
+  memset((void*)&emf_settings, 0, sizeof(emf_settings_t));
+  emf_settings.L = 0;
+  emf_settings.R = 0;
+  emf_settings.Km = 0;
+  emf_settings.BackEMFFlags = 0;
+  result = set_emf_settings(id, &emf_settings);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  engine_advansed_setup_t engine_advansed_setup;
+  memset((void*)&engine_advansed_setup, 0, sizeof(engine_advansed_setup_t));
+  engine_advansed_setup.stepcloseloop_Kw = 50;
+  engine_advansed_setup.stepcloseloop_Kp_low = 1000;
+  engine_advansed_setup.stepcloseloop_Kp_high = 33;
+  result = set_engine_advansed_setup(id, &engine_advansed_setup);
+
+  if (result != result_ok)
+  {
+    if (worst_result == result_ok || worst_result == result_value_error)
+    {
+      worst_result = result;
+    }
+  }
+
+  extended_settings_t extended_settings;
+  memset((void*)&extended_settings, 0, sizeof(extended_settings_t));
+  extended_settings.Param1 = 0;
+  result = set_extended_settings(id, &extended_settings);
 
   if (result != result_ok)
   {
@@ -510,9 +563,9 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
 
   gear_information_t gear_information;
   memset((void*)&gear_information, 0, sizeof(gear_information_t));
-  const int8_t gear_information_Manufacturer_temp[16] = {0, 65, 85, 76, 72, 65, 66, 69, 82, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t gear_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(gear_information.Manufacturer, gear_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t gear_information_PartNumber_temp[24] = {0, 54, 47, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t gear_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(gear_information.PartNumber, gear_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_gear_information(id, &gear_information);
 
@@ -526,8 +579,8 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
 
   gear_settings_t gear_settings;
   memset((void*)&gear_settings, 0, sizeof(gear_settings_t));
-  gear_settings.ReductionIn = 50;
-  gear_settings.ReductionOut = 1;
+  gear_settings.ReductionIn = 0;
+  gear_settings.ReductionOut = 0;
   gear_settings.RatedInputTorque = 0;
   gear_settings.RatedInputSpeed = 0;
   gear_settings.MaxOutputBacklash = 0;
@@ -556,7 +609,7 @@ static inline result_t set_profile_8MID27_15_AR(device_t id)
   accessories_settings.TSMin = 0;
   accessories_settings.TSMax = 0;
   accessories_settings.TSGrad = 0;
-  accessories_settings.TSSettings = TS_TYPE_THERMOCOUPLE | TS_TYPE_UNKNOWN;
+  accessories_settings.TSSettings = TS_TYPE_UNKNOWN;
   accessories_settings.LimitSwitchesSettings = 0;
   result = set_accessories_settings(id, &accessories_settings);
 
