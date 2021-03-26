@@ -189,12 +189,12 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp testappeasy testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks testlabwindows; do
+	for example in testapp_C testappeasy testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks testlabwindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
 
-	for example in testapp testappeasy testcprofile; do
+	for example in testapp_C testappeasy testcprofile; do
 		echo Cleaning example $example
 		rm -f $DISTEXAM/$example/Makefile.am
 		echo Copying compiled example $example
@@ -393,7 +393,7 @@ build_depends()
 	build_dep_xiwrapper $*
 	echo Seed keyfile to libximc, seems like a hack
 	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
-	cp $DEPS/bindy/sample_keyfile.sqlite examples/testapp/keyfile.sqlite
+	cp $DEPS/bindy/sample_keyfile.sqlite examples/testapp_C/keyfile.sqlite
 }
 
 build_deb_package()
@@ -495,7 +495,7 @@ libosx)
 	make -C wrappers/java/src/c framework-build
 	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
 	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
-	for exam in testapp testappeasy testcprofile; do
+	for exam in testapp_C testappeasy testcprofile; do
 		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME)
 		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done
