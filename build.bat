@@ -351,7 +351,7 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testapp_C
+@set NAME=testapp
 @echo Building example %NAME%...
 msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
