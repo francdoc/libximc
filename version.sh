@@ -2,7 +2,7 @@
 
 set -e
 
-trap " echo Cleaning up && rm -f *bak libximc/*bak libximc/src/*bak rpm/*bak libximc/libximc.xcodeproj/*bak debian/*bak debian/*bak pkg/freebsd/*bak wrappers/java/src/c/*bak wrappers/csharp/Properties/*bak examples/testapp/*bak examples/testjava/*bak " EXIT
+trap " echo Cleaning up && rm -f *bak libximc/*bak libximc/src/*bak rpm/*bak libximc/libximc.xcodeproj/*bak debian/*bak debian/*bak pkg/freebsd/*bak wrappers/java/src/c/*bak wrappers/csharp/Properties/*bak examples/testapp_C/*bak examples/testjava/*bak " EXIT
 
 VERSION_FILE=`dirname $0`/version
 if [ ! -f "$VERSION_FILE" ] ; then
@@ -115,7 +115,7 @@ sed -ibak "s/^\[assembly: AssemblyVersion(\"[^\"]*\")\]/\[assembly: AssemblyVers
 sed -ibak "s/^\[assembly: AssemblyFileVersion(\"[^\"]*\")\]/\[assembly: AssemblyFileVersion(\"$ASSEMBLYVER\")\]/" wrappers/csharp/Properties/AssemblyInfo.cs
 
 echo Java example files
-sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/testapp/Makefile
+sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/testapp_C/Makefile
 sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/testjava/Makefile
 
 echo RPM files

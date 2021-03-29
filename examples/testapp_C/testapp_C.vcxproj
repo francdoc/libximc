@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{485FFA02-6D10-451D-AEA6-7C9A26CA27FE}</ProjectGuid>
-    <RootNamespace>testapp</RootNamespace>
+    <RootNamespace>testapp_C</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -218,7 +218,7 @@ xcopy /y "..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="testapp.c" />
+    <ClCompile Include="testapp_C.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

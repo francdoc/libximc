@@ -195,7 +195,7 @@ int main (int argc, char* argv[])
 	_setmode( _fileno(stderr), _O_U16TEXT );
 #endif
 
-	int used_loglevel = getenv("XIMC_TESTAPP_VERBOSE") ? LOGLEVEL_DEBUG : LOGLEVEL_WARNING;
+	int used_loglevel = getenv("XIMC_testapp_C_VERBOSE") ? LOGLEVEL_DEBUG : LOGLEVEL_WARNING;
 	set_logging_callback(my_logging_callback, &used_loglevel);
 	ximc_version( ximc_version_str );
 

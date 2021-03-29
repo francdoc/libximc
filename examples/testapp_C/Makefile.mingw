@@ -8,7 +8,7 @@ LDFLAGS = -mconsole
 LIB_PATHS = -L..\..\libximc\Release-Win32 -llibximc
 
 
-EXE_C_SRC = testapp.c
+EXE_C_SRC = testapp_C.c
 
 EXE_OBJECTS = $(EXE_C_SRC:%.c=%.o) 
 
@@ -18,10 +18,10 @@ EXE_OBJECTS = $(EXE_C_SRC:%.c=%.o)
 
 .PHONY: all clean
 
-all: testapp.exe
+all: testapp_C.exe
 
-testapp.exe: $(EXE_OBJECTS)
-	$(CC) $(LDFLAGS) $(EXE_OBJECTS) $(LIB_PATHS) $(EXE_LIBS) -o testapp.exe
+testapp_C.exe: $(EXE_OBJECTS)
+	$(CC) $(LDFLAGS) $(EXE_OBJECTS) $(LIB_PATHS) $(EXE_LIBS) -o testapp_C.exe
 
 clean:
-	del /Q /F $(EXE_OBJECTS) testapp.exe
+	del /Q /F $(EXE_OBJECTS) testapp_C.exe
