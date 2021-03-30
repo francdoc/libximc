@@ -373,7 +373,7 @@ copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
 :SKIP_PDB_COPY_TESTAPP
 
 :: -----
-@set NAME=testappeasy
+@set NAME=testappeasy_C
 @echo Building example %NAME%...
 msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
