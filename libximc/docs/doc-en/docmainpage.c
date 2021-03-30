@@ -202,11 +202,11 @@
  *
  * \subsection howtouse_c_codeblocks CodeBlocks
  *
- * Testapp can be built using testcodeblocks.cbp. 
+ * Testapp can be built using test_CodeBlocks.cbp.
  * Library must be compiled with MS Visual C++ too, mingw-library isn't supported.
  * Make sure that Microsoft Visual C++ Redistributable Package is installed.  *
  *
- * Open solution examples/testcodeblocks/testcodeblocks.cbp, build and run from the IDE.
+ * Open solution examples/test_CodeBlocks/test_CodeBlocks.cbp, build and run from the IDE.
  *
  * \subsection howtouse_c_mingw_sec MinGW
  *

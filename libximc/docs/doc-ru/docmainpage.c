@@ -201,12 +201,12 @@
  *
  * \subsection howtouse_c_codeblocks CodeBlocks
  *
- * Тестовое приложение может быть собрано с помощью testcodeblocks.cbp
+ * Тестовое приложение может быть собрано с помощью test_CodeBlocks.cbp
  * Для компиляции необходимо использовать также MS Visual C++, mingw-library не поддерживается. 
  * Убедитесь, что Microsoft Visual C++ Redistributable Package установлен.
  *
  *
- * Откройте проект examples/testcodeblocks/testcodeblocks.cbp, выполните сборку и запустите приложение из среды разработки.
+ * Откройте проект examples/test_CodeBlocks/test_CodeBlocks.cbp, выполните сборку и запустите приложение из среды разработки.
  *
  * \subsection howtouse_c_mingw_sec MinGW
  *
