@@ -4,7 +4,7 @@ using System.Threading;
 using System.Reflection;
 using ximc;
 
-namespace testcs
+namespace test_CSharp
 {
     class testapp
     {

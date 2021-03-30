@@ -176,12 +176,12 @@
  *
  * Для приобретения первых навыков использования библиотеки создано простое тестовое приложение testapp. 
  * Языки, отличные от C-подобных, поддерживаются с помощью вызовов с преобразованием аргументов типа stdcall.
- * Простое тестовое приложение на языке C расположено в директории 'examples/testapp', проект на C# - в 'examples/testcs', 
+ * Простое тестовое приложение на языке C расположено в директории 'examples/testapp', проект на C# - в 'examples/test_CSharp',
  * на VB.NET - в 'examples/testvbnet', для delphi 6 - в 'example/testdelphi', для matlab - 'examples/testmatlab',
  * для Java - 'examples/testjava', для Python - 'examples/testpython'.
  * Библиотеки, заголовочные файлы и другие необходимые файлы расположены в директориях 'win32'/'win64','macosx' и подобных.
  * В комплект разработчика также входят уже скомпилированные примеры: testapp и testappeasy в варианте 32 и 64 бита под windows и только 64 бита под osx,
- * testcs, testvbnet, testdelphi - только 32 бита, testjava - кроссплатформенный, testmatlab и testpython не требуют компиляции.
+ * test_CSharp, testvbnet, testdelphi - только 32 бита, testjava - кроссплатформенный, testmatlab и testpython не требуют компиляции.
  *
  * ЗАМЕЧАНИЕ: Для работы с SDK требуется Microsoft Visual C++ Redistributable Package (поставляется с SDK, файлы vcredist_x86 или vcredist_x64).
  *
@@ -284,7 +284,7 @@
  * Для использования в .NET предлагается обертка wrappers/csharp/ximcnet.dll.
  * Она распространяется в двух различных архитектурах. Поддерживает платформу .NET от 2.0. до 4.0.
  *
- * Тестовые приложения на языке C# для Visual Studio 2013 расположены в директориях testcs (для C#) и testvbnet (для VB.NET).
+ * Тестовые приложения на языке C# для Visual Studio 2013 расположены в директориях test_CSharp (для C#) и testvbnet (для VB.NET).
  * Откройте проекты и соберите.
  * 
  * В случае, если планируется использовать Ethernet-адаптер 8SMC4-USB-Eth1, в файле testapp.cs или testapp.vb (в зависимости от языка) перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enumerate_hints для C#, переменная enum_hints для VB).

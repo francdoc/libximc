@@ -8,8 +8,8 @@
     <ProjectGuid>{D27E55DB-579B-4BE1-AC96-EE96F416B997}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>testcs</RootNamespace>
-    <AssemblyName>testcs</AssemblyName>
+    <RootNamespace>test_CSharp</RootNamespace>
+    <AssemblyName>test_CSharp</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>

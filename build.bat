@@ -428,7 +428,7 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 ::   clear env
 @SET PATH=%PATH_BASE%
 :: -----
-@set NAME=testcs
+@set NAME=test_CSharp
 @echo Building example %NAME%...
 :: Win32
 copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%\
