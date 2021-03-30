@@ -376,11 +376,11 @@ build_dep_xiwrapper()
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper)
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER)
+		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
+		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
 	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER)
-	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .)
+	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
+	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
 	$MAKE -C $DEPS/xiwrapper
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
 }
@@ -496,10 +496,10 @@ libosx)
 	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
 	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
 	for exam in testapp_C testappeasy_C testprofile_C; do
-		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME)
+		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
 		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done
-	(cd examples/testjava && $MAKE)
+	(cd examples/testjava && $MAKE) || false
 	cp -a examples/testjava/testjava.jar $DL/$DISTNAME/
 	cp -a examples/testjava/README.txt $DL/$DISTNAME/java-README.txt
 	mkdir -p $DL/crossplatform/wrappers/python
