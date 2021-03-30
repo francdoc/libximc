@@ -38,5 +38,5 @@ $ make
 $ make run
 * В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
 Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll.
-Откройте пример /testapp_C/testapp_C.sln, создайте и запустите их из среды IDE.
+Откройте пример /testapp_C/testapp_C.sln, соберите и запустите его из среды IDE.
 
