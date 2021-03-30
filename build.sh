@@ -189,12 +189,12 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C testcs testvbnet testdelphi testmatlab testpython testcprofile testcodeblocks testlabwindows; do
+	for example in testapp_C testappeasy_C testcs testvbnet testdelphi testmatlab testpython testprofile_C testcodeblocks testlabwindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
 
-	for example in testapp_C testappeasy_C testcprofile; do
+	for example in testapp_C testappeasy_C testprofile_C; do
 		echo Cleaning example $example
 		rm -f $DISTEXAM/$example/Makefile.am
 		echo Copying compiled example $example
@@ -495,7 +495,7 @@ libosx)
 	make -C wrappers/java/src/c framework-build
 	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
 	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
-	for exam in testapp_C testappeasy_C testcprofile; do
+	for exam in testapp_C testappeasy_C testprofile_C; do
 		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME)
 		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done

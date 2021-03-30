@@ -386,7 +386,7 @@ mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testcprofile
+@set NAME=testprofile_C
 @echo Building example %NAME%...
 msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
