@@ -361,15 +361,15 @@ int main (int argc, char* argv[])
 
 	edges_settings_calb.LeftBorder = -900;
 	edges_settings_calb.RightBorder = 1500;
-	if (result = set_edges_settings_calb(device, &edges_settings_calb, &calibration) != result_ok)
+	if ((result = set_edges_settings_calb(device, &edges_settings_calb, &calibration)) != result_ok)
 		wprintf(L"error edges settings %ls\n", error_string(result));
 	print_edges_calb(&edges_settings_calb);
 
-	if (result = get_edges_settings_calb(device, &edges_settings_calb, &calibration) != result_ok)
+	if ((result = get_edges_settings_calb(device, &edges_settings_calb, &calibration)) != result_ok)
 		wprintf(L"error edges settings %ls\n", error_string(result));
 	print_edges_calb(&edges_settings_calb);
 
-	if (result = get_edges_settings(device, &edges_settings) != result_ok)
+	if ((result = get_edges_settings(device, &edges_settings)) != result_ok)
 		wprintf(L"error edges settings %ls\n", error_string(result));
 	print_edges(&edges_settings);
 
