@@ -3,7 +3,7 @@ Imports System.Text
 Imports System.Threading
 Imports ximc
 
-Namespace testvbnet
+Namespace test_VBNET
     Class testapp
         Private Shared Sub print_status(ByVal status As status_t)
             Console.WriteLine("rpm: {0} pos: {1} flags: {2}", _

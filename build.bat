@@ -445,7 +445,7 @@ mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testvbnet
+@set NAME=test_VBNET
 @echo Building example %NAME%...
 :: Win32
 copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%

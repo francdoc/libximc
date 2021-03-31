@@ -178,11 +178,11 @@
  * Library usage can be examinated from test application testapp.
  * Non-C languages are supported because library supports stdcall calling convention and so can be used with a variety of languages.
  *
- * C test project is located at 'examples/testapp' directory, C# test project - at 'examples/test_CSharp', VB.NET - 'examples/testvbnet',
+ * C test project is located at 'examples/testapp' directory, C# test project - at 'examples/test_CSharp', VB.NET - 'examples/test_VBNET',
  * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/test_MATLAB', for Java - 'examples/test_Java',
  * for Python - 'examples/test_Python'.
  * Development kit also contains precompiled examples: testapp and testappeasy as 32 and 64-bit applications for Windows and 64-bit application for osx,
- * test_CSharp, testvbnet, test_Delphi - 32-bit only, test_Java is architecture-independent, test_MATLAB and test_Python are runtime-interpreted.
+ * test_CSharp, test_VBNET, test_Delphi - 32-bit only, test_Java is architecture-independent, test_MATLAB and test_Python are runtime-interpreted.
  *
  * NOTE: SDK requires Microsoft Visual C++ Redistributable Package (provided with SDK - vcredist_x86 or vcredist_x64)
  *
@@ -286,7 +286,7 @@
  * Wrapper assembly for libximc.dll is wrappers/csharp/ximcnet.dll.
  * It is provided with two different architectures. Supports the platform .NET from 2.0. to 4.0.
  *
- * Test .NET applications for Visual Studio 2013 is located at test_CSharp (for C#) and testvbnet (for VB.NET) respectively.
+ * Test .NET applications for Visual Studio 2013 is located at test_CSharp (for C#) and test_VBNET (for VB.NET) respectively.
  * Open solutions and build.
  * 
  * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testapp.cs or testapp.vb file (depending on programming language) before build (see enumerate_hints variable for C# or enum_hints variable for VB).

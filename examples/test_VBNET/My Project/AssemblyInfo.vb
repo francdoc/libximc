@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("testvbnet")> 
+<Assembly: AssemblyTitle("test_VBNET")>
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("XIMC")> 
-<Assembly: AssemblyProduct("testvbnet")> 
+<Assembly: AssemblyProduct("test_VBNET")>
 <Assembly: AssemblyCopyright("Copyright © XIMC 2014")> 
 <Assembly: AssemblyTrademark("")> 
 

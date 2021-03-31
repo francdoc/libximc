@@ -7,9 +7,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ED617BF0-F4BB-4C5C-9042-65CC0CA2B433}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>testvbnet.testvbnet.testapp</StartupObject>
-    <RootNamespace>testvbnet</RootNamespace>
-    <AssemblyName>testvbnet</AssemblyName>
+    <StartupObject>test_VBNET.test_VBNET.testapp</StartupObject>
+    <RootNamespace>test_VBNET</RootNamespace>
+    <AssemblyName>test_VBNET</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
@@ -42,7 +42,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DefineTrace>true</DefineTrace>
     <OutputPath>compiled-win32\</OutputPath>
-    <DocumentationFile>testvbnet.xml</DocumentationFile>
+    <DocumentationFile>test_VBNET.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42030,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -54,7 +54,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>compiled-win32\</OutputPath>
-    <DocumentationFile>testvbnet.xml</DocumentationFile>
+    <DocumentationFile>test_VBNET.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42030,42353,42354,42355</NoWarn>
@@ -65,7 +65,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>compiled-win64\</OutputPath>
-    <DocumentationFile>testvbnet.xml</DocumentationFile>
+    <DocumentationFile>test_VBNET.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42030,42353,42354,42355</NoWarn>
@@ -76,7 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>compiled-win64\</OutputPath>
-    <DocumentationFile>testvbnet.xml</DocumentationFile>
+    <DocumentationFile>test_VBNET.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42030,42353,42354,42355</NoWarn>
@@ -114,7 +114,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="testvbnet.vb" />
+    <Compile Include="test_VBNET.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
