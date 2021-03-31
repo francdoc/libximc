@@ -1,4 +1,4 @@
-program testdelphi;
+program test_Delphi;
 
 {$APPTYPE CONSOLE}
 

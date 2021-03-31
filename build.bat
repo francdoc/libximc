@@ -462,7 +462,7 @@ mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testdelphi
+@set NAME=test_Delphi
 @echo Building example %NAME%...
 "%PROGRAMFILES(x86)%\Borland\Delphi6\Bin\DCC32.EXE" -U%DISTDIR%\win32 examples\%NAME%\%NAME%.dpr
 @if not %errorlevel% == 0 goto FAIL

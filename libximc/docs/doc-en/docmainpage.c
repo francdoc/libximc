@@ -179,10 +179,10 @@
  * Non-C languages are supported because library supports stdcall calling convention and so can be used with a variety of languages.
  *
  * C test project is located at 'examples/testapp' directory, C# test project - at 'examples/test_CSharp', VB.NET - 'examples/testvbnet',
- * Delphi 6 - 'examples/testdelphi', sample bindings for MATLAB - 'examples/testmatlab', for Java - 'examples/testjava',
+ * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/testmatlab', for Java - 'examples/testjava',
  * for Python - 'examples/testpython'.
  * Development kit also contains precompiled examples: testapp and testappeasy as 32 and 64-bit applications for Windows and 64-bit application for osx,
- * test_CSharp, testvbnet, testdelphi - 32-bit only, testjava is architecture-independent, testmatlab and testpython are runtime-interpreted.
+ * test_CSharp, testvbnet, test_Delphi - 32-bit only, testjava is architecture-independent, testmatlab and testpython are runtime-interpreted.
  *
  * NOTE: SDK requires Microsoft Visual C++ Redistributable Package (provided with SDK - vcredist_x86 or vcredist_x64)
  *
@@ -295,11 +295,11 @@
  *
  * Wrapper for libximc.dll is a unit wrappers/delphi/ximc.pas
  *
- * Console test application for is located at testdelphi. Tested with Delphi 6 and only 32-bit version.
+ * Console test application for is located at test_Delphi. Tested with Delphi 6 and only 32-bit version.
  *
  * Just compile, place DLL near the executable and run program.
  * 
- * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testdelphi.dpr file before build (see enum_hints variable).
+ * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in test_Delphi.dpr file before build (see enum_hints variable).
  *
  * \section howtouse_java_sec Java
  *

@@ -189,7 +189,7 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C test_CSharp testvbnet testdelphi testmatlab testpython testprofile_C test_CodeBlocks testlabwindows; do
+	for example in testapp_C testappeasy_C test_CSharp testvbnet test_Delphi testmatlab testpython testprofile_C test_CodeBlocks testlabwindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
@@ -216,7 +216,7 @@ makedist()
 		done
 	done
 
-	for example in testdelphi ; do
+	for example in test_Delphi ; do
 		echo Copying compiled example $example
 		mkdir -p $DISTEXAM/$example/compiled-win32
 		cp $DL/win32/$example.exe $DISTEXAM/$example/compiled-win32
