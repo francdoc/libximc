@@ -3,7 +3,11 @@
 
 #include <string.h>
 
-#include "ximc.h"
+#if defined(__APPLE__) && !defined(NOFRAMEWORK)
+#include <libximc/ximc.h>
+#else
+#include <ximc.h>
+#endif
 
 
 #define 8MT175V_100_VSS42_BUILDER_VERSION_MAJOR  0

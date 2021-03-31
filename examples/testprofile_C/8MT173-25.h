@@ -3,6 +3,13 @@
 
 #include <string.h>
 
+#if defined(__APPLE__) && !defined(NOFRAMEWORK)
+#include <libximc/ximc.h>
+#else
+#include <ximc.h>
+#endif
+
+
 #if defined(_MSC_VER)
 #define inline __inline
 #endif
