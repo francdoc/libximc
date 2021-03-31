@@ -179,10 +179,10 @@
  * Non-C languages are supported because library supports stdcall calling convention and so can be used with a variety of languages.
  *
  * C test project is located at 'examples/testapp' directory, C# test project - at 'examples/test_CSharp', VB.NET - 'examples/testvbnet',
- * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/testmatlab', for Java - 'examples/test_Java',
- * for Python - 'examples/testpython'.
+ * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/test_MATLAB', for Java - 'examples/test_Java',
+ * for Python - 'examples/test_Python'.
  * Development kit also contains precompiled examples: testapp and testappeasy as 32 and 64-bit applications for Windows and 64-bit application for osx,
- * test_CSharp, testvbnet, test_Delphi - 32-bit only, test_Java is architecture-independent, testmatlab and testpython are runtime-interpreted.
+ * test_CSharp, testvbnet, test_Delphi - 32-bit only, test_Java is architecture-independent, test_MATLAB and test_Python are runtime-interpreted.
  *
  * NOTE: SDK requires Microsoft Visual C++ Redistributable Package (provided with SDK - vcredist_x86 or vcredist_x64)
  *
@@ -339,7 +339,7 @@
  *
  * \section howtouse_python_sec Python
  *
- * Change current directory to the examples/testpython.
+ * Change current directory to the examples/test_Python.
  * For correct usage of the library libximc, the example uses the file wrapper, crossplatform\wrappers\python\pyximc.py with a description of the structures of the library.
  *
  * Before launch:
@@ -357,14 +357,14 @@
  *
  * Launch Python 2 or Python 3:
  * \code
- * python testpython.py
+ * python test_Python.py
  * \endcode
  * 
- * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testpython.py file before launch (see enum_hints variable).
+ * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in test_Python.py file before launch (see enum_hints variable).
  *
  * \section howtouse_matlab_sec MATLAB
  *
- * Sample MATLAB program testximc.m is provided at the directory examples/testmatlab.
+ * Sample MATLAB program testximc.m is provided at the directory examples/test_MATLAB.
  * On windows copy ximc.h, libximc.dll, bindy.dll, xiwrapper.dll and contents of ximc/(win32,win64)/wrappers/matlab/ directory to the current directory.
  *
  * Before launch:

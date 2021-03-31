@@ -4,7 +4,7 @@ This example demonstrates loading python profiles into the controller.
 
 
 For run:
-1. Change the current directory to examples/testpython/profiletest. To use the libximc library correctly, the example uses a file wrapper, /ximc/crossplatform/wrappers/python/pyximc.py with a description of the library structure.
+1. Change the current directory to examples/test_Python/profiletest. To use the libximc library correctly, the example uses a file wrapper, /ximc/crossplatform/wrappers/python/pyximc.py with a description of the library structure.
 2. Configuring dependencies:
  * On OS X: copy the ximc/macosx/libximc library.add the framework to the current directory.
  * On Linux: You may need to set LD_LIBRARY_PATH so that Python can find libraries using RPATH. For example, using:
@@ -17,7 +17,7 @@ python testpythonprofile.py
 
 For modify:
 1. The example code can be modified in any text editor.
-2. To use a different profile, copy the required profile from the \ximc\python-profiles folder to examples/testpython/profiletest. In the example code, replace the profile name with the required one.
+2. To use a different profile, copy the required profile from the \ximc\python-profiles folder to examples/test_Python/profiletest. In the example code, replace the profile name with the required one.
 
 
 Rus.
@@ -26,7 +26,7 @@ Rus.
 
  
 Для запуска примера:
-1. Измените текущий каталог на examples/testpython/profiletest. Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
+1. Измените текущий каталог на examples/test_Python/profiletest. Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
 2. Настройка зависимостей:
  * В OS X: скопируйте библиотеку ximc/macosx/libximc.framework в текущий каталог.
  * В Linux: возможно, вам потребуется установить LD_LIBRARY_PATH, чтобы Python мог находить библиотеки с помощью RPATH. Например, с помощью:
@@ -39,4 +39,4 @@ Rus.
  
 Для модификации примера:
 1. Код примера можно модифицировать в любом текстовом редакторе.
-2. Для использования другого профиля, скопируйте необходимый профиль из папки \ximc\python-profiles в examples/testpython/profiletest. В коде примера замените имя профиля на необходимое.
+2. Для использования другого профиля, скопируйте необходимый профиль из папки \ximc\python-profiles в examples/test_Python/profiletest. В коде примера замените имя профиля на необходимое.

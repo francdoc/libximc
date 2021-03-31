@@ -6,4 +6,4 @@ ifeq ($(UNAME), Darwin)
 endif
 
 run:
-	PYTHONPATH=../../wrappers/python $(ENV_LD_PATH) $(PYTHON) standardtest/testpython.py
+	PYTHONPATH=../../wrappers/python $(ENV_LD_PATH) $(PYTHON) standardtest/test_Python.py

@@ -189,7 +189,7 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C test_CSharp testvbnet test_Delphi testmatlab testpython testprofile_C test_CodeBlocks testlabwindows; do
+	for example in testapp_C testappeasy_C test_CSharp testvbnet test_Delphi test_MATLAB test_Python testprofile_C test_CodeBlocks test_LabWindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
@@ -206,7 +206,7 @@ makedist()
 		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/$example/compiled-win32/
 		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/$example/compiled-win64/
 	done
-	rm -f $DISTEXAM/testpython/Makefile
+	rm -f $DISTEXAM/test_Python/Makefile
 		
 	for example in test_CSharp testvbnet test_CodeBlocks; do
 		echo Copying compiled example $example
@@ -225,6 +225,17 @@ makedist()
 		cp -R $DL/win32/bindy.lib $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
+	done
+	
+	for example in test_LabWindows ; do
+		for namexample in testcli testgui ; do
+			echo Copying example $example/$namexample
+			cp -R $DL/win32/libximc.* $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/bindy.dll $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/bindy.lib $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/$namexample
+		done
 	done
 
 	for example in test_Java ; do

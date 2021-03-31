@@ -8,7 +8,7 @@ The work of the examples was tested on the LabWindows CVI 2017 version.
 
 How to work with examples.
 
-1. Open the project ..\examples\testlabwindows\testcli\testcli.prj or ..\examples\testlabwindows\testgui\simple.prj in LabWindows CVI.
+1. Open the project ..\examples\test_LabWindows\testcli\testcli.prj or ..\examples\test_LabWindows\testgui\simple.prj in LabWindows CVI.
 2. By default, the examples have a 64-bit build installed, and the 64-bit libximc library is connected to the example.
 3. To build, run Build->Rebuild.
 4. If you need to build a 32-bit version of the application, select one of the 32-bit builds in the Build->Configuration menu.
@@ -26,7 +26,7 @@ testgui - пример представляет собой приложение 
 
 Как работать с примерами.
 
-1. Открыть проект ..\examples\testlabwindows\testcli\testcli.prj или ..\examples\testlabwindows\testgui\simple.prj в LabWindows CVI.
+1. Открыть проект ..\examples\test_LabWindows\testcli\testcli.prj или ..\examples\test_LabWindows\testgui\simple.prj в LabWindows CVI.
 2. По умолчанию в примерах установлена 64-битная сборка, и к примеру подключена 64-битная библиотека libximc.
 3. Для сборки необходимо выполнить Build->Rebuild.
 4. Если необходимо собрать 32-битную версию приложения в меню Build->Configuration выбрать одну из 32-битных сборок. 

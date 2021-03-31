@@ -177,11 +177,11 @@
  * Для приобретения первых навыков использования библиотеки создано простое тестовое приложение testapp. 
  * Языки, отличные от C-подобных, поддерживаются с помощью вызовов с преобразованием аргументов типа stdcall.
  * Простое тестовое приложение на языке C расположено в директории 'examples/testapp', проект на C# - в 'examples/test_CSharp',
- * на VB.NET - в 'examples/testvbnet', для delphi 6 - в 'example/test_Delphi', для matlab - 'examples/testmatlab',
- * для Java - 'examples/test_Java', для Python - 'examples/testpython'.
+ * на VB.NET - в 'examples/testvbnet', для delphi 6 - в 'example/test_Delphi', для matlab - 'examples/test_MATLAB',
+ * для Java - 'examples/test_Java', для Python - 'examples/test_Python'.
  * Библиотеки, заголовочные файлы и другие необходимые файлы расположены в директориях 'win32'/'win64','macosx' и подобных.
  * В комплект разработчика также входят уже скомпилированные примеры: testapp и testappeasy в варианте 32 и 64 бита под windows и только 64 бита под osx,
- * test_CSharp, testvbnet, test_Delphi - только 32 бита, test_Java - кроссплатформенный, testmatlab и testpython не требуют компиляции.
+ * test_CSharp, testvbnet, test_Delphi - только 32 бита, test_Java - кроссплатформенный, test_MATLAB и test_Python не требуют компиляции.
  *
  * ЗАМЕЧАНИЕ: Для работы с SDK требуется Microsoft Visual C++ Redistributable Package (поставляется с SDK, файлы vcredist_x86 или vcredist_x64).
  *
@@ -337,7 +337,7 @@
  * 
  * \section howtouse_python_sec Python
  *
- * Измените текущую директорию на examples/testpython.
+ * Измените текущую директорию на examples/test_Python.
  * Для корректного использования библиотеки libximc, в примере используется файл обертка, crossplatform\wrappers\python\pyximc.py с описанием структур библиотеки.
  *
  * Перед запуском:
@@ -355,14 +355,14 @@
  *
  * Запустите Python 2 или Python 3:
  * \code
- * python testpython.py
+ * python test_Python.py
  * \endcode
  * 
- * В случае, если планируется использовать Ethernet-адаптер 8SMC4-USB-Eth1, в файле testpython.py перед запуском нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).
+ * В случае, если планируется использовать Ethernet-адаптер 8SMC4-USB-Eth1, в файле test_Python.py перед запуском нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).
  *
  * \section howtouse_matlab_sec MATLAB
  *
- * Тестовая программа на MATLAB testximc.m располагается в директории examples/testmatlab.
+ * Тестовая программа на MATLAB testximc.m располагается в директории examples/test_MATLAB.
  *
  * Перед запуском:
  *

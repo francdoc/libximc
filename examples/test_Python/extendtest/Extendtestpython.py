@@ -64,7 +64,7 @@ else:
 try: 
     from pyximc import *
 except ImportError as err:
-    print ("Can't import pyximc module. The most probable reason is that you changed the relative location of the testpython.py and pyximc.py files. See developers' documentation for details.")
+    print ("Can't import pyximc module. The most probable reason is that you changed the relative location of the test_Python.py and pyximc.py files. See developers' documentation for details.")
     exit()
 except OSError as err:
     # print(err.errno, err.filename, err.strerror, err.winerror) # Allows you to display detailed information by mistake.
