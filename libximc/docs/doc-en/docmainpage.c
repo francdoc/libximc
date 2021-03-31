@@ -179,10 +179,10 @@
  * Non-C languages are supported because library supports stdcall calling convention and so can be used with a variety of languages.
  *
  * C test project is located at 'examples/testapp' directory, C# test project - at 'examples/test_CSharp', VB.NET - 'examples/testvbnet',
- * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/testmatlab', for Java - 'examples/testjava',
+ * Delphi 6 - 'examples/test_Delphi', sample bindings for MATLAB - 'examples/testmatlab', for Java - 'examples/test_Java',
  * for Python - 'examples/testpython'.
  * Development kit also contains precompiled examples: testapp and testappeasy as 32 and 64-bit applications for Windows and 64-bit application for osx,
- * test_CSharp, testvbnet, test_Delphi - 32-bit only, testjava is architecture-independent, testmatlab and testpython are runtime-interpreted.
+ * test_CSharp, testvbnet, test_Delphi - 32-bit only, test_Java is architecture-independent, testmatlab and testpython are runtime-interpreted.
  *
  * NOTE: SDK requires Microsoft Visual C++ Redistributable Package (provided with SDK - vcredist_x86 or vcredist_x64)
  *
@@ -303,24 +303,24 @@
  *
  * \section howtouse_java_sec Java
  *
- * How to run example on Linux. Navigate to ximc-2.x.x./examples/testjava/compiled/ and run:
+ * How to run example on Linux. Navigate to ximc-2.x.x./examples/test_Java/compiled/ and run:
  * \code
  * $ cp /usr/share/libximc/keyfile.sqlite .
- * $ java -cp /usr/share/java/libjximc.jar:testjava.jar ru.ximc.TestJava
+ * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
- * How to run example on Windows or Mac. Navigate to ximc-2.x.x./examples/testjava/compiled/.
+ * How to run example on Windows or Mac. Navigate to ximc-2.x.x./examples/test_Java/compiled/.
  * Copy contents of ximc-2.x.x/ximc/win64 or ximc-2.x.x/ximc/macosx accordingly to the current directory.
  * Then run:
  * \code
- * $ java -classpath libjximc.jar -classpath testjava.jar ru.ximc.TestJava
+ * $ java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
  * \endcode
  
  * How to modify and recompile an example.
- * Navigate to examples/testjava/compiled. Sources are embedded in a testjava.jar.
+ * Navigate to examples/test_Java/compiled. Sources are embedded in a test_Java.jar.
  * Extract them:
  * \code
- * $ jar xvf testjava.jar ru META-INF
+ * $ jar xvf test_Java.jar ru META-INF
  * \endcode
  * Then rebuild sources:
  * \code
@@ -332,7 +332,7 @@
  * \endcode
  * Then build a jar:
  * \code
- * $ jar cmf META-INF/MANIFEST.MF testjava.jar ru
+ * $ jar cmf META-INF/MANIFEST.MF test_Java.jar ru
  * \endcode
  * 
  * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in TestJava.java file before build (see ENUM_HINTS variable).

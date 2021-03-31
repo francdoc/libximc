@@ -16,6 +16,6 @@ find libximc xigen wrappers \( -name Makefile.in -or -name Makefile \) -delete
 rm -f Makefile.in Makefile
 rm -rf wrappers/java/gen
 find . \( -name .DS_Store -or -name \*.swp -or -name tags -or -name '._*' -or -name \*.stamp -or -name \*.pyc \) -delete
-for exam in testapp_C testappeasy_C testjava ; do
+for exam in testapp_C testappeasy_C test_Java ; do
 	(cd examples/$exam ; $MAKE clean ; rm -rf DerivedData build *.xcodeproj/*.pbxuser *.xcodeproj/xcuserdata *.xcodeproj/project.xcworkspace )
 done

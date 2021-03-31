@@ -469,7 +469,7 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 copy examples\%NAME%\%NAME%.exe %DISTDIR%\win32
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testjava
+@set NAME=test_Java
 @echo Building example %NAME% 64-bit...
 "%JDK_HOME%\bin\javac" -Xlint -classpath %DISTDIR%\win64\libjximc.jar -d examples\%NAME% examples\%NAME%\ru\ximc\TestJava.java
 @if not %errorlevel% == 0 goto FAIL
@@ -478,7 +478,7 @@ copy examples\%NAME%\%NAME%.exe %DISTDIR%\win32
 copy examples\%NAME%\%NAME%.jar %DISTDIR%\win64
 @if not %errorlevel% == 0 goto FAIL
 :: -----
-@set NAME=testjava
+@set NAME=test_Java
 @echo Building example %NAME% 32-bit...
 "%JDK32_HOME%\bin\javac" -Xlint -classpath %DISTDIR%\win32\libjximc.jar -d examples\%NAME% examples\%NAME%\ru\ximc\TestJava.java
 @if not %errorlevel% == 0 goto FAIL

@@ -178,10 +178,10 @@
  * Языки, отличные от C-подобных, поддерживаются с помощью вызовов с преобразованием аргументов типа stdcall.
  * Простое тестовое приложение на языке C расположено в директории 'examples/testapp', проект на C# - в 'examples/test_CSharp',
  * на VB.NET - в 'examples/testvbnet', для delphi 6 - в 'example/test_Delphi', для matlab - 'examples/testmatlab',
- * для Java - 'examples/testjava', для Python - 'examples/testpython'.
+ * для Java - 'examples/test_Java', для Python - 'examples/testpython'.
  * Библиотеки, заголовочные файлы и другие необходимые файлы расположены в директориях 'win32'/'win64','macosx' и подобных.
  * В комплект разработчика также входят уже скомпилированные примеры: testapp и testappeasy в варианте 32 и 64 бита под windows и только 64 бита под osx,
- * test_CSharp, testvbnet, test_Delphi - только 32 бита, testjava - кроссплатформенный, testmatlab и testpython не требуют компиляции.
+ * test_CSharp, testvbnet, test_Delphi - только 32 бита, test_Java - кроссплатформенный, testmatlab и testpython не требуют компиляции.
  *
  * ЗАМЕЧАНИЕ: Для работы с SDK требуется Microsoft Visual C++ Redistributable Package (поставляется с SDK, файлы vcredist_x86 или vcredist_x64).
  *
@@ -301,24 +301,24 @@
  * 
  * \section howtouse_java_sec Java
  *
- * Как запустить пример на Linux. Перейдите в ximc-2.x.x/examples/testjava/compiled/ и выполните
+ * Как запустить пример на Linux. Перейдите в ximc-2.x.x/examples/test_Java/compiled/ и выполните
  * \code
  * $ cp /usr/share/libximc/keyfile.sqlite .
- * $ java -cp /usr/share/java/libjximc.jar:testjava.jar ru.ximc.TestJava
+ * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
- * Как запустить пример на Windows или Mac. Перейдите в ximc-2.x.x./examples/testjava/compiled/.
+ * Как запустить пример на Windows или Mac. Перейдите в ximc-2.x.x./examples/test_Java/compiled/.
  * Скопируйте содержимое ximc-2.x.x/ximc/win64/ или ximc-2.x.x/ximc/macosx/ соответственно
  * в текущую директорию. Затем запустите:
  * \code
- * $ java -classpath libjximc.jar -classpath testjava.jar ru.ximc.TestJava
+ * $ java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
  * \endcode
  *
  * Как модифицировать и пересобрать пример.
- * Исходный текст расположен внутри testjava.jar. Перейдите в examples/testjava/compiled.
+ * Исходный текст расположен внутри test_Java.jar. Перейдите в examples/test_Java/compiled.
  * Распакуйте jar:
  * \code
- * $ jar xvf testjava.jar ru META-INF
+ * $ jar xvf test_Java.jar ru META-INF
  * \endcode
  * Затем пересоберите исходные тексты:
  * \code
@@ -330,7 +330,7 @@
  * \endcode
  * Затем соберите jar:
  * \code
- * $ jar cmf MANIFEST.MF testjava.jar ru
+ * $ jar cmf MANIFEST.MF test_Java.jar ru
  * \endcode
  *
  * В случае, если планируется использовать Ethernet-адаптер 8SMC4-USB-Eth1, в файле TestJava.java перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная ENUM_HINTS).

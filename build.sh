@@ -227,7 +227,7 @@ makedist()
 		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
 	done
 
-	for example in testjava ; do
+	for example in test_Java ; do
 		echo Copying compiled example $example
 		mkdir -p $DISTEXAM/$example/compiled
 		mkdir -p $DISTEXAM/$example/compiled-win32
@@ -499,9 +499,9 @@ libosx)
 		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
 		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done
-	(cd examples/testjava && $MAKE) || false
-	cp -a examples/testjava/testjava.jar $DL/$DISTNAME/
-	cp -a examples/testjava/README.txt $DL/$DISTNAME/java-README.txt
+	(cd examples/test_Java && $MAKE) || false
+	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
+	cp -a examples/test_Java/README.txt $DL/$DISTNAME/java-README.txt
 	mkdir -p $DL/crossplatform/wrappers/python
 	cp wrappers/python/pyximc.py $DL/crossplatform/wrappers/python
 	;;
