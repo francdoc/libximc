@@ -6,7 +6,7 @@
  * \image html 8SMC4.png
  * \image html 8SMC5.png
  *
- * Libximc is cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
+ * Libximc is **thread safe**, cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
  *
  * Full documentation about controllers is <a href="https://doc.xisupport.com">there</a>
  *
