@@ -1,9 +1,16 @@
+def ciBuildingTag = false
+script {
+  if (env.TAG_NAME) {
+    ciBuildingTag = true
+  }
+}
+
 pipeline {
   agent { label "master" }
 
   parameters {
     booleanParam(name: 'DEBUG', defaultValue: false, description: 'Build with debug symbols')
-    booleanParam(name: 'WITH_ARM', defaultValue: false, description: 'Enable build for ARM')
+    booleanParam(name: 'WITH_ARM', defaultValue: "${ciBuildingTag}", description: 'Enable build for ARM')
   }
 
   triggers {
@@ -27,6 +34,8 @@ pipeline {
       // execute at master
       steps {
         echo "Libximc init"
+        echo "Param WITH_ARM=${params.WITH_ARM}"
+        echo "Param DEBUG=${params.DEBUG}"
       }
     } // stage
 
