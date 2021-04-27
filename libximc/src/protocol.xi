@@ -58,7 +58,7 @@ PWR_STATE_UNKNOWN	= 0x00	/**< \english Unknown state, should never happen. \ende
 PWR_STATE_OFF		= 0x01	/**< \english Motor windings are disconnected from the driver. \endenglish \russian Обмотки мотора разомкнуты и не управляются драйвером. \endrussian */
 PWR_STATE_NORM		= 0x03	/**< \english Motor windings are powered by nominal current. \endenglish \russian Обмотки запитаны номинальным током. \endrussian */
 PWR_STATE_REDUCT	= 0x04	/**< \english Motor windings are powered by reduced current to lower power consumption. \endenglish \russian Обмотки намеренно запитаны уменьшенным током от рабочего для снижения потребляемой мощности. \endrussian */
-PWR_STATE_MAX		= 0x05	/**< \english Motor windings are powered by maximum current driver can provide at this voltage. \endenglish \russian Обмотки запитаны максимально доступным током, который может выдать схема при данном напряжении питания. \endrussian */
+PWR_STATE_MAX		= 0x05	/**< \english Motor windings are powered by maximum current driver can provide at this voltage. \endenglish \russian Обмотки двигателя питаются от максимального тока, который драйвер может обеспечить при этом напряжении. \endrussian */
 
 /**
 	* \english
@@ -143,7 +143,7 @@ ENC_STATE_ABSENT	= 0x00	/**< \english Encoder is absent. \endenglish \russian Э
 ENC_STATE_UNKNOWN	= 0x01	/**< \english Encoder state is unknown. \endenglish \russian Cостояние энкодера неизвестно. \endrussian */
 ENC_STATE_MALFUNC	= 0x02	/**< \english Encoder is connected and malfunctioning. \endenglish \russian Энкодер подключен и неисправен. \endrussian */
 ENC_STATE_REVERS	= 0x03	/**< \english Encoder is connected and operational but counts in other direction. \endenglish \russian Энкодер подключен и исправен, но считает в другую сторону. \endrussian */
-ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \endenglish \russian Энкодер подключен и работает адекватно. \endrussian */
+ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \endenglish \russian Энкодер подключен и работает должным образом. \endrussian */
 
 /**
 	* \english
@@ -280,8 +280,8 @@ ENGINE_TYPE_NONE		= 0x00	/**< \english A value that shouldn't be used. \endengli
 ENGINE_TYPE_DC			= 0x01	/**< \english DC motor. \endenglish \russian Мотор постоянного тока. \endrussian */
 ENGINE_TYPE_2DC			= 0x02	/**< \english 2 DC motors. \endenglish \russian Два мотора постоянного тока, что приводит к эмуляции двух контроллеров. \endrussian */
 ENGINE_TYPE_STEP		= 0x03	/**< \english Step motor. \endenglish \russian Шаговый мотор. \endrussian */
-ENGINE_TYPE_TEST		= 0x04	/**< \english Duty cycle are fixed. Used only manufacturer. \endenglish \russian Скважность в обмотках фиксирована. Используется только производителем. \endrussian */
-ENGINE_TYPE_BRUSHLESS	= 0x05	/**< \english Brushless motor. \endenglish \russian Безщеточный мотор. \endrussian */
+ENGINE_TYPE_TEST		= 0x04	/**< \english Duty cycle are fixed. Used only manufacturer. \endenglish \russian Продолжительность включения фиксирована. Используется только производителем. \endrussian */
+ENGINE_TYPE_BRUSHLESS	= 0x05	/**< \english Brushless motor. \endenglish \russian Бесщеточный мотор. \endrussian */
 
 /**
 	* \english
@@ -388,7 +388,7 @@ FEEDBACK_ENCODER_MEDIATED	= 0x06	/**< \english Feedback by encoder mediated by m
 flagset FeedbackFlags:
 FEEDBACK_ENC_REVERSE	= 0x01	/**< \english Reverse count of encoder. \endenglish \russian Обратный счет у энкодера. \endrussian */
 FEEDBACK_ENC_TYPE_BITS	= 0xC0	/**< \english Bits of the encoder type. \endenglish \russian Биты, отвечающие за тип энкодера. \endrussian */
-FEEDBACK_ENC_TYPE_AUTO	= 0x00	/**< \english Auto detect encoder type. \endenglish \russian Определять тип энкодера автоматически. \endrussian */
+FEEDBACK_ENC_TYPE_AUTO	= 0x00	/**< \english Auto detect encoder type. \endenglish \russian Определяет тип энкодера автоматически. \endrussian */
 FEEDBACK_ENC_TYPE_SINGLE_ENDED	= 0x40	/**< \english Single ended encoder. \endenglish \russian Недифференциальный энкодер. \endrussian */
 FEEDBACK_ENC_TYPE_DIFFERENTIAL	= 0x80	/**< \english Differential encoder. \endenglish \russian Дифференциальный энкодер. \endrussian */
 
@@ -420,7 +420,7 @@ SYNCOUT_INVERT		= 0x04	/**< \english Low level is active, if set, and high level
 SYNCOUT_IN_STEPS	= 0x08	/**< \english Use motor steps/encoder pulses instead of milliseconds for output pulse generation if the flag is set. \endenglish \russian Если флаг установлен использовать шаги/импульсы энкодера для выходных импульсов синхронизации вместо миллисекунд. \endrussian */
 SYNCOUT_ONSTART		= 0x10	/**< \english Generate synchronization pulse when movement starts. \endenglish \russian Генерация синхронизирующего импульса при начале движения. \endrussian */
 SYNCOUT_ONSTOP		= 0x20	/**< \english Generate synchronization pulse when movement stops. \endenglish \russian Генерация синхронизирующего импульса при остановке. \endrussian */
-SYNCOUT_ONPERIOD	= 0x40	/**< \english Generate synchronization pulse every SyncOutPeriod encoder pulses. \endenglish \russian Выдать импульс синхронизации после прохождения SyncOutPeriod отсчётов. \endrussian */
+SYNCOUT_ONPERIOD	= 0x40	/**< \english Generate synchronization pulse every SyncOutPeriod encoder pulses. \endenglish \russian Выдает импульс синхронизации после прохождения SyncOutPeriod отсчётов. \endrussian */
 
 /**
 	* \english
@@ -537,9 +537,9 @@ flagset ControlFlags:
 CONTROL_MODE_BITS				= 0x03	/**< \english Bits to control engine by joystick or buttons. \endenglish \russian Биты управления мотором с помощью джойстика или кнопок влево/вправо. \endrussian */
 CONTROL_MODE_OFF				= 0x00	/**< \english Control is disabled. \endenglish \russian Управление отключено. \endrussian */
 CONTROL_MODE_JOY				= 0x01	/**< \english Control by joystick. \endenglish \russian Управление с помощью джойстика. \endrussian */
-CONTROL_MODE_LR					= 0x02	/**< \english Control by left/right buttons. \endenglish \russian Управление с помощью кнопок left/right. \endrussian */
-CONTROL_BTN_LEFT_PUSHED_OPEN	= 0x04	/**< \english Pushed left button corresponds to open contact, if this flag is set. \endenglish \russian Левая кнопка нормально разомкнутая, если флаг установлен. \endrussian */
-CONTROL_BTN_RIGHT_PUSHED_OPEN	= 0x08	/**< \english Pushed right button corresponds to open contact, if this flag is set. \endenglish \russian Правая кнопка нормально разомкнутая, если флаг установлен. \endrussian */
+CONTROL_MODE_LR					= 0x02	/**< \english Control by left/right buttons. \endenglish \russian Управление с помощью кнопок влево/вправо. \endrussian */
+CONTROL_BTN_LEFT_PUSHED_OPEN	= 0x04	/**< \english Pushed left button corresponds to open contact, if this flag is set. \endenglish \russian Нажатая левая кнопка соответствует открытому контакту, если этот флаг установлен. \endrussian */
+CONTROL_BTN_RIGHT_PUSHED_OPEN	= 0x08	/**< \english Pushed right button corresponds to open contact, if this flag is set. \endenglish \russian Нажатая правая кнопка соответствует открытому контакту, если этот флаг установлен. \endrussian */
 
 /**
 	* \english
@@ -572,9 +572,9 @@ JOY_REVERSE				= 0x01	/**< \english Joystick action is reversed. Joystick deviat
 	*/
 flagset CtpFlags:
 CTP_ENABLED			    = 0x01	/**< \english Position control is enabled, if flag set. \endenglish \russian Контроль позиции включен, если флаг установлен. \endrussian */
-CTP_BASE			    = 0x02	/**< \english Position control is based on revolution sensor, if this flag is set; otherwise it is based on encoder. \endenglish \russian Опорой является датчик оборотов, если флаг установлен; иначе - энкодер. \endrussian */
+CTP_BASE			    = 0x02	/**< \english Position control is based on revolution sensor, if this flag is set; otherwise it is based on encoder. \endenglish \russian Управление положением основано на датчике вращения, если установлен этот флаг; в противном случае - на энкодере. \endrussian */
 CTP_ALARM_ON_ERROR	    = 0x04	/**< \english Set ALARM on mismatch, if flag set. \endenglish \russian Войти в состояние ALARM при расхождении позиции, если флаг установлен. \endrussian */
-REV_SENS_INV	        = 0x08	/**< \english Sensor is active when it 0 and invert makes active level 1. That is, if you do not invert, it is normal logic - 0 is the activation. \endenglish \russian Сенсор считается активным, когда на нём 0, а инвертирование делает активным уровнем 1. То есть если не инвертировать, то действует обычная логика - 0 это срабатывание/активация/активное состояние. \endrussian */
+REV_SENS_INV	        = 0x08	/**< \english Sensor is active when it 0 and invert makes active level 1. That is, if you do not invert, it is normal logic - 0 is the activation. \endenglish \russian Сенсор считается активным, когда на нём 0, инвертирование делает активным уровень 1. То есть если не инвертировать, то действует обычная логика - 0 это срабатывание/активация/активное состояние. \endrussian */
 CTP_ERROR_CORRECTION    = 0x10 /**< \english Correct errors which appear when slippage if the flag is set. It works only with the encoder. Incompatible with flag CTP_ALARM_ON_ERROR. \endenglish \russian Корректировать ошибки, возникающие при проскальзывании, если флаг установлен. Работает только с энкодером. Несовместимо с флагом CTP_ALARM_ON_ERROR.\endrussian */
 
 /**
@@ -617,8 +617,8 @@ HOME_USE_FAST           = 0x0100	/**< \english Use the fast algorithm of calibra
 	*/
 flagset UARTSetupFlags:
 UART_PARITY_BITS		= 0x03	/**< \english Bits of the parity. \endenglish \russian Биты, отвечающие за выбор четности. \endrussian */
-UART_PARITY_BIT_EVEN	= 0x00	/**< \english Parity bit 1, if  even \endenglish \russian Бит 1, если чет \endrussian */
-UART_PARITY_BIT_ODD		= 0x01	/**< \english Parity bit 1, if  odd \endenglish \russian Бит 1, если нечет \endrussian */
+UART_PARITY_BIT_EVEN	= 0x00	/**< \english Parity bit 1, if  even \endenglish \russian Бит 1, если четный \endrussian */
+UART_PARITY_BIT_ODD		= 0x01	/**< \english Parity bit 1, if  odd \endenglish \russian Бит 1, если нечетный \endrussian */
 UART_PARITY_BIT_SPACE	= 0x02	/**< \english Parity bit always 0 \endenglish \russian Бит четности всегда 0 \endrussian */
 UART_PARITY_BIT_MARK	= 0x03	/**< \english Parity bit always 1 \endenglish \russian Бит четности всегда 1 \endrussian */
 UART_PARITY_BIT_USE		= 0x04	/**< \english None parity \endenglish \russian Бит чётности не используется, если "0"; бит четности используется, если "1" \endrussian */
@@ -693,7 +693,7 @@ LS_ON_SW1_AVAILABLE				= 0x01	/**< \english If flag is set the limit switch conn
 LS_ON_SW2_AVAILABLE				= 0x02	/**< \english If flag is set the limit switch connnected to pin SW2 is available \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, доступен \endrussian */
 LS_SW1_ACTIVE_LOW				= 0x04	/**< \english If flag is set the limit switch connnected to pin SW1 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW1, считается сработавшим по низкому уровню на контакте \endrussian */
 LS_SW2_ACTIVE_LOW				= 0x08	/**< \english If flag is set the limit switch connnected to pin SW2 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, считается сработавшим по низкому уровню на контакте \endrussian */
-LS_SHORTED						= 0x10	/**< \english If flag is set the Limit switches is shorted \endenglish \russian Если флаг установлен, то концевики закорочены. \endrussian */
+LS_SHORTED						= 0x10	/**< \english If flag is set the Limit switches is shorted \endenglish \russian Если флаг установлен, то концевики замкнуты. \endrussian */
 
 /**
 	* \english
