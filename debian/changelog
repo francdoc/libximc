@@ -1,6 +1,16 @@
 libximc7 (2.13.0-1) unstable; urgency=low
 
   * Version bump
+  * Feature #48565 Implement compatibility of our examples for python 3.9
+  * Bug #47662 Fix typos in the libximc manual
+  * Bug #48141 Remove Makefile. mingw from testapp and testappeasy
+  * Bug #48266 Fix errors in the examples
+  * Bug #48272 Fix the header in the profile generator to work under Mac OS
+  * Bug #48582 Migrate Bindy socket leak fix to libximc
+  * Feature #46853 Try to fix the Python 3.9 examples on Win10
+  * Feature #47464 Rename the examples and add dependencies for labwindows
+  * Feature #48562 Specify on the main page libximc-thread-safe
+  * Feature #48564 Processing a missing library msvc120.dll/msvcp120.dll
 
  -- XIMC <info@ximc.ru>  Wed, 31 Mar 2021 14:30:41 +0300
 
