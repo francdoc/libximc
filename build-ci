@@ -18,7 +18,7 @@ build_macosx()
 {
 	[ -z "`command -v pdflatex`" ] && PATH=$PATH:/usr/texbin
 	./build.sh cleandist
-	./build.sh libosx
+	./build.sh libosxci
 }
 
 build_docs()
