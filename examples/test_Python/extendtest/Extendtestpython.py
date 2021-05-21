@@ -48,7 +48,10 @@ if platform.system() == "Windows":
     # Determining the directory with dependencies for windows depending on the bit depth.
     arch_dir = "win64" if "64" in platform.architecture()[0] else "win32"  #
     libdir = os.path.join(ximc_dir, arch_dir)
-    os.environ["Path"] = libdir + ";" + os.environ["Path"] # add dll path into an environment variable
+    if sys.version_info >= (3,8):
+        os.add_dll_directory(libdir)
+    else:
+        os.environ["Path"] = libdir + ";" + os.environ["Path"] # add dll path into an environment variable
     # from msvcrt import getch as getch1
     import keyboard
 else:
