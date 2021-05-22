@@ -112,7 +112,7 @@ int loglevel_to_sysloglevel (int loglevel)
 }
 #endif
 
-char* widestr_to_str (const wchar_t* str)
+static char* widestr_to_str (const wchar_t* str)
 {
 	char *result;
 	mbstate_t mbs;
