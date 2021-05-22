@@ -63,7 +63,10 @@ configure_dist()
 			# it is about deprecated sem_getvalue
 			USE_CFLAGS="-Wno-deprecated-declarations"
 			USE_CXXFLAGS="-Wno-tautological-compare"
-			SPECIAL_ENV="CC=clang CXX=clang++ CC_FOR_BUILD=clang CXX_FOR_BUILD=clang++ JAVA_HOME=`/usr/libexec/java_home -v 1.7`"
+			SPECIAL_ENV="CC=clang CXX=clang++ CC_FOR_BUILD=clang CXX_FOR_BUILD=clang++"
+			if [ -z "$JAVA_HOME" ] ; then
+				SPECIAL_ENV="$SPECIAL_ENV JAVA_HOME=`/usr/libexec/java_home -v 1.7`"
+			fi
 			;;
 		Linux)
 			DISTNAME=
