@@ -96,6 +96,17 @@ AC_MSG_RESULT([$with_java])
 
 AM_CONDITIONAL([HAVE_JAVA], [test "x$with_java" = "xyes"])
 
+# Check for static deps
+
+AC_MSG_CHECKING([for static deps])
+AC_ARG_WITH([staticdeps],
+						[AS_HELP_STRING([--with-staticdeps], [use static xiwrapper and bindy dependencies (default no)])],
+						[with_staticdeps=$withval],
+						[with_staticdeps=no])
+AC_MSG_RESULT([$with_staticdeps])
+
+AM_CONDITIONAL([HAVE_STATICDEPS], [test "x$with_staticdeps" = "xyes"])
+
 # detect OS X and add framework flags
 
 case "$host_os" in
@@ -170,6 +181,7 @@ if test "x$libltdl_cv_shrext" = "x"; then
 else
 	AC_SUBST([SHARED_EXT], ["$libltdl_cv_shrext"])
 fi
+AC_SUBST([STATIC_EXT], [".a"])
 
 # Checks for header files.
 AC_HEADER_STDC
