@@ -394,6 +394,8 @@ namespace xigen
 			{
 			}
 
+			virtual ~Comment() { }
+
 			std::string getComment() const { return comment; }
 			DoxyType type() const { return doxyType; }
 
