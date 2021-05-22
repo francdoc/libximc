@@ -44,7 +44,7 @@ configure_dist()
 	# all these platform-specific flags
 	CONFIGURE_FLAGS=
 	SPECIAL_ENV=
-	DEPS_CMAKE_OPT=
+	DEPS_CMAKE_OPT=$DEPS_CMAKE_OPT
 	if [ -z "$USE_CFLAGS" ] ; then
 		USE_CFLAGS=
 		echo Using default external CFLAGS
