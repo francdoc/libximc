@@ -1,3 +1,9 @@
+libximc (2.13.1-1)
+  * Released: Mon, 24 May 2021 11:59:34 +0300
+  * Version bump
+  * Feature #46853 Try to fix the Python 3.9 examples on Win10
+  * Feature #49922 The python profile didn't include the wiring diagram
+
 libximc (2.13.0-1)
   * Released: Wed, 31 Mar 2021 14:30:41 +0300
   * Version bump
