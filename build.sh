@@ -453,6 +453,26 @@ build_rpm_package()
 	cd $BASEROOT
 }
 
+build_osx_impl()
+{
+	clean
+	build_depends
+	build_to_local --with-xcode-build $*
+	# Override JNI lib with a jni library linked to framework
+	make -C wrappers/java/src/c framework-build
+	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
+	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
+	for exam in testapp_C testappeasy_C testprofile_C; do
+		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
+		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
+	done
+	(cd examples/test_Java && $MAKE) || false
+	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
+	cp -a examples/test_Java/README.txt $DL/$DISTNAME/java-README.txt
+	mkdir -p $DL/crossplatform/wrappers/python
+	cp wrappers/python/pyximc.py $DL/crossplatform/wrappers/python
+}
+
 echo XIMC build script
 trap exit_clean_up EXIT INT TERM
 ACTION=$1
@@ -501,23 +521,15 @@ makedist)
 	makedist
 	;;
 
+libosxci)
+	# do not call distcheck target for osx CI build
+	# to avoid building docs, #48562
+	TARGETS="all dist install" \
+		build_osx_impl --without-docs $*
+	;;
+
 libosx)
-	clean
-	build_depends
-	build_to_local --with-docs --with-xcode-build $*
-	# Override JNI lib with a jni library linked to framework
-	make -C wrappers/java/src/c framework-build
-	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
-	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
-	for exam in testapp_C testappeasy_C testprofile_C; do
-		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
-		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
-	done
-	(cd examples/test_Java && $MAKE) || false
-	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
-	cp -a examples/test_Java/README.txt $DL/$DISTNAME/java-README.txt
-	mkdir -p $DL/crossplatform/wrappers/python
-	cp wrappers/python/pyximc.py $DL/crossplatform/wrappers/python
+	build_osx_impl --with-docs $*
 	;;
 
 libdeb)
