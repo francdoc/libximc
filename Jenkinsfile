@@ -88,7 +88,7 @@ pipeline {
         post {
           cleanup {
             // drop workspace for each matrix cell job
-            deleteDir()
+            cleanWs(notFailBuild: true)
           }
         }
       } // matrix
@@ -142,7 +142,7 @@ pipeline {
     }
     cleanup {
       // drop workspace for main job
-      deleteDir()
+      cleanWs(notFailBuild: true)
     }
   }
 }
