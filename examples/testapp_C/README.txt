@@ -9,7 +9,7 @@ For run:
 Copy ximc/macosx/libximc.framework, ximc/ximc.h to the directory examples/testapp_C.
 Install XCode. Test app should be built with XCode project testapp_C.xcodeproj.
 Then launch application testapp_C.app and check activity output in Console.app.
- * For Linux: Install libximc*deb and libximc-dev*dev of the target architecture. Then copy ximc/ximc.h to the directory
+ * For Linux: install libximc*deb and libximc-dev*dev of the target architecture in the specified order. Then copy ximc/ximc.h to the directory
 examples/testapp_C. Install gcc. Test application can be built with the installed library with the following script:
 $ make
 In case of cross-compilation (target architecture differs from the current system architecture) feed -m64 or -m32 flag
@@ -31,7 +31,7 @@ Rus.
 * На OS X: библиотека для Mac OS поставляется в формате Mac OS X framework. Скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог
 examples/testapp_C. Должен быть установлен XCode. Пример testapp_C дорлжен быть собран проектом XCode testapp_C.xcodeproj.
 Запустите приложение testapp_C.app и проверте его работу в Console.app.
-* Для Linux: установите libximc*deb и libximc-dev*dev целевой архитектуры. Затем скопируйте ximc/ximc.h в каталог
+* Для Linux: установите libximc*deb и libximc-dev*dev целевой архитектуры в указанном порядке. Затем скопируйте ximc/ximc.h в каталог
 examples/testapp_C. Установите gcc. Тестовое приложение может быть собрано с помощью установленной библиотеки командой:
 $ make
 Выполнить приложение можно командой:
