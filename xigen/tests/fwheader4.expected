@@ -16,21 +16,21 @@
 
 
 typedef struct sfo1_cmd_str {
-	unsigned long	speed;
+	INT32U	speed;
 } sfo1_cmd_str; 
 
 typedef struct sfbr_cmd_str {
-	signed long	position;
+	INT32S	position;
 } sfbr_cmd_str; 
 
 typedef struct rbbz_cmd_str {
-	signed long	velocity;
+	INT32S	velocity;
 } rbbz_cmd_str; 
 
 typedef struct rqqx_cmd_str {
-	signed long	velocity;
+	INT32S	velocity;
 } rqqx_cmd_str; 
 
 typedef struct sfo2_cmd_str {
-	unsigned long	speed;
+	INT32U	speed;
 } sfo2_cmd_str; 
