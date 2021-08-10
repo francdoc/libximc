@@ -3,9 +3,9 @@
 
 typedef struct
 {
-  unsigned long	    Cmd;
-  unsigned char		SendBytes;
-  unsigned char		ReceiveBytes;
+  INT32U	Cmd;
+  INT8U		SendBytes;
+  INT8U		ReceiveBytes;
 } CmdLengthStr;
 
 extern CmdLengthStr CmdLengths[];

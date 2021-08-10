@@ -257,7 +257,7 @@ namespace xigen
 						if (!m_current)
 							return;
 
-						stream() << "\tunsigned char\treserved";
+						stream() << "\tINT8U\treserved";
 						if (m_reservedIndex)
 							stream() << m_reservedIndex;
 						stream() << "[" << field.getSize() << "];\n";
