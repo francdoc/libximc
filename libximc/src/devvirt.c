@@ -678,9 +678,9 @@ void create_empty_state (AllParamsStr* blob, const char* serial)
 	bcd->SPID.KdU = 0;
 	/* SEMF settings */
 	bcd->SEMF.BackEMFFlags = 0;
-	bcd->SEMF.Km = (FLT32) 0.0025;
-	bcd->SEMF.L = (FLT32) 0.0054;
-	bcd->SEMF.R = (FLT32) 7.4;
+	bcd->SEMF.Km = (float) 0.0025;
+	bcd->SEMF.L = (float) 0.0054;
+	bcd->SEMF.R = (float) 7.4;
 	/* SSNI settings */
 	bcd->SSNI.SyncInFlags = 0;
 	bcd->SSNI.ClutterTime = 2000;
