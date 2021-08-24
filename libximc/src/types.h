@@ -8,7 +8,7 @@
 #define COMMAND_LENGTH    4    // Command name size in bytes (must be 4)
 #define PROTOCOL_CRC_SIZE 2    // CRC appendix size (must be 2)
 
-typedef uint8_t  INT8U;
+/*typedef uint8_t  INT8U;
 typedef int8_t   INT8S;
 typedef uint16_t INT16U;
 typedef int16_t  INT16S;
@@ -18,7 +18,7 @@ typedef uint64_t INT64U;
 typedef int64_t  INT64S;
 typedef float    FLT32;
 typedef double   FLT64;
-
+*/
 #endif
 
 // vim: syntax=c tabstop=4 shiftwidth=4

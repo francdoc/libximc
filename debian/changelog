@@ -1,3 +1,9 @@
+libximc7 (2.13.102-1) unstable; urgency=low
+
+  * Version bump
+
+ -- XIMC <info@ximc.ru>  Wed, 25 Aug 2021 01:26:14 +0300
+
 libximc7 (2.13.1-1) unstable; urgency=low
 
   * Version bump
