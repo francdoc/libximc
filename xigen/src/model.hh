@@ -236,11 +236,11 @@ namespace xigen
 		switch (type)
 		{
 			case VariableEnum::Int64u:	return "unsigned long long";
-			case VariableEnum::Int64s:	return "signed   long long";
+			case VariableEnum::Int64s:	return "long long";
 			case VariableEnum::Int32u:	return "unsigned long";
-			case VariableEnum::Int32s:	return "signed   long";
+			case VariableEnum::Int32s:	return "long";
 			case VariableEnum::Int16u:	return "unsigned short";
-			case VariableEnum::Int16s:	return "signed   short";
+			case VariableEnum::Int16s:	return "short";
 			case VariableEnum::Int8u:		return "unsigned char";
 			case VariableEnum::Int8s:		return "signed   char";
 			case VariableEnum::Float:		return "float";
