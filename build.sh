@@ -148,6 +148,23 @@ makedist()
 	done
 
 	cp -R $DL/deb/*.deb $DISTLIB/deb/
+	
+	for arch in amd64 i386 armhf ; do
+		mkdir -p $DL/deb/$arch
+		mkdir -p $DL/deb/dev-$arch
+		mkdir -p $DISTLIB/debian-$arch
+		
+		ar -p $DL/deb/libximc7_*_$arch.deb data.tar.gz | tar zx -C $DL/deb/$arch
+		ar -p $DL/deb/libximc7-dev_*_$arch.deb data.tar.gz | tar zx -C $DL/deb/dev-$arch
+		
+		cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
+		cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
+		cp -R $DL/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
+		
+		rm -rf $DL/deb/$arch
+		rm -rf $DL/deb/dev-$arch
+		
+	done
 
 	cp -R $DL/rpm/*.rpm $DISTLIB/rpm/
 
