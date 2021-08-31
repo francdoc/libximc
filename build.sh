@@ -161,18 +161,26 @@ makedist()
 			mkdir -p $DISTLIB/debian-$arch
 			#echo $arch
 			#echo $DL/deb/libximc7_*_$arch.deb
-			ar -p $namearch $DL/deb/$arch/data.tar.gz | tar zx -C $DL/deb/$arch
-			ar -p $namearch_dev $DL/deb/dev-$arch/data.tar.gz | tar zx -C $DL/deb/dev-$arch
+			ar -x $namearch data.tar.gz 
+			mv -f data.tar.gz $DL/deb/$arch
+			tar -C $DL/deb/$arch/ -zxf  $DL/deb/$arch/data.tar.gz
+			
+			ar -x $namearch_dev data.tar.gz
+			mv -f data.tar.gz $DL/deb/dev-$arch
+			tar -C $DL/deb/dev-$arch/ -zxf  $DL/deb/dev-$arch/data.tar.gz
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
+			
+			rm -rf $DL/deb/$arch
+			rm -rf $DL/deb/dev-$arch
+			
 		else
 			echo No archive file
 		fi
 		
-		# rm -rf $DL/deb/$arch
-		# rm -rf $DL/deb/dev-$arch
+
 		
 	done
 
