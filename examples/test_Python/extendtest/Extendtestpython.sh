@@ -28,5 +28,5 @@ if [ $FULL_LIBRARY_PATH != "None" ]
 then
   echo "${FULL_LIBRARY_PATH}"
   export LD_LIBRARY_PATH=${FULL_LIBRARY_PATH}
-  python3 testpython.py
+  python3 Extendtestpython.py
 fi
