@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd) # Текущая директория
-LIBRARY_PATH=$WORKING_DIR/../../ximc/deb
+LIBRARY_PATH=$WORKING_DIR/../../../ximc/deb
 LINUX_ARCH=$(uname -m)
 echo Current architecture: $LINUX_ARCH
 case $LINUX_ARCH in
