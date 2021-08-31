@@ -162,7 +162,7 @@ makedist()
 			#echo $arch
 			#echo $DL/deb/libximc7_*_$arch.deb
 			ar -p $namearch $DL/deb/$arch/data.tar.gz | tar zx -C $DL/deb/$arch
-			ar -p $namearch_dev $DL/deb/$arch/data.tar.gz | tar zx -C $DL/deb/dev-$arch
+			ar -p $namearch_dev $DL/deb/dev-$arch/data.tar.gz | tar zx -C $DL/deb/dev-$arch
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
