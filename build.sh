@@ -155,13 +155,14 @@ makedist()
 		mkdir -p $DISTLIB/debian-$arch
 		
 		namearch=$(find $DL/deb/libximc7_*_$arch.deb)
+		namearch_dev=$(libximc7-dev_*_$arch.deb)
 		echo $namearch
 		if [ -f "$namearch" ]
 		then
-			echo $arch
-			echo $DL/deb/libximc7_*_$arch.deb
-			ar -p $DL/deb/libximc7_*_$arch.deb data.tar.gz | tar zx -C $DL/deb/$arch
-			ar -p $DL/deb/libximc7-dev_*_$arch.deb data.tar.gz | tar zx -C $DL/deb/dev-$arch
+			#echo $arch
+			#echo $DL/deb/libximc7_*_$arch.deb
+			ar -p $DL/deb/$namearch $DL/deb/$arch/data.tar.gz | tar zx -C $DL/deb/$arch
+			ar -p $DL/deb/$namearch_dev $DL/deb/$arch/data.tar.gz | tar zx -C $DL/deb/dev-$arch
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
