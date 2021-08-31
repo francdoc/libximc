@@ -155,7 +155,7 @@ makedist()
 		mkdir -p $DISTLIB/debian-$arch
 		
 		namearch=$(find $DL/deb/libximc7_*_$arch.deb)
-		namearch_dev=$(libximc7-dev_*_$arch.deb)
+		namearch_dev=$(find $DL/deb/libximc7-dev_*_$arch.deb)
 		echo $namearch
 		if [ -f "$namearch" ]
 		then
