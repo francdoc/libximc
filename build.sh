@@ -148,13 +148,15 @@ makedist()
 	done
 
 	cp -R $DL/deb/*.deb $DISTLIB/deb/
-	
+	ls $DL/deb/
 	for arch in amd64 i386 armhf ; do
 		mkdir -p $DL/deb/$arch
 		mkdir -p $DL/deb/dev-$arch
 		mkdir -p $DISTLIB/debian-$arch
 		
-		if [ -f "$DL/deb/libximc7_*_$arch.deb" ]
+		namearch=$(find $DL/deb/libximc7_*_$arch.deb)
+		echo $namearch
+		if [ -f "$namearch" ]
 		then
 			echo $arch
 			echo $DL/deb/libximc7_*_$arch.deb
@@ -164,6 +166,8 @@ makedist()
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
+		else
+			echo No archive file
 		fi
 		
 		# rm -rf $DL/deb/$arch
