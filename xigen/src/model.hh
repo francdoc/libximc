@@ -235,18 +235,18 @@ namespace xigen
 	{
 		switch (type)
 		{
-			case VariableEnum::Int64u:	return "unsigned long long";
-			case VariableEnum::Int64s:	return "long long";
-			case VariableEnum::Int32u:	return "unsigned long";
-			case VariableEnum::Int32s:	return "long";
-			case VariableEnum::Int16u:	return "unsigned short";
-			case VariableEnum::Int16s:	return "short";
-			case VariableEnum::Int8u:		return "unsigned char";
-			case VariableEnum::Int8s:		return "signed   char";
+			case VariableEnum::Int64u:	return "uint64_t";
+			case VariableEnum::Int64s:	return "int64_t";
+			case VariableEnum::Int32u:	return "uint32_t";
+			case VariableEnum::Int32s:	return "int32_t";
+			case VariableEnum::Int16u:	return "uint16_t";
+			case VariableEnum::Int16s:	return "int16_t";
+			case VariableEnum::Int8u:		return "uint8_t";
+			case VariableEnum::Int8s:		return "int8_t";
 			case VariableEnum::Float:		return "float";
 			case VariableEnum::Double:	return "double";
-			case VariableEnum::Char:		return "unsigned char";
-			case VariableEnum::Byte:		return "unsigned char";
+			case VariableEnum::Char:		return "uint8_t";
+			case VariableEnum::Byte:		return "uint8_t";
 			case VariableEnum::CFloat:		return "float";
 			case VariableEnum::CDFloat:		return "float";
 			default:										throw std::runtime_error("unserializable type");
