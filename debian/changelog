@@ -1,3 +1,14 @@
+libximc7 (2.13.2-1) unstable; urgency=low
+
+  * Version bump
+  * Bug #51208 Make the examples on linux working
+  * Bug #51557 Fix the description of the BITS flag group
+  * Feature #48562 Specify that libximc is thread-safe
+  * Feature #51971 Running examples out of the box for linux
+  * Feature #53139 Add unpacked libraries to the linux build
+
+ -- XIMC <info@ximc.ru>  Wed, 08 Sep 2021 23:51:43 +0300
+
 libximc7 (2.13.1-1) unstable; urgency=low
 
   * Version bump
