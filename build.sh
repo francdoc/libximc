@@ -151,8 +151,8 @@ makedist()
 	ls $DL/deb/
 	for arch in amd64 i386 armhf ; do		
 		
-		namearch=$(find $DL/deb/libximc7_*_$arch.deb)
-		namearch_dev=$(find $DL/deb/libximc7-dev_*_$arch.deb)
+		namearch=$(find $DL/deb -name "libximc7_*_$arch.deb")
+		namearch_dev=$(find $DL/deb -name "libximc7-dev_*_$arch.deb")
 		echo $namearch
 		if [ -f "$namearch" ]
 		then
