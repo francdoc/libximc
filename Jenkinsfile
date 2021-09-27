@@ -70,7 +70,7 @@ pipeline {
                 expression { params.WITH_ARM }
               };
               // avoid building tags on cron
-              not { triggeredBy 'TimerTrigger'; buildingTag() }
+              not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
             } }
             steps {
               sh "./build-ci build"
@@ -82,7 +82,7 @@ pipeline {
             // Build for Windows agents
             when { allOf {
               expression { !isUnix() };
-              not { triggeredBy 'TimerTrigger'; buildingTag() }
+              not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
             } }
             steps {
               bat "build-ci.bat"
@@ -105,7 +105,7 @@ pipeline {
         label "debian64"
       }
       when {
-        not { triggeredBy 'TimerTrigger'; buildingTag() }
+        not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
       }
       steps {
         // Just to be sure delete any local leftover files
@@ -119,7 +119,7 @@ pipeline {
     stage('pack') {
       // execute on master
       when {
-        not { triggeredBy 'TimerTrigger'; buildingTag() }
+        not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
       }
       steps {
         // Get all stashed archives
