@@ -5,7 +5,7 @@
  * Device metadata
  */
 
-typedef enum { dtUnknown, dtSerial, dtVirtual, dtNet } device_type_t;
+typedef enum { dtUnknown, dtSerial, dtVirtual, dtNet, dtUdp } device_type_t;
 
 struct mutex_t;
 
