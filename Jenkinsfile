@@ -68,7 +68,9 @@ pipeline {
               anyOf {
                 expression { env.BUILDOS != 'debianarm' };
                 expression { params.WITH_ARM }
-              }
+              };
+              // avoid building tags on cron
+              not { triggeredBy 'TimerTrigger'; buildingTag() }
             } }
             steps {
               sh "./build-ci build"
@@ -78,7 +80,10 @@ pipeline {
 
           stage('build-win') {
             // Build for Windows agents
-            when { expression { !isUnix() } }
+            when { allOf {
+              expression { !isUnix() };
+              not { triggeredBy 'TimerTrigger'; buildingTag() }
+            } }
             steps {
               bat "build-ci.bat"
               stash name: "result-${BUILDOS}", includes: "results-dist-*.tar"
@@ -99,6 +104,9 @@ pipeline {
       agent {
         label "debian64"
       }
+      when {
+        not { triggeredBy 'TimerTrigger'; buildingTag() }
+      }
       steps {
         // Just to be sure delete any local leftover files
         sh "rm -rf deps"
@@ -110,6 +118,9 @@ pipeline {
 
     stage('pack') {
       // execute on master
+      when {
+        not { triggeredBy 'TimerTrigger'; buildingTag() }
+      }
       steps {
         // Get all stashed archives
         unstash "result-debian64"
