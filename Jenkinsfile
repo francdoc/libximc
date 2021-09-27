@@ -152,8 +152,6 @@ pipeline {
                subject: '$DEFAULT_SUBJECT'
     }
     cleanup {
-      // avoid JENKINS-37043
-      sleep 10
       // drop workspace for main job
       cleanWs(notFailBuild: true)
     }
