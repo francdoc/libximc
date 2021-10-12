@@ -3,9 +3,11 @@ defaults with crc, answer, public
 
 /** \english
 	@name Enumerate devices flags
+	* This is a bit mask for bitwise operations.
 	\endenglish
 	\russian
 	@name Флаги поиска устройств
+	* Это битовая маска для побитовых операций.
 	\endrussian
 	*/
 flagset EnumerateFlags:
@@ -16,10 +18,12 @@ ENUMERATE_NETWORK	= 0x04	/**< \english Check network devices \endenglish \russia
 /**
 	* \english
 	* @name Flags of move state
+	* This is a bit mask for bitwise operations.
 	* Specify move states.
 	* \endenglish
 	* \russian
 	* @name Флаги состояния движения
+	* Это битовая маска для побитовых операций.
 	* Возвращаются командой get_status.
 	* \endrussian
 	* @see get_status
@@ -32,9 +36,11 @@ MOVE_STATE_ANTIPLAY		= 0x04	/**< \english Motor is playing compensation, if flag
 /**
 	* \english
 	* @name Flags of internal controller settings
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек контроллера
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see set_controller_name
 	* @see get_controller_name
@@ -45,10 +51,12 @@ EEPROM_PRECEDENCE		= 0x01	/**< \english If the flag is set settings from externa
 /**
 	* \english
 	* @name Flags of power state of stepper motor
+	* This is a bit mask for bitwise operations.
 	* Specify power states.
 	* \endenglish
 	* \russian
 	* @name Флаги состояния питания шагового мотора
+	* Это битовая маска для побитовых операций.
 	* Возвращаются командой get_status.
 	* \endrussian
 	* @see get_status
@@ -63,12 +71,14 @@ PWR_STATE_MAX		= 0x05	/**< \english Motor windings are powered by maximum curren
 /**
 	* \english
 	* @name Status flags
+	* This is a bit mask for bitwise operations.
 	* Controller flags returned by device query.
 	* Contains boolean part of controller state.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги состояния
+	* Это битовая маска для побитовых операций.
 	* Содержат бинарные значения состояния контроллера. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
 	* @see get_status
@@ -101,12 +111,14 @@ STATE_EXTIO_ALARM				= 0x01000000	/**< \english The error is caused by the input
 /**
 	* \english
 	* @name Status flags of the GPIO outputs
+	* This is a bit mask for bitwise operations.
 	* GPIO state flags returned by device query.
 	* Contains boolean part of controller state.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги состояния GPIO входов
+	* Это битовая маска для побитовых операций.
 	* Содержат бинарные значения состояния контроллера. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
 	* @see get_status
@@ -130,10 +142,12 @@ STATE_ENC_B						= 0x00004000	/**< \english State of encoder B pin. \endenglish 
 /**
 	* \english
 	* @name Encoder state
+	* This is a bit mask for bitwise operations.
 	* Encoder state returned by device query.
 	* \endenglish
 	* \russian
 	* @name Состояние энкодера
+	* Это битовая маска для побитовых операций.
 	* Состояние энкодера, подключенного к контроллеру.
 	* \endrussian
 	* @see get_status
@@ -148,10 +162,12 @@ ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \e
 /**
 	* \english
 	* @name Winding state
+	* This is a bit mask for bitwise operations.
 	* Motor winding state returned by device query.
 	* \endenglish
 	* \russian
 	* @name Состояние обмоток
+	* Это битовая маска для побитовых операций.
 	* Состояние обмоток двигателя, подключенного к контроллеру.
 	* \endrussian
 	* @see get_status
@@ -169,11 +185,13 @@ WIND_B_STATE_OK			= 0x30	/**< \english Winding B is connected and working proper
 /**
 	* \english
 	* @name Move command state
+	* This is a bit mask for bitwise operations.
 	* Move command (command_move, command_movr, command_left, command_right, command_stop, command_home, command_loft, command_sstp)
 	* and its state (run, finished, error).
 	* \endenglish
 	* \russian
 	* @name Состояние команды движения
+	* Это битовая маска для побитовых операций.
 	* Состояние команды движения (касается command_move, command_movr, command_left, command_right, command_stop, command_home, command_loft, command_sstp)
 	* и статуса её выполнения (выполяется, завершено, ошибка)
 	* \endrussian
@@ -196,11 +214,13 @@ MVCMD_RUNNING	= 0x80	/**< \english Move command state (0 - move command have fin
 /**
 	* \english
 	* @name Flags of the motion parameters
+	* This is a bit mask for bitwise operations.
 	* Specify motor shaft movement algorithm and list of limitations.
 	* Flags returned by query of get_move_settings.
 	* \endenglish
 	* \russian
 	* @name Флаги параметров движения
+	* Это битовая маска для побитовых операций.
 	* Определяют настройки параметров движения.
 	* Возращаются командой get_move_settings.
 	* \endrussian
@@ -213,11 +233,13 @@ RPM_DIV_1000		= 0x01	/**< \english This flag indicates that the operating speed 
 /**
 	* \english
 	* @name Flags of engine settings
+	* This is a bit mask for bitwise operations.
 	* Specify motor shaft movement algorithm and list of limitations.
 	* Flags returned by query of engine settings. May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги параметров мотора
+	* Это битовая маска для побитовых операций.
 	* Определяют настройки движения и работу ограничителей.
 	* Возращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
@@ -237,11 +259,13 @@ ENGINE_LIMIT_RPM	= 0x0080	/**< \english Maximum motor speed limit enable flag. \
 /**
 	* \english
 	* @name Flags of microstep mode
+	* This is a bit mask for bitwise operations.
 	* Specify settings of microstep mode. Using with step motors.
 	* Flags returned by query of engine settings. May be combined with bitwise OR
 	* \endenglish
 	* \russian
 	* @name Флаги параметров микрошагового режима
+	* Это битовая маска для побитовых операций.
 	* Определяют деление шага в микрошаговом режиме. Используются с шаговыми моторами.
 	* Возращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
@@ -263,11 +287,13 @@ MICROSTEP_MODE_FRAC_256	= 0x09	/**< \english 1/256 step mode. \endenglish \russi
 /**
 	* \english
 	* @name Flags of engine type
+	* This is a bit mask for bitwise operations.
 	* Specify motor type.
 	* Flags returned by query of engine settings.
 	* \endenglish
 	* \russian
 	* @name Флаги, определяющие тип мотора
+	* Это битовая маска для побитовых операций.
 	* Определяют тип мотора.
 	* Возращаются командой get_entype_settings.
 	* \endrussian
@@ -286,11 +312,13 @@ ENGINE_TYPE_BRUSHLESS	= 0x05	/**< \english Brushless motor. \endenglish \russian
 /**
 	* \english
 	* @name Flags of driver type
+	* This is a bit mask for bitwise operations.
 	* Specify driver type.
 	* Flags returned by query of engine settings.
 	* \endenglish
 	* \russian
 	* @name Флаги, определяющие тип силового драйвера
+	* Это битовая маска для побитовых операций.
 	* Определяют тип силового драйвера.
 	* Возращаются командой get_entype_settings.
 	* \endrussian
@@ -307,10 +335,13 @@ DRIVER_TYPE_EXTERNAL		= 0x03	/**< \english External driver. \endenglish \russian
 /**
 	* \english
 	* @name Flags of power settings of stepper motor
+	* This is a bit mask for bitwise operations.
+	* Flags returned by query of engine settings.
 	* Specify power settings. Flags returned by query of power settings.
 	* \endenglish
 	* \russian
 	* @name Флаги параметров питания шагового мотора
+	* Это битовая маска для побитовых операций.
 	* Возвращаются командой get_power_settings.
 	* \endrussian
 	* @see get_power_settings
@@ -324,10 +355,13 @@ POWER_SMOOTH_CURRENT	= 0x04	/**< \english Current ramp-up/down is performed smoo
 /**
 	* \english
 	* @name Flags of secure settings
+	* This is a bit mask for bitwise operations.
+	* Flags returned by query of engine settings.
 	* Specify secure settings. Flags returned by query of secure settings.
 	* \endenglish
 	* \russian
 	* @name Флаги критических параметров.
+	* Это битовая маска для побитовых операций.
 	* Возвращаются командой get_secure_settings.
 	* \endrussian
 	* @see get_secure_settings
@@ -346,10 +380,12 @@ ALARM_ENGINE_RESPONSE		= 0x80 /**< \english If this flag is set enter Alarm stat
 /**
 	* \english
 	* @name Position setting flags
+	* This is a bit mask for bitwise operations.
 	* Flags used in setting of position.
 	* \endenglish
 	* \russian
 	* @name Флаги установки положения
+	* Это битовая маска для побитовых операций.
 	* Возвращаются командой get_position.
 	* \endrussian
 	* @see get_position
@@ -362,9 +398,11 @@ SETPOS_IGNORE_ENCODER	= 0x02	/**< \english Will not reload encoder state if this
 /**
 	* \english
 	* @name Feedback type.
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Тип обратной связи.
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see set_feedback_settings
 	* @see get_feedback_settings
@@ -378,9 +416,11 @@ FEEDBACK_ENCODER_MEDIATED	= 0x06	/**< \english Feedback by encoder mediated by m
 /**
 	* \english
 	* @name Describes feedback flags.
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги обратной связи.
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see set_feedback_settings
 	* @see get_feedback_settings
@@ -395,9 +435,11 @@ FEEDBACK_ENC_TYPE_DIFFERENTIAL	= 0x80	/**< \english Differential encoder. \enden
 /**
 	* \english
 	* @name Flags for synchronization input setup
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек синхронизации входа
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset SyncInFlags:
@@ -408,9 +450,11 @@ SYNCIN_GOTOPOSITION	= 0x04	/**< \english The engine is go to position specified 
 /**
 	* \english
 	* @name Flags of synchronization output
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек синхронизации выхода
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset SyncOutFlags:
@@ -425,9 +469,11 @@ SYNCOUT_ONPERIOD	= 0x40	/**< \english Generate synchronization pulse every SyncO
 /**
 	* \english
 	* @name External IO setup flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настройки работы внешнего ввода/вывода
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see get_extio_settings
 	* @see set_extio_settings
@@ -439,9 +485,11 @@ EXTIO_SETUP_INVERT	= 0x02	/**< \english Interpret EXTIO states and fronts invert
 /**
 	* \english
 	* @name External IO mode flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настройки режимов внешнего ввода/вывода
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see extio_settings_t::extio_mode_flags
 	* @see get_extio_settings
@@ -465,11 +513,13 @@ EXTIO_SETUP_MODE_OUT_MOTOR_ON       = 0x40  /**< \english EXTIO pin stays active
 /**
 	* \english
 	* @name Border flags
+	* This is a bit mask for bitwise operations.
 	* Specify types of borders and motor behaviour on borders.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги границ
+	* Это битовая маска для побитовых операций.
 	* Типы границ и поведение позиционера на границах.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -485,11 +535,13 @@ BORDERS_SWAP_MISSET_DETECTION	= 0x08	/**< \english Motor should stop on both bor
 /**
 	* \english
 	* @name Limit switches flags
+	* This is a bit mask for bitwise operations.
 	* Specify electrical behaviour of limit switches like order and pulled positions.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги концевых выключателей
+	* Это битовая маска для побитовых операций.
 	* Определяют направление и состояние границ.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -504,11 +556,13 @@ ENDER_SW2_ACTIVE_LOW	= 0x04	/**< \english 1 - Limit switch connnected to pin SW2
 /**
 	* \english
 	* @name Brake settings flags
+	* This is a bit mask for bitwise operations.
 	* Specify behaviour of brake.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек тормоза
+	* Это битовая маска для побитовых операций.
 	* Определяют поведение тормоза.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -522,11 +576,13 @@ BRAKE_ENG_PWROFF		= 0x02	/**< \english Brake turns off power of step motor, if t
 /**
 	* \english
 	* @name Control flags
+	* This is a bit mask for bitwise operations.
 	* Specify motor control settings by joystick or buttons.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги управления
+	* Это битовая маска для побитовых операций.
 	* Определяют параметры управления мотором с помощью джойстика или кнопок.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -544,10 +600,12 @@ CONTROL_BTN_RIGHT_PUSHED_OPEN	= 0x08	/**< \english Pushed right button correspon
 /**
 	* \english
 	* @name Joystick flags
+	* This is a bit mask for bitwise operations.
 	* Control joystick states.
 	* \endenglish
 	* \russian
 	* @name Флаги джойстика
+	* Это битовая маска для побитовых операций.
 	* Управляют состояниями джойстика.
 	* \endrussian
 	* @see set_joystick_settings
@@ -559,11 +617,13 @@ JOY_REVERSE				= 0x01	/**< \english Joystick action is reversed. Joystick deviat
 /**
 	* \english
 	* @name Position control flags
+	* This is a bit mask for bitwise operations.
 	* Specify settings of position control.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги контроля позиции
+	* Это битовая маска для побитовых операций.
 	* Определяют настройки контроля позиции.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -580,11 +640,13 @@ CTP_ERROR_CORRECTION    = 0x10 /**< \english Correct errors which appear when sl
 /**
 	* \english
 	* @name Home settings flags
+	* This is a bit mask for bitwise operations.
 	* Specify behaviour for home command.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек команды home
+	* Это битовая маска для побитовых операций.
 	* Определяют поведение для команды home.
 	* Могут быть объединены с помощью побитового ИЛИ.
 	* \endrussian
@@ -610,9 +672,11 @@ HOME_USE_FAST           = 0x0100	/**< \english Use the fast algorithm of calibra
 /**
 	* \english
 	* @name UART parity flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек четности команды uart
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset UARTSetupFlags:
@@ -627,9 +691,11 @@ UART_STOP_BIT			= 0x08	/**< \english If set - one stop bit, else two stop bit \e
 /** 
  	* \english
 	* @name Motor Type flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
-	* @name Флаг типа двигателя
+	* @name Флаги типа двигателя
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset MotorTypeFlags:
@@ -641,9 +707,11 @@ MOTOR_TYPE_BLDC			= 0x03	/**< \english BLDC engine \endenglish \russian BLDC д�
 /** 
  	* \english
 	* @name Encoder settings flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек энкодера
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset EncoderSettingsFlags:
@@ -656,9 +724,11 @@ ENCSET_REVOLUTIONSENSOR_ACTIVE_HIGH = 0x0100	/**< \english If flag is set the re
 /** 
  	* \english
 	* @name Magnetic brake settings flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек энкодера
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset MBSettingsFlags:
@@ -668,9 +738,11 @@ MB_POWERED_HOLD					= 0x02	/**< \english If this flag is set the magnetic brake 
 /** 
  	* \english
 	* @name Temperature sensor settings flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек температурного датчика
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset TSSettingsFlags:
@@ -683,9 +755,11 @@ TS_AVAILABLE					= 0x08	/**< \english If flag is set the temperature sensor is a
 /** 
  	* \english
 	* @name Temperature sensor settings flags
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги настроек температурного датчика
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	*/
 flagset LSFlags:
@@ -698,9 +772,11 @@ LS_SHORTED						= 0x10	/**< \english If flag is set the Limit switches is shorte
 /**
 	* \english
 	* @name Flags of auto-detection of characteristics of windings of the engine.
+	* This is a bit mask for bitwise operations.
 	* \endenglish
 	* \russian
 	* @name Флаги автоопределения характеристик обмоток двигателя.
+	* Это битовая маска для побитовых операций.
 	* \endrussian
 	* @see set_emf_settings
 	* @see get_emf_settings
