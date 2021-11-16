@@ -422,7 +422,7 @@ extern "C"
 
 	/**
 		* \english
-		* Command of loading a correction table from a text file.
+		* Command of loading a correction table from a text file. This function is deprecated.
 		* This function is deprecated. Use the function set_correction_table(device_t id, const char* namefile).
 		* The correction table is used for position correction in case of mechanical inaccuracies.
 		* It works for some parameters in _calb commands.
@@ -448,7 +448,7 @@ extern "C"
 		*
 		* \endenglish
 		* \russian
-		* Команда загрузки корректирующей таблицы из текстового файла.
+		* Команда загрузки корректирующей таблицы из текстового файла. Данная функция устарела.
 		* Данная функция устарела. Используйте функцию set_correction_table(device_t id, const char* namefile).
 		* Таблица используется для коррекции положения в случае механических неточностей.
 		* Работает для некоторых параметров в _calb командах.
@@ -727,9 +727,15 @@ extern "C"
 
 	/** \english
 		* Reset library locks in a case of deadlock.
+		* This function returns only 0 (OK).
+		* If sending some libximc command ends with an incorrect data transfer (error), any subsequent command always returns -1 (typical for Windows).
+		* Calling this command, resets the error.
 		* \endenglish
 		* \russian
 		* Снимает блокировку библиотеки в экстренном случае.
+		* Эта функция  возвращает только 0 (OK).
+		* Если отправка некоторой команды libximc заканчивается неправильной передачей данных (ошибкой), любая последующая команда всегда возвращает -1 (типично для Windows) .
+		* Вызов этой команды, сбрасывает ошибку.
 		* \endrussian
 	*/
 	result_t XIMC_API reset_locks ();
