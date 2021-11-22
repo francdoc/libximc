@@ -44,7 +44,7 @@ except OSError as err:
             # print(err)
         elif err.winerror == 126: # One of the library bindy.dll, libximc.dll, xiwrapper.dll files is missing.
             print("Err: One of the library bindy.dll, libximc.dll, xiwrapper.dll is missing.")
-            print("It is also possible that one of the system libraries is missing. This problem is solved by installing the vcredist package from the ximc\winXX folder.")
+            print("It is also possible that one of the system libraries is missing. This problem is solved by installing the vcredist package from the ximc\\winXX folder.")
             # print(err)
         else:           # Other errors the value of which can be viewed in the code.
             print(err)
