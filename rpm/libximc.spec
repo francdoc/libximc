@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.13.2
+Version: 2.13.3
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -74,6 +74,18 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Mon Nov 29 2021 XIMC <info@ximc.ru> - 2.13.3
+- version bump
+- Feature #51788 Clean up the Bindy branches
+- Bug #51208 Make examples on linux working
+- Bug #51557 Fix the description of the BITS flag group
+- Bug #52853 Fix comments on our matlab examples
+- Bug #54266 Jenkins assembly on Cubieboard broke
+- Bug #54677 The old driver gets into the archives with the library
+- Bug #55439 The local libximc build from the GIT repository does not work
+- Bug #55638 Fix the description of the "reset_locks" function
+- Bug #55735 The Java example from the libximc library is not going to
 
 * Wed Sep 08 2021 XIMC <info@ximc.ru> - 2.13.2
 - version bump

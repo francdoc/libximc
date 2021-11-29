@@ -1,3 +1,16 @@
+libximc (2.13.3-1)
+  * Released: Mon, 29 Nov 2021 14:25:29 +0300
+  * Version bump
+  * Feature #51788 Clean up the Bindy branches
+  * Bug #51208 Make examples on linux working
+  * Bug #51557 Fix the description of the BITS flag group
+  * Bug #52853 Fix comments on our matlab examples
+  * Bug #54266 Jenkins assembly on Cubieboard broke
+  * Bug #54677 The old driver gets into the archives with the library
+  * Bug #55439 The local libximc build from the GIT repository does not work
+  * Bug #55638 Fix the description of the "reset_locks" function
+  * Bug #55735 The Java example from the libximc library is not going to
+
 libximc (2.13.2-1)
   * Released: Wed, 08 Sep 2021 23:51:43 +0300
   * Version bump
