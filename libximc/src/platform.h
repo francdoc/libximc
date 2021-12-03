@@ -30,7 +30,9 @@ ssize_t write_port_serial (device_metadata_t *metadata, const void *buf, size_t 
 /*
 * Platform-specific udp routines
 */
-#include "udp-win.h"
+#ifdef _MSC_VER
+  #include "udp-win.h"
+#endif
 
 
 /*

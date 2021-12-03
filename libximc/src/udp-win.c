@@ -11,9 +11,9 @@
 #include <setupapi.h>
 #include <process.h>
 
-#include "ximc-template.h"
+#include "ximc.h"
 
-#include "ximc-gen-template.h"
+//#include "ximc-gen.h"
 #include "util.h"
 #include "metadata.h"
 #include "platform.h"
@@ -21,6 +21,8 @@
 #include "protosup.h"
 
 //#include "wrapper.h"
+
+#ifdef _MSC_VER
 
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
@@ -77,3 +79,5 @@ int read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 	iResult = recvfrom((SOCKET)metadata->handle, (char *)buf, amount, 0, NULL, NULL);
 	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
 }
+
+#endif
