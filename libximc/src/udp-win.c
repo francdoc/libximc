@@ -27,7 +27,6 @@
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
 	// check parameter ip4_port : address:port
-
 	char saddress[64];
 	memset(saddress, 0, 64);
 	strncpy(saddress, ip4_port, 64);
@@ -39,10 +38,51 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 	ULONG addr = inet_addr(saddress);
 	if (addr == INADDR_NONE) return result_error;
  
+ // init actions to init some windows dll with udp from Microsoft example  
+	WORD wVersionRequested;
+	WSADATA wsaData;
+	int err;
+
+	/* Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h */
+	wVersionRequested = MAKEWORD(2, 2);
+
+	err = WSAStartup(wVersionRequested, &wsaData);
+	if (err != 0) {
+		/* Tell the user that we could not find a usable */
+		/* Winsock DLL.                                  */
+		//printf("WSAStartup failed with error: %d\n", err);
+		return result_error;
+	}
+
+	/* Confirm that the WinSock DLL supports 2.2.*/
+	/* Note that if the DLL supports versions greater    */
+	/* than 2.2 in addition to 2.2, it will still return */
+	/* 2.2 in wVersion since that is the version we      */
+	/* requested.                                        */
+
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) {
+		/* Tell the user that we could not find a usable */
+		/* WinSock DLL.                                  */
+		//printf("Could not find a usable version of Winsock.dll\n");
+		WSACleanup();
+		return result_error;
+	}
+	
+  
 	// creating a new connection resource
 
 	metadata->handle = (handle_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (metadata->handle == INVALID_SOCKET) return result_error;
+
+	// устанавлмваем опцию сокета
+	int OptVal = 1;
+	int OptLen = sizeof(int);
+
+	int rez = setsockopt(metadata->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&OptVal, OptLen);
+	if (rez == SOCKET_ERROR)
+	{
+		return result_error;
+	}
 
 	metadata->type = dtUdp;
 
@@ -61,6 +101,8 @@ result_t close_udp(device_metadata_t *metadata)
 {
 	closesocket((SOCKET)metadata->handle);
 	free(metadata->virtual_state);
+	// free some windows dll
+	WSACleanup();
 	return result_ok;
 }
 
