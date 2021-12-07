@@ -124,8 +124,8 @@ cd %DISTARCH%\bindy
 
 "%GIT%" --no-pager show --stat %BINDYVER%
 @set GENERATOR=Visual Studio 12 2013
-if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
-%CMAKE% -G "%GENERATOR%" .
+if %ARCH% == x64 @set GENERATOR=%GENERATOR%
+%CMAKE% -G "%GENERATOR%" -A x64.
 @set LASTERR=%errorlevel%
 cd %BASEDIR%
 @if not %LASTERR% == 0 goto FAIL
@@ -169,8 +169,8 @@ cd %DISTARCH%\xiwrapper
 %MERCURIAL% log -r %XIWRAPPERVER%
 @if not %errorlevel% == 0 goto FAIL
 @set GENERATOR=Visual Studio 12 2013
-if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
-%CMAKE% -G "%GENERATOR%" -DBINDY_PATH=%BASEDIR%\%DISTARCH%\bindy .
+if %ARCH% == x64 @set GENERATOR=%GENERATOR%
+%CMAKE% -G "%GENERATOR%" -A x64 -DBINDY_PATH=%BASEDIR%\%DISTARCH%\bindy .
 @set LASTERR=%errorlevel%
 cd %BASEDIR%
 @if not %LASTERR% == 0 goto FAIL
