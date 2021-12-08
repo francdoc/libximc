@@ -149,11 +149,13 @@ int command_port_send (device_metadata_t *metadata, const byte* command, size_t 
 			failed = n < 0;
 		}
 #ifdef _MSC_VER
+		
 		else if (metadata->type == dtUdp)
 		{
-			n = write_port_udp(metadata, command + k, amount);
+			n = write_udp(metadata, command + k, amount);
 			failed = n < 0;
 		}
+		
 #endif
 		if (failed)
 		{
@@ -234,11 +236,13 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 		}
 
 #ifdef _MSC_VER
+		
 		else if (metadata->type == dtUdp)
 		{
-			n = read_port_udp(metadata, response + k, amount);
+			n = read_udp(metadata, response + k, amount);
 			failed = n < 0;
 		}
+		
 #endif
 		else
 		{
@@ -1079,10 +1083,13 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 		return open_port_virtual( metadata, abs_path, serial );
 	}
 #ifdef _MSC_VER
+	
 	else if (!portable_strcasecmp(uri_scheme, "xi-udp"))
 	{
-		return open_port_udp(metadata, abs_path);
+		
+		return open_udp(metadata, abs_path);
 	}
+	
 #endif
 	else
 	{
@@ -1105,8 +1112,10 @@ result_t close_port (device_metadata_t *metadata)
 		case dtVirtual:
 			return close_port_virtual( metadata );
 #ifdef _MSC_VER
+			
 		case dtUdp:
 			return close_udp(metadata);
+			
 #endif
 		default:
 			return result_ok;

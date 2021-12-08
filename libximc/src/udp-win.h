@@ -10,7 +10,7 @@
 * Assumes host contains as follows: just an IP-address
 * port contains port
 */
-extern result_t open_udp(device_metadata_t *metadata, const char* host, USHORT port, const char* serial);
+extern result_t open_udp(device_metadata_t *metadata, const char* ip4_port);
 
 /**
 Closes previuosly opened UDP socket and removes all metadata associated

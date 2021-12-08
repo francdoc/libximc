@@ -5,12 +5,12 @@
 #include <winioctl.h>
 #include <winsock2.h>
 #include <Ws2tcpip.h>
-#else
+
+/*
 #include <ddk/ntddser.h>
-#endif
 #include <setupapi.h>
 #include <process.h>
-
+*/
 #include "ximc.h"
 
 //#include "ximc-gen.h"
@@ -22,24 +22,23 @@
 
 //#include "wrapper.h"
 
-#ifdef _MSC_VER
 
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
 	// check parameter ip4_port : address:port
 	char saddress[64];
 	memset(saddress, 0, 64);
-	strncpy_s(saddress, ip4_port, 64);
+	strncpy_s(saddress, 64, ip4_port, strlen(ip4_port));
 	char * port_start = strchr(saddress,':');
 	if (port_start == NULL) return result_error;
-	uint32_t port;
+	unsigned int port;
 	if (sscanf_s(port_start+1, "%ud", &port) != 1) return result_error;
 	*port_start = 0;
 	ULONG addr = inet_addr(saddress);
 	if (addr == INADDR_NONE) return result_error;
  
  // init actions to init some windows dll with udp from Microsoft example  
-	WORD wVersionRequested;
+	unsigned short wVersionRequested;
 	WSADATA wsaData;
 	int err;
 
@@ -72,13 +71,13 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 	// creating a new connection resource
 
 	metadata->handle = (handle_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (metadata->handle == INVALID_SOCKET) return result_error;
+	if ((SOCKET)metadata->handle == INVALID_SOCKET) return result_error;
 
 	// устанавлмваем опцию сокета
 	int OptVal = 1;
 	int OptLen = sizeof(int);
 
-	int rez = setsockopt(metadata->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&OptVal, OptLen);
+	int rez = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&OptVal, OptLen);
 	if (rez == SOCKET_ERROR)
 	{
 		return result_error;
@@ -110,14 +109,14 @@ result_t close_udp(device_metadata_t *metadata)
 int write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
 	int iResult;
-	iResult = sendto((SOCKET)metadata->handle, (const char *)command, command_len, 0, (SOCKADDR *)&metadata->virtual_state, sizeof (SOCKADDR_IN));
+	iResult = sendto((SOCKET)metadata->handle, (const char *)command, (int)command_len, 0, (SOCKADDR *)metadata->virtual_state, (int) sizeof (SOCKADDR_IN));
 	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
 }
 
 int read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 {
 	int iResult;
-	iResult = recvfrom((SOCKET)metadata->handle, (char *)buf, amount, 0, NULL, NULL);
+	iResult = recvfrom((SOCKET)metadata->handle, (char *)buf, (int)amount, 0, NULL, NULL);
 	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
 }
 
