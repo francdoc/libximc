@@ -388,7 +388,7 @@ def set_profile_8MT167S_25LS(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -407,7 +407,7 @@ def set_profile_8MT167S_25LS(lib, id):
         BACK_EMF_KM_AUTO = 4
         BACK_EMF_RESISTANCE_AUTO = 2
         BACK_EMF_INDUCTANCE_AUTO = 1
-
+    emf_settings.BackEMFFlags = BackEMFFlags_.BACK_EMF_KM_AUTO | BackEMFFlags_.BACK_EMF_RESISTANCE_AUTO | BackEMFFlags_.BACK_EMF_INDUCTANCE_AUTO
     result = lib.set_emf_settings(id, byref(emf_settings))
 
     if result != Result.Ok:
@@ -445,8 +445,8 @@ def set_profile_8MT167S_25LS(lib, id):
 
     stage_information = stage_information_t()
 
-    stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.Manufacturer = bytes([83, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 84, 49, 54, 55, 83, 45, 50, 53, 76, 83, 0, 77, 69, 110, 49, 0, 50, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,15 +455,15 @@ def set_profile_8MT167S_25LS(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 0
-    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
-    stage_settings.MaxSpeed = 0
-    stage_settings.TravelRange = 0
-    stage_settings.SupplyVoltageMin = 0
-    stage_settings.SupplyVoltageMax = 0
+    stage_settings.LeadScrewPitch = 0.25
+    stage_settings.Units = bytes([109, 109, 0, 114, 101, 101, 0, 0])
+    stage_settings.MaxSpeed = 6
+    stage_settings.TravelRange = 25
+    stage_settings.SupplyVoltageMin = 12
+    stage_settings.SupplyVoltageMax = 36
     stage_settings.MaxCurrentConsumption = 0
-    stage_settings.HorizontalLoadCapacity = 0
-    stage_settings.VerticalLoadCapacity = 0
+    stage_settings.HorizontalLoadCapacity = 30
+    stage_settings.VerticalLoadCapacity = 7
     result = lib.set_stage_settings(id, byref(stage_settings))
 
     if result != Result.Ok:
@@ -472,7 +472,7 @@ def set_profile_8MT167S_25LS(lib, id):
 
     motor_information = motor_information_t()
 
-    motor_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
     motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 
@@ -487,7 +487,7 @@ def set_profile_8MT167S_25LS(lib, id):
         MOTOR_TYPE_DC = 2
         MOTOR_TYPE_STEP = 1
         MOTOR_TYPE_UNKNOWN = 0
-    motor_settings.MotorType = MotorType_.MOTOR_TYPE_UNKNOWN
+    motor_settings.MotorType = MotorType_.MOTOR_TYPE_STEP | MotorType_.MOTOR_TYPE_UNKNOWN
     motor_settings.ReservedField = 0
     motor_settings.Poles = 0
     motor_settings.Phases = 0
@@ -505,7 +505,7 @@ def set_profile_8MT167S_25LS(lib, id):
     motor_settings.SpeedConstant = 0
     motor_settings.SpeedTorqueGradient = 0
     motor_settings.MechanicalTimeConstant = 0
-    motor_settings.MaxSpeed = 0
+    motor_settings.MaxSpeed = 5000
     motor_settings.MaxCurrent = 0
     motor_settings.MaxCurrentTime = 0
     motor_settings.NoLoadCurrent = 0
@@ -532,7 +532,7 @@ def set_profile_8MT167S_25LS(lib, id):
     encoder_settings.SupplyVoltageMin = 0
     encoder_settings.SupplyVoltageMax = 0
     encoder_settings.MaxCurrentConsumption = 0
-    encoder_settings.PPR = 0
+    encoder_settings.PPR = 1000
     class EncoderSettings_:
         ENCSET_REVOLUTIONSENSOR_ACTIVE_HIGH = 256
         ENCSET_REVOLUTIONSENSOR_PRESENT = 64

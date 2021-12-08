@@ -12,9 +12,9 @@
 
 #define 8MRB450_350_60_MEN2_BUILDER_VERSION_MAJOR  0
 #define 8MRB450_350_60_MEN2_BUILDER_VERSION_MINOR  9
-#define 8MRB450_350_60_MEN2_BUILDER_VERSION_BUGFIX 9
+#define 8MRB450_350_60_MEN2_BUILDER_VERSION_BUGFIX 10
 #define 8MRB450_350_60_MEN2_BUILDER_VERSION_SUFFIX ""
-#define 8MRB450_350_60_MEN2_BUILDER_VERSION        "0.9.9"
+#define 8MRB450_350_60_MEN2_BUILDER_VERSION        "0.9.10"
 
 
 #if defined(_MSC_VER)
@@ -87,7 +87,7 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
   engine_settings.NomSpeed = 480;
   engine_settings.uNomSpeed = 0;
   engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_ACCEL_ON;
-  engine_settings.Antiplay = 4640;
+  engine_settings.Antiplay = 24062;
   engine_settings.MicrostepMode = MICROSTEP_MODE_FRAC_256;
   engine_settings.StepsPerRev = 200;
   result = set_engine_settings(id, &engine_settings);
@@ -155,9 +155,9 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
   memset((void*)&edges_settings, 0, sizeof(edges_settings_t));
   edges_settings.BorderFlags = 0;
   edges_settings.EnderFlags = ENDER_SW2_ACTIVE_LOW | ENDER_SW1_ACTIVE_LOW;
-  edges_settings.LeftBorder = -487458;
+  edges_settings.LeftBorder = -48708;
   edges_settings.uLeftBorder = 0;
-  edges_settings.RightBorder = -12458;
+  edges_settings.RightBorder = -1208;
   edges_settings.uRightBorder = 0;
   result = set_edges_settings(id, &edges_settings);
 
@@ -255,8 +255,8 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
 
   control_settings_t control_settings;
   memset((void*)&control_settings, 0, sizeof(control_settings_t));
-  control_settings.MaxSpeed[0] = 24;
-  control_settings.MaxSpeed[1] = 240;
+  control_settings.MaxSpeed[0] = 75;
+  control_settings.MaxSpeed[1] = 750;
   control_settings.MaxSpeed[2] = 0;
   control_settings.MaxSpeed[3] = 0;
   control_settings.MaxSpeed[4] = 0;
@@ -311,7 +311,7 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
   ctp_settings_t ctp_settings;
   memset((void*)&ctp_settings, 0, sizeof(ctp_settings_t));
   ctp_settings.CTPMinError = 3;
-  ctp_settings.CTPFlags = CTP_ERROR_CORRECTION | CTP_ENABLED;
+  ctp_settings.CTPFlags = CTP_ERROR_CORRECTION | REV_SENS_INV | CTP_ENABLED;
   result = set_ctp_settings(id, &ctp_settings);
 
   if (result != result_ok)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -411,9 +411,9 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
 
   stage_information_t stage_information;
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
-  const int8_t stage_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t stage_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_PartNumber_temp[24] = {56, 77, 82, 66, 52, 53, 48, 45, 51, 53, 48, 45, 54, 48, 45, 77, 69, 110, 50, 0, 0, 0, 0, 0};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_stage_information(id, &stage_information);
 
@@ -427,11 +427,11 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
 
   stage_settings_t stage_settings;
   memset((void*)&stage_settings, 0, sizeof(stage_settings_t));
-  stage_settings.LeadScrewPitch = 0;
-  const int8_t stage_settings_Units_temp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+  stage_settings.LeadScrewPitch = 360;
+  const int8_t stage_settings_Units_temp[8] = {0, 101, 103, 114, 101, 101, 0, 0};
   memcpy(stage_settings.Units, stage_settings_Units_temp, sizeof(int8_t) * 8);
-  stage_settings.MaxSpeed = 0;
-  stage_settings.TravelRange = 0;
+  stage_settings.MaxSpeed = 720;
+  stage_settings.TravelRange = 360;
   stage_settings.SupplyVoltageMin = 0;
   stage_settings.SupplyVoltageMax = 0;
   stage_settings.MaxCurrentConsumption = 0;
@@ -449,7 +449,7 @@ static inline result_t set_profile_8MRB450_350_60_MEn2(device_t id)
 
   motor_information_t motor_information;
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
-  const int8_t motor_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
   const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);

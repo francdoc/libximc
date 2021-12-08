@@ -12,9 +12,9 @@
 
 #define 8MT195X_540_10_BUILDER_VERSION_MAJOR  0
 #define 8MT195X_540_10_BUILDER_VERSION_MINOR  9
-#define 8MT195X_540_10_BUILDER_VERSION_BUGFIX 9
+#define 8MT195X_540_10_BUILDER_VERSION_BUGFIX 10
 #define 8MT195X_540_10_BUILDER_VERSION_SUFFIX ""
-#define 8MT195X_540_10_BUILDER_VERSION        "0.9.9"
+#define 8MT195X_540_10_BUILDER_VERSION        "0.9.10"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MT195X_540_10(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -356,7 +356,7 @@ static inline result_t set_profile_8MT195X_540_10(device_t id)
   emf_settings.L = 0.013000000268220901;
   emf_settings.R = 2.5999999046325684;
   emf_settings.Km = 0.015599999576807022;
-  emf_settings.BackEMFFlags = 0;
+  emf_settings.BackEMFFlags = BACK_EMF_KM_AUTO | BACK_EMF_RESISTANCE_AUTO | BACK_EMF_INDUCTANCE_AUTO;
   result = set_emf_settings(id, &emf_settings);
 
   if (result != result_ok)

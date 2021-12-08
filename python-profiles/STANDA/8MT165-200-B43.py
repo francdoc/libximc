@@ -388,7 +388,7 @@ def set_profile_8MT165_200_B43(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -446,7 +446,7 @@ def set_profile_8MT165_200_B43(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([56, 77, 84, 49, 54, 53, 45, 50, 48, 48, 45, 66, 52, 51, 0, 0, 50, 48, 48, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 84, 49, 54, 53, 45, 50, 48, 48, 45, 66, 52, 51, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -603,7 +603,7 @@ def set_profile_8MT165_200_B43(lib, id):
     class MBSettings_:
         MB_POWERED_HOLD = 2
         MB_AVAILABLE = 1
-    accessories_settings.MBSettings = MBSettings_.MB_AVAILABLE
+
     accessories_settings.TemperatureSensorInfo = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     accessories_settings.TSMin = 0
     accessories_settings.TSMax = 0
@@ -614,7 +614,7 @@ def set_profile_8MT165_200_B43(lib, id):
         TS_TYPE_SEMICONDUCTOR = 2
         TS_TYPE_THERMOCOUPLE = 1
         TS_TYPE_UNKNOWN = 0
-    accessories_settings.TSSettings = TSSettings_.TS_TYPE_THERMOCOUPLE | TSSettings_.TS_TYPE_UNKNOWN
+    accessories_settings.TSSettings = TSSettings_.TS_TYPE_UNKNOWN
     class LimitSwitchesSettings_:
         LS_SHORTED = 16
         LS_SW2_ACTIVE_LOW = 8

@@ -87,7 +87,7 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
         ENGINE_CURRENT_AS_RMS = 2
         ENGINE_REVERSE = 1
     engine_settings.EngineFlags = EngineFlags_.ENGINE_LIMIT_RPM | EngineFlags_.ENGINE_ACCEL_ON
-    engine_settings.Antiplay = 4640
+    engine_settings.Antiplay = 24062
     class MicrostepMode_:
         MICROSTEP_MODE_FRAC_256 = 9
         MICROSTEP_MODE_FRAC_128 = 8
@@ -182,9 +182,9 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
         ENDER_SW1_ACTIVE_LOW = 2
         ENDER_SWAP = 1
     edges_settings.EnderFlags = EnderFlags_.ENDER_SW2_ACTIVE_LOW | EnderFlags_.ENDER_SW1_ACTIVE_LOW
-    edges_settings.LeftBorder = -487458
+    edges_settings.LeftBorder = -48708
     edges_settings.uLeftBorder = 0
-    edges_settings.RightBorder = -12458
+    edges_settings.RightBorder = -1208
     edges_settings.uRightBorder = 0
     result = lib.set_edges_settings(id, byref(edges_settings))
 
@@ -290,8 +290,8 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
 
     control_settings = control_settings_t()
 
-    control_settings.MaxSpeed[0] = 24
-    control_settings.MaxSpeed[1] = 240
+    control_settings.MaxSpeed[0] = 75
+    control_settings.MaxSpeed[1] = 750
     control_settings.MaxSpeed[2] = 0
     control_settings.MaxSpeed[3] = 0
     control_settings.MaxSpeed[4] = 0
@@ -361,7 +361,7 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
         CTP_ALARM_ON_ERROR = 4
         CTP_BASE = 2
         CTP_ENABLED = 1
-    ctp_settings.CTPFlags = CTPFlags_.CTP_ERROR_CORRECTION | CTPFlags_.CTP_ENABLED
+    ctp_settings.CTPFlags = CTPFlags_.CTP_ERROR_CORRECTION | CTPFlags_.REV_SENS_INV | CTPFlags_.CTP_ENABLED
     result = lib.set_ctp_settings(id, byref(ctp_settings))
 
     if result != Result.Ok:
@@ -388,7 +388,7 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -445,8 +445,8 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
 
     stage_information = stage_information_t()
 
-    stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.Manufacturer = bytes([0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 82, 66, 52, 53, 48, 45, 51, 53, 48, 45, 54, 48, 45, 77, 69, 110, 50, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,10 +455,10 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 0
-    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
-    stage_settings.MaxSpeed = 0
-    stage_settings.TravelRange = 0
+    stage_settings.LeadScrewPitch = 360
+    stage_settings.Units = bytes([0, 101, 103, 114, 101, 101, 0, 0])
+    stage_settings.MaxSpeed = 720
+    stage_settings.TravelRange = 360
     stage_settings.SupplyVoltageMin = 0
     stage_settings.SupplyVoltageMax = 0
     stage_settings.MaxCurrentConsumption = 0
@@ -472,7 +472,7 @@ def set_profile_8MRB450_350_60_MEn2(lib, id):
 
     motor_information = motor_information_t()
 
-    motor_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
     motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 

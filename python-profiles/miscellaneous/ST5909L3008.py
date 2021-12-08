@@ -74,7 +74,7 @@ def set_profile_ST5909L3008(lib, id):
     engine_settings = engine_settings_t()
 
     engine_settings.NomVoltage = 1
-    engine_settings.NomCurrent = 3000
+    engine_settings.NomCurrent = 2120
     engine_settings.NomSpeed = 5000
     engine_settings.uNomSpeed = 0
     class EngineFlags_:
@@ -388,7 +388,7 @@ def set_profile_ST5909L3008(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -446,7 +446,7 @@ def set_profile_ST5909L3008(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([83, 84, 53, 57, 48, 57, 76, 51, 48, 48, 56, 0, 53, 45, 48, 52, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,10 +455,10 @@ def set_profile_ST5909L3008(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 1
-    stage_settings.Units = bytes([100, 101, 103, 114, 101, 101, 0, 0])
+    stage_settings.LeadScrewPitch = 0
+    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
     stage_settings.MaxSpeed = 0
-    stage_settings.TravelRange = 360
+    stage_settings.TravelRange = 0
     stage_settings.SupplyVoltageMin = 0
     stage_settings.SupplyVoltageMax = 0
     stage_settings.MaxCurrentConsumption = 0
