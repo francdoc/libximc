@@ -25,11 +25,7 @@
 /* use newer C++ skeleton file */
 %skeleton "lalr1.cc"
 
-/* namespace to enclose parser in */
-/*2.6 syntax: %name-prefix="xigen"*/
-/*3.0 syntax: %define namespace "xigen"*/
-/* following syntax supported since 2.6: */
-%define api.prefix "xigen"
+/* use default namespace yy to keep compatibility with bison 2.3 */
 
 /* keep track of the current position within the input */
 %locations
