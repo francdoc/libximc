@@ -30,9 +30,30 @@ ssize_t write_port_serial (device_metadata_t *metadata, const void *buf, size_t 
 /*
 * Platform-specific udp routines
 */
-#ifdef _MSC_VER
-#include "udp-win.h"
-#endif
+/**
+* Opens UDP-socket as a client
+* Assumes host contains as follows: just an IP-address
+* port contains port
+*/
+result_t open_udp(device_metadata_t *metadata, const char* ip4_port);
+
+/**
+Closes previuosly opened UDP socket and removes all metadata associated
+*/
+result_t close_udp(device_metadata_t *metadata);
+
+/**
+* Writes to UDP socket
+
+*/
+int write_udp(device_metadata_t *metadata, const byte* command, size_t command_len);
+
+/**
+* Reads from  UDP socket
+
+*/
+
+int read_udp(device_metadata_t *metadata, void *buf, size_t amount);
 
 
 /*

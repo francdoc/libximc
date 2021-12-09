@@ -42,6 +42,7 @@ libximc_la_SOURCES = \
 						loader.h \
 						metadata.h \
 						platform-posix.c \
+						udp-posix.c \
 						platform.h \
 						protosup.c \
 						protosup.h \

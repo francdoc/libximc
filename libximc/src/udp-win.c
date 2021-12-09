@@ -1,16 +1,9 @@
 #include "common.h"
 
-// do not force to use DDK with MSVC or other
-#ifdef _MSC_VER
 #include <winioctl.h>
 #include <winsock2.h>
 #include <Ws2tcpip.h>
 
-/*
-#include <ddk/ntddser.h>
-#include <setupapi.h>
-#include <process.h>
-*/
 #include "ximc.h"
 
 //#include "ximc-gen.h"
@@ -119,5 +112,3 @@ int read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 	iResult = recvfrom((SOCKET)metadata->handle, (char *)buf, (int)amount, 0, NULL, NULL);
 	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
 }
-
-#endif

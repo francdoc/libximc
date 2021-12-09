@@ -281,7 +281,6 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     <ClInclude Include="src\platform.h" />
     <ClInclude Include="src\protosup.h" />
     <ClInclude Include="src\sglib.h" />
-    <ClInclude Include="src\udp-win.h" />
     <ClInclude Include="src\util.h" />
     <ClInclude Include="src\wrapper.h" />
     <CustomBuild Include="src\ximc-gen-template.h">

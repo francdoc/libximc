@@ -148,15 +148,11 @@ int command_port_send (device_metadata_t *metadata, const byte* command, size_t 
 			n = write_port_serial( metadata, command+k, amount );
 			failed = n < 0;
 		}
-#ifdef _MSC_VER
-		
 		else if (metadata->type == dtUdp)
 		{
 			n = write_udp(metadata, command + k, amount);
 			failed = n < 0;
 		}
-		
-#endif
 		if (failed)
 		{
 			errcode = get_system_error_code();
@@ -234,16 +230,11 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 			n = read_port_serial( metadata, response+k, amount );
 			failed = n < 0;
 		}
-
-#ifdef _MSC_VER
-		
 		else if (metadata->type == dtUdp)
 		{
 			n = read_udp(metadata, response + k, amount);
 			failed = n < 0;
 		}
-		
-#endif
 		else
 		{
 			log_error( L"unknown device type %d", metadata->type );
@@ -836,11 +827,9 @@ void filelog_data(const char* direction, device_type_t type,
 	case dtNet:
 		type_str = "net";
 		break;
-#ifdef _MSC_VER
 	case dtUdp:
 		type_str = "udp";
 		break;
-#endif
 	default:
 		type_str = "---";
 		break;
@@ -1082,15 +1071,12 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 			serial = uri_paramvalue;
 		return open_port_virtual( metadata, abs_path, serial );
 	}
-#ifdef _MSC_VER
-	
+
 	else if (!portable_strcasecmp(uri_scheme, "xi-udp"))
 	{
 		
-		return open_udp(metadata, abs_path);
+		return open_udp(metadata, uri_host);
 	}
-	
-#endif
 	else
 	{
 		log_error( L"unknown device type" );
@@ -1111,12 +1097,9 @@ result_t close_port (device_metadata_t *metadata)
 			return result_ok;
 		case dtVirtual:
 			return close_port_virtual( metadata );
-#ifdef _MSC_VER
-			
+		
 		case dtUdp:
 			return close_udp(metadata);
-			
-#endif
 		default:
 			return result_ok;
 	}
