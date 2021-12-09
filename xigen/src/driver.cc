@@ -25,9 +25,9 @@ namespace xigen {
 		scanner.set_debug(trace_scanning);
 		m_lexer = &scanner;
 
-		Parser parser(*this);
-		parser.set_debug_level(trace_parsing);
-		return (parser.parse() == 0);
+		parser the_parser(*this);
+		the_parser.set_debug_level(trace_parsing);
+		return (the_parser.parse() == 0);
 	}
 
 	bool Driver::parse_file(const std::string &filename)

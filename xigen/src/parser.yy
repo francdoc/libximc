@@ -26,12 +26,10 @@
 %skeleton "lalr1.cc"
 
 /* namespace to enclose parser in */
+/*2.6 syntax: %name-prefix="xigen"*/
 /*3.0 syntax: %define namespace "xigen"*/
-%name-prefix="xigen"
-
-/* set the parser's class identifier */
-/*3.0 syntax: %define parser_class_name {Parser}*/
-%define "parser_class_name" "Parser"
+/* following syntax supported since 2.6: */
+%define api.prefix "xigen"
 
 /* keep track of the current position within the input */
 %locations
@@ -46,8 +44,8 @@
  * variables. */
 %parse-param { class Driver& driver }
 
-/* verbose error messages */
-%error-verbose
+/* verbose error messages, drop for compatibility with 2.7 */
+/*%define parse.error verbose*/
 
  /*** BEGIN XIGEN - Change the xigen grammar's tokens below ***/
 
@@ -442,7 +440,7 @@ start 			: protocol_header skips flagsets commands comments
 
 %% /*** Additional Code ***/
 
-void xigen::Parser::error(const Parser::location_type& l, const std::string& m)
+void xigen::parser::error(const parser::location_type& l, const std::string& m)
 {
 	driver.report(l, "Error: " + m);
 }
