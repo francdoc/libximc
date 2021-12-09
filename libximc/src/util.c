@@ -6,7 +6,6 @@
 #include "util.h"
 #include "metadata.h"
 #include "platform.h"
-#include "wrapper.h"
 
 #define ERRORBUFLEN 2000
 
