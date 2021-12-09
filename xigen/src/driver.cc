@@ -3,9 +3,9 @@
 #include "driver.hh"
 #include "scanner.hh"
 
-namespace xigen {
+namespace yy {
 
-	Driver::Driver(ParserContext& context)
+	Driver::Driver(xigen::ParserContext& context)
 		: trace_scanning(false),
 		trace_parsing(false),
 		trace_ast(false),
@@ -21,7 +21,7 @@ namespace xigen {
 
 		streamname = sname;
 
-		Scanner scanner(&in);
+		yy::Scanner scanner(&in);
 		scanner.set_debug(trace_scanning);
 		m_lexer = &scanner;
 

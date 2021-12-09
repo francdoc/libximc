@@ -6,8 +6,8 @@
 #include <iostream>
 
 /* import the parser's token type into a local typedef */
-typedef xigen::parser::token token;
-typedef xigen::parser::token_type token_type;
+typedef yy::parser::token token;
+typedef yy::parser::token_type token_type;
 
 /* By default yylex returns int, we use token_type. Unfortunately yyterminate
  * by default returns 0, which is not of token_type. */
@@ -184,7 +184,7 @@ cdfloat			{ XI_STR; return token::TYPE_CDFLOAT; }
 %% /*** Additional Code ***/
 
 
-namespace xigen {
+namespace yy {
 
 
 Scanner::Scanner(std::istream* in,

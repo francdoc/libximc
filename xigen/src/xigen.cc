@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
 	xigen::ParserContext context;
-	xigen::Driver driver(context);
+	yy::Driver driver(context);
 
 	std::string grammarFile;
 	std::string outputFile;

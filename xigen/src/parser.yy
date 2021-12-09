@@ -5,6 +5,8 @@
 #include "model.hh"
 #include "parsercontext.hh"
 
+using namespace xigen;
+
 %}
 
 /*** yacc/bison Declarations ***/
@@ -49,14 +51,14 @@
 	unsigned int 	integerVal;
 	bool 		boolVal;
 	std::string* 	stringVal;
-	Command* 	nodeCommand;
-	Field* 		nodeField;
-	ArrayField*	nodeArrayField;
-	Communicator* 	nodeCommunicator;
-	Comments* 	nodeComments;
-	Comment* 	nodeComment;
-	VariableEnum::Type variableType;
-	CalibrationEnum::Type calibrationType;
+	xigen::Command* 	nodeCommand;
+	xigen::Field* 		nodeField;
+	xigen::ArrayField*	nodeArrayField;
+	xigen::Communicator* 	nodeCommunicator;
+	xigen::Comments* 	nodeComments;
+	xigen::Comment* 	nodeComment;
+	xigen::VariableEnum::Type variableType;
+	xigen::CalibrationEnum::Type calibrationType;
 }
 
 /* token declarations */
@@ -436,7 +438,7 @@ start 			: protocol_header skips flagsets commands comments
 
 %% /*** Additional Code ***/
 
-void xigen::parser::error(const parser::location_type& l, const std::string& m)
+void yy::parser::error(const parser::location_type& l, const std::string& m)
 {
 	driver.report(l, "Error: " + m);
 }

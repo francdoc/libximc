@@ -7,10 +7,10 @@
 #ifndef YY_DECL
 
 #define	YY_DECL						\
-	xigen::parser::token_type				\
-xigen::Scanner::lex(				\
-		xigen::parser::semantic_type* yylval,		\
-		xigen::parser::location_type* yylloc		\
+	yy::parser::token_type				\
+yy::Scanner::lex(				\
+		yy::parser::semantic_type* yylval,		\
+		yy::parser::location_type* yylloc		\
 		)
 #endif
 
@@ -20,9 +20,10 @@ xigen::Scanner::lex(				\
 #undef yyFlexLexer
 #endif
 
+
 #include "parser.hh"
 
-namespace xigen {
+namespace yy {
 
 	/** Scanner is a derived class to add some extra function to the scanner
 	 * class. Flex itself creates a class named yyFlexLexer, which is renamed using

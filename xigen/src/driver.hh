@@ -6,9 +6,10 @@
 /** The xigen namespace is used to encapsulate the three parser classes
 	* xigen::Parser, xigen::Scanner and xigen::Driver */
 namespace xigen {
-
 	// forward declaration
 	class ParserContext;
+};
+namespace yy {
 
 	/** The Driver class brings together all components. It creates an instance of
 	 * the Parser and Scanner classes and connects them. Then the input stream is
@@ -20,7 +21,7 @@ namespace xigen {
 	{
 		public:
 			/// construct a new parser driver context
-			Driver(ParserContext& context);
+			Driver(xigen::ParserContext& context);
 
 			/// enable debug output in the flex scanner
 			bool trace_scanning;
@@ -74,7 +75,7 @@ namespace xigen {
 
 			class Scanner* getLexer() { return m_lexer; }
 
-			class ParserContext& getContext() { return m_context; }
+			class xigen::ParserContext& getContext() { return m_context; }
 
 
 		private:
@@ -83,10 +84,10 @@ namespace xigen {
 			class Scanner* m_lexer;
 
 			/** Reference to the context */
-			class ParserContext& m_context;
+			class xigen::ParserContext& m_context;
 	};
 
-} // namespace xigen
+} // namespace yy
 
 #endif // DRIVER_H
 /* vim: set ts=2 sw=2: */
