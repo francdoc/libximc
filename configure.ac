@@ -223,8 +223,8 @@ echo "
   C Compiler..........: $CC $CFLAGS $CPPFLAGS
   C++ Compiler........: $CXX $CXXFLAGS $CPPFLAGS
   Linker..............: $LD $LDFLAGS $LIBS
-  Yacc................: $YACC
-  Lex.................: $LEX
+  Yacc................: $YACC (`$YACC --version | head -n1`)
+  Lex.................: $LEX (`$LEX --version | head -n1`)
   Doxygen.............: ${DX_DOXYGEN:-NO}
   Docs support........: ${with_docs:-NO}
   Locks support.......: ${with_locks:-NO}
