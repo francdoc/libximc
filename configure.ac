@@ -207,7 +207,9 @@ if test "x$with_xiwrapper" != "xno" ; then
 	CPPFLAGS="$CPPFLAGS -I$with_xiwrapper"
 	LDFLAGS="$LDFLAGS -L$with_xiwrapper"
 	AC_SUBST([XIWRAPPER_PATH], [$with_xiwrapper])
+	AC_DEFINE([HAVE_XIWRAPPER], [1], [Use xiwrapper])
 fi
+AM_CONDITIONAL([HAVE_XIWRAPPER], [test "x$with_xiwrapper" != "xno"])
 
 AC_CHECK_HEADERS([wrapper.h])
 
