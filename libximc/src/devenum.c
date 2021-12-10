@@ -7,7 +7,9 @@
 #include "metadata.h"
 #include "platform.h"
 #include "protosup.h"
+#ifdef HAVE_XIWRAPPER
 #include "wrapper.h"
+#endif
 #include <errno.h>
 
 #if defined(WIN32) || defined(WIN64)
@@ -148,8 +150,12 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
 
 int enumerate_device_by_ximc_information(const char* addr, const char* adapter_addr, uint8_t** pbuf)
 {
+#ifdef HAVE_XIWRAPPER
 	int result = bindy_enumerate_specify_adapter(addr, adapter_addr, ENUMERATE_TIMEOUT_TIME, pbuf);
 	return result;
+#else
+	return result_error;
+#endif
 }
 
 /* Concrete thread function to slowly check a device for beeing XIMC */
@@ -355,6 +361,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		launch_check_threads( devenum );
 	}
 	if (enumerate_flags & ENUMERATE_NETWORK) {
+#ifdef HAVE_XIWRAPPER
 		if ( !bindy_init() ) {
 			log_error( L"network layer init failed" );
 			return result_error;
@@ -471,7 +478,11 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		free(net_enum.device_count);
 		free(net_enum.addrs);
 		free(net_enum.pbufs);
+#else
+		return result_error;
+#endif
 	}
+
 
 	log_debug(L"found %d devices", devenum->count);
 
@@ -487,6 +498,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 result_t XIMC_API set_bindy_key(const char* keyfilepath)
 {
+#ifdef HAVE_XIWRAPPER
 #if defined(WIN32) || defined(WIN64)
 	if (_access(keyfilepath, 0) != -1)
 #else
@@ -508,6 +520,10 @@ result_t XIMC_API set_bindy_key(const char* keyfilepath)
 		//return result_error;
 	}
 	return result_ok;
+#else
+	// not enabled
+	return result_error;
+#endif
 }
 
 device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints)

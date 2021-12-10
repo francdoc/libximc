@@ -6,7 +6,9 @@
 #include "metadata.h"
 #include "platform.h"
 #include "protosup.h"
+#ifdef HAVE_XIWRAPPER
 #include "wrapper.h"
+#endif
 
 #include "sglib.h"
 
@@ -131,11 +133,16 @@ int command_port_send (device_metadata_t *metadata, const byte* command, size_t 
 
 		if (metadata->type == dtNet)
 		{
+#ifdef HAVE_XIWRAPPER
 			// any failure results in nodevice
 			if ( ! bindy_write ( metadata->conn_id, command+k, amount ) )
 				return result_serial_nodevice;
 			// XXX bindy does not report resulting amount
 			n = amount;
+#else
+			log_error( L"network device support is not built" );
+			return result_serial_nodevice;
+#endif
 		}
 		else if (metadata->type == dtVirtual)
 		{
@@ -204,6 +211,7 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 		
 		if (metadata->type == dtNet)
 		{
+#ifdef HAVE_XIWRAPPER
 			const int tick_time_ms = 1;
 			int wait_time_ms = 0;
 			do {
@@ -218,6 +226,10 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 				// will be replaced in buffered xiwrapper
 				set_error_nodevice();
 			}
+#else
+			log_error( L"network device support is not built" );
+			failed = 1;
+#endif
 		}
 		else if (metadata->type == dtVirtual)
 		{
@@ -984,6 +996,7 @@ void unlock_metadata ()
 /*
  * Open bindy port
  */
+#ifdef HAVE_XIWRAPPER
 result_t open_port_net(device_metadata_t *metadata, const char* host, const char* serial)
 {
 	uint32_t serial32;
@@ -1006,6 +1019,7 @@ result_t open_port_net(device_metadata_t *metadata, const char* host, const char
 
 	return result_ok;
 }
+#endif
 
 /* Open a port by URI
  * examples:
@@ -1022,6 +1036,7 @@ result_t open_port_net(device_metadata_t *metadata, const char* host, const char
  */
 result_t open_port (device_metadata_t *metadata, const char* name)
 {
+#ifdef HAVE_XIWRAPPER
 	char uri_scheme[1024], uri_host[1024], uri_path[1024], decoded_path[1024],
 		 uri_paramname[1024], uri_paramvalue[1024],
 		 abs_path[1024], *tmp, *serial;
@@ -1082,10 +1097,15 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 		log_error( L"unknown device type" );
 		return result_error;
 	}
+#else
+	log_error( L"network device support is not built" );
+	return result_error;
+#endif
 }
 
 result_t close_port (device_metadata_t *metadata)
 {
+#ifdef HAVE_XIWRAPPER
 	filelog_text("-", metadata->type, (uint32_t)metadata->handle, "Closing port...");
 	switch (metadata->type)
 	{
@@ -1103,6 +1123,10 @@ result_t close_port (device_metadata_t *metadata)
 		default:
 			return result_ok;
 	}
+#else
+	log_error( L"network device support is not built" );
+	return result_error;
+#endif
 }
 
 

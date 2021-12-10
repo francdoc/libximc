@@ -12,9 +12,9 @@
 
 #define 8MT50_150BS1_MEN1_BUILDER_VERSION_MAJOR  0
 #define 8MT50_150BS1_MEN1_BUILDER_VERSION_MINOR  9
-#define 8MT50_150BS1_MEN1_BUILDER_VERSION_BUGFIX 9
+#define 8MT50_150BS1_MEN1_BUILDER_VERSION_BUGFIX 10
 #define 8MT50_150BS1_MEN1_BUILDER_VERSION_SUFFIX ""
-#define 8MT50_150BS1_MEN1_BUILDER_VERSION        "0.9.9"
+#define 8MT50_150BS1_MEN1_BUILDER_VERSION        "0.9.10"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MT50_150BS1_MEn1(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -411,9 +411,9 @@ static inline result_t set_profile_8MT50_150BS1_MEn1(device_t id)
 
   stage_information_t stage_information;
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
-  const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t stage_information_PartNumber_temp[24] = {56, 77, 84, 53, 48, 45, 49, 53, 48, 66, 83, 49, 45, 77, 69, 110, 49, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_stage_information(id, &stage_information);
 
@@ -427,11 +427,11 @@ static inline result_t set_profile_8MT50_150BS1_MEn1(device_t id)
 
   stage_settings_t stage_settings;
   memset((void*)&stage_settings, 0, sizeof(stage_settings_t));
-  stage_settings.LeadScrewPitch = 1;
-  const int8_t stage_settings_Units_temp[8] = {0, 109, 0, 114, 101, 101, 0, 0};
+  stage_settings.LeadScrewPitch = 0;
+  const int8_t stage_settings_Units_temp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_settings.Units, stage_settings_Units_temp, sizeof(int8_t) * 8);
-  stage_settings.MaxSpeed = 20;
-  stage_settings.TravelRange = 150;
+  stage_settings.MaxSpeed = 0;
+  stage_settings.TravelRange = 0;
   stage_settings.SupplyVoltageMin = 0;
   stage_settings.SupplyVoltageMax = 0;
   stage_settings.MaxCurrentConsumption = 0;

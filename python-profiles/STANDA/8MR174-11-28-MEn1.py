@@ -388,7 +388,7 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -407,7 +407,7 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
         BACK_EMF_KM_AUTO = 4
         BACK_EMF_RESISTANCE_AUTO = 2
         BACK_EMF_INDUCTANCE_AUTO = 1
-
+    emf_settings.BackEMFFlags = BackEMFFlags_.BACK_EMF_KM_AUTO | BackEMFFlags_.BACK_EMF_RESISTANCE_AUTO | BackEMFFlags_.BACK_EMF_INDUCTANCE_AUTO
     result = lib.set_emf_settings(id, byref(emf_settings))
 
     if result != Result.Ok:
@@ -487,7 +487,7 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
         MOTOR_TYPE_DC = 2
         MOTOR_TYPE_STEP = 1
         MOTOR_TYPE_UNKNOWN = 0
-    motor_settings.MotorType = MotorType_.MOTOR_TYPE_STEP | MotorType_.MOTOR_TYPE_UNKNOWN
+    motor_settings.MotorType = MotorType_.MOTOR_TYPE_UNKNOWN
     motor_settings.ReservedField = 0
     motor_settings.Poles = 0
     motor_settings.Phases = 0
@@ -505,7 +505,7 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
     motor_settings.SpeedConstant = 0
     motor_settings.SpeedTorqueGradient = 0
     motor_settings.MechanicalTimeConstant = 0
-    motor_settings.MaxSpeed = 5000
+    motor_settings.MaxSpeed = 0
     motor_settings.MaxCurrent = 0
     motor_settings.MaxCurrentTime = 0
     motor_settings.NoLoadCurrent = 0
@@ -528,11 +528,11 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
 
     encoder_settings = encoder_settings_t()
 
-    encoder_settings.MaxOperatingFrequency = 100
+    encoder_settings.MaxOperatingFrequency = 0
     encoder_settings.SupplyVoltageMin = 0
     encoder_settings.SupplyVoltageMax = 0
     encoder_settings.MaxCurrentConsumption = 0
-    encoder_settings.PPR = 1000
+    encoder_settings.PPR = 0
     class EncoderSettings_:
         ENCSET_REVOLUTIONSENSOR_ACTIVE_HIGH = 256
         ENCSET_REVOLUTIONSENSOR_PRESENT = 64
@@ -581,8 +581,8 @@ def set_profile_8MR174_11_28_MEn1(lib, id):
 
     gear_settings = gear_settings_t()
 
-    gear_settings.ReductionIn = 1
-    gear_settings.ReductionOut = 1
+    gear_settings.ReductionIn = 0
+    gear_settings.ReductionOut = 0
     gear_settings.RatedInputTorque = 0
     gear_settings.RatedInputSpeed = 0
     gear_settings.MaxOutputBacklash = 0

@@ -1,3 +1,33 @@
 For build and usage instructions please consult documentation
 at libximc/docs/doc-en or libximc/docs/doc-ru. Files are generated during library build. 
 Source files for documentation can be found at libximc/docs/doc-en/docmainpage or libximc/docs/doc-ru/docmainpage.
+
+Building a library for Windows
+
+Dependencies
+
+* We install git. Download and install from https://git-scm.com in C:\Program Files\Git (should be the default).
+* We put CMake with https://cmake.org along the way C:\Program Files (x86)\CMake. 
+You can put the 64 bit version in C:\Program Files\CMake, and then just copy it to C:\Program Files (x86).
+* Installing cygwin
+The installation must be done in the c directory:\cygwin (this is the default).
+It is necessary to select flex, bison, bash packages for installation. 
+The archive with the verified version can be downloaded at https://files.xisupport.com/libximc_dependencies/cygwin_ci.7z, 
+then just unpack the archive on the C:\ drive.
+* Install JDK 64 bits if not installed. A proven Java distribution can be downloaded 
+https://sourceforge.net/projects/javaclientmsiinstallers/files/Java%20JDK%209%20Update%20464/jdk9.0.464.zip/download
+or https://www.oracle.com/java/technologies/javase/javase9-archive-downloads.html. Authorization is required to download from the second link.
+Prescribe the variable JDK_PATH
+Example: JDK is installed in C:\Program Files\Java\jdk-9.0.4 
+=> Start -> PC Software Computer -> Properties -> Additional system parameters -> Environment Variables -> System variables,
+there we create a variable JDK_HOME and JDK32_HOME with the value C:\Program Files\Java\jdk-9.0.4
+* It is necessary to install Microsoft Visual Studio 2013.
+
+Working with the library
+
+* Cloning the repository: 
+  git clone https://github.com/EPC-MSU/libximc
+* We switch to the desired state using git checkout
+* From the library folder, run the: 
+  build.bat
+* The result of the assembly can be taken in \ximc

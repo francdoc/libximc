@@ -388,7 +388,7 @@ def set_profile_8MR191_30_4209_E4(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -445,8 +445,8 @@ def set_profile_8MR191_30_4209_E4(lib, id):
 
     stage_information = stage_information_t()
 
-    stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.Manufacturer = bytes([0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 82, 49, 57, 49, 45, 51, 48, 45, 52, 50, 48, 57, 45, 69, 52, 0, 49, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,10 +455,10 @@ def set_profile_8MR191_30_4209_E4(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 0
-    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
-    stage_settings.MaxSpeed = 0
-    stage_settings.TravelRange = 0
+    stage_settings.LeadScrewPitch = 2
+    stage_settings.Units = bytes([0, 101, 103, 114, 101, 101, 0, 0])
+    stage_settings.MaxSpeed = 48
+    stage_settings.TravelRange = 360
     stage_settings.SupplyVoltageMin = 0
     stage_settings.SupplyVoltageMax = 0
     stage_settings.MaxCurrentConsumption = 0
@@ -472,7 +472,7 @@ def set_profile_8MR191_30_4209_E4(lib, id):
 
     motor_information = motor_information_t()
 
-    motor_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
     motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 

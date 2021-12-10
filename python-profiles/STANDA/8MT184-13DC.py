@@ -388,7 +388,7 @@ def set_profile_8MT184_13DC(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -528,11 +528,11 @@ def set_profile_8MT184_13DC(lib, id):
 
     encoder_settings = encoder_settings_t()
 
-    encoder_settings.MaxOperatingFrequency = 80
+    encoder_settings.MaxOperatingFrequency = 0
     encoder_settings.SupplyVoltageMin = 0
     encoder_settings.SupplyVoltageMax = 0
     encoder_settings.MaxCurrentConsumption = 0
-    encoder_settings.PPR = 256
+    encoder_settings.PPR = 0
     class EncoderSettings_:
         ENCSET_REVOLUTIONSENSOR_ACTIVE_HIGH = 256
         ENCSET_REVOLUTIONSENSOR_PRESENT = 64
@@ -572,7 +572,7 @@ def set_profile_8MT184_13DC(lib, id):
     gear_information = gear_information_t()
 
     gear_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    gear_information.PartNumber = bytes([0, 48, 47, 49, 32, 49, 54, 58, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    gear_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_gear_information(id, byref(gear_information))
 
     if result != Result.Ok:
@@ -581,10 +581,10 @@ def set_profile_8MT184_13DC(lib, id):
 
     gear_settings = gear_settings_t()
 
-    gear_settings.ReductionIn = 141
-    gear_settings.ReductionOut = 1
+    gear_settings.ReductionIn = 0
+    gear_settings.ReductionOut = 0
     gear_settings.RatedInputTorque = 0
-    gear_settings.RatedInputSpeed = 5000
+    gear_settings.RatedInputSpeed = 0
     gear_settings.MaxOutputBacklash = 0
     gear_settings.InputInertia = 0
     gear_settings.Efficiency = 0
@@ -614,7 +614,7 @@ def set_profile_8MT184_13DC(lib, id):
         TS_TYPE_SEMICONDUCTOR = 2
         TS_TYPE_THERMOCOUPLE = 1
         TS_TYPE_UNKNOWN = 0
-    accessories_settings.TSSettings = TSSettings_.TS_TYPE_THERMOCOUPLE | TSSettings_.TS_TYPE_UNKNOWN
+    accessories_settings.TSSettings = TSSettings_.TS_TYPE_UNKNOWN
     class LimitSwitchesSettings_:
         LS_SHORTED = 16
         LS_SW2_ACTIVE_LOW = 8

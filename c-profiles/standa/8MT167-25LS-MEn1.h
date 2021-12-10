@@ -12,9 +12,9 @@
 
 #define 8MT167_25LS_MEN1_BUILDER_VERSION_MAJOR  0
 #define 8MT167_25LS_MEN1_BUILDER_VERSION_MINOR  9
-#define 8MT167_25LS_MEN1_BUILDER_VERSION_BUGFIX 9
+#define 8MT167_25LS_MEN1_BUILDER_VERSION_BUGFIX 10
 #define 8MT167_25LS_MEN1_BUILDER_VERSION_SUFFIX ""
-#define 8MT167_25LS_MEN1_BUILDER_VERSION        "0.9.9"
+#define 8MT167_25LS_MEN1_BUILDER_VERSION        "0.9.10"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MT167_25LS_MEn1(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -4, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -356,7 +356,7 @@ static inline result_t set_profile_8MT167_25LS_MEn1(device_t id)
   emf_settings.L = 0.005400000140070915;
   emf_settings.R = 7.400000095367432;
   emf_settings.Km = 0.0024999999441206455;
-  emf_settings.BackEMFFlags = 0;
+  emf_settings.BackEMFFlags = BACK_EMF_KM_AUTO | BACK_EMF_RESISTANCE_AUTO | BACK_EMF_INDUCTANCE_AUTO;
   result = set_emf_settings(id, &emf_settings);
 
   if (result != result_ok)
@@ -449,7 +449,7 @@ static inline result_t set_profile_8MT167_25LS_MEn1(device_t id)
 
   motor_information_t motor_information;
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
-  const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
+  const int8_t motor_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
   const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);
@@ -465,7 +465,7 @@ static inline result_t set_profile_8MT167_25LS_MEn1(device_t id)
 
   motor_settings_t motor_settings;
   memset((void*)&motor_settings, 0, sizeof(motor_settings_t));
-  motor_settings.MotorType = MOTOR_TYPE_STEP | MOTOR_TYPE_UNKNOWN;
+  motor_settings.MotorType = MOTOR_TYPE_UNKNOWN;
   motor_settings.ReservedField = 0;
   motor_settings.Poles = 0;
   motor_settings.Phases = 0;
@@ -483,7 +483,7 @@ static inline result_t set_profile_8MT167_25LS_MEn1(device_t id)
   motor_settings.SpeedConstant = 0;
   motor_settings.SpeedTorqueGradient = 0;
   motor_settings.MechanicalTimeConstant = 0;
-  motor_settings.MaxSpeed = 5000;
+  motor_settings.MaxSpeed = 0;
   motor_settings.MaxCurrent = 0;
   motor_settings.MaxCurrentTime = 0;
   motor_settings.NoLoadCurrent = 0;

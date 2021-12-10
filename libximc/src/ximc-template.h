@@ -422,8 +422,8 @@ extern "C"
 
 	/**
 		* \english
-		* Command of loading a correction table from a text file.
-		* This function is deprecated. Use the function set_correction_table(device_t id, const char* namefile).
+		* Command of loading a correction table from a text file (this function is deprecated).
+		* Use the function set_correction_table(device_t id, const char* namefile).
 		* The correction table is used for position correction in case of mechanical inaccuracies.
 		* It works for some parameters in _calb commands.
 		* @param id an identifier the device
@@ -448,8 +448,8 @@ extern "C"
 		*
 		* \endenglish
 		* \russian
-		* Команда загрузки корректирующей таблицы из текстового файла.
-		* Данная функция устарела. Используйте функцию set_correction_table(device_t id, const char* namefile).
+		* Команда загрузки корректирующей таблицы из текстового файла (данная функция устарела).
+		* Используйте функцию set_correction_table(device_t id, const char* namefile).
 		* Таблица используется для коррекции положения в случае механических неточностей.
 		* Работает для некоторых параметров в _calb командах.
 		* @param id - идентификатор устройства
@@ -726,31 +726,29 @@ extern "C"
 	result_t XIMC_API get_enumerate_device_network_information(device_enumeration_t device_enumeration, int device_index, device_network_information_t* device_network_information);
 
 	/** \english
-		* Reset library locks in a case of deadlock.
+		* Resets the error of incorrect data transmission. This function returns only 0 (OK). 
+		* For example, sending the libximc command ends with an incorrect data transfer (error), any subsequent command always returns -1 (relevant for Windows).
 		* \endenglish
 		* \russian
-		* Снимает блокировку библиотеки в экстренном случае.
+		* Сбрасывает ошибку неправильной передачи данных. Эта функция возвращает только 0 (OK). 
+		* Например, отправка команды libximc заканчивается неправильной передачей данных (ошибкой), любая последующая команда всегда возвращает -1 (актуально для Windows).
 		* \endrussian
 	*/
 	result_t XIMC_API reset_locks ();
 
 	/** \english
-		* Fix for errors in Windows USB driver stack.
-		* USB subsystem on Windows does not always work correctly. The following bugs are possible:
-		* the device cannot be opened at all, or
-		* the device can be opened and written to, but it will not respond with data.
-		* These errors can be fixed by device reconnection or removal-rescan in device manager.
-		* ximc_fix_usbser_sys() is a shortcut function to do the remove-rescan process.
-		* You should call this function if libximc library cannot open the device which was not physically removed from the system or if the device does not respond.
+		* Fixing a USB driver error in Windows.
+		* The USB-COM subsystem in the Windows OS does not always work correctly. During operation, the following malfunctions are possible:
+		* All attempts to open the device fail. The device can be opened and data can be sent to it, but the response data is not received.
+		* These problems are fixed by reconnecting the device or reinitializing it in the Device Manager.
+		* The ximc_fix_usbser_sys() function automates the deletion detection process.
 		* \endenglish
 		* \russian
 		* Исправление ошибки драйвера USB в Windows.
-		* Подсистема USB-COM на Windows не всегда работает корректно. При работе возможны следующие неисправности:
-		* все попытки открыть устройство заканчиваются неудачно, или
-		* устройство можно открыть и писать в него данные, но в ответ данные не приходят.
-		* Эти проблемы лечатся переподключением устройства или удалением и повторным поиском устройства в диспетчере устройств.
-		* Функция ximc_fix_usbser_sys() автоматизирует процесс удаления-обнаружения.		
-		* Имеет смысл вызывать эту функцию, если библиотека не может открыть устройство, при том что оно физически не было удалено из системы, или если устройство не отвечает.
+		* Подсистема USB-COM на OC Windows не всегда работает корректно. При работе возможны следующие неисправности:
+		* Все попытки открыть устройство заканчиваются неудачно. Устройство можно открыть и отправить в него данные, но ответные данные не приходят.
+		* Эти проблемы исправляются переподключением устройства или его переинециализацией в диспетчере устройств.
+		* Функция ximc_fix_usbser_sys() автоматизирует процесс удаления-обнаружения.
 		* \endrussian
 		*/
 	result_t XIMC_API ximc_fix_usbser_sys(const char* device_uri);

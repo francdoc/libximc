@@ -3,9 +3,9 @@
 #include "driver.hh"
 #include "scanner.hh"
 
-namespace xigen {
+namespace yy {
 
-	Driver::Driver(ParserContext& context)
+	Driver::Driver(xigen::ParserContext& context)
 		: trace_scanning(false),
 		trace_parsing(false),
 		trace_ast(false),
@@ -21,13 +21,13 @@ namespace xigen {
 
 		streamname = sname;
 
-		Scanner scanner(&in);
+		yy::Scanner scanner(&in);
 		scanner.set_debug(trace_scanning);
 		m_lexer = &scanner;
 
-		Parser parser(*this);
-		parser.set_debug_level(trace_parsing);
-		return (parser.parse() == 0);
+		parser the_parser(*this);
+		the_parser.set_debug_level(trace_parsing);
+		return (the_parser.parse() == 0);
 	}
 
 	bool Driver::parse_file(const std::string &filename)

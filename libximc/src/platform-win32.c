@@ -547,8 +547,12 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 /* Returns non-zero on success */
 int set_default_bindy_key()
 {
+#ifdef HAVE_XIWRAPPER
 	/* relative to the current directory of the process which called libximc.dll */
 	return bindy_setkey("keyfile.sqlite");
+#else
+	return 0;
+#endif
 }
 
 /*

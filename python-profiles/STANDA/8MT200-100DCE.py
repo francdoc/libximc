@@ -388,7 +388,7 @@ def set_profile_8MT200_100DCE(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -472,7 +472,7 @@ def set_profile_8MT200_100DCE(lib, id):
 
     motor_information = motor_information_t()
 
-    motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
+    motor_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 
@@ -487,7 +487,7 @@ def set_profile_8MT200_100DCE(lib, id):
         MOTOR_TYPE_DC = 2
         MOTOR_TYPE_STEP = 1
         MOTOR_TYPE_UNKNOWN = 0
-    motor_settings.MotorType = MotorType_.MOTOR_TYPE_STEP | MotorType_.MOTOR_TYPE_UNKNOWN
+    motor_settings.MotorType = MotorType_.MOTOR_TYPE_UNKNOWN
     motor_settings.ReservedField = 0
     motor_settings.Poles = 0
     motor_settings.Phases = 0
@@ -505,7 +505,7 @@ def set_profile_8MT200_100DCE(lib, id):
     motor_settings.SpeedConstant = 0
     motor_settings.SpeedTorqueGradient = 0
     motor_settings.MechanicalTimeConstant = 0
-    motor_settings.MaxSpeed = 14000
+    motor_settings.MaxSpeed = 0
     motor_settings.MaxCurrent = 0
     motor_settings.MaxCurrentTime = 0
     motor_settings.NoLoadCurrent = 0
@@ -528,11 +528,11 @@ def set_profile_8MT200_100DCE(lib, id):
 
     encoder_settings = encoder_settings_t()
 
-    encoder_settings.MaxOperatingFrequency = 200
+    encoder_settings.MaxOperatingFrequency = 0
     encoder_settings.SupplyVoltageMin = 0
     encoder_settings.SupplyVoltageMax = 0
     encoder_settings.MaxCurrentConsumption = 0
-    encoder_settings.PPR = 1000
+    encoder_settings.PPR = 0
     class EncoderSettings_:
         ENCSET_REVOLUTIONSENSOR_ACTIVE_HIGH = 256
         ENCSET_REVOLUTIONSENSOR_PRESENT = 64
@@ -571,8 +571,8 @@ def set_profile_8MT200_100DCE(lib, id):
 
     gear_information = gear_information_t()
 
-    gear_information.Manufacturer = bytes([77, 97, 120, 111, 110, 32, 109, 111, 116, 111, 114, 0, 0, 0, 0, 0])
-    gear_information.PartNumber = bytes([49, 52, 52, 48, 50, 55, 0, 58, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    gear_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    gear_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_gear_information(id, byref(gear_information))
 
     if result != Result.Ok:
@@ -581,13 +581,13 @@ def set_profile_8MT200_100DCE(lib, id):
 
     gear_settings = gear_settings_t()
 
-    gear_settings.ReductionIn = 57
-    gear_settings.ReductionOut = 13
-    gear_settings.RatedInputTorque = 0.5
-    gear_settings.RatedInputSpeed = 8000
-    gear_settings.MaxOutputBacklash = 1
-    gear_settings.InputInertia = 0.6000000238418579
-    gear_settings.Efficiency = 84
+    gear_settings.ReductionIn = 0
+    gear_settings.ReductionOut = 0
+    gear_settings.RatedInputTorque = 0
+    gear_settings.RatedInputSpeed = 0
+    gear_settings.MaxOutputBacklash = 0
+    gear_settings.InputInertia = 0
+    gear_settings.Efficiency = 0
     result = lib.set_gear_settings(id, byref(gear_settings))
 
     if result != Result.Ok:
@@ -614,7 +614,7 @@ def set_profile_8MT200_100DCE(lib, id):
         TS_TYPE_SEMICONDUCTOR = 2
         TS_TYPE_THERMOCOUPLE = 1
         TS_TYPE_UNKNOWN = 0
-    accessories_settings.TSSettings = TSSettings_.TS_TYPE_THERMOCOUPLE | TSSettings_.TS_TYPE_UNKNOWN
+    accessories_settings.TSSettings = TSSettings_.TS_TYPE_UNKNOWN
     class LimitSwitchesSettings_:
         LS_SHORTED = 16
         LS_SW2_ACTIVE_LOW = 8

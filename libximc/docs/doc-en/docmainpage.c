@@ -6,7 +6,7 @@
  * \image html 8SMC4.png
  * \image html 8SMC5.png
  *
- * Libximc is cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
+ * Libximc is **thread safe**, cross-platform library for working with 8SMC4-USB and 8SMC5-USB controllers.
  *
  * Full documentation about controllers is <a href="https://doc.xisupport.com">there</a>
  *
@@ -186,7 +186,7 @@
  *
  * NOTE: SDK requires Microsoft Visual C++ Redistributable Package (provided with SDK - vcredist_x86 or vcredist_x64)
  *
- * NOTE: On Linux both the libximc7_x.x.x and libximc7-dev_x.x need to be installed. For install packages, you can use the .deb command: dpkg -i filename.deb, where filename.deb is the name of the package (packages in Debian have the extension .deb). You must run dpkg with superuser privileges (root).
+ * NOTE: On Linux both the libximc7_x.x.x and libximc7-dev_x.x.x target architecture in the specified order. For install packages, you can use the .deb command: dpkg -i filename.deb, where filename.deb is the name of the package (packages in Debian have the extension .deb). You must run dpkg with superuser privileges (root).
  *
  * \section howtouse_c_sec Usage with C
  *

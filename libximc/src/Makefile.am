@@ -1,18 +1,27 @@
+if HAVE_XIWRAPPER
+XIWRAPPER_LINK_EXPR = -lxiwrapper
+endif
 libximc_la_CPPFLAGS = -I$(top_builddir)/libximc/include -DLIBXIMC_EXPORTS -DDATADIR='"$(datadir)"'
 libximc_la_CFLAGS = -fvisibility=hidden 
-libximc_la_LDFLAGS = -lxiwrapper -version-info 7:0:0 $(extra_ldflags_iokit)
+libximc_la_LDFLAGS = $(XIWRAPPER_LINK_EXPR) -version-info 7:0:0 $(extra_ldflags_iokit)
 
 # the library name to build
 lib_LTLIBRARIES = libximc.la
 
+if HAVE_STATICDEPS
+DEP_EXT = $(STATIC_EXT)
+else
+DEP_EXT = $(SHARED_EXT)
+endif
+
 install-exec-local:
 	mkdir -p "$(DESTDIR)$(libdir)"
-	cp -Ra $(XIWRAPPER_PATH)/libbindy$(SHARED_EXT) "$(DESTDIR)$(libdir)"
-	cp -Ra $(XIWRAPPER_PATH)/libxiwrapper$(SHARED_EXT) "$(DESTDIR)$(libdir)"
+	cp -Ra $(XIWRAPPER_PATH)/libbindy$(DEP_EXT) "$(DESTDIR)$(libdir)"
+	cp -Ra $(XIWRAPPER_PATH)/libxiwrapper$(DEP_EXT) "$(DESTDIR)$(libdir)"
 
 uninstall-local:
-	rm -f "$(DESTDIR)$(libdir)"/libbindy$(SHARED_EXT)
-	rm -f "$(DESTDIR)$(libdir)"/libxiwrapper$(SHARED_EXT)
+	rm -f "$(DESTDIR)$(libdir)"/libbindy$(DEP_EXT)
+	rm -f "$(DESTDIR)$(libdir)"/libxiwrapper$(DEP_EXT)
 
 XIGEN = ${top_builddir}/xigen/src/xigen
 XIGEN_DEP = ${top_builddir}/xigen/src/xigen.stamp

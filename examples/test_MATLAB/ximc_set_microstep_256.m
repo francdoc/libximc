@@ -1,7 +1,10 @@
 function [ ] = ximc_set_microstep_256(device_id)
 
-% here is a trick.
-% we need to init a struct with any real field from the header.
+% To use the libximc library commands get_engine_settings, set_engine_settings,
+% you need to initialize the engine_settings_t structure used by the commands.
+% Here is a trick.
+% It is necessary to initiate an arbitrary structure(dummy_struct) with a field that is present in the structure engine_settings_t.
+% Based on which the engine_settings_t structure should be set.
 dummy_struct = struct('MicrostepMode',0);
 parg_struct = libpointer('engine_settings_t', dummy_struct);
 

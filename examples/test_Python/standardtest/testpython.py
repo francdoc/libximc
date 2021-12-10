@@ -26,7 +26,10 @@ if platform.system() == "Windows":
     # Determining the directory with dependencies for windows depending on the bit depth.
     arch_dir = "win64" if "64" in platform.architecture()[0] else "win32" # 
     libdir = os.path.join(ximc_dir, arch_dir)
-    os.environ["Path"] = libdir + ";" + os.environ["Path"] # add dll path into an environment variable
+    if sys.version_info >= (3,8):
+        os.add_dll_directory(libdir)
+    else:
+        os.environ["Path"] = libdir + ";" + os.environ["Path"] # add dll path into an environment variable
 
 try: 
     from pyximc import *
@@ -41,6 +44,7 @@ except OSError as err:
             # print(err)
         elif err.winerror == 126: # One of the library bindy.dll, libximc.dll, xiwrapper.dll files is missing.
             print("Err: One of the library bindy.dll, libximc.dll, xiwrapper.dll is missing.")
+            print("It is also possible that one of the system libraries is missing. This problem is solved by installing the vcredist package from the ximc\\winXX folder.")
             # print(err)
         else:           # Other errors the value of which can be viewed in the code.
             print(err)

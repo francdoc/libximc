@@ -5,6 +5,8 @@
 #include "model.hh"
 #include "parsercontext.hh"
 
+using namespace xigen;
+
 %}
 
 /*** yacc/bison Declarations ***/
@@ -25,13 +27,7 @@
 /* use newer C++ skeleton file */
 %skeleton "lalr1.cc"
 
-/* namespace to enclose parser in */
-/*3.0 syntax: %define namespace "xigen"*/
-%name-prefix="xigen"
-
-/* set the parser's class identifier */
-/*3.0 syntax: %define parser_class_name {Parser}*/
-%define "parser_class_name" "Parser"
+/* use default namespace yy to keep compatibility with bison 2.3 */
 
 /* keep track of the current position within the input */
 %locations
@@ -46,8 +42,8 @@
  * variables. */
 %parse-param { class Driver& driver }
 
-/* verbose error messages */
-%error-verbose
+/* verbose error messages, drop for compatibility with 2.7 */
+/*%define parse.error verbose*/
 
  /*** BEGIN XIGEN - Change the xigen grammar's tokens below ***/
 
@@ -55,14 +51,14 @@
 	unsigned int 	integerVal;
 	bool 		boolVal;
 	std::string* 	stringVal;
-	Command* 	nodeCommand;
-	Field* 		nodeField;
-	ArrayField*	nodeArrayField;
-	Communicator* 	nodeCommunicator;
-	Comments* 	nodeComments;
-	Comment* 	nodeComment;
-	VariableEnum::Type variableType;
-	CalibrationEnum::Type calibrationType;
+	xigen::Command* 	nodeCommand;
+	xigen::Field* 		nodeField;
+	xigen::ArrayField*	nodeArrayField;
+	xigen::Communicator* 	nodeCommunicator;
+	xigen::Comments* 	nodeComments;
+	xigen::Comment* 	nodeComment;
+	xigen::VariableEnum::Type variableType;
+	xigen::CalibrationEnum::Type calibrationType;
 }
 
 /* token declarations */
@@ -442,7 +438,7 @@ start 			: protocol_header skips flagsets commands comments
 
 %% /*** Additional Code ***/
 
-void xigen::Parser::error(const Parser::location_type& l, const std::string& m)
+void yy::parser::error(const parser::location_type& l, const std::string& m)
 {
 	driver.report(l, "Error: " + m);
 }

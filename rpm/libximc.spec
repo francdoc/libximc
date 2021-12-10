@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.12.10
+Version: 2.13.3
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -74,6 +74,44 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Mon Nov 29 2021 XIMC <info@ximc.ru> - 2.13.3
+- version bump
+- Feature #51788 Clean up the Bindy branches
+- Bug #51208 Make examples on linux working
+- Bug #51557 Fix the description of the BITS flag group
+- Bug #52853 Fix comments on our matlab examples
+- Bug #54266 Jenkins assembly on Cubieboard broke
+- Bug #54677 The old driver gets into the archives with the library
+- Bug #55439 The local libximc build from the GIT repository does not work
+- Bug #55638 Fix the description of the "reset_locks" function
+- Bug #55735 The Java example from the libximc library is not going to
+
+* Wed Sep 08 2021 XIMC <info@ximc.ru> - 2.13.2
+- version bump
+- Bug #51208 Make the examples on linux working
+- Bug #51557 Fix the description of the BITS flag group
+- Feature #48562 Specify that libximc is thread-safe
+- Feature #51971 Running examples out of the box for linux
+- Feature #53139 Add unpacked libraries to the linux build
+
+* Mon May 24 2021 XIMC <info@ximc.ru> - 2.13.1
+- version bump
+- Feature #46853 Try to fix the Python 3.9 examples on Win10
+- Feature #49922 The python profile didn't include the wiring diagram
+
+* Wed Mar 31 2021 XIMC <info@ximc.ru> - 2.13.0
+- version bump
+- Feature #48565 Implement compatibility of our examples for python 3.9
+- Bug #47662 Fix typos in the libximc manual
+- Bug #48141 Remove Makefile. mingw from testapp and testappeasy
+- Bug #48266 Fix errors in the examples
+- Bug #48272 Fix the header in the profile generator to work under Mac OS
+- Bug #48582 Migrate Bindy socket leak fix to libximc
+- Feature #46853 Try to fix the Python 3.9 examples on Win10
+- Feature #47464 Rename the examples and add dependencies for labwindows
+- Feature #48562 Specify on the main page libximc-thread-safe
+- Feature #48564 Processing a missing library msvc120.dll/msvcp120.dll
 
 * Mon Mar 22 2021 XIMC <info@ximc.ru> - 2.12.10
 - version bump

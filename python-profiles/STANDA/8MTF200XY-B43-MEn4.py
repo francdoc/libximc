@@ -388,7 +388,7 @@ def set_profile_8MTF200XY_B43_MEn4(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -446,7 +446,7 @@ def set_profile_8MTF200XY_B43_MEn4(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([83, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([56, 77, 84, 70, 50, 48, 48, 88, 89, 45, 66, 52, 51, 45, 77, 69, 110, 52, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 84, 70, 50, 48, 48, 88, 89, 45, 66, 52, 51, 45, 77, 69, 110, 52, 0, 49, 48, 48, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:

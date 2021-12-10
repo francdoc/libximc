@@ -1,6 +1,7 @@
 from ctypes import *
 import os
 import platform
+import sys
 
 # Load library
 
@@ -13,7 +14,10 @@ def ximc_shared_lib():
     elif platform.system() == "Darwin":
         return CDLL("libximc.framework/libximc")
     elif platform.system() == "Windows":
-        return WinDLL("libximc.dll")
+        if sys.version_info[0] == 3 and sys.version_info[0] >= 8:
+            WinDLL("libximc.dll", winmode=RTLD_GLOBAL)
+        else:
+            return WinDLL("libximc.dll")
     else:
         return None
 

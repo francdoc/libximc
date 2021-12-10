@@ -388,7 +388,7 @@ def set_profile_ST5918L3008(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 252, 118, 36, 0, 72, 0, 3, 0, 0, 0, 104, 101, 103, 0])
+    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -407,7 +407,7 @@ def set_profile_ST5918L3008(lib, id):
         BACK_EMF_KM_AUTO = 4
         BACK_EMF_RESISTANCE_AUTO = 2
         BACK_EMF_INDUCTANCE_AUTO = 1
-
+    emf_settings.BackEMFFlags = BackEMFFlags_.BACK_EMF_KM_AUTO | BackEMFFlags_.BACK_EMF_RESISTANCE_AUTO | BackEMFFlags_.BACK_EMF_INDUCTANCE_AUTO
     result = lib.set_emf_settings(id, byref(emf_settings))
 
     if result != Result.Ok:
@@ -446,7 +446,7 @@ def set_profile_ST5918L3008(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([83, 84, 53, 57, 49, 56, 76, 51, 48, 48, 56, 0, 53, 45, 48, 52, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:

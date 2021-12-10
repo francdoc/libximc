@@ -44,7 +44,7 @@ configure_dist()
 	# all these platform-specific flags
 	CONFIGURE_FLAGS=
 	SPECIAL_ENV=
-	DEPS_CMAKE_OPT=
+	DEPS_CMAKE_OPT=$DEPS_CMAKE_OPT
 	if [ -z "$USE_CFLAGS" ] ; then
 		USE_CFLAGS=
 		echo Using default external CFLAGS
@@ -63,7 +63,10 @@ configure_dist()
 			# it is about deprecated sem_getvalue
 			USE_CFLAGS="-Wno-deprecated-declarations"
 			USE_CXXFLAGS="-Wno-tautological-compare"
-			SPECIAL_ENV="CC=clang CXX=clang++ CC_FOR_BUILD=clang CXX_FOR_BUILD=clang++ JAVA_HOME=`/usr/libexec/java_home -v 1.7`"
+			SPECIAL_ENV="CC=clang CXX=clang++ CC_FOR_BUILD=clang CXX_FOR_BUILD=clang++"
+			if [ -z "$JAVA_HOME" ] ; then
+				SPECIAL_ENV="$SPECIAL_ENV JAVA_HOME=`/usr/libexec/java_home -v 1.7`"
+			fi
 			;;
 		Linux)
 			DISTNAME=
@@ -145,6 +148,40 @@ makedist()
 	done
 
 	cp -R $DL/deb/*.deb $DISTLIB/deb/
+	ls $DL/deb/
+	for arch in amd64 i386 armhf ; do		
+		
+		namearch=$(find $DL/deb -name "libximc7_*_$arch.deb")
+		namearch_dev=$(find $DL/deb -name "libximc7-dev_*_$arch.deb")
+		echo $namearch
+		if [ -f "$namearch" ]
+		then
+			mkdir -p $DL/deb/$arch
+			mkdir -p $DL/deb/dev-$arch
+			mkdir -p $DISTLIB/debian-$arch
+
+			ar -x $namearch data.tar.gz 
+			mv -f data.tar.gz $DL/deb/$arch
+			tar -C $DL/deb/$arch/ -zxf  $DL/deb/$arch/data.tar.gz
+			
+			ar -x $namearch_dev data.tar.gz
+			mv -f data.tar.gz $DL/deb/dev-$arch
+			tar -C $DL/deb/dev-$arch/ -zxf  $DL/deb/dev-$arch/data.tar.gz
+		
+			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
+			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
+			cp -R $DL/deb/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
+			
+			rm -rf $DL/deb/$arch
+			rm -rf $DL/deb/dev-$arch
+			
+		else
+			echo No archive file
+		fi
+		
+
+		
+	done
 
 	cp -R $DL/rpm/*.rpm $DISTLIB/rpm/
 
@@ -450,6 +487,26 @@ build_rpm_package()
 	cd $BASEROOT
 }
 
+build_osx_impl()
+{
+	clean
+	build_depends
+	build_to_local --with-xcode-build $*
+	# Override JNI lib with a jni library linked to framework
+	make -C wrappers/java/src/c framework-build
+	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
+	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
+	for exam in testapp_C testappeasy_C testprofile_C; do
+		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
+		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
+	done
+	(cd examples/test_Java && $MAKE) || false
+	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
+	cp -a examples/test_Java/README.txt $DL/$DISTNAME/java-README.txt
+	mkdir -p $DL/crossplatform/wrappers/python
+	cp wrappers/python/pyximc.py $DL/crossplatform/wrappers/python
+}
+
 echo XIMC build script
 trap exit_clean_up EXIT INT TERM
 ACTION=$1
@@ -498,23 +555,15 @@ makedist)
 	makedist
 	;;
 
+libosxci)
+	# do not call distcheck target for osx CI build
+	# to avoid building docs, #48562
+	TARGETS="all dist install" \
+		build_osx_impl --without-docs $*
+	;;
+
 libosx)
-	clean
-	build_depends
-	build_to_local --with-docs --with-xcode-build $*
-	# Override JNI lib with a jni library linked to framework
-	make -C wrappers/java/src/c framework-build
-	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
-	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
-	for exam in testapp_C testappeasy_C testprofile_C; do
-		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
-		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
-	done
-	(cd examples/test_Java && $MAKE) || false
-	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
-	cp -a examples/test_Java/README.txt $DL/$DISTNAME/java-README.txt
-	mkdir -p $DL/crossplatform/wrappers/python
-	cp wrappers/python/pyximc.py $DL/crossplatform/wrappers/python
+	build_osx_impl --with-docs $*
 	;;
 
 libdeb)

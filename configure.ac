@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT([libximc7], [2.12.10])
+AC_INIT([libximc7], [2.13.3])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
@@ -96,6 +96,17 @@ AC_MSG_RESULT([$with_java])
 
 AM_CONDITIONAL([HAVE_JAVA], [test "x$with_java" = "xyes"])
 
+# Check for static deps
+
+AC_MSG_CHECKING([for static deps])
+AC_ARG_WITH([staticdeps],
+						[AS_HELP_STRING([--with-staticdeps], [use static xiwrapper and bindy dependencies (default no)])],
+						[with_staticdeps=$withval],
+						[with_staticdeps=no])
+AC_MSG_RESULT([$with_staticdeps])
+
+AM_CONDITIONAL([HAVE_STATICDEPS], [test "x$with_staticdeps" = "xyes"])
+
 # detect OS X and add framework flags
 
 case "$host_os" in
@@ -170,6 +181,7 @@ if test "x$libltdl_cv_shrext" = "x"; then
 else
 	AC_SUBST([SHARED_EXT], ["$libltdl_cv_shrext"])
 fi
+AC_SUBST([STATIC_EXT], [".a"])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -195,7 +207,9 @@ if test "x$with_xiwrapper" != "xno" ; then
 	CPPFLAGS="$CPPFLAGS -I$with_xiwrapper"
 	LDFLAGS="$LDFLAGS -L$with_xiwrapper"
 	AC_SUBST([XIWRAPPER_PATH], [$with_xiwrapper])
+	AC_DEFINE([HAVE_XIWRAPPER], [1], [Use xiwrapper])
 fi
+AM_CONDITIONAL([HAVE_XIWRAPPER], [test "x$with_xiwrapper" != "xno"])
 
 AC_CHECK_HEADERS([wrapper.h])
 
@@ -209,8 +223,8 @@ echo "
   C Compiler..........: $CC $CFLAGS $CPPFLAGS
   C++ Compiler........: $CXX $CXXFLAGS $CPPFLAGS
   Linker..............: $LD $LDFLAGS $LIBS
-  Yacc................: $YACC
-  Lex.................: $LEX
+  Yacc................: $YACC (`$YACC --version | head -n1`)
+  Lex.................: $LEX (`$LEX --version | head -n1`)
   Doxygen.............: ${DX_DOXYGEN:-NO}
   Docs support........: ${with_docs:-NO}
   Locks support.......: ${with_locks:-NO}

@@ -8,14 +8,14 @@ ClassGuid={4d36e978-e325-11ce-bfc1-08002be10318}
 Provider=%MFGNAME%
 LayoutFile=layout.inf
 DriverVer=04/27/2012,0.1.1.2
-CatalogFile.NTx86=ximc_driver.cat
-CatalogFile.NTamd64=ximc_driver.cat
+CatalogFile.NTx86=standa_8smc4-5.cat
+CatalogFile.NTamd64=standa_8smc4-5.cat
 
 [DestinationDirs]
 DefaultDestDir = 12
 
 [DefaultInstall]
-CopyFiles=XIMC_driver.inf
+CopyFiles=Standa_8SMC4-5.inf
 
 [Manufacturer]
 %MFGNAME%=VirtualComDevices,NT,NTamd64
