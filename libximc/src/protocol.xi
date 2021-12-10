@@ -663,12 +663,10 @@ HOME_STOP_FIRST_BITS	= 0x0030	/**< \english Bits of the first stop selector. \en
 HOME_STOP_FIRST_REV		= 0x0010	/**< \english First motion stops by  revolution sensor. \endenglish \russian Первое движение завершается по сигналу с Revolution sensor. \endrussian */
 HOME_STOP_FIRST_SYN		= 0x0020	/**< \english First motion stops by synchronization input. \endenglish \russian Первое движение завершается по сигналу со входа синхронизации. \endrussian */
 HOME_STOP_FIRST_LIM		= 0x0030	/**< \english First motion stops by limit switch. \endenglish \russian Первое движение завершается по сигналу с концевика. \endrussian */
-RESERVED = 0x0000 /**< \english Reserved \endenglish \russian Зарезервировано \endrussian */
 HOME_STOP_SECOND_BITS	= 0x00C0	/**< \english Bits of the second stop selector. \endenglish \russian Биты, отвечающие за выбор сигнала завершения второго движения. \endrussian */
 HOME_STOP_SECOND_REV	= 0x0040	/**< \english Second motion stops by  revolution sensor. \endenglish \russian Второе движение завершается по сигналу с Revolution sensor. \endrussian */
 HOME_STOP_SECOND_SYN	= 0x0080	/**< \english Second motion stops by synchronization input. \endenglish \russian Второе движение завершается по сигналу со входа синхронизации. \endrussian */
 HOME_STOP_SECOND_LIM	= 0x00C0	/**< \english Second motion stops by limit switch. \endenglish \russian Второе движение завершается по сигналу с концевика. \endrussian */
-RESERVED = 0x0000 /**< \english Reserved \endenglish \russian Зарезервировано \endrussian */
 HOME_USE_FAST           = 0x0100	/**< \english Use the fast algorithm of calibration to the home position, if set; otherwise the traditional algorithm. \endenglish \russian Если флаг установлен, используется быстрый поиск домашней позиции; иначе - традиционный. \endrussian */
 
 /**
