@@ -62,7 +62,7 @@
  * - doxygen - для сборки документации
  * - LaTeX distribution (teTeX or texlive) - для сборки документации
  * - flex 2.5.30+
- * - bison
+ * - bison 2.3+
  * - mercurial (для сборки версии для разработки из hg)
  *
  * Для Mac OS X:
@@ -113,8 +113,8 @@
  *
  * \section building_unix_deb Сборка для Linux на основе Debian
  * Требования: 64-битная или 32-битная система на основе debian, ubuntu
- * Примерный набор пакетов: gcc, autotools, autoconf, libtool, dpkg-dev, flex, bison, doxygen, texlive, mercurial
- * Полный набор пакетов: apt-get install ruby1.9.1 debhelper vim sudo g++ mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex doxygen lsb-release pkg-config check
+ * Примерный набор пакетов: gcc, autotools, autoconf, libtool, dpkg-dev, flex, libfl-dev, bison, doxygen, texlive, mercurial
+ * Полный набор пакетов: apt-get install ruby1.9.1 debhelper vim sudo g++ mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
  * Для кросс-компиляции ARM установите gcc-arm-linux-gnueabihf из вашего инструментария ARM.
  *
  * Необходимо соблюдать парность архитектуры библиотеки и системы: 64-битная библиотека может быть собрана только на 64-битной системе,
@@ -132,8 +132,8 @@
  * \section building_unix_rpm Сборка для Linux на основе RedHat
  * Требования: 64-битная система на основе redhat (Fedora, Red Hat, SUSE)
 
- * Примерный набор пакетов: gcc, autotools, autoconf, libtool, flex, bison, doxygen, texlive, mercurial 
- * Полный набор пакетов: autoconf automake bison doxygen flex gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make mercurial rpm-build rpm-devel rpmlint texlive texlive-fonts-extra texlive-latex 
+ * Примерный набор пакетов: gcc, autotools, autoconf, libtool, flex, libfl-dev, bison, doxygen, texlive, mercurial 
+ * Полный набор пакетов: autoconf automake bison doxygen flex libfl-dev gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make mercurial rpm-build rpm-devel rpmlint texlive texlive-fonts-extra texlive-latex 
  *
  * Возможно собрать 32-битную и 64-битную библиотеки на 64-битной системе, однако 64-битная
  * библиотека не может быть собрана на 32-битной системе.
