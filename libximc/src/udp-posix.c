@@ -1,7 +1,5 @@
 #include "common.h"
 
-#include <stdio.h>
-
 #include<stdio.h>	
 #include<string.h>    
 #include<stdlib.h>    
@@ -41,6 +39,18 @@
 /*
  * Udp support
  */
+// uses device_meatada_t virtual_XXX fields to save some udp-connection params
+// virtual_state - allocated for socket_in data of a controller-server
+// virtual_scratchpad - all accepted data
+// virtual_packet_actual - unread data size
+
+#define PUDP_SOCKET_IN metadata -> virtual_state
+
+#define UDP_BUFFER_LEN VIRTUAL_SCRATCHPAD_SIZE
+
+#define UDP_BUFFER metadata ->	virtual_scratchpad
+
+#define UDP_UNREAD_LEN metadata -> virtual_packet_actual
 
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
@@ -76,12 +86,12 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 
 	sockaddr_in * sa;
 
-	metadata->virtual_state = (sa = (sockaddr_in*)malloc(sizeof(sockaddr_in)));
+	PUDP_SOCKET_IN = (sa = (sockaddr_in*)malloc(sizeof(sockaddr_in)));
 
 	sa->sin_family = AF_INET;
 	sa->sin_port = htons((port));
 	sa->sin_addr.s_addr = addr;
-
+	UDP_UNREAD_LEN = 0;
 	return result_ok;
 
 }
@@ -89,22 +99,45 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 result_t close_udp(device_metadata_t *metadata)
 {
 	close((int)metadata->handle);
-	free(metadata->virtual_state);
+	free(PUDP_SOCKET_IN);
+	UDP_UNREAD_LEN = 0;
 	return result_ok;
 }
 
 
-int write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
+ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
-	int iResult;
-	iResult = (int)sendto((int)metadata->handle, (const char *)command, (int)command_len, 0, (sockaddr *)metadata->virtual_state, (socklen_t) sizeof (sockaddr_in));
-	return  (iResult == -1) ? 0 : iResult;
+	return (ssize_t)sendto((int)metadata->handle, (const char *)command, (int)command_len, 0, (sockaddr *)metadata->virtual_state, (socklen_t) sizeof (sockaddr_in));
 }
 
-int read_udp(device_metadata_t *metadata, void *buf, size_t amount)
+// assume amount is the required number of data bytes - non max buffer size
+ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 {
-	int iResult;
-	iResult = (int)recvfrom((int)metadata->handle, (char *)buf, (int)amount, 0, NULL, NULL);
-	return  (iResult == -1) ? 0 : iResult;
-}
+	if (UDP_UNREAD_LEN > 0)
+	{
+		if ((size_t)UDP_UNREAD_LEN >= amount)
+		{
+			memcpy(buf, UDP_BUFFER, amount);
+			memmove(UDP_BUFFER, UDP_BUFFER + amount, (UDP_UNREAD_LEN = UDP_UNREAD_LEN - amount));
+			return amount;
+		}
 
+	}
+	// this is blocking udp reading (recvfrom); if nothing to receive - will hang
+	int real_len = recvfrom((int)metadata->handle, (char *)(UDP_BUFFER + UDP_UNREAD_LEN), UDP_BUFFER_LEN - UDP_UNREAD_LEN, 0, NULL, NULL);
+	if (real_len == -1) return -1;
+	if (amount <= (size_t)(real_len + UDP_UNREAD_LEN)) // calling context wants too little of bytes
+	{
+		memcpy(buf, UDP_BUFFER, amount);
+		// rewrite the rest of buffer data to the buffer array start  
+		memmove(UDP_BUFFER, UDP_BUFFER + amount, (UDP_UNREAD_LEN = real_len + UDP_UNREAD_LEN - amount));
+		return amount;
+	}
+	else // calling context wants too match - unread bytes plus just real read ones will be written and their amount will be return
+	{
+		memcpy(buf, UDP_BUFFER, real_len + UDP_UNREAD_LEN);
+		UDP_UNREAD_LEN = 0;
+		return real_len + UDP_UNREAD_LEN;
+	}
+
+}

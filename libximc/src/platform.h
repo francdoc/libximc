@@ -46,14 +46,14 @@ result_t close_udp(device_metadata_t *metadata);
 * Writes to UDP socket
 
 */
-int write_udp(device_metadata_t *metadata, const byte* command, size_t command_len);
+ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t command_len);
 
 /**
 * Reads from  UDP socket
 
 */
 
-int read_udp(device_metadata_t *metadata, void *buf, size_t amount);
+ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount);
 
 
 /*

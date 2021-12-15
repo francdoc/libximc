@@ -48,7 +48,8 @@ pipeline {
         axes {
           axis {
             name 'BUILDOS'
-            values 'debian64', 'debian32', 'debianarm', 'suse64', 'suse32', 'win', 'osx'
+            //values 'debian64', 'debian32', 'debianarm', 'suse64', 'suse32', 'win', 'osx'
+			values 'debian64', 'win'
           }
         }
         stages {

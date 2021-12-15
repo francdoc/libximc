@@ -6,31 +6,41 @@
 
 #include "ximc.h"
 
-//#include "ximc-gen.h"
 #include "util.h"
 #include "metadata.h"
 #include "platform.h"
 
 #include "protosup.h"
 
-//#include "wrapper.h"
+// uses device_meatada_t virtual_XXX fields to save some udp-connection params
+// virtual_state - allocated for socket_in data of a controller-server
+// virtual_scratchpad - all accepted data
+// virtual_packet_actual - unread data size
 
+#define PUDP_SOCKET_IN metadata -> virtual_state
+
+#define UDP_BUFFER_LEN VIRTUAL_SCRATCHPAD_SIZE
+
+#define UDP_BUFFER metadata ->	virtual_scratchpad
+
+#define UDP_UNREAD_LEN metadata -> virtual_packet_actual
 
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
+	
 	// check parameter ip4_port : address:port
 	char saddress[64];
 	memset(saddress, 0, 64);
 	strncpy_s(saddress, 64, ip4_port, strlen(ip4_port));
-	char * port_start = strchr(saddress,':');
+	char * port_start = strchr(saddress, ':');
 	if (port_start == NULL) return result_error;
 	unsigned int port;
-	if (sscanf_s(port_start+1, "%ud", &port) != 1) return result_error;
+	if (sscanf_s(port_start + 1, "%ud", &port) != 1) return result_error;
 	*port_start = 0;
 	ULONG addr = inet_addr(saddress);
 	if (addr == INADDR_NONE) return result_error;
- 
- // init actions to init some windows dll with udp from Microsoft example  
+
+	// init actions to init some windows dll with udp from Microsoft example  
 	unsigned short wVersionRequested;
 	WSADATA wsaData;
 	int err;
@@ -59,8 +69,8 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 		WSACleanup();
 		return result_error;
 	}
-	
-  
+
+
 	// creating a new connection resource
 
 	metadata->handle = (handle_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -80,35 +90,62 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 
 	SOCKADDR_IN * sa;
 
-	metadata->virtual_state = (sa = (SOCKADDR_IN *)malloc(sizeof(SOCKADDR_IN)));
+	PUDP_SOCKET_IN = (sa = (SOCKADDR_IN *)malloc(sizeof(SOCKADDR_IN)));
 
 	sa->sin_family = AF_INET;
 	sa->sin_port = htons((USHORT)(port));
 	sa->sin_addr.s_addr = addr;
-	
+
+	UDP_UNREAD_LEN = 0;
 	return result_ok;
 }
 
 result_t close_udp(device_metadata_t *metadata)
 {
 	closesocket((SOCKET)metadata->handle);
-	free(metadata->virtual_state);
+	free(PUDP_SOCKET_IN);
 	// free some windows dll
 	WSACleanup();
+	UDP_UNREAD_LEN = 0;
 	return result_ok;
 }
 
 
-int write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
+ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
 	int iResult;
-	iResult = sendto((SOCKET)metadata->handle, (const char *)command, (int)command_len, 0, (SOCKADDR *)metadata->virtual_state, (int) sizeof (SOCKADDR_IN));
-	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
+	iResult = sendto((SOCKET)metadata->handle, (const char *)command, (int)command_len, 0, (SOCKADDR *)PUDP_SOCKET_IN, (int) sizeof (SOCKADDR_IN));
+	return  (iResult == SOCKET_ERROR) ? -1 : iResult;
 }
 
-int read_udp(device_metadata_t *metadata, void *buf, size_t amount)
+// assume amount is the required number of data bytes - non max buffer size
+ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 {
-	int iResult;
-	iResult = recvfrom((SOCKET)metadata->handle, (char *)buf, (int)amount, 0, NULL, NULL);
-	return  (iResult == SOCKET_ERROR) ? 0 : iResult;
+	if (UDP_UNREAD_LEN > 0)
+	{
+		if ((size_t)UDP_UNREAD_LEN >= amount)
+		{
+			memcpy(buf, UDP_BUFFER, amount);
+			memmove(UDP_BUFFER, UDP_BUFFER + amount, (UDP_UNREAD_LEN = UDP_UNREAD_LEN - amount));
+			return amount;
+		}
+		
+	}
+	// this is blocking udp reading (recvfrom); if nothing to receive - will hang
+	int real_len = recvfrom((SOCKET)metadata->handle, (char *)(UDP_BUFFER + UDP_UNREAD_LEN), UDP_BUFFER_LEN - UDP_UNREAD_LEN, 0, NULL, NULL);
+	if (real_len == SOCKET_ERROR) return -1;
+	if (amount <= (size_t)(real_len + UDP_UNREAD_LEN)) // calling context wants too little of bytes
+	{
+		memcpy(buf, UDP_BUFFER, amount);
+		// rewrite the rest of buffer data to the buffer array start  
+		memmove(UDP_BUFFER, UDP_BUFFER + amount, (UDP_UNREAD_LEN = real_len + UDP_UNREAD_LEN - amount));
+		return amount;
+	}
+	else // calling context wants too match - unread bytes plus just real read ones will be written and their amount will be return
+	{
+		memcpy(buf, UDP_BUFFER, real_len + UDP_UNREAD_LEN);
+		UDP_UNREAD_LEN = 0;
+		return real_len + UDP_UNREAD_LEN;
+	}
+
 }
