@@ -125,11 +125,11 @@ pipeline {
       steps {
         // Get all stashed archives
         unstash "result-debian64"
-        unstash "result-debian32"
-        unstash "result-suse64"
-        unstash "result-suse32"
+        //unstash "result-debian32"
+        //unstash "result-suse64"
+        //unstash "result-suse32"
         unstash "result-win"
-        unstash "result-osx"
+        //unstash "result-osx"
         unstash "result-docs"
         script {
           if (params.WITH_ARM) {
