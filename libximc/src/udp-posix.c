@@ -87,7 +87,7 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 
 	sockaddr_in * sa;
 
-	PUDP_SOCKET_IN = (sa = (sockaddr_in*)malloc(sizeof(sockaddr_in)));
+	PUDP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(sockaddr_in)));
 
 	sa->sin_family = AF_INET;
 	sa->sin_port = htons((port));
@@ -108,7 +108,7 @@ result_t close_udp(device_metadata_t *metadata)
 
 ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
-	return (ssize_t)sendto((int)metadata->handle, (const char *)command, (int)command_len, 0, (sockaddr *)metadata->virtual_state, (socklen_t) sizeof (sockaddr_in));
+	return (ssize_t)sendto((int)metadata->handle, (const char *)command, (int)command_len, 0, (struct sockaddr *)metadata->virtual_state, (socklen_t) sizeof (struct sockaddr_in));
 }
 
 // assume amount is the required number of data bytes - non max buffer size
