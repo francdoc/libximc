@@ -85,9 +85,9 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 
 	metadata->type = dtUdp;
 
-	sockaddr_in * sa;
+	struct sockaddr_in * sa;
 
-	PUDP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(sockaddr_in)));
+	PUDP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in)));
 
 	sa->sin_family = AF_INET;
 	sa->sin_port = htons((port));
