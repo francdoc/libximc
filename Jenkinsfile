@@ -108,7 +108,7 @@ pipeline {
     //    sh "./build-ci docs"
     //    stash name: "result-docs", includes: "results-dist-*.tar"
     //  }
-    } // stage
+    //} // stage
 
 
     // stage('pack') {
