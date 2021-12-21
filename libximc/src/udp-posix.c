@@ -125,7 +125,7 @@ ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 
 	}
 	// this is blocking udp reading (recvfrom); if nothing to receive - will hang
-	int real_len = recvfrom((int)metadata->handle, (char *)(UDP_BUFFER + UDP_UNREAD_LEN), UDP_BUFFER_LEN - UDP_UNREAD_LEN, 0, NULL, NULL);
+	int real_len = (int)recvfrom((int)metadata->handle, (char *)(UDP_BUFFER + UDP_UNREAD_LEN), UDP_BUFFER_LEN - UDP_UNREAD_LEN, 0, NULL, NULL);
 	if (real_len == -1) return -1;
 	if (amount <= (size_t)(real_len + UDP_UNREAD_LEN)) // calling context wants too little of bytes
 	{
