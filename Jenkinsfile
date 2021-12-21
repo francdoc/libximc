@@ -48,8 +48,7 @@ pipeline {
         axes {
           axis {
             name 'BUILDOS'
-            // values 'debian64', 'debian32', 'debianarm', 'suse64', 'suse32', 'win', 'osx'
-            values 'debian64', 'win'
+            values 'debian64', 'debian32', 'debianarm', 'suse64', 'suse32', 'win', 'osx'
           }
         }
         stages {
@@ -81,7 +80,10 @@ pipeline {
 
           stage('build-win') {
             // Build for Windows agents
-            when { expression { !isUnix() } }
+            when { allOf {
+              expression { !isUnix() };
+              not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
+            } }
             steps {
               bat "build-ci.bat"
               stash name: "result-${BUILDOS}", includes: "results-dist-*.tar"
@@ -91,46 +93,52 @@ pipeline {
         post {
           cleanup {
             // drop workspace for each matrix cell job
-            deleteDir()
+            cleanWs(notFailBuild: true)
           }
         }
       } // matrix
     } // stage
     
-    // stage('docs') {
-    //  // execute at debian machine (BSD does not work)
-    //  agent {
-    //    label "debian64"
-    //  }
-    //  steps {
-    //    // Just to be sure delete any local leftover files
-    //    sh "rm -rf deps"
-    //    sh "./build-ci docs"
-    //    stash name: "result-docs", includes: "results-dist-*.tar"
-    //  }
-    //} // stage
+    stage('docs') {
+      // execute at debian machine (BSD does not work)
+      agent {
+        label "debian64"
+      }
+      when {
+        not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
+      }
+      steps {
+        // Just to be sure delete any local leftover files
+        sh "rm -rf deps"
+        sh "./build-ci docs"
+        stash name: "result-docs", includes: "results-dist-*.tar"
+      }
+    } // stage
 
 
-     stage('pack') {
-    //   // execute on master
-       steps {
-    //     // Get all stashed archives
-         unstash "result-debian64"
-    //     unstash "result-debian32"
-    //     unstash "result-suse64"
-    //     unstash "result-suse32"
-         unstash "result-win"
-    //     unstash "result-osx"
-    //     unstash "result-docs"
-    //     script {
-    //       if (params.WITH_ARM) {
-    //         unstash "result-debianarm"
-    //       }
-    //     }
-         sh "ls"
-         sh "./build-ci dist"
-         archiveArtifacts artifacts: "dist/ximc*.tar.gz"
-       }
+    stage('pack') {
+      // execute on master
+      when {
+        not { allOf { triggeredBy 'TimerTrigger'; buildingTag() } }
+      }
+      steps {
+        // Get all stashed archives
+        unstash "result-debian64"
+        unstash "result-debian32"
+        unstash "result-suse64"
+        unstash "result-suse32"
+        unstash "result-win"
+        unstash "result-osx"
+        unstash "result-docs"
+        script {
+          if (params.WITH_ARM) {
+            unstash "result-debianarm"
+          }
+        }
+        sh "ls"
+        sh "./build-ci dist"
+        archiveArtifacts artifacts: "dist/ximc*.tar.gz"
+      }
     } // stage
 
   } // stages
@@ -145,7 +153,7 @@ pipeline {
     }
     cleanup {
       // drop workspace for main job
-      deleteDir()
+      cleanWs(notFailBuild: true)
     }
   }
 }
