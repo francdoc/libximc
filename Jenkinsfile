@@ -111,15 +111,15 @@ pipeline {
     //} // stage
 
 
-    // stage('pack') {
+     stage('pack') {
     //   // execute on master
-    //   steps {
+       steps {
     //     // Get all stashed archives
-    //     unstash "result-debian64"
+         unstash "result-debian64"
     //     unstash "result-debian32"
     //     unstash "result-suse64"
     //     unstash "result-suse32"
-    //     unstash "result-win"
+         unstash "result-win"
     //     unstash "result-osx"
     //     unstash "result-docs"
     //     script {
@@ -127,11 +127,11 @@ pipeline {
     //         unstash "result-debianarm"
     //       }
     //     }
-    //     sh "ls"
-    //     sh "./build-ci dist"
-    //     archiveArtifacts artifacts: "dist/ximc*.tar.gz"
-    //   }
-    // } // stage
+         sh "ls"
+         sh "./build-ci dist"
+         archiveArtifacts artifacts: "dist/ximc*.tar.gz"
+       }
+    } // stage
 
   } // stages
 
