@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8108B74C1847FA57007E9F48 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8108B74B1847FA57007E9F48 /* CoreFoundation.framework */; };
 		8108B74E1847FA60007E9F48 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8108B74D1847FA60007E9F48 /* IOKit.framework */; };
+		810AC684277219B30021F1C9 /* udp-posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 810AC683277219B30021F1C9 /* udp-posix.c */; };
 		815090FD1B531AD50072B82A /* keyfile.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 815090FC1B531AD50072B82A /* keyfile.sqlite */; };
 		819182A4170B3124001B93C8 /* sglib.h in Headers */ = {isa = PBXBuildFile; fileRef = 819182A3170B3124001B93C8 /* sglib.h */; };
 		81B35D701A32482000980E24 /* wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 81B35D6F1A32482000980E24 /* wrapper.h */; };
@@ -54,6 +55,7 @@
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8108B74B1847FA57007E9F48 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		8108B74D1847FA60007E9F48 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		810AC683277219B30021F1C9 /* udp-posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "udp-posix.c"; path = "src/udp-posix.c"; sourceTree = "<group>"; };
 		815090FC1B531AD50072B82A /* keyfile.sqlite */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = keyfile.sqlite; path = src/keyfile.sqlite; sourceTree = "<group>"; };
 		819182A3170B3124001B93C8 /* sglib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sglib.h; path = src/sglib.h; sourceTree = "<group>"; };
 		8195605114EFF39100C65881 /* libximc.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = libximc.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -135,6 +137,7 @@
 		08FB77ACFE841707C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				810AC683277219B30021F1C9 /* udp-posix.c */,
 				81BAFE851ACB26A10096F411 /* devvirt.c */,
 				81BAFE861ACB26A10096F411 /* fwprotocol.c */,
 				81E9E172175E96FB0032ECAF /* metadata.h */,
@@ -277,6 +280,7 @@
 				81F6942E14F002A9003EEC3C /* util.c in Sources */,
 				81BAFE871ACB26A10096F411 /* devvirt.c in Sources */,
 				81BAFE881ACB26A10096F411 /* fwprotocol.c in Sources */,
+				810AC684277219B30021F1C9 /* udp-posix.c in Sources */,
 				81C68A791551BDA7002E377F /* ximc-gen.c in Sources */,
 				81D1543716811E4F0075B4B8 /* devenum.c in Sources */,
 				81D1543816811E4F0075B4B8 /* platform-posix.c in Sources */,

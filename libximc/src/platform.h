@@ -28,6 +28,35 @@ ssize_t read_port_serial (device_metadata_t *metadata, void *buf, size_t amount)
 ssize_t write_port_serial (device_metadata_t *metadata, const void *buf, size_t amount);
 
 /*
+* Platform-specific udp routines
+*/
+/**
+* Opens UDP-socket as a client
+* Assumes host contains as follows: just an IP-address
+* port contains port
+*/
+result_t open_udp(device_metadata_t *metadata, const char* ip4_port);
+
+/**
+Closes previuosly opened UDP socket and removes all metadata associated
+*/
+result_t close_udp(device_metadata_t *metadata);
+
+/**
+* Writes to UDP socket
+
+*/
+ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t command_len);
+
+/**
+* Reads from  UDP socket
+
+*/
+
+ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount);
+
+
+/*
  * Threading support
  */
 
