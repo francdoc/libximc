@@ -11,6 +11,10 @@
 :: @set GIT="%ProgramFiles%\Git\bin\git.exe"
 @set CMAKE="%ProgramFiles(x86)%\CMake\bin\cmake.exe" 
 
+:: avoid node reuse, flag is not enough to stop msbuildtaskhost so set env too
+@set MSBUILD=msbuild -nr:false
+@set MSBUILDDISABLENODEREUSE=1
+
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
 
 :: JDK_HOME must be set
@@ -22,16 +26,15 @@ set BINDYVER=
 set XIWRAPPERVER=
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set BINDYVER=%%i
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
-if "%BINDYVER%" == "" set BINDYVER=master
+if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
 
 :: debug flag
-::set DEBUG=true
-set CONFIGURATION=Debug
-if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
-set CONFIGURATION=Release
+@set CONFIGURATION=Debug
+@if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
+@set CONFIGURATION=Release
 :CONF_DEBUG
 echo Configuration %CONFIGURATION%
 
@@ -130,7 +133,7 @@ if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 @set LASTERR=%errorlevel%
 cd %BASEDIR%
 @if not %LASTERR% == 0 goto FAIL
-msbuild %DISTARCH%\bindy\bindy.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+%MSBUILD% %DISTARCH%\bindy\bindy.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
 if not exist %DISTARCH%\bindy\%CONFIGURATION%\bindy.dll goto FAIL
 @if not exist %DISTDIR%\%1 mkdir %DISTDIR%\%1
@@ -175,7 +178,7 @@ if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 @set LASTERR=%errorlevel%
 cd %BASEDIR%
 @if not %LASTERR% == 0 goto FAIL
-msbuild %DISTARCH%\xiwrapper\xiwrapper.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+%MSBUILD% %DISTARCH%\xiwrapper\xiwrapper.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
 if not exist %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.dll goto FAIL
 @if not exist %DISTDIR%\%1 mkdir %DISTDIR%\%1
@@ -205,7 +208,7 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
-msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen;libximc
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen;libximc
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\libximc.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -235,9 +238,9 @@ copy libximc\include\ximc.h %DISTARCH%
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
-msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
 @if not %errorlevel% == 0 goto FAIL
-msbuild wrappers\csharp\ximcnet.sln /p:Configuration=%CONFIGURATION% /p:Platform=%2
+%MSBUILD% wrappers\csharp\ximcnet.sln /p:Configuration=%CONFIGURATION% /p:Platform=%2
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\ximcnet.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -256,7 +259,7 @@ copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
-msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
 @if not %errorlevel% == 0 goto FAIL
 %CONFIGURATION%-Win32\xigen.exe --gen-pascal -x version -i libximc\src\protocol.xi -o wrappers\delphi\ximc.pas -t wrappers\delphi\ximc-template.pas
 @if not %errorlevel% == 0 goto FAIL
@@ -282,7 +285,7 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 
 @if not exist %GENDIR% mkdir %GENDIR%
 
-msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen
 @if not %errorlevel% == 0 goto FAIL
 
 %CONFIGURATION%-%ARCH%\xigen.exe --gen-java -x version -i libximc\src\protocol.xi -o wrappers\java\src\java\ru\ximc\libximc\JXimc.java -t wrappers\java\src\java\\ru\ximc\libximc\JXimc-template.java
@@ -300,7 +303,7 @@ msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen
 %CONFIGURATION%-%ARCH%\xigen.exe --gen-jni -x version -i libximc\src\protocol.xi -o wrappers\java\src\c\ru_ximc_libximc_JXimc-gen.c -t wrappers\java\src\c\ru_ximc_libximc_JXimc-template.c
 @if not %errorlevel% == 0 goto FAIL
 
-msbuild libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:libjximc
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:libjximc
 @if not %errorlevel% == 0 goto FAIL
 
 copy wrappers\java\libjximc.jar %DISTARCH%
@@ -354,12 +357,12 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: -----
 @set NAME=testapp_C
 @echo Building example %NAME%...
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
@@ -376,12 +379,12 @@ copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
 :: -----
 @set NAME=testappeasy_C
 @echo Building example %NAME%...
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
@@ -389,12 +392,12 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 :: -----
 @set NAME=testprofile_C
 @echo Building example %NAME%...
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
@@ -433,14 +436,14 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @echo Building example %NAME%...
 :: Win32
 copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%\
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
 :: x64
 copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
@@ -450,14 +453,14 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @echo Building example %NAME%...
 :: Win32
 copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
 :: x64
 copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
-msbuild examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
