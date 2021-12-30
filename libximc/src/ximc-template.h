@@ -385,6 +385,8 @@ extern "C"
 		* For example "xi-com:\\\.\COM3" in Windows or "xi-com:/dev/tty.s123" in Linux/Mac.
 		* In case of network device the "host" is an IPv4 address or fully qualified domain uri (FQDN), "serial" is the device serial number in hexadecimal system.
 		* For example "xi-net://192.168.0.1/00001234" or "xi-net://hostname.com/89ABCDEF".
+		* In case of UDP protocol, use "xi-udp://<ip/host>:<port>.
+		* For example, "xi-udp://192.168.0.1:1818".
 		* Note: to open network device you must call {@link set_bindy_key} first.
 		* In case of virtual device the "file" is the full filename with device memory state, if it doesn't exist then it is initialized with default values.
 		* For example "xi-emu:///C:/dir/file.bin" in Windows or "xi-emu:///home/user/file.bin" in Linux/Mac.
@@ -397,6 +399,8 @@ extern "C"
 		* Например "xi-com:\\\.\COM3" в Windows или "xi-com:/dev/tty.s123" в Linux/Mac.
 		* Для сетевого устройства "host" это IPv4 адрес или полностью определённое имя домена, "serial" это серийный номер устройства в шестнадцатеричной системе.
 		* Например "xi-net://192.168.0.1/00001234" или "xi-net://hostname.com/89ABCDEF".
+		* Для работы по UDP протоколу используйте "xi-udp://<ip/host>:<port>.
+		* Например "xi-udp://192.168.0.1:1818".
 		* Замечание: для открытия сетевого устройства обязательно нужно сначала вызвать функцию установки сетевого ключа {@link set_bindy_key}.
 		* Для виртуального устройства "file" это путь к файлу с сохраненным состоянием устройства. Если файл не существует, он будет создан и инициализирован значениями по умолчанию.
 		* Например "xi-emu:///C:/dir/file.bin" в Windows или "xi-emu:///home/user/file.bin" в Linux/Mac.
