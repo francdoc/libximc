@@ -2596,6 +2596,7 @@ fields:
 	* key BREAK (winding short-circuited), the regime "retention" is
 	* deactivated for DC motors, keeping current in the windings for
 	* stepper motors (with Power management settings).
+	* When this command is called, the ALARM flag is reset.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
@@ -2604,6 +2605,7 @@ fields:
 	* "удержания" дезактивируется для DC двигателей, удержание тока
 	* в обмотках для шаговых двигателей (с учётом Power management
 	* настроек).
+	* При вызове этой команды сбрасывается флаг ALARM.
 	* @param id идентификатор устройства
 	* \endrussian
 	*/
