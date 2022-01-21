@@ -160,6 +160,11 @@ int command_port_send (device_metadata_t *metadata, const byte* command, size_t 
 			n = write_udp(metadata, command + k, amount);
 			failed = n < 0;
 		}
+		else if (metadata->type == dtTcp)
+		{
+			n = write_tcp(metadata, command + k, amount);
+			failed = n < 0;
+		}
 		if (failed)
 		{
 			errcode = get_system_error_code();
@@ -245,6 +250,11 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 		else if (metadata->type == dtUdp)
 		{
 			n = read_udp(metadata, response + k, amount);
+			failed = n < 0;
+		}
+		else if (metadata->type == dtTcp)
+		{
+			n = read_tcp(metadata, response + k, amount);
 			failed = n < 0;
 		}
 		else
@@ -1092,6 +1102,12 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 		
 		return open_udp(metadata, uri_host);
 	}
+	else if (!portable_strcasecmp(uri_scheme, "xi-tcp"))
+	{
+	
+		return open_tcp(metadata, uri_host);
+	}
+
 	else
 	{
 		log_error( L"unknown device type" );
@@ -1120,6 +1136,10 @@ result_t close_port (device_metadata_t *metadata)
 		
 		case dtUdp:
 			return close_udp(metadata);
+
+		case dtTcp:
+			return close_tcp(metadata);
+
 		default:
 			return result_ok;
 	}

@@ -263,6 +263,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     <ClCompile Include="src\loader.c" />
     <ClCompile Include="src\platform-win32.c" />
     <ClCompile Include="src\protosup.c" />
+    <ClCompile Include="src\tcp-win.c" />
     <ClCompile Include="src\udp-win.c" />
     <ClCompile Include="src\util.c" />
     <ClCompile Include="src\ximc-gen-template.c">

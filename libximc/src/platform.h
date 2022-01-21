@@ -32,8 +32,7 @@ ssize_t write_port_serial (device_metadata_t *metadata, const void *buf, size_t 
 */
 /**
 * Opens UDP-socket as a client
-* Assumes host contains as follows: just an IP-address
-* port contains port
+* Assumes host contains as follows: just an IP-address:port
 */
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port);
 
@@ -54,6 +53,33 @@ ssize_t write_udp(device_metadata_t *metadata, const byte* command, size_t comma
 */
 
 ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount);
+
+
+/*
+* Platform-specific tcp routines
+*/
+/**
+* Opens TCP-socket as a client
+* Assumes host contains as follows: just an IP-address:port
+*/
+result_t open_tcp(device_metadata_t *metadata, const char* ip4_port);
+
+/**
+Closes previuosly opened TCP socket and removes all metadata associated
+*/
+result_t close_tcp(device_metadata_t *metadata);
+
+/**
+* Writes to TCP socket
+
+*/
+ssize_t write_tcp(device_metadata_t *metadata, const byte* command, size_t command_len);
+
+/**
+* Reads from  TCP socket
+
+*/
+ssize_t read_tcp(device_metadata_t *metadata, void *buf, size_t amount);
 
 
 /*
