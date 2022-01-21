@@ -3,6 +3,7 @@
 #include <winioctl.h>
 #include <winsock2.h>
 #include <Ws2tcpip.h>
+#include <ws2def.h>
 
 #include "ximc.h"
 
@@ -49,7 +50,8 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	wVersionRequested = MAKEWORD(2, 2);
 
 	err = WSAStartup(wVersionRequested, &wsaData);
-	if (err != 0) {
+	if (err != 0) 
+	{
 		/* Tell the user that we could not find a usable */
 		/* Winsock DLL.                                  */
 		//printf("WSAStartup failed with error: %d\n", err);
@@ -62,7 +64,8 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	/* 2.2 in wVersion since that is the version we      */
 	/* requested.                                        */
 
-	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) {
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) 
+	{
 		/* Tell the user that we could not find a usable */
 		/* WinSock DLL.                                  */
 		//printf("Could not find a usable version of Winsock.dll\n");
@@ -74,29 +77,28 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	// creating a new connection resource
 
 	metadata->handle = (handle_t)socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if ((SOCKET)metadata->handle == INVALID_SOCKET) return result_error;
+	if ((SOCKET)metadata->handle == INVALID_SOCKET)
+	{
+		return result_error;
+	}
+	
+	SOCKADDR_IN *sa;
+	PTCP_SOCKET_IN = (sa = (SOCKADDR_IN *)malloc(sizeof(SOCKADDR_IN)));
+	sa->sin_family = AF_INET;
+	sa->sin_port = htons((USHORT)(port));
+	sa->sin_addr.s_addr = addr;
 
-	SOCKADDR_IN test_sa;
-	test_sa.sin_family = AF_INET;
-	test_sa.sin_port = htons((USHORT)(port));
-	test_sa.sin_addr.s_addr = addr;
-
-	int result_connect = connect(metadata->handle, (const SOCKADDR *)&test_sa, sizeof(SOCKADDR_IN));
+	int result_connect = connect((SOCKET)metadata->handle, (const SOCKADDR *)sa, sizeof(SOCKADDR_IN));
 	if (result_connect == SOCKET_ERROR)
 	{
-		closesocket(metadata->handle);
+		closesocket((SOCKET)metadata->handle);
+		free(PTCP_SOCKET_IN);
 		return result_error;
 	}
 	
 	metadata->type = dtTcp;
 
-	SOCKADDR_IN * sa;
-
-	PTCP_SOCKET_IN = (sa = (SOCKADDR_IN *)malloc(sizeof(SOCKADDR_IN)));
-
-	sa->sin_family = test_sa.sin_family;
-	sa->sin_port = test_sa.sin_port;
-	sa->sin_addr.s_addr = test_sa.sin_addr.s_addr;
+	
 
 	TCP_UNREAD_LEN = 0;
 	return result_ok;

@@ -71,30 +71,28 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	// creating a new connection resource
 
 	metadata->handle = (uint32_t)socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if ((int)metadata->handle == -1) return result_error;
+	if ((int)metadata->handle == -1)
+	{
+		return result_error;
+	}
 
-	struct sockaddr_in test_sa;
-	test_sa.sin_family = AF_INET;
-	test_sa.sin_port = htons((USHORT)(port));
-	test_sa.sin_addr.s_addr = addr;
+	struct sockaddr_in *sa;
 
-	int result_connect = connect(metadata->handle, (const struct sockaddr *)&test_sa, sizeof(struct sockaddr_in));
+	PTCP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in)));
+
+	sa->sin_family = AF_INET;
+	sa->sin_port = htons((port));
+	sa->sin_addr.s_addr = addr;
+
+	int result_connect = connect((int)metadata->handle, (const struct sockaddr *)sa, sizeof(struct sockaddr_in));
 	if (result_connect == -1)
 	{
-		close(metadata->handle);
+		close((int)metadata->handle);
+		free(PTCP_SOCKET_IN);
 		return result_error;
 	}
 
 	metadata->type = dtTcp;
-
-	struct sockaddr_in * sa;
-
-	PTCP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in)));
-		
-	sa->sin_family = test_sa.sin_family;
-	sa->sin_port = test_sa.sin_port;
-	sa->sin_addr.s_addr = test_sa.sin_addr.s_addr;
-	
 	TCP_UNREAD_LEN = 0;
 	return result_ok;
 }
