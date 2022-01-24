@@ -1,15 +1,15 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 
 # Declare files that will always have CRLF line endings on checkout.
-*.bat text eol=crlf
-*.vcxproj text eol=crlf
-*.sln text eol=crlf
-*.sh text eol=lf
-ChangeLog text eol=lf
-configure.ac text eol=lf
-version text eol=lf
-version.sh text eol=lf
-libximc.spec text eol=lf
+*.bat eol=crlf
+*.vcxproj eol=crlf
+*.sln eol=crlf
+*.sh eol=lf
+ChangeLog eol=lf
+configure.ac eol=lf
+version eol=lf
+version.sh eol=lf
+libximc.spec eol=lf
 
 # exception
 
