@@ -8,6 +8,7 @@
 ChangeLog text eol=lf
 configure.ac text eol=lf
 version text eol=lf
+version.sh text eol=lf
 libximc.spec text eol=lf
 
 # exception
