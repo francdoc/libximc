@@ -90,10 +90,10 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		struct timeval timeout;
 		timeout.tv_sec = metadata->handle / 1000;
 		timeout.tv_usec = 0;
-		result = setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+		result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 		if (result != -1)
 		{
-			result = setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
+			result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
 		}
 	}
 	if (result == -1)
