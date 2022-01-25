@@ -84,8 +84,19 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	sa->sin_port = htons((port));
 	sa->sin_addr.s_addr = addr;
 
-	int result_connect = connect((int)metadata->handle, (const struct sockaddr *)sa, sizeof(struct sockaddr_in));
-	if (result_connect == -1)
+	int result = connect((int)metadata->handle, (const struct sockaddr *)sa, sizeof(struct sockaddr_in));
+	if (result != -1)
+	{
+		struct timeval timeout;
+		timeout.tv_sec = metadata->handle / 1000;
+		timeout.tv_usec = 0;
+		result = setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+		if (result != -1)
+		{
+			result = setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
+		}
+	}
+	if (result == -1)
 	{
 		close((int)metadata->handle);
 		free(PTCP_SOCKET_IN);
@@ -108,6 +119,7 @@ result_t close_tcp(device_metadata_t *metadata)
 
 ssize_t write_tcp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
+	TCP_UNREAD_LEN = 0;
 	return (ssize_t)sendto((int)metadata->handle, (const char *)command, (int)command_len, 0, (struct sockaddr *)metadata->virtual_state, (socklen_t) sizeof (struct sockaddr_in));
 }
 

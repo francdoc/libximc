@@ -87,19 +87,26 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	sa->sin_family = AF_INET;
 	sa->sin_port = htons((USHORT)(port));
 	sa->sin_addr.s_addr = addr;
-
-	int result_connect = connect((SOCKET)metadata->handle, (const SOCKADDR *)sa, sizeof(SOCKADDR_IN));
-	if (result_connect == SOCKET_ERROR)
+	
+	int result  = connect((SOCKET)metadata->handle, (const SOCKADDR *)sa, sizeof(SOCKADDR_IN));
+	if (result != SOCKET_ERROR)
+	{
+		DWORD timeout = metadata->timeout;
+		result = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout));
+		if (result != SOCKET_ERROR)
+		{
+			result = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+		}
+	}
+	if (result == SOCKET_ERROR)
 	{
 		closesocket((SOCKET)metadata->handle);
 		free(PTCP_SOCKET_IN);
+		WSACleanup();
 		return result_error;
 	}
 	
 	metadata->type = dtTcp;
-
-	
-
 	TCP_UNREAD_LEN = 0;
 	return result_ok;
 }
@@ -117,6 +124,7 @@ result_t close_tcp(device_metadata_t *metadata)
 
 ssize_t write_tcp(device_metadata_t *metadata, const byte* command, size_t command_len)
 {
+	TCP_UNREAD_LEN = 0;
 	int iResult;
 	iResult = send((SOCKET)metadata->handle, (const char *)command, (int)command_len, 0);
 	return  (iResult == SOCKET_ERROR) ? -1 : iResult;
