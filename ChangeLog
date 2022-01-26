@@ -1,3 +1,9 @@
+libximc (2.14.1-1)
+  * Released: Wed, 26 Jan 2022 10:36:44 +0300
+  * Version bump
+  * Feature #53786 Control of adding UDP support to libximc
+  * Feature #59317 Add tcp support to libximc
+
 libximc (2.14.0-1)
   * Released: Tue, 28 Dec 2021 23:08:32 +0300
   * Version bump

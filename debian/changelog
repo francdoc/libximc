@@ -1,3 +1,11 @@
+libximc7 (2.14.1-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #53786 Control of adding UDP support to libximc
+  * Feature #59317 Add tcp support to libximc
+
+ -- XIMC <info@ximc.ru>  Wed, 26 Jan 2022 10:36:44 +0300
+
 libximc7 (2.14.0-1) unstable; urgency=low
 
   * Version bump

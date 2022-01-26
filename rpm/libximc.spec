@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.14.0
+Version: 2.14.1
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -74,6 +74,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Wed Jan 26 2022 XIMC <info@ximc.ru> - 2.14.1
+- version bump
+- Feature #53786 Control of adding UDP support to libximc
+- Feature #59317 Add tcp support to libximc
 
 * Tue Dec 28 2021 XIMC <info@ximc.ru> - 2.14.0
 - version bump
