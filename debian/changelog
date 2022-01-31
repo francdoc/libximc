@@ -1,3 +1,17 @@
+libximc7 (2.13.4-1) unstable; urgency=low
+
+  * Version bump
+  * Bug #55735 The Java example from the libximc library is not going to
+  * Bug #55638 Fix the description of the "reset_locks" function
+  * Bug #55439 The local libximc build from the GIT repository does not work
+  * Bug #53162 Building and running C examples on linux
+  * Feature #58545 Note the stop command resets the alarm
+  * Feature #57646 Update the C and Python profiles in the libximc library
+  * Feature #57131 An example for the BUILDER C++ environment
+  * Feature #48566 Automatic testing of our python examples
+
+ -- XIMC <info@ximc.ru>  Mon, 31 Jan 2022 18:00:04 +0300
+
 libximc7 (2.13.3-1) unstable; urgency=low
 
   * Version bump
