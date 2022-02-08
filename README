@@ -6,14 +6,14 @@ Building a library for Windows
 
 Dependencies
 
-* We install git. Download and install from https://git-scm.com in C:\Program Files\Git (should be the default).
-* We put CMake with https://cmake.org along the way C:\Program Files (x86)\CMake. 
-You can put the 64 bit version in C:\Program Files\CMake, and then just copy it to C:\Program Files (x86).
+* Download and install from https://git-scm.com in C:\Program Files\Git (should be the default).
+* Download and install from https://cmake.org in C:\Program Files (x86)\CMake. 
+You can put the 64 bit version in C:\Program Files\CMake, and then just copy it in C:\Program Files (x86).
 * Installing cygwin
-The installation must be done in the c directory:\cygwin (this is the default).
+The installation must be done in the C:\cygwin (this is the default).
 It is necessary to select flex, bison, bash packages for installation. 
 The archive with the verified version can be downloaded at https://files.xisupport.com/libximc_dependencies/cygwin_ci.7z, 
-then just unpack the archive on the C:\ drive.
+then just unpack the archive on the C:\drive.
 * Install JDK 64 bits if not installed. A proven Java distribution can be downloaded 
 https://sourceforge.net/projects/javaclientmsiinstallers/files/Java%20JDK%209%20Update%20464/jdk9.0.464.zip/download
 or https://www.oracle.com/java/technologies/javase/javase9-archive-downloads.html. Authorization is required to download from the second link.
