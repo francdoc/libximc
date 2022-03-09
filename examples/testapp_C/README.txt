@@ -20,8 +20,7 @@ Then launch the application as:
 $ make run
 
 To quickly build and run the example on Linux, you can run the script testapp_C.sh . You don't need to install libraries for it to work.
-It will automatically build and run the example. If the script outputs a message that the device has not been found, 
-you can change the device address to the correct one in the script line:
+It will automatically build and run the example. If the script displays a message that the device has not been found, you can change the device address to the correct one:
 ./testapp_C  xi-com:/dev/ttyACM0
 
  * In Windows: testapp_C can be built using testapp_C.sln. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed.
@@ -60,9 +59,8 @@ $ make
 $ make run
 
 Для быстрой сборки и запуска примера на Linux можно запустить скрипт testapp_C.sh. Для его работы не нужно устанавливать библиотеки. 
-Он автоматически соберет и запустит пример. Если скрипт выведет сообщение, что не найдено устройство можно поменять в строке скрипта: 
+Он автоматически соберет и запустит пример. Если скрипт выведет сообщение, что не найдено устройство можно поменять адрес устройства на правильный: 
 ./testapp_C  xi-com:/dev/ttyACM0
-адрес устройства на правильный.
 
 * В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
 Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: xibridge.dll, libximc.dll.
