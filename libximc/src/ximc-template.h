@@ -10,11 +10,17 @@
 	* \endrussian
 	*/
 
-/**
-	* \def XIMC_API
-	* \brief Library import macro
-	* Macros allows to automatically import function from shared library.
-	* It automatically expands to dllimport on msvc when including header file
+/** @def XIMC_API
+	* \english
+	* 		@brief Library import macro.
+	* 		Macros allows to automatically import function from shared library.
+	* 		It automatically expands to dllimport on msvc when including header file.
+	* \endenglish
+	* \russian
+	*		@brief Макрос импорта библиотеки.
+	*		Макросы позволяют автоматически импортировать функцию из общей библиотеки.
+	*		Он автоматически расширяется до dllimport на msvc при включении файла заголовка.
+	* \endrussian
 	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 	#define XIMC_API __stdcall
@@ -26,9 +32,13 @@
 	#endif
 #endif
 
-/**
-	* \def XIMC_CALLCONV
-	* \brief Library calling convention macros.
+/** @def XIMC_CALLCONV
+	* \english
+	*		@brief Library calling convention macros.
+	* \endenglish
+	* \russian
+	*		@brief Библиотека вызывающая условные макросы.
+	* \endrussian
 	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 	#define XIMC_CALLCONV __stdcall
@@ -36,10 +46,14 @@
 	#define XIMC_CALLCONV
 #endif
 
-/**
-* \def XIMC_RETTYPE
-* \brief Thread return type.
-*/
+/** @def XIMC_RETTYPE
+	* \english
+	* 		@brief Thread return type.
+	* \endenglish
+	* \russian
+	*		@brief Возвращаеемый тип потока.
+	* \endrussian
+	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 #define XIMC_RETTYPE unsigned int
 #else
