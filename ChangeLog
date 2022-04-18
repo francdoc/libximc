@@ -1,3 +1,17 @@
+libximc (2.13.5-1)
+  * Released: Mon, 18 Apr 2022 19:01:43 +0300
+  * Version bump
+  * Bug #61174 Restore the functionality of the libximc with micro manager
+  * Feature #48566 Automated testing system for our python examples
+  * Feature #60555 Add an example with a virtual controller to the Labview
+  * Feature #60556 Test libximc-2.10.5 c micromanager-2.0gamma
+  * Feature #60559 Add to the with LabVIEW examples .exe and write a readme
+  * Feature #62671 Respond to Pull Request in libximc
+  * Bug #53163 Translation of XIMC_API in the libximc manual
+  * Bug #56883 Update the libximc assembly instructions
+  * Bug #60244 Select the stand folder with caps in libximc/ximc/c-profiles
+  * Bug #61174 Restore libximc functionality with micromanager
+
 libximc (2.13.4-1)
   * Released: Mon, 31 Jan 2022 18:00:04 +0300
   * Version bump
