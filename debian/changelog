@@ -1,3 +1,13 @@
+libximc7 (2.14.2-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #50500 Organize the addition of UDP support to libximc
+  * Feature #58865 Bring XIMC network management with built-in Ethernet
+  * Feature #59871 Bring Windows 11 support to official status
+  * Bug #62093 The build on Jenkins does not work
+
+ -- XIMC <info@ximc.ru>  Mon, 18 Apr 2022 17:04:25 +0300
+
 libximc7 (2.14.1-1) unstable; urgency=low
 
   * Version bump
