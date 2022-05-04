@@ -15,7 +15,7 @@ def ximc_shared_lib():
         return CDLL("libximc.framework/libximc")
     elif platform.system() == "Windows":
         if sys.version_info[0] == 3 and sys.version_info[0] >= 8:
-            WinDLL("libximc.dll", winmode=RTLD_GLOBAL)
+            return WinDLL("libximc.dll", winmode=RTLD_GLOBAL)
         else:
             return WinDLL("libximc.dll")
     else:
