@@ -317,6 +317,94 @@ void store_device_name (char* name, void* arg)
 	++devenum->count;
 }
 
+/*Preprocess hints string*/
+void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char **new_xi_udp)
+{
+	char *addr, *pnet, *pudp, *ptcp;
+	int c_net, c_udp, c_tcp, len;
+	size_t net_len,tcp_len, udp_len;
+	*new_xi_net = NULL;
+	*new_xi_tcp = NULL;
+	*new_xi_udp = NULL;
+	c_net = c_udp = c_tcp = 0;
+	int hint_length = (int)strlen(hints);
+	addr = malloc(hint_length + 1);
+	memset(addr, 0, hint_length + 1);
+
+	if (!find_key(hints, "addr", addr, strlen(hints)) 
+	{
+		log_error(L"no \"addr\" substring in hints");
+		free(addr);
+		return; // empty hints string is not a critical error
+	}
+
+	const char* delim = ",";
+	int items = 0;
+	if (strlen(addr) = 0)
+		return;
+	char *ptr = addr;
+	char *new_ptr;
+	while (ptr != NULL)
+	{ // exit when no new item is found in strchr() function
+
+		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+		if (new_ptr != NULL) 
+		{   // NULL means there is no commas left and we must quit
+			ptr = new_ptr+1; // Continue with string after the comma
+			*new_ptr = 0;
+		}
+		if (strstr(ptr, "xi-udp://") != NULL)
+		{
+			c_udp++;
+			udp_len += (size_t)(new_ptr - ptr + 1);
+		}
+		else if ((strstr(ptr, "xi-tcp://") != NULL))
+		{
+			c_tcp++;
+			tcp_len  += (size_t)(new_ptr - ptr + 1);
+		}
+		else
+		{
+			c_net++;
+			net_len += (size_t)(new_ptr - ptr + 1);
+		}
+	}
+
+	// addr is now 0-separ
+	if (c_net) {*new_xi_net = pnet = malloc(net_len); 
+	if (c_udp) *new_xi_udp = pudp = malloc(udp_len);
+	if (c_tcp) *new_xi_tcp = ptcp = malloc(tcp_len);
+	ptr = addr;
+	for (int i = 0; i < (n_udp+n_tcp+n_net); i++)
+	{
+		len = strlen(ptr);
+		if (strstr(ptr, "xi-udp://") != NULL)
+		{
+			memcpy(pudp, ptr, len);
+			memcpy(pudp+len, delim, 1);
+			pudp += (len + 1);
+		}
+		else if ((strstr(ptr, "xi-tcp://") != NULL))
+		{
+			memcpy(ptcp, ptr, len);
+			memcpy(*ptcp+len, delim, 1);
+			ptcp += (len + 1);
+		}
+		else
+		{
+			memcpy(pnet, ptr, len);
+			memcpy(pnet+len, delim, 1);
+			pnet += (len + 1);
+		}
+
+	}
+	if (c_net) *--pnet = 0;
+	if (c_udp) *--pudp = 0;
+	if (c_tcp) *--ptcp = 0;
+
+}
+
+
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
 {
