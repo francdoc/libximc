@@ -317,13 +317,21 @@ void store_device_name (char* name, void* arg)
 	++devenum->count;
 }
 
-/*Preprocess hints string*/
-void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char **new_xi_udp)
+/* if no port number specified these are default values */
+#define PORT_UDP 4000
+#define PORT_TCP 4001
+
+
+/*
+ * Put tcp, udp adressed devices names to device_enumeartion struture and preprocesses hints string - extract tcp-, udp-addresses
+ ** ENUMERATE_NETWORK flag makes sence
+*/
+void enumeare_tcp_udp_devices_&_prep_hints(const char *hints, char  **new_hints, /*char ** new_xi_tcp, char **new_xi_udp,*/ device_enumeration_opaque_t *deo)
 {
 	char *addr, *pnet, *pudp, *ptcp;
 	int c_net, c_udp, c_tcp, len;
 	size_t net_len,tcp_len, udp_len;
-	*new_xi_net = NULL;
+	*new_hints = NULL;
 	*new_xi_tcp = NULL;
 	*new_xi_udp = NULL;
 	c_net = c_udp = c_tcp = 0;
@@ -331,7 +339,7 @@ void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char 
 	addr = malloc(hint_length + 1);
 	memset(addr, 0, hint_length + 1);
 
-	if (!find_key(hints, "addr", addr, strlen(hints)) 
+	if (!find_key(hints, "addr", addr, strlen(hints))) 
 	{
 		log_error(L"no \"addr\" substring in hints");
 		free(addr);
@@ -340,7 +348,7 @@ void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char 
 
 	const char* delim = ",";
 	int items = 0;
-	if (strlen(addr) = 0)
+	if (strlen(addr) == 0)
 		return;
 	char *ptr = addr;
 	char *new_ptr;
@@ -371,7 +379,7 @@ void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char 
 	}
 
 	// addr is now 0-separ
-	if (c_net) {*new_xi_net = pnet = malloc(net_len); 
+	if (c_net) {*new_hints = pnet = malloc(net_len); 
 	if (c_udp) *new_xi_udp = pudp = malloc(udp_len);
 	if (c_tcp) *new_xi_tcp = ptcp = malloc(tcp_len);
 	ptr = addr;
@@ -387,13 +395,14 @@ void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char 
 		else if ((strstr(ptr, "xi-tcp://") != NULL))
 		{
 			memcpy(ptcp, ptr, len);
-			memcpy(*ptcp+len, delim, 1);
+			//memcpy(*ptcp+len, delim, 1);
+            store_device_name(ptcp, deo);
 			ptcp += (len + 1);
 		}
 		else
 		{
 			memcpy(pnet, ptr, len);
-			memcpy(pnet+len, delim, 1);
+			//memcpy(pnet+len, delim, 1);
 			pnet += (len + 1);
 		}
 
@@ -401,9 +410,22 @@ void prep_hints(const char *hints, char  **new_xi_net, char ** new_xi_tcp, char 
 	if (c_net) *--pnet = 0;
 	if (c_udp) *--pudp = 0;
 	if (c_tcp) *--ptcp = 0;
-
+    free(addr);
 }
 
+ bool is_ip_name_ok(const char *prefix, const char *addr)
+ {
+     const char *prefix;
+     if (!portable_strncasecmp(addr, prefix, strlen(prefix)) &&
+         )
+         return false;
+     const char *pip = addr + strlen(prefix);
+     // ip or domain : port
+     
+     return false;
+ }
+
+ 
 
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
