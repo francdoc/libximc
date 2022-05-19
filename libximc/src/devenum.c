@@ -318,120 +318,121 @@ void store_device_name (char* name, void* arg)
 }
 
 /* if no port number specified these are default values */
-#define PORT_UDP 4000
-#define PORT_TCP 4001
-
+#define XIMC_UDP_PORT 1818
+#define XIMC_TCP_PORT 1820
 
 /*
- * Put tcp, udp adressed devices names to device_enumeartion struture and preprocesses hints string - extract tcp-, udp-addresses
- ** ENUMERATE_NETWORK flag makes sence
+* Put tcp, udp adressed devices names to device_enumeartion struture and preprocesses hints string - extract tcp-, udp-addresses
+** ENUMERATE_NETWORK flag makes sence
 */
-void enumeare_tcp_udp_devices_&_prep_hints(const char *hints, char  **new_hints, /*char ** new_xi_tcp, char **new_xi_udp,*/ device_enumeration_opaque_t *deo)
+void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, device_enumeration_opaque_t *deo)
 {
-	char *addr, *pnet, *pudp, *ptcp;
-	int c_net, c_udp, c_tcp, len;
-	size_t net_len,tcp_len, udp_len;
+	char *addr, *pnet;
+	int c_net, c_udp, c_tcp;
+	size_t net_len, len_max, len, hint_length;
+
 	*new_hints = NULL;
-	*new_xi_tcp = NULL;
-	*new_xi_udp = NULL;
 	c_net = c_udp = c_tcp = 0;
-	int hint_length = (int)strlen(hints);
-	addr = malloc(hint_length + 1);
+	hint_length = len_max = len = net_len = 0;
+
+
+	if (hints == NULL) return;
+	hint_length = strlen(hints);
+	addr = (char *)malloc(hint_length + 1);
 	memset(addr, 0, hint_length + 1);
 
-	if (!find_key(hints, "addr", addr, strlen(hints))) 
+	if (!find_key(hints, "addr", addr, strlen(hints))) // addr is to be filled
 	{
-		log_error(L"no \"addr\" substring in hints");
 		free(addr);
-		return; // empty hints string is not a critical error
-	}
-
-	const char* delim = ",";
-	int items = 0;
-	if (strlen(addr) == 0)
 		return;
+	}
+	const char* delim = ",";
+	const char* prefix_udp = "xi-udp://";
+	const char* prefix_tcp = "xi-tcp://";
+
+	int items = 0;
 	char *ptr = addr;
 	char *new_ptr;
 	while (ptr != NULL)
 	{ // exit when no new item is found in strchr() function
 
 		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-		if (new_ptr != NULL) 
+		if (new_ptr != NULL)
 		{   // NULL means there is no commas left and we must quit
-			ptr = new_ptr+1; // Continue with string after the comma
 			*new_ptr = 0;
 		}
+		len = strlen(ptr);
 		if (strstr(ptr, "xi-udp://") != NULL)
 		{
 			c_udp++;
-			udp_len += (size_t)(new_ptr - ptr + 1);
+			if (len_max < len) len_max = len;
 		}
 		else if ((strstr(ptr, "xi-tcp://") != NULL))
 		{
 			c_tcp++;
-			tcp_len  += (size_t)(new_ptr - ptr + 1);
+			if (len_max < len) len_max = len;
 		}
 		else
 		{
 			c_net++;
-			net_len += (size_t)(new_ptr - ptr + 1);
+			net_len += (len + strlen(delim));
 		}
+		if (new_ptr != NULL)
+		{   // NULL means there is no commas left and we must quit
+			ptr = new_ptr + 1; // Continue with string after the comma
+		}
+		else ptr = NULL;
 	}
 
 	// addr is now 0-separ
-	if (c_net) {*new_hints = pnet = malloc(net_len); 
-	if (c_udp) *new_xi_udp = pudp = malloc(udp_len);
-	if (c_tcp) *new_xi_tcp = ptcp = malloc(tcp_len);
+	char *probe_device_name = (char *)malloc(len_max + 16);
+	if (net_len == 0) net_len++;
+	*new_hints = pnet = (char *)malloc(net_len);
+	memset(pnet, 0, net_len);
 	ptr = addr;
-	for (int i = 0; i < (n_udp+n_tcp+n_net); i++)
+	for (int i = 0; i < (c_udp + c_tcp + c_net); i++)
 	{
 		len = strlen(ptr);
-		if (strstr(ptr, "xi-udp://") != NULL)
+		if (strstr(ptr, prefix_tcp) != NULL)
 		{
-			memcpy(pudp, ptr, len);
-			memcpy(pudp+len, delim, 1);
-			pudp += (len + 1);
+			memcpy(probe_device_name, ptr, len);
+			probe_device_name[len] = 0;
+			if (strchr(probe_device_name + strlen(prefix_tcp), ':') == NULL)
+				sprintf_s(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_TCP_PORT);
+			if ((deo -> flags & ENUMERATE_NETWORK) != 0)
+			   store_device_name(probe_device_name, deo);
+
 		}
-		else if ((strstr(ptr, "xi-tcp://") != NULL))
+		else if ((strstr(ptr, prefix_udp) != NULL))
 		{
-			memcpy(ptcp, ptr, len);
-			//memcpy(*ptcp+len, delim, 1);
-            store_device_name(ptcp, deo);
-			ptcp += (len + 1);
+			memcpy(probe_device_name, ptr, len);
+			probe_device_name[len] = 0;
+			if (strchr(probe_device_name + strlen(prefix_udp), ':') == NULL)
+				sprintf_s(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_UDP_PORT);
+			if ((deo -> flags & ENUMERATE_NETWORK) != 0)
+			   store_device_name(probe_device_name, deo);
 		}
 		else
 		{
 			memcpy(pnet, ptr, len);
-			//memcpy(pnet+len, delim, 1);
-			pnet += (len + 1);
+			memcpy(pnet + len, delim, strlen(delim));
+			pnet += (len + strlen(delim));
 		}
-
+		ptr += (len + 1);
 	}
-	if (c_net) *--pnet = 0;
-	if (c_udp) *--pudp = 0;
-	if (c_tcp) *--ptcp = 0;
-    free(addr);
+
+	if (c_net) *(pnet - strlen(delim)) = 0;
+	free(addr);
+	free(probe_device_name);
 }
 
- bool is_ip_name_ok(const char *prefix, const char *addr)
- {
-     const char *prefix;
-     if (!portable_strncasecmp(addr, prefix, strlen(prefix)) &&
-         )
-         return false;
-     const char *pip = addr + strlen(prefix);
-     // ip or domain : port
-     
-     return false;
- }
-
- 
 
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
 {
 	device_enumeration_opaque_t* devenum;
 	device_description desc;
+	char * new_hints;
 	size_t max_name_len = 4096;
 
 	/* ensure one-thread mutex init */
@@ -465,6 +466,8 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		return result_error;
 	}
 
+	enumerate_tcp_udp_devices_prep_hints(hints, &new_hints, devenum);
+
 	/* Check all found devices in threads */
 	if ((enumerate_flags & ENUMERATE_PROBE) && devenum->count > 0)
 	{
@@ -476,22 +479,30 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 			log_error( L"network layer init failed" );
 			return result_error;
 		}
-		char* addr;
+		char* addr = new_hints;
 		char* adapter_addr;
 		if (hints == NULL) {
-			log_error(L"hints string is null");
+			log_error(L"addr hints string is null");
 			return result_ok; // null hints is fine too
-		} else {
+		}
+		else
+		{
+			/*
 			int hint_length = (int)strlen(hints);
 			addr = malloc(hint_length+1);
 			memset(addr, 0, hint_length+1);
-		
+
 			if (!find_key(hints, "addr", addr, hint_length)) {
+			log_error(L"no \"addr\" substring in hints");
+			free(addr);
+			return result_ok; // empty hints string is not a critical error
+			}
+			*/
+			if (addr == NULL) {
 				log_error(L"no \"addr\" substring in hints");
-				free(addr);
 				return result_ok; // empty hints string is not a critical error
 			}
-			
+			int hint_length = (int)strlen(hints);
 			adapter_addr = malloc(hint_length+1);
 			memset(adapter_addr, 0, hint_length+1);
 			find_key(hints, "adapter_addr", adapter_addr, hint_length);
@@ -499,9 +510,11 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 		const char* delim = ",";
 		int items = 0;
-		if (strlen(addr) == 0) { // broadcast enumerate
+		if (strlen(addr) == 0) 
+		{ // broadcast enumerate
 			items = 1;
-		} else {
+		} else 
+		{
 			char *ptr = addr;
 			while (ptr != NULL) { // exit when no new item is found in strchr() function
 				items++;
