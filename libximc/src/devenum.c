@@ -332,7 +332,7 @@ void store_device_name (char* name, void* arg)
 void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, device_enumeration_opaque_t *deo)
 {
 	char *addr, *pnet;
-	int c_net, c_udp, c_tcp;
+	int c_net, c_udp, c_tcp, i;
 	size_t net_len, len_max, len, hint_length;
 
 	*new_hints = NULL;
@@ -354,8 +354,7 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 	const char* prefix_udp = "xi-udp://";
 	const char* prefix_tcp = "xi-tcp://";
 
-	int items = 0;
-	char *ptr = addr;
+    char *ptr = addr;
 	char *new_ptr;
 	while (ptr != NULL)
 	{ // exit when no new item is found in strchr() function
@@ -394,7 +393,7 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 	*new_hints = pnet = (char *)malloc(net_len);
 	memset(pnet, 0, net_len);
 	ptr = addr;
-	for (int i = 0; i < (c_udp + c_tcp + c_net); i++)
+	for (i = 0; i < (c_udp + c_tcp + c_net); i++)
 	{
 		len = strlen(ptr);
 		if (strstr(ptr, prefix_tcp) != NULL)
@@ -402,7 +401,7 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 			memcpy(probe_device_name, ptr, len);
 			probe_device_name[len] = 0;
 			if (strchr(probe_device_name + strlen(prefix_tcp), ':') == NULL)
-				sprintf_s(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_TCP_PORT);
+                portable_snprintf(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_TCP_PORT);
 			if ((deo -> flags & ENUMERATE_NETWORK) != 0)
 			   store_device_name(probe_device_name, deo);
 
@@ -412,7 +411,7 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 			memcpy(probe_device_name, ptr, len);
 			probe_device_name[len] = 0;
 			if (strchr(probe_device_name + strlen(prefix_udp), ':') == NULL)
-				sprintf_s(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_UDP_PORT);
+                portable_snprintf(probe_device_name + strlen(probe_device_name), 16, ":%d", XIMC_UDP_PORT);
 			if ((deo -> flags & ENUMERATE_NETWORK) != 0)
 			   store_device_name(probe_device_name, deo);
 		}
