@@ -299,7 +299,11 @@ void store_device_name (char* name, void* arg)
 	encoded_name = uri_copy(name);
 
 	devenum->names[devenum->count] = (char*)malloc(max_name_len);
-	if (*encoded_name && *encoded_name == '/')
+    if (*encoded_name && (portable_strncasecmp(encoded_name, "xi-tcp://", 9) == 0 || portable_strncasecmp(encoded_name, "xi-udp://", 9) == 0))
+    {
+        portable_snprintf(devenum->names[devenum->count], max_name_len - 1, "%s", encoded_name);
+    }
+	else if (*encoded_name && *encoded_name == '/')
 	{
 		/* absolute path - make file:// uri, like xi-com:///dev/tty */
 		/* skip first slash for absolute pathes */
@@ -341,7 +345,7 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 	addr = (char *)malloc(hint_length + 1);
 	memset(addr, 0, hint_length + 1);
 
-	if (!find_key(hints, "addr", addr, strlen(hints))) // addr is to be filled
+	if (!find_key(hints, "addr", addr, (int)strlen(hints))) // addr is to be filled
 	{
 		free(addr);
 		return;
@@ -362,12 +366,12 @@ void enumerate_tcp_udp_devices_prep_hints(const char *hints, char  **new_hints, 
 			*new_ptr = 0;
 		}
 		len = strlen(ptr);
-		if (strstr(ptr, "xi-udp://") != NULL)
+        if (portable_strncasecmp(ptr, prefix_udp, strlen(prefix_udp)) == 0)
 		{
 			c_udp++;
 			if (len_max < len) len_max = len;
 		}
-		else if ((strstr(ptr, "xi-tcp://") != NULL))
+        else if (portable_strncasecmp(ptr, prefix_tcp, strlen(prefix_tcp)) == 0)
 		{
 			c_tcp++;
 			if (len_max < len) len_max = len;
