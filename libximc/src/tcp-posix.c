@@ -88,8 +88,8 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	if (result != -1)
 	{
 		struct timeval timeout;
-		timeout.tv_sec = metadata->handle / 1000;
-		timeout.tv_usec = 0;
+		timeout.tv_sec = metadata->timeout / 1000;            // second part of timeout (which ordinary in milliseconds)
+        timeout.tv_usec = (metadata->timeout % 1000) * 1000;  // millisecond part of timeout in microseconds
 		result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 		if (result != -1)
 		{
