@@ -80,11 +80,17 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 	int OptVal = 1;
 	int OptLen = sizeof(int);
 
-	int rez = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&OptVal, OptLen);
-	if (rez == SOCKET_ERROR)
-	{
-		return result_error;
-	}
+	DWORD timeout = metadata->timeout;
+    int rez = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout));
+    if (rez != SOCKET_ERROR)
+    {
+        rez = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+    }
+    if (rez == SOCKET_ERROR)
+    {
+        closesocket((SOCKET)metadata->handle);
+        return result_error;
+    }
 
 	metadata->type = dtUdp;
 
@@ -129,7 +135,6 @@ ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 			memmove(UDP_BUFFER, UDP_BUFFER + amount, (UDP_UNREAD_LEN = UDP_UNREAD_LEN - amount));
 			return amount;
 		}
-		
 	}
 	// this is blocking udp reading (recvfrom); if nothing to receive - will hang
 	int real_len = recvfrom((SOCKET)metadata->handle, (char *)(UDP_BUFFER + UDP_UNREAD_LEN), (int)(UDP_BUFFER_LEN - UDP_UNREAD_LEN), 0, NULL, NULL);
@@ -147,5 +152,4 @@ ssize_t read_udp(device_metadata_t *metadata, void *buf, size_t amount)
 		UDP_UNREAD_LEN = 0;
 		return real_len + UDP_UNREAD_LEN;
 	}
-
 }

@@ -56,45 +56,52 @@
 result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
 {
 
-	// check parameter ip4_port : address:port
-	char saddress[64];
-	memset(saddress, 0, 64);
-	strncpy(saddress, ip4_port, strlen(ip4_port));
-	char * port_start = strchr(saddress, ':');
-	if (port_start == NULL) return result_error;
-	unsigned int port;
-	if (sscanf(port_start + 1, "%ud", &port) != 1) return result_error;
-	*port_start = 0;
-	in_addr_t addr = inet_addr(saddress);
-	if (addr == INADDR_NONE) return result_error;
+    // check parameter ip4_port : address:port
+    char saddress[64];
+    memset(saddress, 0, 64);
+    strncpy(saddress, ip4_port, strlen(ip4_port));
+    char * port_start = strchr(saddress, ':');
+    if (port_start == NULL) return result_error;
+    unsigned int port;
+    if (sscanf(port_start + 1, "%ud", &port) != 1) return result_error;
+    *port_start = 0;
+    in_addr_t addr = inet_addr(saddress);
+    if (addr == INADDR_NONE) return result_error;
 
-	// creating a new connection resource
+    // creating a new connection resource
 
-	metadata->handle = (uint32_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if ((int)metadata->handle == -1) return result_error;
+    metadata->handle = (uint32_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if ((int)metadata->handle == -1) return result_error;
 
-	// setting  socket option
-	int OptVal = 1;
-	int OptLen = sizeof(int);
+    // setting  socket option
+    int OptVal = 1;
+    int OptLen = sizeof(int);
 
-	int rez = setsockopt((int)metadata->handle, SOL_SOCKET, SO_REUSEADDR, (const char*)&OptVal, OptLen);
-	if (rez == -1)
-	{
-		return result_error;
-	}
+    struct timeval timeout;
+    timeout.tv_sec = metadata->timeout / 1000;            // second part of timeout (which ordinary in milliseconds)
+    timeout.tv_usec = (metadata->timeout % 1000) * 1000;  // millisecond part of timeout in microseconds
+    int result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    if (result != -1)
+    {
+        result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
+    }
+    if (result == -1)
+    {
+        close((int)metadata->handle);
+        return result_error;
+    }
 
-	metadata->type = dtUdp;
+    metadata->type = dtUdp;
 
-	struct sockaddr_in * sa;
+    struct sockaddr_in * sa;
 
-	PUDP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in)));
+    PUDP_SOCKET_IN = (sa = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in)));
 
-	sa->sin_family = AF_INET;
-	sa->sin_port = htons((port));
-	sa->sin_addr.s_addr = addr;
-	UDP_UNREAD_LEN = 0;
-	return result_ok;
-
+    sa->sin_family = AF_INET;
+    sa->sin_port = htons((port));
+    sa->sin_addr.s_addr = addr;
+    UDP_UNREAD_LEN = 0;
+    return result_ok;
 }
 
 result_t close_udp(device_metadata_t *metadata)
