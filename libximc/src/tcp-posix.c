@@ -61,7 +61,12 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	memset(saddress, 0, 64);
 	strncpy(saddress, ip4_port, strlen(ip4_port));
 	char * port_start = strchr(saddress, ':');
-	if (port_start == NULL) return result_error;
+	if (port_start == NULL)
+	{
+
+		port_start = strchr(saddress, 0);
+		portable_snprintf(port_start, 64 - strlen(saddress), ":%ud", XIMC_TCP_PORT);
+	}
 	unsigned int port;
 	if (sscanf(port_start + 1, "%ud", &port) != 1) return result_error;
 	*port_start = 0;
@@ -90,10 +95,10 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		struct timeval timeout;
 		timeout.tv_sec = metadata->timeout / 1000;            // second part of timeout (which ordinary in milliseconds)
         timeout.tv_usec = (metadata->timeout % 1000) * 1000;  // millisecond part of timeout in microseconds
-		result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+		result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
 		if (result != -1)
 		{
-			result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
+			result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
 		}
 	}
 	if (result == -1)
