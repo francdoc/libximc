@@ -434,8 +434,7 @@ void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, 
 result_t enumerate_udp_devices(
 	enumerate_devices_directory_callback_t callback,
 	device_enumeration_opaque_t *devenum,
-	const char *hints,
-	int flags
+	const char *hints
 	)
 {
 	char *hints_udp, *ptr, *new_ptr;
@@ -476,8 +475,7 @@ result_t enumerate_udp_devices(
 result_t enumerate_tcp_devices(
 	enumerate_devices_directory_callback_t callback,
 	device_enumeration_opaque_t *devenum,
-	const char *hints,
-	int flags
+	const char *hints
 	)
 {
 	char *hints_tcp, *ptr, *new_ptr;
@@ -559,13 +557,13 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 	if (enumerate_flags & ENUMERATE_NETWORK)
 	{
 #ifdef HAVE_XIWRAPPER
-		enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints, enumerate_flags);
+		enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints);
 		if (enumresult != result_ok)
 		{
 			log_debug( L"enumerate_tcp_devices failed with error %d", enumresult);
 		}
 
-		enumresult = enumerate_udp_devices(store_device_name_with_xi_prefix, devenum, hints, enumerate_flags);
+		enumresult = enumerate_udp_devices(store_device_name_with_xi_prefix, devenum, hints);
 		if (enumresult != result_ok)
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
