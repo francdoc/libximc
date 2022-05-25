@@ -514,6 +514,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 {
 	device_enumeration_opaque_t* devenum;
 	device_description desc;
+	result_t enumresult;
 	char * addr;
 	size_t max_name_len = 4096;
 
@@ -548,8 +549,20 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		return result_error;
 	}
 
-	enumerate_tcp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
-	enumerate_udp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
+	if (enumerate_flags & ENUMERATE_NETWORK)
+	{
+		enumresult = enumerate_tcp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
+		if (enumresult != result_ok)
+		{
+			log_debug( L"enumerate_tcp_devices failed with error %d", enumresult);
+		}
+
+		enumresult = enumerate_udp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
+		if (enumresult != result_ok)
+		{
+			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
+		}
+	}
 
 	/* Check all found devices in threads */
 	if ((enumerate_flags & ENUMERATE_PROBE) && devenum->count > 0)
