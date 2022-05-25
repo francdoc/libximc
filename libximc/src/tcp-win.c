@@ -37,10 +37,10 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	if (port_start == NULL)
 	{
 		port_start = strchr(saddress, 0);
-		portable_snprintf(port_start, 64 - strlen(saddress), ":%ud", XIMC_TCP_PORT);
+		portable_snprintf(port_start, 64 - strlen(saddress), ":%u", XIMC_TCP_PORT);
 	}
 	unsigned int port;
-	if (sscanf_s(port_start + 1, "%ud", &port) != 1) return result_error;
+	if (sscanf_s(port_start + 1, "%u", &port) != 1) return result_error;
 	*port_start = 0;
 	ULONG addr = inet_addr(saddress);
 	if (addr == INADDR_NONE) return result_error;

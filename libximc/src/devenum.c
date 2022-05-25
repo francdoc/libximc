@@ -360,14 +360,18 @@ void store_device_name_with_xi_prefix(char* name, void* arg)
 	++devenum->count;
 }
 
+#ifdef HAVE_XIWRAPPER
+/*
+ * The next three  funcions are unavilable without wrapper library
+*/
 void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, char **rel_data)
 {
 	char *addr, *ptr, *new_ptr, *p;
-	int c_prefix, i;
+	int  i, n_count;
 	size_t len_out, len, hint_length;
 
 	*rel_data = NULL;
-	c_prefix = 0;
+	n_count = 0;
 	hint_length = len_out = len = 0;
 
 
@@ -376,25 +380,26 @@ void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, 
 	addr = (char *)malloc(hint_length + 1);
 	memset(addr, 0, hint_length + 1);
 
+    
 	if (!find_key(hints, "addr", addr, (int)strlen(hints))) // addr is to be filled
 	{
+
 		free(addr);
 		return;
 	}
 	ptr = addr;
 	while (ptr != NULL)
 	{ // exit when no new item is found in strchr() function
-
+        n_count++;
 		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
 		if (new_ptr != NULL)
 		{   // NULL means there is no commas left and we must quit
 			*new_ptr = 0;
 		}
 		len = strlen(ptr);
-		if ((strlen(xi_prefix) == 0 && strstr(ptr, "://") == NULL) ||
+		if ((strlen(xi_prefix) == 0 && strstr(ptr, ":/") == NULL) ||
 			(strlen(xi_prefix) != 0 && portable_strncasecmp(ptr, xi_prefix, strlen(xi_prefix)) == 0))
 		{
-			c_prefix++;
 			len_out += (len + 1);
 		}
 
@@ -406,12 +411,12 @@ void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, 
 	}
 	if (len_out == 0) len_out++;
 	*rel_data = p = (char *)malloc(len_out);
-	memset(ptr, 0, len_out);
+	memset(p, 0, len_out);
 	ptr = addr;
-	for (i = 0; i < c_prefix; i++)
+	for (i = 0; i < n_count; i++)
 	{
 		len = strlen(ptr);
-		if ((strlen(xi_prefix) == 0 && strstr(ptr, "://") == NULL) ||
+		if ((strlen(xi_prefix) == 0 && strstr(ptr, ":/") == NULL) ||
 			(strlen(xi_prefix) != 0 && portable_strncasecmp(ptr, xi_prefix, strlen(xi_prefix)) == 0))
 		{
 			memcpy(p, ptr, len);
@@ -421,9 +426,10 @@ void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, 
 		ptr += (len + 1);
 	}
 
-	if (c_prefix) *(p - 1) = 0;
+	if (p > *rel_data) *(p - 1) = 0;
 	free(addr);
 }
+
 
 result_t enumerate_udp_devices(
 	enumerate_devices_directory_callback_t callback,
@@ -440,29 +446,29 @@ result_t enumerate_udp_devices(
 		return result_ok;
 	}
 	ptr = hints_udp;
-	if (strlen(ptr) == 0)
+	if (strlen(hints_udp) != 0)
 	{
 		// to do network enumerate (network discover)
-		return result_ok;
+		
 	}
-	while (ptr != NULL)
-	{ // exit when no new item is found in strchr() function
-		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-		if (new_ptr != NULL)
-		{   // NULL means there is no commas left and we must quit
-			*new_ptr = 0;
-		}
-		if ((flags & ENUMERATE_NETWORK) != 0)
-		{
-			callback(ptr, devenum);
-		}
+    else
+    {
+        while (ptr != NULL)
+        { // exit when no new item is found in strchr() function
+            new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                *new_ptr = 0;
+            }
+            callback(ptr, devenum);
 
-		if (new_ptr != NULL)
-		{   // NULL means there is no commas left and we must quit
-			ptr = new_ptr + 1; // Continue with string after the comma
-		}
-		else ptr = NULL;
-	}
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                ptr = new_ptr + 1; // Continue with string after the comma
+            }
+            else ptr = NULL;
+        }
+    }
 	free(hints_udp);
 	return result_ok;
 }
@@ -481,33 +487,34 @@ result_t enumerate_tcp_devices(
 		// no addr key was found
 		return result_ok;
 	}
-	if (strlen(ptr) == 0)
+	if (strlen(hints_tcp) == 0)
 	{
 		// to do network enumerate (network discover)
-		return result_ok;
 	}
-	ptr = hints_tcp;
-	while (ptr != NULL)
-	{ // exit when no new item is found in strchr() function
-		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-		if (new_ptr != NULL)
-		{   // NULL means there is no commas left and we must quit
-			*new_ptr = 0;
-		}
-		if ((flags & ENUMERATE_NETWORK) != 0)
-		{
-			callback(ptr, devenum);
-		}
+    else
+    {
+        ptr = hints_tcp;
+        while (ptr != NULL)
+        { // exit when no new item is found in strchr() function
+            new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                *new_ptr = 0;
+            }
+            callback(ptr, devenum);
 
-		if (new_ptr != NULL)
-		{   // NULL means there is no commas left and we must quit
-			ptr = new_ptr + 1; // Continue with string after the comma
-		}
-		else ptr = NULL;
-	}
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                ptr = new_ptr + 1; // Continue with string after the comma
+            }
+            else ptr = NULL;
+        }
+    }
 	free(hints_tcp);
 	return result_ok;
 }
+
+#endif 
 
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
@@ -551,17 +558,21 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 	if (enumerate_flags & ENUMERATE_NETWORK)
 	{
-		enumresult = enumerate_tcp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
+#ifdef HAVE_XIWRAPPER
+		enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints, enumerate_flags);
 		if (enumresult != result_ok)
 		{
 			log_debug( L"enumerate_tcp_devices failed with error %d", enumresult);
 		}
 
-		enumresult = enumerate_udp_devices(store_device_name_xi_prefix, devenum, hints, enumerate_flags);
+		enumresult = enumerate_udp_devices(store_device_name_with_xi_prefix, devenum, hints, enumerate_flags);
 		if (enumresult != result_ok)
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
+#else
+        return result_error;
+#endif
 	}
 
 	/* Check all found devices in threads */
@@ -583,18 +594,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		}
 		else
 		{
-			/*
-			int hint_length = (int)strlen(hints);
-			addr = malloc(hint_length+1);
-			memset(addr, 0, hint_length+1);
-
-			if (!find_key(hints, "addr", addr, hint_length)) {
-			log_error(L"no \"addr\" substring in hints");
-			free(addr);
-			return result_ok; // empty hints string is not a critical error
-			}
-			*/
-			get_addresses_from_hints_by_type(hints, "", addr);
+			get_addresses_from_hints_by_type(hints, "", &addr);
 			if (addr == NULL) {
 				log_error(L"no \"addr\" substring in hints");
 				return result_ok; // empty hints string is not a critical error
