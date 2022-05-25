@@ -77,10 +77,6 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
     metadata->handle = (uint32_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if ((int)metadata->handle == -1) return result_error;
 
-    // setting  socket option
-    int OptVal = 1;
-    int OptLen = sizeof(int);
-
     struct timeval timeout;
     timeout.tv_sec = metadata->timeout / 1000;            // second part of timeout (which ordinary in milliseconds)
     timeout.tv_usec = (metadata->timeout % 1000) * 1000;  // millisecond part of timeout in microseconds
