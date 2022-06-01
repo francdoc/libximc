@@ -35,7 +35,8 @@ typedef struct device_metadata_t
 	/* bindy serial */
 	uint32_t serial;
 	/* bindy id */
-	uint32_t conn_id;
+	//uint32_t conn_id;
+    xibridge_conn_id_
 	/* Corrective table. */
 	device_corr_table_t table;
 

@@ -472,6 +472,13 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 		log_error( L"command_checked can't read to empty buffer" );
 	}
 
+    if (dm->type == dtNet)
+    {
+    
+        res = xibridge_request_response(dm, command)
+     
+    }
+
 	// send command
 	res = command_port_send( dm, command, command_len );
 	switch (res)
