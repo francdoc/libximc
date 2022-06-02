@@ -8,7 +8,7 @@
 #include "platform.h"
 #include "protosup.h"
 #ifdef HAVE_XIWRAPPER
-#include "wrapper.h"
+#include "xibridge.h"
 #endif
 #include <errno.h>
 
@@ -148,16 +148,6 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
 	return is_ximc_device;
 }
 
-int enumerate_device_by_ximc_information(const char* addr, const char* adapter_addr, uint8_t** pbuf)
-{
-#ifdef HAVE_XIWRAPPER
-	int result = bindy_enumerate_specify_adapter(addr, adapter_addr, ENUMERATE_TIMEOUT_TIME, pbuf);
-	return result;
-#else
-	return result_error;
-#endif
-}
-
 /* Concrete thread function to slowly check a device for beeing XIMC */
 void check_device_thread (void* arg)
 {
@@ -165,11 +155,11 @@ void check_device_thread (void* arg)
 	ts->status = check_device_by_ximc_information( ts->name, ts->info, &ts->serial, ts->controller_name, ts->stage_name ) ? 1 : 0;
 }
 
-/* Network enumeration thread function */
+/* Network enumeration thread function to do !!!*/
 void network_enumerate_thread(void* arg)
 {
 	netthread_state_t* ts = (netthread_state_t*)arg;
-	ts->devices_found = enumerate_device_by_ximc_information(ts->addr, ts->adapter_addr, ts->pbuf);
+	///ts->devices_found = enumerate_device_by_ximc_information(ts->addr, ts->adapter_addr, ts->pbuf);
 	ts->status = ts->devices_found ? 1 : 0;
 }
 
@@ -360,6 +350,80 @@ void store_device_name_with_xi_prefix(char* name, void* arg)
 	++devenum->count;
 }
 
+
+/*
+for finding key in libximc without using c++ functions.
+*/
+int find_key(const char* hints, const char* key, char* buf, unsigned int length)
+{
+	if (hints == NULL) return FALSE;
+	char *s, *ptr, *ptoc;
+	int key_count, i, len;
+	char delim, eq;
+	bool ret;
+	s = (char *)malloc(strlen(hints) + 1);
+	memcpy(s, hints, strlen(hints));
+	s[strlen(hints)] = 0;
+
+	delim = ',';
+	eq = '=';
+	key_count = 0;
+	ret = 1;
+	do
+	{ // exit when no new item is found in strrchr() function
+		ptr = strrchr(s, eq);
+		if (ptr == NULL) break;
+		key_count++;
+		while (ptr != s && *ptr != delim) // find the nearest left delimiter
+			ptr--;
+		if (ptr == s) break;
+		*ptr-- = 0;
+	} while (1);
+	ptr = s;
+	for (i = 0; i < key_count; i++)
+	{
+		len = strlen(ptr);
+		ptoc = ptr;
+		ptoc += strspn(ptoc, " \t");
+		if (portable_strncasecmp(ptoc, key, strlen(key)) == 0 && strchr(ptoc, eq) != NULL)
+		{
+			ptoc += strlen(key);
+			ptoc += strspn(ptoc, " \t");
+			if (*ptoc++ == eq)
+			{
+				ptoc += strspn(ptoc, " \t");
+				if (length < strlen(ptoc) + 1) ret = 0;
+				else  memcpy(buf, ptoc, strlen(ptoc) + 1);
+				free(s);
+				return ret;
+			}
+		}
+		ptr += (len + 1);
+	}
+	free(s);
+	return 0;
+}
+
+/*
+bool test_find_key()
+{
+	ZF_LOGD("Starting test_find_key...");
+	char * hints = "addr= abb, c,dd, xi-net=  888, 999, ";
+	char *hints_empty = "addr=";
+	char *bad_hints = " addr = 8 = 9";
+	char result[128];
+	if (!find_key(hints, "addr", result, 128))
+		return false;
+	if (!find_key(hints, "xi-net", result, 128))
+		return false;
+	if (!find_key(hints_empty, "addr", result, 128))
+		return false;
+	if (!find_key(bad_hints, "addr", result, 128))
+		return false;
+	return true;
+}
+*/
+
 #ifdef HAVE_XIWRAPPER
 /*
  * The next three  funcions are unavilable without wrapper library
@@ -512,6 +576,76 @@ result_t enumerate_tcp_devices(
 	return result_ok;
 }
 
+result_t enumerate_xinet_devices(
+	enumerate_devices_directory_callback_t callback,
+	device_enumeration_opaque_t *devenum,
+	const char *hints
+	)
+{
+	uint32_t err;
+	char *hints_net, *adapter,  *ptr, *new_ptr, *pdev;
+	char *pxis;
+
+	int hint_length;
+	get_addresses_from_hints_by_type(hints, "", &hints_net);
+	if (hints_net == NULL)
+	{
+		// no addr key was found
+		return result_ok;
+	}
+	hint_length = strlen(hints);
+	adapter = (char *)malloc(hint_length + 1);
+	memset(adapter, 0, hint_length + 1);
+	find_key(hints, "adapter_addr", adapter, hint_length)
+	err = 0;
+	if (strlen(hints_net) == 0)
+	{
+		// some broadcast enumerate
+		err = xibridge_enumerate_adapter_devices("", adapter, &pxis, &count);
+		if (err == 0)
+		{
+			pdev = pxis;
+			while (count--)
+			{
+				callback(pdev, devenum);
+				pdev = strchr(pxis, 0) + 1;
+			}
+		}
+
+	}
+	else
+	{
+		ptr = hints_tcp;
+		while (ptr != NULL)
+		{ // exit when no new item is found in strchr() function
+			new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+			if (new_ptr != NULL)
+			{   // NULL means there is no commas left and we must quit
+				*new_ptr = 0;
+			}
+
+			err = xibridge_enumerate_adapter_devices(ptr, adapter, &pxis, &count);
+			if (err == 0)
+			{
+				pdev = pxis;
+				while (count--)
+				{
+					callback(pdev, devenum);
+					pdev = strchr(pxis, 0) + 1;
+				}
+			}
+			if (new_ptr != NULL)
+			{   // NULL means there is no commas left and we must quit
+				ptr = new_ptr + 1; // Continue with string after the comma
+			}
+			else ptr = NULL;
+		}
+	}
+	free(hints_tcp);
+	free(adapter);
+	return result_ok;
+}
+
 #endif 
 
 /* Enumerate devices main function */
@@ -568,6 +702,17 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
+		if (!xibridge_init())
+		{
+			log_error(L"network layer init failed");
+		    return result_error;
+	    }
+		enumresult = enumerate_xinet_devices(store_device_name_with_xi_prefix, devenum, hints);
+		if (enumresult != result_ok)
+		{
+			log_debug( L"enumerate_xinet_devices failed with error %d", enumresult);
+		}
+
 #else
         return result_error;
 #endif
@@ -578,132 +723,8 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 	{
 		launch_check_threads( devenum );
 	}
-	if (enumerate_flags & ENUMERATE_NETWORK) {
-#ifdef HAVE_XIWRAPPER
-		if ( !bindy_init() ) {
-			log_error( L"network layer init failed" );
-			return result_error;
-		}
-		
-		char* adapter_addr;
-		if (hints == NULL) {
-			log_error(L"addr hints string is null");
-			return result_ok; // null hints is fine too
-		}
-		else
-		{
-			get_addresses_from_hints_by_type(hints, "", &addr);
-			if (addr == NULL) {
-				log_error(L"no \"addr\" substring in hints");
-				return result_ok; // empty hints string is not a critical error
-			}
-			int hint_length = (int)strlen(hints);
-			adapter_addr = malloc(hint_length+1);
-			memset(adapter_addr, 0, hint_length+1);
-			find_key(hints, "adapter_addr", adapter_addr, hint_length);
-		}
-
-		const char* delim = ",";
-		int items = 0;
-		if (strlen(addr) == 0) 
-		{ // broadcast enumerate
-			items = 1;
-		} else 
-		{
-			char *ptr = addr;
-			while (ptr != NULL) { // exit when no new item is found in strchr() function
-				items++;
-				ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-				if (ptr != NULL) { // NULL means there is no commas left and we must quit
-					ptr++; // Continue with string after the comma
-				}
-			}
-		}
-
-		net_enum_t net_enum;
-		net_enum.server_count = items;
-		net_enum.device_count = (int*)malloc(sizeof (int) * items);
-		net_enum.addrs = (char**)malloc(sizeof (char*) * items);
-		net_enum.pbufs = (uint8_t***)malloc(sizeof(uint8_t**) * items);
-		net_enum.adapter_addr = adapter_addr;
-
-		if (strlen(addr) == 0) { // broadcast enumerate
-			net_enum.addrs[0] = addr;
-			net_enum.pbufs[0] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
-			*(net_enum.pbufs[0]) = NULL;
-			net_enum.device_count[0] = 0;
-		} else {
-			char* token = strtok(addr, delim);
-			int i = 0;
-			while (i < items) {
-				net_enum.addrs[i] = token;
-				net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
-				*(net_enum.pbufs[i]) = NULL;
-				net_enum.device_count[i] = 0;
-				i++;
-				token = strtok(NULL, delim);
-			}
-		}
-
-		single_thread_wrapper_function(&net_enum); // returns after a timeout
-		
-		//log_info( L"libximc found %d network devices", devices );
-		int server;
-		for (server = 0; server < net_enum.server_count; server++ ) {
-			if (net_enum.device_count[server] > 0) {
-				int i;
-				for (i = 0; i < net_enum.device_count[server]; ++i) {
-					if (devenum->count < devenum->allocated_count) {
-						desc = *( ( (device_description*) *(net_enum.pbufs[server]) ) + i);
-						devenum->serials[devenum->count] = desc.serial;
-
-						memcpy(devenum->infos[devenum->count].Manufacturer, &desc.my_device_information.Manufacturer, sizeof (desc.my_device_information.Manufacturer));
-						memcpy(devenum->infos[devenum->count].ManufacturerId, &desc.my_device_information.ManufacturerId, sizeof (desc.my_device_information.ManufacturerId));
-						memcpy(devenum->infos[devenum->count].ProductDescription, &desc.my_device_information.ProductDescription, sizeof (desc.my_device_information.ProductDescription));
-						devenum->infos[devenum->count].Major = desc.my_device_information.Major;
-						devenum->infos[devenum->count].Minor = desc.my_device_information.Minor;
-						devenum->infos[devenum->count].Release = desc.my_device_information.Release;
-
-						/* compose name from IPv4 passed in host byte order */
-						devenum->names[devenum->count] = (char*)malloc(max_name_len);
-						devenum->raw_names[devenum->count] = NULL;
-						uint8_t *ip_bytes = (uint8_t*)&desc.ipv4;
-						portable_snprintf(devenum->names[devenum->count], max_name_len - 1, "xi-net://%d.%d.%d.%d/%08X",
-							ip_bytes[0], ip_bytes[1], ip_bytes[2], ip_bytes[3], desc.serial);
-						devenum->names[devenum->count][max_name_len - 1] = '\0';
-
-						memcpy(devenum->controller_names[devenum->count].ControllerName, &desc.my_cname.ControllerName, sizeof (desc.my_cname.ControllerName));
-						devenum->controller_names[devenum->count].CtrlFlags = desc.my_cname.CtrlFlags;
-
-						memcpy(devenum->stage_names[devenum->count].PositionerName, &desc.my_sname.PositionerName, sizeof (desc.my_sname.PositionerName));
-
-						/* fill dev_net_info from passed structure */
-						memcpy(&devenum->dev_net_infos[devenum->count].ipv4, &desc.ipv4, sizeof(desc.ipv4));
-						memcpy(&devenum->dev_net_infos[devenum->count].nodename, &desc.nodename, sizeof(desc.nodename) - 1);
-						memcpy(&devenum->dev_net_infos[devenum->count].axis_state, &desc.axis_state, sizeof(desc.axis_state));
-						memcpy(&devenum->dev_net_infos[devenum->count].locker_username, &desc.locker_username, sizeof(desc.locker_username) - 1);
-						memcpy(&devenum->dev_net_infos[devenum->count].locker_nodename, &desc.locker_nodename, sizeof(desc.locker_nodename) - 1);
-						memcpy(&devenum->dev_net_infos[devenum->count].locked_time, &desc.locked_time, sizeof(desc.locked_time));
-
-						devenum->count++;
-					} //else {
-				}
-			}
-			bindy_free(net_enum.pbufs[server]); // free the buffer allocations
-		}
-		free(addr); // free after last use of net_enum.addrs, because we use ptrs into this string
-		// also free the net_enum
-		free(net_enum.device_count);
-		free(net_enum.addrs);
-		free(net_enum.pbufs);
-#else
-		return result_error;
-#endif
-	}
-
 
 	log_debug(L"found %d devices", devenum->count);
-
 	return result_ok;
 }
 
@@ -716,32 +737,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 result_t XIMC_API set_bindy_key(const char* keyfilepath)
 {
-#ifdef HAVE_XIWRAPPER
-#if defined(WIN32) || defined(WIN64)
-	if (_access(keyfilepath, 0) != -1)
-#else
-	if (access(keyfilepath, 0) != -1)
-#endif
-	{
-		if (!bindy_setkey(keyfilepath)) {
-			log_error(L"network layer setkey failed");
-			return result_error;
-		}
-	}
-	else
-	{
-		log_warning(L"Bindi key file not found. The default data will be used.");
-		if (!bindy_setkey(":memory:")) {
-			log_error(L"network layer setkey failed");
-			return result_error;
-		}
-		//return result_error;
-	}
-	return result_ok;
-#else
-	// not enabled
-	return result_error;
-#endif
+ return result_ok;
 }
 
 device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints)

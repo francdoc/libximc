@@ -16,7 +16,7 @@
 #include "platform.h"
 
 #include "protosup.h"
-#include "wrapper.h"
+#include "xibridge.h"
 
 /*
  * Serial port and pipe support

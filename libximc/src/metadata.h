@@ -32,11 +32,10 @@ typedef struct device_metadata_t
 	/* logical timeout */
 	int timeout;
 	struct mutex_t* device_mutex;
-	/* bindy serial */
-	uint32_t serial;
+	/* bindy (xibridge)serial */
+	//uint32_t serial;
 	/* bindy id */
-	//uint32_t conn_id;
-    xibridge_conn_id_
+	xibridge_conn_t xi_conn;
 	/* Corrective table. */
 	device_corr_table_t table;
 
