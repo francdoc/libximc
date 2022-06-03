@@ -4,6 +4,9 @@
 /*
  * Device metadata
  */
+#ifdef HAVE_XIBRIDGE
+  #include "xibridge.h"
+#endif
 
 typedef enum { dtUnknown, dtSerial, dtVirtual, dtNet, dtUdp, dtTcp } device_type_t;
 
@@ -35,7 +38,9 @@ typedef struct device_metadata_t
 	/* bindy (xibridge)serial */
 	//uint32_t serial;
 	/* bindy id */
+#ifdef HAVE_XIBRIDGE
 	xibridge_conn_t xi_conn;
+#endif
 	/* Corrective table. */
 	device_corr_table_t table;
 

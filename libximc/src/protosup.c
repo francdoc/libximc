@@ -6,9 +6,6 @@
 #include "metadata.h"
 #include "platform.h"
 #include "protosup.h"
-#ifdef HAVE_XIWRAPPER
-#include "xibridge.h"
-#endif
 
 #include "sglib.h"
 
@@ -289,8 +286,8 @@ int send_synchronization_zeroes(device_metadata_t *metadata)
 	memset(zeroes, 0, SYNC_ZERO_COUNT);
 	if (metadata->type == dtNet)
 	{
-#ifdef HAVE_XIWRAPPER
-		res = xibridge_request_response(metadata->xi_conn, (uint8_t *)zeroes, SYNC_ZERO_COUNT, (uint8_t *)zeroes, SYNC_ZERO_COUNT);
+#ifdef HAVE_XIBRIDGE
+		res = (int)xibridge_device_request_response(&(metadata->xi_conn), (uint8_t *)zeroes, SYNC_ZERO_COUNT, (uint8_t *)zeroes, SYNC_ZERO_COUNT);
 		log_info(res == 0 ? L"synchronize: got zeros, done" :L"synchronize: command_port_send sync failed");
 	    return res == 0 ? 0 : 1;
 
@@ -450,10 +447,10 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 	}
 
 	if (dm->type == dtNet)
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	{
 		filelog_data("W", dm->type, (uint32_t)dm->handle, (char*)command, command_len);
-		res = (int)xibridge_request_response(&(dm->xi_conn), (uint8_t *)command, (uint32_t)command_len, (uint8_t *)response, (uint32_t)response_len);
+		res = (int)xibridge_device_request_response(&(dm->xi_conn), (uint8_t *)command, (uint32_t)command_len, (uint8_t *)response, (uint32_t)response_len);
 		filelog_data("R", dm->type, (uint32_t)dm->handle, (char*)response, response_len);
 		if (res)
 		{
@@ -1007,18 +1004,18 @@ void unlock_metadata ()
 /*
  * Open xibridge port
  */
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 result_t open_port_net_xibridge(device_metadata_t *metadata, const char* xi_uri)
 {
-	uint32_t err = xibridge_open_device_connection(xi_uri, &(metadata->xi_conn))
+    uint32_t err = xibridge_open_device_connection(xi_uri, &(metadata->xi_conn));
 	if (err)
 	{
-		log_system_error(L"can't open net device %hs due to network error: %s", xi_uri, xibridge_get_err_expl(err);
+		log_system_error(L"can't open net device %hs due to network error: %s", xi_uri, xibridge_get_err_expl(err));
 		return result_error;
 	}
 
 	/* save metadata */
-	metadata->handle = (handle_t)xi_conn.conn_id; // serves as unique id for unified file logging interface
+	metadata->handle = (handle_t)metadata -> xi_conn.conn_id; // serves as unique id for unified file logging interface
 	metadata->type = dtNet;
 	return result_ok;
 }
@@ -1039,7 +1036,7 @@ result_t open_port_net_xibridge(device_metadata_t *metadata, const char* xi_uri)
  */
 result_t open_port (device_metadata_t *metadata, const char* name)
 {
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	char uri_scheme[1024], uri_host[1024], uri_path[1024], decoded_path[1024],
 		 uri_paramname[1024], uri_paramvalue[1024],
 		 abs_path[1024], *tmp, *serial;
@@ -1114,7 +1111,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 
 result_t close_port (device_metadata_t *metadata)
 {
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	filelog_text("-", metadata->type, (uint32_t)metadata->handle, "Closing port...");
 	switch (metadata->type)
 	{

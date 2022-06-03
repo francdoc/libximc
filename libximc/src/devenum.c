@@ -7,9 +7,6 @@
 #include "metadata.h"
 #include "platform.h"
 #include "protosup.h"
-#ifdef HAVE_XIWRAPPER
-#include "xibridge.h"
-#endif
 #include <errno.h>
 
 #if defined(WIN32) || defined(WIN64)
@@ -358,7 +355,8 @@ int find_key(const char* hints, const char* key, char* buf, unsigned int length)
 {
 	if (hints == NULL) return FALSE;
 	char *s, *ptr, *ptoc;
-	int key_count, i, len;
+    int key_count, i;
+    size_t len;
 	char delim, eq;
 	bool ret;
 	s = (char *)malloc(strlen(hints) + 1);
@@ -424,7 +422,7 @@ bool test_find_key()
 }
 */
 
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 /*
  * The next three  funcions are unavilable without wrapper library
 */
@@ -509,7 +507,7 @@ result_t enumerate_udp_devices(
 		return result_ok;
 	}
 	ptr = hints_udp;
-	if (strlen(hints_udp) != 0)
+	if (strlen(hints_udp) ==  0)
 	{
 		// to do network enumerate (network discover)
 		
@@ -583,10 +581,11 @@ result_t enumerate_xinet_devices(
 	)
 {
 	uint32_t err;
+    uint32_t count;
 	char *hints_net, *adapter,  *ptr, *new_ptr, *pdev;
 	char *pxis;
 
-	int hint_length;
+	size_t hint_length;
 	get_addresses_from_hints_by_type(hints, "", &hints_net);
 	if (hints_net == NULL)
 	{
@@ -596,8 +595,9 @@ result_t enumerate_xinet_devices(
 	hint_length = strlen(hints);
 	adapter = (char *)malloc(hint_length + 1);
 	memset(adapter, 0, hint_length + 1);
-	find_key(hints, "adapter_addr", adapter, hint_length)
+    find_key(hints, "adapter_addr", adapter, (unsigned int)hint_length);
 	err = 0;
+    count = 0;
 	if (strlen(hints_net) == 0)
 	{
 		// some broadcast enumerate
@@ -615,7 +615,7 @@ result_t enumerate_xinet_devices(
 	}
 	else
 	{
-		ptr = hints_tcp;
+		ptr = hints_net;
 		while (ptr != NULL)
 		{ // exit when no new item is found in strchr() function
 			new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
@@ -641,7 +641,7 @@ result_t enumerate_xinet_devices(
 			else ptr = NULL;
 		}
 	}
-	free(hints_tcp);
+	free(hints_net);
 	free(adapter);
 	return result_ok;
 }
@@ -652,9 +652,9 @@ result_t enumerate_xinet_devices(
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
 {
 	device_enumeration_opaque_t* devenum;
-	device_description desc;
+	//device_description desc;
 	result_t enumresult;
-	char * addr;
+	//char * addr;
 	size_t max_name_len = 4096;
 
 	/* ensure one-thread mutex init */
@@ -690,7 +690,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 	if (enumerate_flags & ENUMERATE_NETWORK)
 	{
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 		enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints);
 		if (enumresult != result_ok)
 		{
@@ -702,7 +702,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
-		if (!xibridge_init())
+		if (xibridge_init() != 0)  // error on init!
 		{
 			log_error(L"network layer init failed");
 		    return result_error;

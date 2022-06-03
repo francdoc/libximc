@@ -22,12 +22,13 @@
 @if "x%JDK_HOME%"=="x" goto FAIL
 
 :: read vers
-set XIBRIDGEVER=
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
-if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=t-60457
+set XIBRIDGEVER=t-60457
+::for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
+::if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
 echo Found xibridge ver %XIBRIDGEVER%
 
 :: debug flag
+set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
@@ -106,7 +107,7 @@ goto :eof
 rmdir /S /Q %DISTARCH%\xibridge
 mkdir %DISTARCH%\xibridge
 
-@set URL="https://github.com/EPC-MSU/Xibridge.git"
+@set URL="https://github.com/EPC-MSU/xibridge.git"
 ::@set URL=%USERPROFILE%\Documents\xibridge
 
 "%GIT%" clone --recursive %URL% %DISTARCH%\xibridge
