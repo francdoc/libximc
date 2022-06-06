@@ -75,6 +75,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
+* Mon Jun 06 2022 XIMC <info@ximc.ru> - 2.14.2
+- version bump
+
+* Mon Jun 06 2022 XIMC <info@ximc.ru> - 2.14.2
+- version bump
+
 * Mon Apr 18 2022 XIMC <info@ximc.ru> - 2.14.2
 - version bump
 - Feature #50500 Organize the addition of UDP support to libximc
