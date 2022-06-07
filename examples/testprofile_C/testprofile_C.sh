@@ -28,6 +28,6 @@ if [ $FULL_LIBRARY_PATH != "None" ]
 then
   echo "${FULL_LIBRARY_PATH}"
   export LD_LIBRARY_PATH=${FULL_LIBRARY_PATH}
-  gcc testprofile_C.c -L$FULL_LIBRARY_PATH -lximc -lbindy -lxiwrapper -I $LIBRARY_PATH -o testprofile_C
+  gcc testprofile_C.c -L$FULL_LIBRARY_PATH -lximc -lxibridge -I $LIBRARY_PATH -o testprofile_C
   ./testprofile_C  xi-com:/dev/ttyACM0
 fi

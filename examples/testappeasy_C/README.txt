@@ -53,6 +53,6 @@ $ make run
 адрес устройства на правильный.
 
 * В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
-Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll.
+Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: libximc.dll, xibridge.dll.
 Откройте пример /testappeasy_C/testappeasy_C.sln, создайте и запустите их из среды IDE.
 

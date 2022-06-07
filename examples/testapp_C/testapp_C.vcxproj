@@ -112,9 +112,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\..\ximc\win32\libximc.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\xiwrapper.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\bindy.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\keyfile.sqlite" "$(OutDir)"</Command>
+xcopy /y "..\..\ximc\win32\xibridge.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -144,9 +142,7 @@ xcopy /y "..\..\ximc\win32\keyfile.sqlite" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\..\ximc\win32\libximc.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\xiwrapper.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\bindy.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win32\keyfile.sqlite" "$(OutDir)"</Command>
+xcopy /y "..\..\ximc\win32\xibridge.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -177,9 +173,7 @@ xcopy /y "..\..\ximc\win32\keyfile.sqlite" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\..\ximc\win64\libximc.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\xiwrapper.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\bindy.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
+xcopy /y "..\..\ximc\win64\xibridge.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -212,9 +206,7 @@ xcopy /y "..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\..\ximc\win64\libximc.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\xiwrapper.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\bindy.dll" "$(OutDir)"
-xcopy /y "..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
+xcopy /y "..\..\ximc\win64\xibridge.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
