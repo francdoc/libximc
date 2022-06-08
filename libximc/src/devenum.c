@@ -155,8 +155,17 @@ void check_device_thread (void* arg)
 /* Network enumeration thread function to do !!!*/
 void network_enumerate_thread(void* arg)
 {
+    uint32_t count;
 	netthread_state_t* ts = (netthread_state_t*)arg;
-	///ts->devices_found = enumerate_device_by_ximc_information(ts->addr, ts->adapter_addr, ts->pbuf);
+    count = 0;
+#ifdef HAVE_XIBRIDGE
+    xibridge_enumerate_adapter_devices(
+        ts -> addr,
+        ts -> adapter_addr,
+        ts->pbuf,
+        &count);
+ #endif
+    ts->devices_found = (unsigned int)count;
 	ts->status = ts->devices_found ? 1 : 0;
 }
 
@@ -580,12 +589,12 @@ result_t enumerate_xinet_devices(
 	const char *hints
 	)
 {
-	uint32_t err;
-    uint32_t count;
-	char *hints_net, *adapter,  *ptr, *new_ptr, *pdev;
-	char *pxis;
-
+	uint32_t count;
+	char *hints_net, *adapter,  *token, *pdev, *pxis;
+    net_enum_t net_enum;
+    int items, i, server;
 	size_t hint_length;
+
 	get_addresses_from_hints_by_type(hints, "", &hints_net);
 	if (hints_net == NULL)
 	{
@@ -596,53 +605,62 @@ result_t enumerate_xinet_devices(
 	adapter = (char *)malloc(hint_length + 1);
 	memset(adapter, 0, hint_length + 1);
     find_key(hints, "adapter_addr", adapter, (unsigned int)hint_length);
-	err = 0;
-    count = 0;
-	if (strlen(hints_net) == 0)
-	{
+	items = 0;
+    token = hints_net;
+    while (*token != 0)
+    {
+        if (*token++ == ',') items++;
+    }
+    if (strlen(hints_net) == 0) items++;
+    // prepare net_enum data
+    net_enum.server_count = items;
+    net_enum.device_count = (int*)malloc(sizeof (int)* items);
+    net_enum.addrs = (char**)malloc(sizeof (char*)* items);
+    net_enum.pbufs = (uint8_t***)malloc(sizeof(uint8_t**)* items);
+    net_enum.adapter_addr = adapter;
+   
+    if (strlen(hints_net) == 0)
+    {
 		// some broadcast enumerate
-		err = xibridge_enumerate_adapter_devices("", adapter, &pxis, &count);
-		if (err == 0)
-		{
-			pdev = pxis;
-			while (count--)
-			{
-				callback(pdev, devenum);
-				pdev = strchr(pxis, 0) + 1;
-			}
-		}
-
-	}
-	else
-	{
-		ptr = hints_net;
-		while (ptr != NULL)
-		{ // exit when no new item is found in strchr() function
-			new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-			if (new_ptr != NULL)
-			{   // NULL means there is no commas left and we must quit
-				*new_ptr = 0;
-			}
-
-			err = xibridge_enumerate_adapter_devices(ptr, adapter, &pxis, &count);
-			if (err == 0)
-			{
-				pdev = pxis;
-				while (count--)
-				{
-					callback(pdev, devenum);
-					pdev = strchr(pxis, 0) + 1;
-				}
-			}
-			if (new_ptr != NULL)
-			{   // NULL means there is no commas left and we must quit
-				ptr = new_ptr + 1; // Continue with string after the comma
-			}
-			else ptr = NULL;
-		}
-	}
-	free(hints_net);
-	free(adapter);
+		//err = xibridge_enumerate_adapter_devices("", adapter, &pxis, &count);
+        net_enum.addrs[0] = hints_net;
+        net_enum.pbufs[0] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
+        *(net_enum.pbufs[0]) = NULL;
+        net_enum.device_count[0] = 0;
+    }
+    else
+    {
+        i = 0;
+        char* token = strtok(hints_net, ",");
+        int i = 0;
+        while (i < items)
+        {
+            net_enum.addrs[i] = token;
+            net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
+            *(net_enum.pbufs[i]) = NULL;
+            net_enum.device_count[i] = 0;
+            i++;
+            token = strtok(NULL, ",");
+        }
+    }
+    single_thread_wrapper_function(&net_enum); // returns after a timeout
+    for (server = 0; server < net_enum.server_count; server++)
+    {
+        pdev = pxis = *net_enum.pbufs[server];
+        count = net_enum.device_count[server];
+        while (count--)
+        {
+            callback(pdev, devenum);
+            pdev = strchr(pxis, 0) + 1;
+        }
+        xibridge_free_enumerate_devices(*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
+    }
+    free(hints_net); 
+    free(adapter);
+    // also free the net_enum
+    free(net_enum.device_count);
+    free(net_enum.addrs);
+    free(net_enum.pbufs);
 	return result_ok;
 }
 
@@ -702,7 +720,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
-		if (xibridge_init() != 0)  // error on init!
+		if (init_xibridge() != result_ok)  // error on init!
 		{
 			log_error(L"network layer init failed");
 		    return result_error;
@@ -737,7 +755,13 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 result_t XIMC_API set_bindy_key(const char* keyfilepath)
 {
- return result_ok;
+    printf("set_bindy_key() CALLED, which is deprecated!\n");
+    return result_ok;
+}
+
+result_t XIMC_API init_xibridge()
+{
+    return xibridge_init() == 0 ? result_ok : result_error;
 }
 
 device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints)

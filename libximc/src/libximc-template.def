@@ -34,3 +34,4 @@ EXPORTS
 	command_wait_for_stop @538
 	command_homezero @539
 	set_bindy_key @540
+    init_xibridge 

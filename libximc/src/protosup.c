@@ -455,7 +455,7 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 		if (res)
 		{
 			// error type of xibridge does not matter
-			log_error(L"command_checked device lost");
+			log_error(L"command_checked device lost: %s", xibridge_get_err_expl(res));
 			return result_nodevice;
 		}
 

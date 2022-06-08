@@ -387,7 +387,7 @@ extern "C"
 		* For example "xi-net://192.168.0.1/00001234" or "xi-net://hostname.com/89ABCDEF".
 		* In case of UDP protocol, use "xi-udp://<ip/host>:<port>.
 		* For example, "xi-udp://192.168.0.1:1818".
-		* Note: to open network device you must call {@link set_bindy_key} first.
+		* Note: to open network device you must call {@link init_xibridge} first.
 		* In case of virtual device the "file" is the full filename with device memory state, if it doesn't exist then it is initialized with default values.
 		* For example "xi-emu:///C:/dir/file.bin" in Windows or "xi-emu:///home/user/file.bin" in Linux/Mac.
 		* \endenglish
@@ -401,7 +401,7 @@ extern "C"
 		* Например "xi-net://192.168.0.1/00001234" или "xi-net://hostname.com/89ABCDEF".
 		* Для работы по UDP протоколу используйте "xi-udp://<ip/host>:<port>.
 		* Например "xi-udp://192.168.0.1:1818".
-		* Замечание: для открытия сетевого устройства обязательно нужно сначала вызвать функцию установки сетевого ключа {@link set_bindy_key}.
+		* Замечание: для открытия сетевого устройства обязательно нужно сначала вызвать функцию инициализации сетевого компонента {@link init_xibridge}.
 		* Для виртуального устройства "file" это путь к файлу с сохраненным состоянием устройства. Если файл не существует, он будет создан и инициализирован значениями по умолчанию.
 		* Например "xi-emu:///C:/dir/file.bin" в Windows или "xi-emu:///home/user/file.bin" в Linux/Mac.
 		* \endrussian
@@ -548,16 +548,24 @@ extern "C"
 
 	/**
 		* \english
-		* Set network encryption layer (bindy) key.
-		* @param[in] keyfilepath full path to the bindy keyfile
+		* Initialize internal network objects of the library (xibridge).
 		* When using network-attached devices this function must be called before {@link enumerate_devices} and {@link open_device} functions.
 		* \endenglish
 		* \russian
-		* Устанавливливает ключ шифрования сетевой подсистемы (bindy).
-		* @param[in] keyfilepath полный путь к файлу ключа
+		* Инициализирует сетевую подсистему (xibridge).
 		* В случае использования сетевых устройств эта функция должна быть вызвана до функций {@link enumerate_devices} и {@link open_device}.
 		* \endrussian
 	 */
+    result_t XIMC_API init_xibridge();
+
+    /**
+    * \english
+    * Obsoltete. Left for compatibility Do just nothing.
+    * \endenglish
+    * \russian
+    * Устарело. Оставлено для совместимости. Ничего не делает.
+    * \endrussian
+    */
 	result_t XIMC_API set_bindy_key(const char* keyfilepath);
 
 	/**
@@ -571,7 +579,7 @@ extern "C"
 		* adapter_addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a IP address of network adapter. Remote ximc device must be on the same local network as the adapter.
 		* When using the adapter_addr key, you must install the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
-		* To enumerate network devices you must call {@link set_bindy_key} first.
+		* To enumerate network devices you must call {@link init_xibridge} first.
 		* \endenglish
 		* \russian
 		* Перечисляет все XIMC-совместимые устройства.
@@ -583,7 +591,7 @@ extern "C"
 		* adapter_addr - используется вместе с флагом ENUMERATE_NETWORK.
 		* Ненулевое значение это IP адрес сетевого адаптера. Сетевое устройство ximc должно быть в локальной сети, к которой подключён этот адаптер.
 		* При использование ключа adapter_addr обязательно установить ключ addr. Пример: "addr= \n adapter_addr=192.168.0.100".
-		* Для перечисления сетевых устройств обязательно нужно сначала вызвать функцию установки сетевого ключа {@link set_bindy_key}.
+		* Для перечисления сетевых устройств обязательно нужно сначала вызвать функцию тнициализациии сетевого компонента {@link init_xibridge}.
 		* \endrussian
 	 */
 	device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints);
