@@ -23,7 +23,7 @@ int main (int argc, char* argv[])
 	int names_count;
 	char device_name[256];
 	const int probe_flags = ENUMERATE_PROBE | ENUMERATE_NETWORK;
-	const char* enumerate_hints = "addr=172.16.130.55";
+	const char* enumerate_hints = "addr=172.16.130.07,172.16.130.59 ";
 	// const char* enumerate_hints = "addr="; // this hint will use broadcast enumeration, if ENUMERATE_NETWORK flag is enabled
 	char ximc_version_str[32];
 	const int seconds = 3;

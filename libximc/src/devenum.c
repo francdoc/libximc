@@ -605,13 +605,12 @@ result_t enumerate_xinet_devices(
 	adapter = (char *)malloc(hint_length + 1);
 	memset(adapter, 0, hint_length + 1);
     find_key(hints, "adapter_addr", adapter, (unsigned int)hint_length);
-	items = 0;
+	items = 1; // anyway one item presents 
     token = hints_net;
     while (*token != 0)
     {
         if (*token++ == ',') items++;
     }
-    if (strlen(hints_net) == 0) items++;
     // prepare net_enum data
     net_enum.server_count = items;
     net_enum.device_count = (int*)malloc(sizeof (int)* items);
