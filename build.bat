@@ -375,6 +375,34 @@ copy examples\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32
 copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
 @if not %errorlevel% == 0 goto FAIL
 :SKIP_PDB_COPY_TESTAPP
+:: ----- in CodeBlocks
+@echo Building example CodeBlocks %NAME%...
+@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
+@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
+@SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
+@SET PATH_BASE=%PATH%;
+:: Win32
+@SET PATH=%PATH_BASE%;%MINGW32%
+"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win32" 
+@if not %errorlevel% == 0 goto FAIL
+mingw32-make --directory examples\%NAME%
+@if not %errorlevel% == 0 goto FAIL
+del examples\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
+copy examples\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+@if not %errorlevel% == 0 goto FAIL
+:: Win64
+@SET PATH=%PATH_BASE%;%MINGW64%
+"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win64"
+@if not %errorlevel% == 0 goto FAIL
+mingw32-make --directory examples\%NAME%
+@if not %errorlevel% == 0 goto FAIL
+del examples\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
+copy examples\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+@if not %errorlevel% == 0 goto FAIL
+::   clear env
+@SET PATH=%PATH_BASE%
 
 :: -----
 @set NAME=testappeasy_C
@@ -390,7 +418,7 @@ mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 :: ----- in CodeBlocks
-@echo Building example %NAME%...
+@echo Building example CodeBlocks %NAME%...
 @SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
 @SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
@@ -431,35 +459,7 @@ copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
-:: -----
-@set NAME=test_CodeBlocks
-@echo Building example %NAME%...
-@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
-@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
-@SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
-@SET PATH_BASE=%PATH%;
-:: Win32
-@SET PATH=%PATH_BASE%;%MINGW32%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win32" 
-@if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
-@if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\obj /Q
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
-@if not %errorlevel% == 0 goto FAIL
-:: Win64
-@SET PATH=%PATH_BASE%;%MINGW64%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win64"
-@if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
-@if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\obj /Q
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
-@if not %errorlevel% == 0 goto FAIL
-::   clear env
-@SET PATH=%PATH_BASE%
+
 :: -----
 @set NAME=test_CSharp
 @echo Building example %NAME%...
