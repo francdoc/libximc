@@ -1,3 +1,9 @@
+libximc (2.13.6-1)
+  * Released: Mon, 20 Jun 2022 21:17:44 +0300
+  * Version bump
+  * Feature #63763 Refinement of libximc sample tests
+  * Bug #60244 Select the stand folder with caps in libximc/ximc/c-profiles
+
 libximc (2.13.5-1)
   * Released: Mon, 18 Apr 2022 19:01:43 +0300
   * Version bump
