@@ -719,11 +719,6 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
-		if (init_xibridge() != result_ok)  // error on init!
-		{
-			log_error(L"network layer init failed");
-		    return result_error;
-	    }
 		enumresult = enumerate_xinet_devices(store_device_name_with_xi_prefix, devenum, hints);
 		if (enumresult != result_ok)
 		{
@@ -760,7 +755,7 @@ result_t XIMC_API set_bindy_key(const char* keyfilepath)
 
 result_t XIMC_API init_xibridge()
 {
-    return xibridge_init() == 0 ? result_ok : result_error;
+    return result_ok;
 }
 
 device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints)
