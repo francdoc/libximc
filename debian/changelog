@@ -2,6 +2,7 @@
 
   * Version bump
   * Feature #64133 Distribute enumerate feature on tcp-, udp-connected devices
+  
  -- XIMC <info@ximc.ru>  Fri, 24 Jun 2022 12:20:24 +0300
 
 ﻿libximc7 (2.14.2-1) unstable; urgency=low
