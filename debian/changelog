@@ -1,11 +1,11 @@
-﻿libximc7 (2.14.3-1) unstable; urgency=low
+libximc7 (2.14.3-1) unstable; urgency=low
 
   * Version bump
   * Feature #64133 Distribute enumerate feature on tcp-, udp-connected devices
 
- -- XIMC <info@ximc.ru>  Fri, 24 Jun 2022 12:20:24 +0300
+ -- XIMC <info@ximc.ru>  Fri, 24 Jun 2022 13:57:01 +0300
 
-﻿libximc7 (2.14.2-1) unstable; urgency=low
+libximc7 (2.14.2-1) unstable; urgency=low
 
   * Version bump
   * Feature #50500 Organize the addition of UDP support to libximc

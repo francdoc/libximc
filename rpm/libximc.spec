@@ -1,4 +1,4 @@
-﻿Summary: Library for controlling DC brush motor
+Summary: Library for controlling DC brush motor
 Name: libximc7
 Version: 2.14.3
 Release: 1
