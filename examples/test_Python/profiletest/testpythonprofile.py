@@ -30,9 +30,8 @@ ximc_package_dir = os.path.join(ximc_dir, "crossplatform", "wrappers", "python")
 sys.path.append(ximc_package_dir)  # add pyximc.py wrapper to python path
 
 # Depending on your version of Windows, add the path to the required DLLs to the environment variable
-# bindy.dll
 # libximc.dll
-# xiwrapper.dll
+# xibridge.dll
 if platform.system() == "Windows":
     # Determining the directory with dependencies for windows depending on the bit depth.
     arch_dir = "win64" if "64" in platform.architecture()[0] else "win32" # 
@@ -50,16 +49,16 @@ except ImportError as err:
 except OSError as err:
     # print(err.errno, err.filename, err.strerror, err.winerror) # Allows you to display detailed information by mistake.
     if platform.system() == "Windows":
-        if err.winerror == 193:   # The bit depth of one of the libraries bindy.dll, libximc.dll, xiwrapper.dll does not correspond to the operating system bit.
-            print("Err: The bit depth of one of the libraries bindy.dll, libximc.dll, xiwrapper.dll does not correspond to the operating system bit.")
+        if err.winerror == 193:   # The bit depth of one of the libraries xibridge.dll, libximc.dll does not correspond to the operating system bit.
+            print("Err: The bit depth of one of the libraries xibridge.dll, libximc.dll does not correspond to the operating system bit.")
             # print(err)
-        elif err.winerror == 126: # One of the library bindy.dll, libximc.dll, xiwrapper.dll files is missing.
-            print("Err: One of the library bindy.dll, libximc.dll, xiwrapper.dll is missing.")
+        elif err.winerror == 126: # One of the library xibridge.dll, libximc.dll files is missing.
+            print("Err: One of the library xibridge.dll, libximc.dll is missing.")
             # print(err)
         else:           # Other errors the value of which can be viewed in the code.
             print(err)
         print("Warning: If you are using the example as the basis for your module, make sure that the dependencies installed in the dependencies section of the example match your directory structure.")
-        print("For correct work with the library you need: pyximc.py, bindy.dll, libximc.dll, xiwrapper.dll")
+        print("For correct work with the library you need: pyximc.py, libximc.dll, xibridge.dll")
     else:
         print(err)
         print ("Can't load libximc library. Please add all shared libraries to the appropriate places. It is decribed in detail in developers' documentation. On Linux make sure you installed libximc-dev package.\nmake sure that the architecture of the system and the interpreter is the same")
@@ -75,14 +74,6 @@ print("Library loaded")
 sbuf = create_string_buffer(64)
 lib.ximc_version(sbuf)
 print("Library version: " + sbuf.raw.decode().rstrip("\0"))
-
-# Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-# wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-# relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-# In Python make sure to pass byte-array object to this function (b"string literal").
-result = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-if result != Result.Ok:
-    lib.set_bindy_key("keyfile.sqlite".encode("utf-8")) # Search for the key file in the current directory.
 
 # This is device search and enumeration with probing. It gives more information about devices.
 probe_flags = EnumerateFlags.ENUMERATE_NETWORK#EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK

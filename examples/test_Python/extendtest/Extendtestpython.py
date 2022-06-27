@@ -16,14 +16,12 @@ Warning:
   -To search for network devices, you must have a file keyfile.sqlite
 
   -Required libraries for Windows:
-    bindy.dll
     libximc.dll
-    xiwrapper.dll
+    xibridge.dll
     
   -Required libraries for Linux:
-    libbindy.so
     libximc.so
-    libxiwrapper.so
+    libxibridge.so
 """
 
 from ctypes import *
@@ -72,16 +70,16 @@ except ImportError as err:
 except OSError as err:
     # print(err.errno, err.filename, err.strerror, err.winerror) # Allows you to display detailed information by mistake.
     if platform.system() == "Windows":
-        if err.winerror == 193:   # The bit depth of one of the libraries bindy.dll, libximc.dll, xiwrapper.dll does not correspond to the operating system bit.
-            print("Err: The bit depth of one of the libraries bindy.dll, libximc.dll, xiwrapper.dll does not correspond to the operating system bit.")
+        if err.winerror == 193:   # The bit depth of one of the libraries libximc.dll, xibridge.dll does not correspond to the operating system bit.
+            print("Err: The bit depth of one of the libraries libximc.dll, xibridge.dll does not correspond to the operating system bit.")
             # print(err)
-        elif err.winerror == 126: # One of the library bindy.dll, libximc.dll, xiwrapper.dll files is missing.
-            print("Err: One of the library bindy.dll, libximc.dll, xiwrapper.dll is missing.")
+        elif err.winerror == 126: # One of the library libximc.dll, xibridge.dll files is missing.
+            print("Err: One of the library libximc.dll, xibridge.dll is missing.")
             # print(err)
         else:           # Other errors the value of which can be viewed in the code.
             print(err)
         print("Warning: If you are using the example as the basis for your module, make sure that the dependencies installed in the dependencies section of the example match your directory structure.")
-        print("For correct work with the library you need: pyximc.py, bindy.dll, libximc.dll, xiwrapper.dll")
+        print("For correct work with the library you need: pyximc.py, libximc.dll, xibridge.dll")
     else:
         print(err)
         print("Can't load libximc library. Please add all shared libraries to the appropriate places. It is decribed in detail in developers' documentation. On Linux make sure you installed libximc-dev package.\nmake sure that the architecture of the system and the interpreter is the same")
@@ -892,11 +890,7 @@ def test_extio(lib, device_id):
 def device_selection_dialog():
     """ 
     Device selection Manager.
-    
-    Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-    wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-    relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-    In Python make sure to pass byte-array object to this function (b"string literal").
+   
     Follow the on-screen instructions to change the settings.
     """
     
@@ -925,22 +919,11 @@ def device_selection_dialog():
     elif ord(key_press) == 51: #""" Press "3" network controller """
         print("Enter the device's network address:")
         print("Example:192.168.0.1/89ABCDEF")
-        lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
         head_port = "xi-net://"
         port_name = input_new()
     elif ord(key_press) == 52: #Press "4" search for all available devices
-        # Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-        # wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-        # relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-        # In Python make sure to pass byte-array object to this function (b"string literal").
         print("Wait for the search to complete...")
-        res = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-        if res<0:
-            res = lib.set_bindy_key("keyfile.sqlite".encode("utf-8"))
-            if res<0:
-                print("The keyfile.sqlite file was not found. It is located in the ximc\win32 folder. Copy it to the current folder.")
-                exit(1)
-        # This is device search and enumeration with probing. It gives more information about devices.
+                # This is device search and enumeration with probing. It gives more information about devices.
         probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK # + EnumerateFlags.ENUMERATE_ALL_COM
         print("Search on network interfaces")
         interfaces = netifaces.interfaces()

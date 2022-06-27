@@ -23,7 +23,7 @@ int main (int argc, char* argv[])
 	int names_count;
 	char device_name[256];
 	const int probe_flags = ENUMERATE_PROBE | ENUMERATE_NETWORK;
-	const char* enumerate_hints = "addr=172.16.130.07,172.16.130.73 ";
+	const char* enumerate_hints = "addr=172.16.130.07,172.16.130.73";
 	// const char* enumerate_hints = "addr="; // this hint will use broadcast enumeration, if ENUMERATE_NETWORK flag is enabled
 	char ximc_version_str[32];
 	const int seconds = 3;
@@ -37,11 +37,6 @@ int main (int argc, char* argv[])
 //	ximc_version returns library version string.
 	ximc_version( ximc_version_str );
 	printf( "libximc version %s\n", ximc_version_str );
-
-//  Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-//  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-//  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-	set_bindy_key( "keyfile.sqlite" );
 
 //	Device enumeration function. Returns an opaque pointer to device enumeration data.
 	devenum = enumerate_devices( probe_flags, enumerate_hints );

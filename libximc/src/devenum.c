@@ -621,8 +621,7 @@ result_t enumerate_xinet_devices(
     if (strlen(hints_net) == 0)
     {
 		// some broadcast enumerate
-		//err = xibridge_enumerate_adapter_devices("", adapter, &pxis, &count);
-        net_enum.addrs[0] = hints_net;
+		net_enum.addrs[0] = hints_net;
         net_enum.pbufs[0] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
         *(net_enum.pbufs[0]) = NULL;
         net_enum.device_count[0] = 0;
@@ -749,14 +748,10 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 result_t XIMC_API set_bindy_key(const char* keyfilepath)
 {
-    printf("set_bindy_key() CALLED, which is deprecated!\n");
+    log_warning(L"set_bindy_key() CALLED, which is deprecated");
     return result_ok;
 }
 
-result_t XIMC_API init_xibridge()
-{
-    return result_ok;
-}
 
 device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints)
 {

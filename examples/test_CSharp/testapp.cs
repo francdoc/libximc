@@ -51,11 +51,6 @@ namespace test_CSharp
                 String enumerate_hints = "addr=192.168.1.1,172.16.2.3";
                 // String enumerate_hints = "addr="; // this hint will use broadcast enumeration, if ENUMERATE_NETWORK flag is enabled
 
-                //  Sets bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-                //  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-                //  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-                API.set_bindy_key("keyfile.sqlite");
-
                 // Enumerates all devices
                 device_enumeration = API.enumerate_devices(probe_flags, enumerate_hints);
                 if (device_enumeration == null)

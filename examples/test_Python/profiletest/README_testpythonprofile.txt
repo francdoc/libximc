@@ -11,7 +11,7 @@ For run:
 	- you can not install anything if you run the example using a batch file ./testpythonprofile.sh.
 	- you may need to set LD_LIBRARY_PATH so that Python can find libraries using RPATH. For example, using:
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH: 'pwd'
- * In Windows, you do not need to do anything before starting. All the necessary dependencies are in the example code. Used libraries: bindy.dll files libximc.dll xiwrapper.dll, keyfile.sqlite. Located in the folder for the corresponding versions of Windows.
+ * In Windows, you do not need to do anything before starting. All the necessary dependencies are in the example code. Used libraries: libximc.dll xibridge.dll. Located in the folder for the corresponding versions of Windows.
 3. To run, you need to have python 2 or 3 versions installed.
 4. Run the example with the command:
 python testpythonprofile.py
@@ -35,7 +35,7 @@ Rus.
 	- можно ни чего не устанавливать, если запускать пример с помощью командного файла ./testpythonprofile.sh
 	- возможно, вам потребуется установить LD_LIBRARY_PATH, чтобы Python мог находить библиотеки с помощью RPATH. Например, с помощью:
  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:'pwd'
- * В Windows перед запуском ничего не нужно делать. Все необходимые зависимости есть в коде примера. Используемые библиотеки: bindy.dll файлы libximc.dll xiwrapper.dll. Находится в папке для соответствующих версий Windows.
+ * В Windows перед запуском ничего не нужно делать. Все необходимые зависимости есть в коде примера. Используемые библиотеки: libximc.dll xibridge.dll. Находится в папке для соответствующих версий Windows.
 3. Для запуска необходим установленный python 2 или 3 версии.
 4. Запустите пример командой:
  python testpythonprofile.py

@@ -38,10 +38,10 @@ except ImportError as err:
 except OSError as err:
     # print(err.errno, err.filename, err.strerror, err.winerror) # Allows you to display detailed information by mistake.
     if platform.system() == "Windows":
-        if err.winerror == 193:   # The bit depth of one of the libraries bindy.dll, libximc.dll, xiwrapper.dll does not correspond to the operating system bit.
+        if err.winerror == 193:   # The bit depth of one of the libraries xibridge.dll, libximc.dll does not correspond to the operating system bit.
             print("Err: The bit depth of one of the libraries libximc.dll, xibridge.dll does not correspond to the operating system bit.")
             # print(err)
-        elif err.winerror == 126: # One of the library bindy.dll, libximc.dll, xiwrapper.dll files is missing.
+        elif err.winerror == 126: # One of the library xibridge.dll, libximc.dll files is missing.
             print("Err: One of the library libximc.dll, xibridge.dll is missing.")
             print("It is also possible that one of the system libraries is missing. This problem is solved by installing the vcredist package from the ximc\\winXX folder.")
             # print(err)
@@ -165,14 +165,6 @@ print("Library loaded")
 sbuf = create_string_buffer(64)
 lib.ximc_version(sbuf)
 print("Library version: " + sbuf.raw.decode().rstrip("\0"))
-
-# Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-# wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-# relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-# In Python make sure to pass byte-array object to this function (b"string literal").
-result = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-if result != Result.Ok:
-    lib.set_bindy_key("keyfile.sqlite".encode("utf-8")) # Search for the key file in the current directory.
 
 # This is device search and enumeration with probing. It gives more information about devices.
 probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK
