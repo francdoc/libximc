@@ -4482,6 +4482,28 @@ fields:
 command "service_command_reset_impl" writer "rest" (4) reader "rest" (0)
 without answer, public, crc
 
+/** $XIW
+	* \english
+	* Change motor - command for switching output relay.
+	* @param id an identifier of device
+	* \endenglish
+	* \russian
+	* Сменить двигатель - команда для переключения выходного реле.
+        * @param id идентификатор устройства
+	* \endrussian
+	*/
+/** $XIS
+        * \english
+        * Change motor - command for switching output relay.
+        * \endenglish
+        * \russian
+        * Сменить двигатель - команда для переключения выходного реле.
+        * \endrussian
+        */
+command "command_change_motor" writer "chmt" (22)
+fields:
+	int8u Motor /**< \english Motor number which it should be switch relay on [0..1] \endenglish \russian Номер мотора, на который следует переключить реле [0..1] \endrussian */
+	reserved 15
 
 //@}
 
