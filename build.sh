@@ -81,6 +81,7 @@ configure_dist()
 			fi
 			# readdir_r is now deprecated. ignore
 			USE_CFLAGS="-Wno-deprecated-declarations"
+			USE_CXXFLAGS="-Wno-deprecated-copy"
 			MAKE=make
 			;;
 		FreeBSD)
