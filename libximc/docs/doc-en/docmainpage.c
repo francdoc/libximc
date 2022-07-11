@@ -238,6 +238,8 @@
  *
  * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testapp.c file before build (see enumerate_hints variable).
  * 
+ * There is also an <a href="https://github.com/EPC-MSU/ximc_embarcaderro_builder_example">unsupported example</a> of using libximc in a C++ Builder project
+ *
  * \subsection howtouse_c_xcode_sec XCode
  *
  * Test app should be built with XCode project testapp.xcodeproj. 
