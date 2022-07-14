@@ -89,8 +89,8 @@ STATE_ERRC						= 0x00000001	/**< \english Command error encountered. The comman
 STATE_ERRD						= 0x00000002	/**< \english Data integrity error encountered. The data inside command and its CRC code do not correspond, therefore data can't be considered valid. This error may be caused by EMI in UART/RS232 interface. \endenglish \russian Обнаружена ошибка целостности данных. Данные внутри команды и ее CRC-код не соответствуют, поэтому данные не могут считаться действительными. Эта ошибка может быть вызвана электромагнитными помехами в интерфейсе UART/RS232. \endrussian */
 STATE_ERRV						= 0x00000004	/**< \english Value error encountered. The values in the command can't be applied without correction because they fall out the valid range. Corrected values were used instead of the orginal ones. \endenglish \russian Недопустимое значение данных. Обнаружена ошибка в значении. Значения в команде не могут быть применены без коррекции, поскольку они выходят за допустимый диапазон. Вместо исходных значений были использованы исправленные значения. \endrussian */
 STATE_EEPROM_CONNECTED  		= 0x00000010	/**< \english EEPROM with settings is connected. The built-in stage profile is uploaded from the EEPROM memory chip if the EEPROM_PRECEDENCE flag, allowing you to connect various stages to the controller with automatic setup. \endenglish \russian Подключена память EEPROM с настройками. Встроенный профиль подвижки загружается из микросхемы памяти EEPROM, что позволяет подключать различные подвижки к контроллеру с автоматической настройкой. \endrussian */
-STATE_IS_HOMED          		= 0x00000020  /**< \english Calibration performed. This meaning that relative position scale is calibrated against a hardware absolute position sensor like a limit switch. Drops after loss of calibration like harsh stop and possibly skipped steps. \endenglish \russian Калибровка выполнена. Это означает, что шкала относительного положения откалибрована с помощью аппаратного датчика абсолютного положения, такого как концевой выключатель. \endrussian */
-STATE_SECUR						= 0x3B3FFC0	/**< \english Flags of security. \endenglish \russian Флаги опасности. \endrussian */
+STATE_IS_HOMED          		= 0x00000020	/**< \english Calibration performed. This meaning that relative position scale is calibrated against a hardware absolute position sensor like a limit switch. Drops after loss of calibration like harsh stop and possibly skipped steps. \endenglish \russian Калибровка выполнена. Это означает, что шкала относительного положения откалибрована с помощью аппаратного датчика абсолютного положения, такого как концевой выключатель. \endrussian */
+STATE_SECUR						= 0x03B3FFC0	/**< \english Flags of security. \endenglish \russian Флаги опасности. \endrussian */
 STATE_ALARM						= 0x00000040	/**< \english Controller is in alarm state indicating that something dangerous had happened. Most commands are ignored in this state. To reset the flag a STOP command must be issued. \endenglish \russian Контроллер находится в состоянии ALARM, показывая, что случилась какая-то опасная ситуация. В состоянии ALARM все команды игнорируются пока не будет послана команда STOP и состояние ALARM деактивируется. \endrussian */
 STATE_CTP_ERROR					= 0x00000080	/**< \english Control position error(is only used with stepper motor). Flag is set when encoder position and step position are too far apart. \endenglish \russian Контроль позиции нарушен(используется только с шаговым двигателем). Флаг устанавливается, когда положение энкодера и положение шага слишком далеки друг от друга. \endrussian */
 STATE_POWER_OVERHEAT			= 0x00000100	/**< \english Power driver overheat. Motor control is disabled until some cooldown. This should not happen in boxed versions of controller. This may happen in bare board version of controller with a custom radiator. Redesign your radiator then. \endenglish \russian Перегрев силового драйвера. Управление двигателем отключено до восстановления рабочей температуры драйвера. Этого не должно происходить в коробочных версиях контроллера. Это может произойти в версии контроллера с «голой» платой и с пользовательским радиатором. Решение: используйте другой радиатор. \endrussian */
@@ -99,20 +99,21 @@ STATE_OVERLOAD_POWER_VOLTAGE	= 0x00000400	/**< \english Power voltage exceeds sa
 STATE_OVERLOAD_POWER_CURRENT	= 0x00000800	/**< \english Power current exceeds safe limit. \endenglish \russian Превышен максимальный ток потребления силовой части. \endrussian */
 STATE_OVERLOAD_USB_VOLTAGE		= 0x00001000	/**< \english USB voltage exceeds safe limit. \endenglish \russian Превышено напряжение на USB. \endrussian */
 STATE_LOW_USB_VOLTAGE			= 0x00002000	/**< \english USB voltage is insufficient for normal operation. \endenglish \russian Слишком низкое напряжение на USB. \endrussian */
-STATE_WINDING_RES_MISMATCH = 0x00004000		/**< \english  The difference between winding resistances is too large. This usually happens with a damaged stepper motor with partially short-circuited windings. \endenglish \russian  Сопротивления обмоток слишком сильно отличаются друг от друга. Обычно это происходит с поврежденным шаговым двигателем у которого полностью или частично закорочены обмотки. \endrussian */
+STATE_WINDING_RES_MISMATCH		= 0x00004000	/**< \english  The difference between winding resistances is too large. This usually happens with a damaged stepper motor with partially short-circuited windings. \endenglish \russian  Сопротивления обмоток слишком сильно отличаются друг от друга. Обычно это происходит с поврежденным шаговым двигателем у которого полностью или частично закорочены обмотки. \endrussian */
 STATE_BORDERS_SWAP_MISSET		= 0x00008000	/**< \english Engine stuck at the wrong edge. \endenglish \russian Достижение неверной границы. \endrussian */
 STATE_LOW_POWER_VOLTAGE			= 0x00010000	/**< \english Power voltage is lower than Low Voltage Protection limit \endenglish \russian Напряжение на силовой части ниже чем напряжение Low Voltage Protection \endrussian */
 STATE_H_BRIDGE_FAULT			= 0x00020000	/**< \english Signal from the driver that fault happened \endenglish \russian Получен сигнал от драйвера о неисправности \endrussian */
-STATE_CURRENT_MOTOR_BITS	=	0x000C0000	/**<\english Bits indicating the current operating motor on boards with multiple outputs for engine mounting. \endenglish \russian Bits indicating the current operating motor on boards with multiple outputs for engine mounting. */
-STATE_CURRENT_MOTOR0	=	0x00000000	/**<\english Motor 0. \endenglish \russian Мотор 0. */
-STATE_CURRENT_MOTOR1	= 0x00040000	/**<\english Motor 1. \endenglish \russian Мотор 1. */
-STATE_CURRENT_MOTOR2	= 0x00080000	/**<\english Motor 2. \endenglish \russian Мотор 2. */
-STATE_CURRENT_MOTOR3	= 0x000C0000	/**<\english Motor 3. \endenglish \russian Мотор 3. */
-STATE_INCORRECT_MOTOR_SWITCH		= 0x00100000	/**< \english Error status when trying to switch the motor while driving. \endenglish \russian Состояние ошибки при попытке переключить мотор во время движения. \endrussian */
+STATE_CURRENT_MOTOR_BITS		= 0x000C0000	/**< \english Bits indicating the current operating motor on boards with multiple outputs for engine mounting. \endenglish \russian Bits indicating the current operating motor on boards with multiple outputs for engine mounting. \endrussian */
+STATE_CURRENT_MOTOR0			= 0x00000000	/**< \english Motor 0. \endenglish \russian Мотор 0. \endrussian */
+STATE_CURRENT_MOTOR1			= 0x00040000	/**< \english Motor 1. \endenglish \russian Мотор 1. \endrussian */
+STATE_CURRENT_MOTOR2			= 0x00080000	/**< \english Motor 2. \endenglish \russian Мотор 2. \endrussian */
+STATE_CURRENT_MOTOR3			= 0x000C0000	/**< \english Motor 3. \endenglish \russian Мотор 3. \endrussian */
+STATE_INCORRECT_MOTOR_SWITCH	= 0x00100000	/**< \english Error status when trying to switch the motor while driving. \endenglish \russian Состояние ошибки при попытке переключить мотор во время движения. \endrussian */
 STATE_ENCODER_FAULT 			= 0x00200000	/**< \english Signal from the encoder that fault happened \endenglish \russian Получен сигнал от энкодера о неисправности \endrussian */
 STATE_ENGINE_RESPONSE_ERROR		= 0x00800000	/**< \english Error response of the engine control action. Motor control algorithm failure means that it can't define the correct decisions with the feedback data it receives. Single failure may be caused by mechanical problem. A repeating failure can be caused by incorrect motor settings. \endenglish \russian Ошибка реакции двигателя на управляющее воздействие. Отказ алгоритма управления двигателем означает, что он не может определять правильные решения с помощью полученных данных обратной связи. Единичный отказ может быть вызван механической проблемой. Повторяющийся сбой может быть вызван неправильной настройкой двигателя. \endrussian */
 STATE_EXTIO_ALARM				= 0x01000000	/**< \english The error is caused by the external EXTIO input signal. \endenglish \russian Ошибка вызвана внешним входным сигналом EXTIO. \endrussian */
 STATE_OVERLOAD_USB_CURRENT		= 0x02000000	/**< \english USB current exceeds safe limit. \endenglish \russian Превышен максимальный ток потребления USB. \endrussian */
+
 
 /**
 	* \english
@@ -2596,6 +2597,29 @@ fields:
 
 //@{
 
+/** $XIW
+	* \english
+	* Change motor - command for switching output relay.
+	* @param id an identifier of device
+	* \endenglish
+	* \russian
+	* Сменить двигатель - команда для переключения выходного реле.
+        * @param id идентификатор устройства
+	* \endrussian
+	*/
+/** $XIS
+        * \english
+        * Change motor - command for switching output relay.
+        * \endenglish
+        * \russian
+        * Сменить двигатель - команда для переключения выходного реле.
+        * \endrussian
+        */
+command "command_change_motor" writer "chmt" (22)
+fields:
+	int8u Motor /**< \english Motor number which it should be switch relay on [0..1] \endenglish \russian Номер мотора, на который следует переключить реле [0..1] \endrussian */
+	reserved 15
+
 /**  $XIW
 	* \english
 	* Immediately stop the engine, the transition to the STOP, mode
@@ -3517,6 +3541,45 @@ fields:
 
 /** $XIR
 	* \english
+	* Return device identity information such as firmware version and serial number.
+	* It is useful to find your device in a list of available devices. It can be called
+	* from the firmware and bootloader.
+	* \endenglish
+	* \russian
+	* Возвращает идентификационную информацию об устройстве, такую как номера версий
+	* прошивки и серийный номер. Эта информация удобна для поиска нужного устройства
+	* среди списка доступных. Может быть вызвана как из прошивки, так и из бутлоадера.
+	* \endrussian
+	*/
+/** $XIS
+	* \english
+	* Structure contains vendor name, product name and controller name, hardware version,
+	* bootloader and firmware versions. Also contains serial number.
+	* \endenglish
+	* \russian
+	* Структура с именем производителя, названием продукта и именем контроллера, версей
+	* железа, загрузчика и прошивки. Содержит серийный номер.
+	* \endrussian
+	*/
+command "get_identity_information" reader "ginf" (78)
+fields:
+	int8u	Manufacturer [16]	/**< \english Manufacturer name. The name is set by the manufacturer. \endenglish \russian Имя производителя. Устанавливается производителем. \endrussian */
+	int8u	ProductName [16]	/**< \english Product name. The name is set by the manufacturer. \endenglish \russian Название продукта. Устанавливается производителем. \endrussian */
+	int8u	ControllerName [16]	/**< \english User controller name. This name can be set by user via additional command. \endenglish \russian Пользовательское имя контроллера. Может быть установлено пользователем с помощью отдельной команды. \endrussian */
+	int8u	HardwareMajor		/**< \english The major number of the hardware version. \endenglish \russian Основной номер версии железа. \endrussian */
+	int8u	HardwareMinor		/**< \english Minor number of the hardware version. \endenglish \russian Второстепенный номер версии железа. \endrussian */
+	int16u	HardwareBugfix		/**< \english Number of edits for this release of hardware. \endenglish \russian Номер правок этой версии железа. \endrussian */
+	int8u	BootloaderMajor		/**< \english Bootloader major version number. \endenglish \russian Мажорный номер версии загрузчика. \endrussian */
+	int8u	BootloaderMinor 	/**< \english Bootloader minor version number. \endenglish \russian Минорный номер версии загрузчика. \endrussian */
+	int16u	BootloaderBugfix	/**< \english Bootloader release version number. \endenglish \russian Номер релиза версии загрузчика. \endrussian */
+	int8u	FirmwareMajor		/**< \english Firmware major version number. \endenglish \russian Мажорный номер версии прошивки. \endrussian */
+	int8u	irmwareMinor		/**< \english Firmware minor version number. \endenglish \russian Минорный номер версии прошивки. \endrussian */
+	int16u	FirmwareBugfix		/**< \english Firmware release version number. \endenglish \russian Номер релиза версии прошивки. \endrussian */
+	int32u	SerialNumber		/**< \english Device serial number. \endenglish \russian Серийный номер изделия. \endrussian */
+	reserved 8
+
+/** $XIR
+	* \english
 	* Read analog data structure that contains raw analog data from ADC embedded on board.
 	* This function used for device testing and deep recalibraton by manufacturer only.
 	* @param id an identifier of device
@@ -4340,6 +4403,7 @@ fields:
   int32u UniqueID3 /**< \english Unique ID 3. \endenglish \russian Уникальный ID 3. \endrussian */
   reserved 18
 
+
 /** $XIR
 	* \english
 	* Check for firmware on device.
@@ -4487,29 +4551,6 @@ fields:
 	*/
 command "service_command_reset_impl" writer "rest" (4) reader "rest" (0)
 without answer, public, crc
-
-/** $XIW
-	* \english
-	* Change motor - command for switching output relay.
-	* @param id an identifier of device
-	* \endenglish
-	* \russian
-	* Сменить двигатель - команда для переключения выходного реле.
-        * @param id идентификатор устройства
-	* \endrussian
-	*/
-/** $XIS
-        * \english
-        * Change motor - command for switching output relay.
-        * \endenglish
-        * \russian
-        * Сменить двигатель - команда для переключения выходного реле.
-        * \endrussian
-        */
-command "command_change_motor" writer "chmt" (22)
-fields:
-	int8u Motor /**< \english Motor number which it should be switch relay on [0..1] \endenglish \russian Номер мотора, на который следует переключить реле [0..1] \endrussian */
-	reserved 15
 
 //@}
 
