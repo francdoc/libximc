@@ -22,8 +22,9 @@
 @if "x%JDK_HOME%"=="x" goto FAIL
 
 :: read vers
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
-if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
+::for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
+::if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
+set XIBRIDGEVER=e6d0328
 echo Found xibridge ver %XIBRIDGEVER%
 
 :: debug flag
