@@ -3573,7 +3573,7 @@ fields:
 	int8u	BootloaderMinor 	/**< \english Bootloader minor version number. \endenglish \russian Минорный номер версии загрузчика. \endrussian */
 	int16u	BootloaderBugfix	/**< \english Bootloader release version number. \endenglish \russian Номер релиза версии загрузчика. \endrussian */
 	int8u	FirmwareMajor		/**< \english Firmware major version number. \endenglish \russian Мажорный номер версии прошивки. \endrussian */
-	int8u	irmwareMinor		/**< \english Firmware minor version number. \endenglish \russian Минорный номер версии прошивки. \endrussian */
+	int8u	FirmwareMinor		/**< \english Firmware minor version number. \endenglish \russian Минорный номер версии прошивки. \endrussian */
 	int16u	FirmwareBugfix		/**< \english Firmware release version number. \endenglish \russian Номер релиза версии прошивки. \endrussian */
 	int32u	SerialNumber		/**< \english Device serial number. \endenglish \russian Серийный номер изделия. \endrussian */
 	reserved 8
