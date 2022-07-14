@@ -516,6 +516,7 @@ result_t enumerate_udp_devices(
 		return result_ok;
 	}
 	ptr = hints_udp;
+
 	if (strlen(hints_udp) ==  0)
 	{
 		// to do network enumerate (network discover)

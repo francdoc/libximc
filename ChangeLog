@@ -1,3 +1,12 @@
+libximc (2.14.3-1)
+  * Released: Fri, 24 Jun 2022 13:57:01 +0300
+  * Version bump
+  * Feature #64133 Distribute enumerate feature on tcp-, udp-connected devices
+
+libximc (2.14.3-1)
+  * Released: Fri, 24 Jun 2022 12:20:24 +0300
+  * Version bump
+
 libximc (2.14.2-1)
   * Released: Mon, 06 Jun 2022 16:06:21 +0300
   * Version bump
