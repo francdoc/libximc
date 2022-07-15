@@ -3291,6 +3291,16 @@ fields:
 	reserved 4
 
 /** $XIW
+	* \english
+	* This command resets all alarm state flags.
+	* \endenglish
+	* \russian
+	* Сбрасывает все флаги аварийных состояний.
+	* \endrussian
+	*/
+command "command_reset_alarm_flags" writer "rafl" (4)
+
+/** $XIW
   * \english
   * Start measurements and buffering of speed, following error.
   * @param id an identifier of device
