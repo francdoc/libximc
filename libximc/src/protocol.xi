@@ -433,9 +433,10 @@ FEEDBACK_ENCODER_MEDIATED	= 0x06	/**< \english Feedback by encoder mediated by m
 	* @see get_feedback_settings
 	*/
 flagset FeedbackFlags:
-FEEDBACK_ENC_REVERSE	= 0x01	/**< \english Reverse count of encoder. \endenglish \russian Обратный счет у энкодера. \endrussian */
-FEEDBACK_ENC_TYPE_BITS	= 0xC0	/**< \english Bits of the encoder type. \endenglish \russian Биты, отвечающие за тип энкодера. \endrussian */
-FEEDBACK_ENC_TYPE_AUTO	= 0x00	/**< \english Auto detect encoder type. \endenglish \russian Определяет тип энкодера автоматически. \endrussian */
+FEEDBACK_ENC_REVERSE			= 0x01	/**< \english Reverse count of encoder. \endenglish \russian Обратный счет у энкодера. \endrussian */
+FEEDBACK_ENC_TYPE_POTENTIOMETER	= 0X20  /**< \english Potentiometer encoder(ADC input) \endenglish \russian Потенциометр энкодер (вход АЦП) \endrussian */
+FEEDBACK_ENC_TYPE_BITS			= 0xE0	/**< \english Bits of the encoder type. \endenglish \russian Биты, отвечающие за тип энкодера. \endrussian */
+FEEDBACK_ENC_TYPE_AUTO			= 0x00	/**< \english Auto detect encoder type. \endenglish \russian Определяет тип энкодера автоматически. \endrussian */
 FEEDBACK_ENC_TYPE_SINGLE_ENDED	= 0x40	/**< \english Single ended encoder. \endenglish \russian Недифференциальный энкодер. \endrussian */
 FEEDBACK_ENC_TYPE_DIFFERENTIAL	= 0x80	/**< \english Differential encoder. \endenglish \russian Дифференциальный энкодер. \endrussian */
 
@@ -4413,6 +4414,16 @@ fields:
   int32u UniqueID3 /**< \english Unique ID 3. \endenglish \russian Уникальный ID 3. \endrussian */
   reserved 18
 
+
+/** $XIW
+	* \english
+	* This command reboots the controller to the bootloader. After receiving this command, the firmware sets a flag (for bootloader), sends reply and restarts the controller.
+	* \endenglish
+	* \russian
+	* Команда служит для перезагрузки контроллера в загрузчик. Получив такую команду, прошивка платы устанавливает флаг (для загрузчика), отправляет ответ и перезагружает контроллер.
+	* \endrussian
+	*/
+command "service_command_reboot_to_bootloader" writer "rbld" (4)
 
 /** $XIR
 	* \english
