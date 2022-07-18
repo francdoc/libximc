@@ -1,4 +1,4 @@
-protocol "v20.5"
+protocol "v18.5"
 defaults with crc, answer, public
 
 /** \english
