@@ -100,7 +100,7 @@ AM_CONDITIONAL([HAVE_JAVA], [test "x$with_java" = "xyes"])
 
 AC_MSG_CHECKING([for static deps])
 AC_ARG_WITH([staticdeps],
-						[AS_HELP_STRING([--with-staticdeps], [use static xiwrapper and bindy dependencies (default no)])],
+						[AS_HELP_STRING([--with-staticdeps], [use static xibridge dependencies (default no)])],
 						[with_staticdeps=$withval],
 						[with_staticdeps=no])
 AC_MSG_RESULT([$with_staticdeps])
@@ -193,25 +193,25 @@ fi
 AC_CHECK_LIB([pthread], [pthread_create])
 AC_CHECK_FUNCS([strstr strerror_r nanosleep flock realloc realpath])
 
-# xiwrapper support
+# xibridge support
 
 
-AC_MSG_CHECKING([for xiwrapper support])
-AC_ARG_WITH([xiwrapper],
-						[AS_HELP_STRING([--with-xiwrapper], [use xiwrapper at path])],
-						[with_xiwrapper=$withval],
-						[with_xiwrapper=no])
-AC_MSG_RESULT([$with_xiwrapper])
+AC_MSG_CHECKING([for xibridge support])
+AC_ARG_WITH([xibridge],
+						[AS_HELP_STRING([--with-xibridge], [use xibridge at path])],
+						[with_xibridge=$withval],
+						[with_xibridge=no])
+AC_MSG_RESULT([$with_xibridge])
 
-if test "x$with_xiwrapper" != "xno" ; then
-	CPPFLAGS="$CPPFLAGS -I$with_xiwrapper"
-	LDFLAGS="$LDFLAGS -L$with_xiwrapper"
-	AC_SUBST([XIWRAPPER_PATH], [$with_xiwrapper])
-	AC_DEFINE([HAVE_XIWRAPPER], [1], [Use xiwrapper])
+if test "x$with_xibridge" != "xno" ; then
+	CPPFLAGS="$CPPFLAGS -I$with_xibridge"
+	LDFLAGS="$LDFLAGS -L$with_xibridge"
+	AC_SUBST([XIBRIDGE_PATH], [$with_xibridge])
+	AC_DEFINE([HAVE_XIBRIDGE], [1], [Use xibridge])
 fi
-AM_CONDITIONAL([HAVE_XIWRAPPER], [test "x$with_xiwrapper" != "xno"])
+AM_CONDITIONAL([HAVE_XIbridge], [test "x$with_xibridge" != "xno"])
 
-AC_CHECK_HEADERS([wrapper.h])
+AC_CHECK_HEADERS([xibridge.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
@@ -230,7 +230,7 @@ echo "
   Locks support.......: ${with_locks:-NO}
   Java support........: ${with_java:-NO}
   XCode build.........: ${with_xcode_build:-NO} ${with_xcode_compiler}
-  Xiwrapper support...: ${with_xiwrapper}
+  Xibridge support...: ${with_xibridge}
   Unit testing........: ${with_unittests}"
 if test "x$with_java" = "xyes" ; then
 JAVAC_VERSION=`javac -version 2>&1`

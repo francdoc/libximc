@@ -362,7 +362,7 @@ for finding key in libximc without using c++ functions.
 */
 int find_key(const char* hints, const char* key, char* buf, unsigned int length)
 {
-	if (hints == NULL) return FALSE;
+	if (hints == NULL) return 0;
 	char *s, *ptr, *ptoc;
     int key_count, i;
     size_t len;
@@ -666,14 +666,11 @@ result_t enumerate_xinet_devices(
 #endif 
 
 /* Enumerate devices main function */
-result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
+result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char * hints)
 {
 	device_enumeration_opaque_t* devenum;
-	//device_description desc;
 	result_t enumresult;
-	//char * addr;
-	size_t max_name_len = 4096;
-
+	
 	/* ensure one-thread mutex init */
 	lock_metadata();
 	unlock_metadata();
