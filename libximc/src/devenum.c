@@ -744,7 +744,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 /* we do not have read/write lock so lock all DE functions with one global lock */
 
-result_t XIMC_API set_bindy_key(const char* keyfilepath)
+result_t XIMC_API set_bindy_key(const char* /*keyfilepath*/)
 {
     log_warning(L"set_bindy_key() CALLED, which is deprecated");
     return result_ok;
