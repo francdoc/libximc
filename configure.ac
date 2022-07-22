@@ -209,7 +209,7 @@ if test "x$with_xibridge" != "xno" ; then
 	AC_SUBST([XIBRIDGE_PATH], [$with_xibridge])
 	AC_DEFINE([HAVE_XIBRIDGE], [1], [Use xibridge])
 fi
-AM_CONDITIONAL([HAVE_XIbridge], [test "x$with_xibridge" != "xno"])
+AM_CONDITIONAL([HAVE_XIBRIDGE], [test "x$with_xibridge" != "xno"])
 
 AC_CHECK_HEADERS([xibridge.h])
 
