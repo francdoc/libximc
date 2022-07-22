@@ -353,7 +353,7 @@
  * \endcode
  *
  * On Windows before the start nothing needs to be done. All necessary communication and dependencies are registered in the example code.
- * Libraries used: bindy.dll libximc.dll xiwrapper.dll. Located in the folder for the respective versions of Windows.
+ * Libraries used: libximc.dll xibridge.dll. Located in the folder for the respective versions of Windows.
  *
  * Launch Python 2 or Python 3:
  * \code
@@ -365,7 +365,7 @@
  * \section howtouse_matlab_sec MATLAB
  *
  * Sample MATLAB program testximc.m is provided at the directory examples/test_MATLAB.
- * On windows copy ximc.h, libximc.dll, bindy.dll, xiwrapper.dll and contents of ximc/(win32,win64)/wrappers/matlab/ directory to the current directory.
+ * On windows copy ximc.h, libximc.dll, xibridge.dll and contents of ximc/(win32,win64)/wrappers/matlab/ directory to the current directory.
  *
  * Before launch:
  *

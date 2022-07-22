@@ -25,8 +25,8 @@
 #include "platform.h"
 
 #include "protosup.h"
-#ifdef HAVE_XIWRAPPER
-#include "wrapper.h"
+#ifdef HAVE_XIBRIDGE
+#include "xibridge.h"
 #endif
 
 #ifdef STRERROR_R_CHAR_P
@@ -707,7 +707,7 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 /* Returns non-zero on success */
 int set_default_bindy_key()
 {
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	char path[PATH_MAX] = { 0 };
 #if defined(__APPLE__) && !defined(HAVE_CONFIG_H)
 	/* get keyfile from resource */

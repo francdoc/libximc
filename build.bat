@@ -278,7 +278,6 @@ copy %BINDIR%\libjximc.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
 copy %DISTARCH%\xibridge.dll wrappers\matlab\
-copy %DISTARCH%\xiwrapper.dll wrappers\matlab\
 copy %DISTARCH%\libximc.dll wrappers\matlab\
 
 @if not %errorlevel% == 0 goto FAIL
