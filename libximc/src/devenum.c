@@ -162,7 +162,7 @@ void network_enumerate_thread(void* arg)
     xibridge_enumerate_adapter_devices(
         ts -> addr,
         ts -> adapter_addr,
-        ts->pbuf,
+        (char **)ts->pbuf,
         &count);
  #endif
     ts->devices_found = (unsigned int)count;
