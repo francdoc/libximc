@@ -630,8 +630,8 @@ result_t enumerate_xinet_devices(
     else
     {
         i = 0;
-        char* token = strtok(hints_net, ",");
-        int i = 0;
+        token = strtok(hints_net, ",");
+        i = 0;
         while (i < items)
         {
             net_enum.addrs[i] = token;
@@ -645,14 +645,14 @@ result_t enumerate_xinet_devices(
     single_thread_wrapper_function(&net_enum); // returns after a timeout
     for (server = 0; server < net_enum.server_count; server++)
     {
-        pdev = pxis = *net_enum.pbufs[server];
+        pdev = pxis = (char *)*net_enum.pbufs[server];
         count = net_enum.device_count[server];
         while (count--)
         {
             callback(pdev, devenum);
             pdev = strchr(pxis, 0) + 1;
         }
-        xibridge_free_enumerate_devices(*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
+        xibridge_free_enumerate_devices((char *)*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
     }
     free(hints_net); 
     free(adapter);
