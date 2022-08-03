@@ -67,15 +67,15 @@ nodist_include_HEADERS = $(top_builddir)/libximc/include/ximc.h
 
 BUILT_SOURCES = ximc-gen.c ximc-gen.h fwprotocol.c fwprotocol.h $(top_builddir)/libximc/include/ximc.h
 
-EXTRA_DIST = protocol.xi ximc-gen-template.h ximc-gen-template.c ximc-template.h fwprotocol-template.c fwprotocol-template.h keyfile.sqlite
+EXTRA_DIST = protocol.xi ximc-gen-template.h ximc-gen-template.c ximc-template.h fwprotocol-template.c fwprotocol-template.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
 # keyfile
 # these variables are implicitly required, keep their names
-keyfilepath = $(top_srcdir)/libximc/src/keyfile.sqlite
-keyfiledir = $(datadir)/libximc
-dist_keyfile_DATA = $(keyfilepath)
+#keyfilepath = $(top_srcdir)/libximc/src/keyfile.sqlite
+#keyfiledir = $(datadir)/libximc
+#dist_keyfile_DATA = $(keyfilepath)
 
 if HAVE_CHECK
 # Unit test support
