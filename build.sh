@@ -170,8 +170,7 @@ makedist()
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
-			cp -R $DL/deb/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
-			
+						
 			rm -rf $DL/deb/$arch
 			rm -rf $DL/deb/dev-$arch
 			
@@ -380,9 +379,6 @@ copydist()
 	fi
 	if [ -d "$LOCAL/share/java" ] ; then
 		cp -a $LOCAL/share/java/*.jar $DISTLATEST
-	fi
-	if [ -d "$LOCAL/share/libximc" ] ; then
-		cp -a $LOCAL/share/libximc/keyfile.sqlite $DISTLATEST
 	fi
 }
 
