@@ -22,8 +22,6 @@ Warning:&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;getch&nbsp;for&nbsp;linux&nbsp;and&nbsp;macos,&nbsp;if&nbsp;the&nbsp;package&nbsp;keyboard&nbsp;is&nbsp;blocked&nbsp;due&nbsp;to&nbsp;lack&nbsp;of&nbsp;root&nbsp;user&nbsp;rights.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;pyximc.py&nbsp;for&nbsp;correct&nbsp;usage&nbsp;of&nbsp;the&nbsp;library&nbsp;libximc&nbsp;you&nbsp;need&nbsp;to&nbsp;add&nbsp;the&nbsp;file&nbsp;&nbsp;wrapper&nbsp;with&nbsp;the&nbsp;structures&nbsp;of&nbsp;the&nbsp;library&nbsp;to&nbsp;python&nbsp;path.<br>
 &nbsp;<br>
-&nbsp;&nbsp;-To&nbsp;search&nbsp;for&nbsp;network&nbsp;devices,&nbsp;you&nbsp;must&nbsp;have&nbsp;a&nbsp;file&nbsp;keyfile.sqlite<br>
-&nbsp;<br>
 &nbsp;&nbsp;-Required&nbsp;libraries&nbsp;for&nbsp;Windows:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;libximc.dll<br>
 &nbsp;&nbsp;&nbsp;&nbsp;xibridge.dll<br>
@@ -71,10 +69,6 @@ Allows&nbsp;you&nbsp;to&nbsp;move&nbsp;both&nbsp;in&nbsp;feedback&nbsp;counts&nb
 Follow&nbsp;the&nbsp;on-screen&nbsp;instructions&nbsp;to&nbsp;change&nbsp;the&nbsp;settings.</tt></dd></dl>
  <dl><dt><a name="-device_selection_dialog"><strong>device_selection_dialog</strong></a>()</dt><dd><tt>Device&nbsp;selection&nbsp;Manager.<br>
 &nbsp;<br>
-Set&nbsp;bindy&nbsp;(network)&nbsp;keyfile.&nbsp;Must&nbsp;be&nbsp;called&nbsp;before&nbsp;any&nbsp;call&nbsp;to&nbsp;"enumerate_devices"&nbsp;or&nbsp;"open_device"&nbsp;if&nbsp;you<br>
-wish&nbsp;to&nbsp;use&nbsp;network-attached&nbsp;controllers.&nbsp;Accepts&nbsp;both&nbsp;absolute&nbsp;and&nbsp;relative&nbsp;paths,&nbsp;relative&nbsp;paths&nbsp;are&nbsp;resolved<br>
-relative&nbsp;to&nbsp;the&nbsp;process&nbsp;working&nbsp;directory.&nbsp;If&nbsp;you&nbsp;do&nbsp;not&nbsp;need&nbsp;network&nbsp;devices&nbsp;then&nbsp;"set_bindy_key"&nbsp;is&nbsp;optional.<br>
-In&nbsp;Python&nbsp;make&nbsp;sure&nbsp;to&nbsp;pass&nbsp;byte-array&nbsp;object&nbsp;to&nbsp;this&nbsp;function&nbsp;(b"string&nbsp;literal").<br>
 Follow&nbsp;the&nbsp;on-screen&nbsp;instructions&nbsp;to&nbsp;change&nbsp;the&nbsp;settings.</tt></dd></dl>
  <dl><dt><a name="-flex_wait_for_stop"><strong>flex_wait_for_stop</strong></a>(lib, device_id, msec, mode=1)</dt><dd><tt>This&nbsp;function&nbsp;performs&nbsp;dynamic&nbsp;output&nbsp;coordinate&nbsp;in&nbsp;the&nbsp;process&nbsp;of&nbsp;moving.<br>
 &nbsp;<br>

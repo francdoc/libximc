@@ -255,11 +255,6 @@
  *
  * Note that user should belong to system group which allows access to a serial port (dip or serial, for example).
  *
- * Copy file /usr/share/libximc/keyfile.sqlite project directory:
- * \code
- * $ cp /usr/share/libximc/keyfile.sqlite .
- * \endcode
- *
  * Test application can be built with the installed library with the following script:
  * \code
  * $ make
@@ -305,7 +300,6 @@
  *
  * How to run example on Linux. Navigate to ximc-2.x.x./examples/test_Java/compiled/ and run:
  * \code
- * $ cp /usr/share/libximc/keyfile.sqlite .
  * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
