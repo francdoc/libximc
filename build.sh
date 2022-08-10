@@ -20,7 +20,7 @@ SOVER=`sed '2q;d' "$VERSION_FILE"`
 XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
 
 if [ -z "$XIBRIDGEVER" ] ; then
-	XIBRIDGEVERVER=default
+	XIBRIDGEVER=default
 fi
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
