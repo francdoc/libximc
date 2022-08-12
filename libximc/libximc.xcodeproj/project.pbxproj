@@ -97,7 +97,7 @@
 		0867D691FE84028FC02AAC07 /* libximc */ = {
 			isa = PBXGroup;
 			children = (
-				81B35D711A32483200980E24 /* xiwrapper */,
+				81B35D711A32483200980E24 /* xibridge */,
 				8195607F14EFFED200C65881 /* xcconfigs */,
 				81D3E4850F87E8B50059F088 /* API */,
 				08FB77ACFE841707C02AAC07 /* Source */,
@@ -161,12 +161,12 @@
 			name = xcconfigs;
 			sourceTree = "<group>";
 		};
-		81B35D711A32483200980E24 /* xiwrapper */ = {
+		81B35D711A32483200980E24 /* xibridge */ = {
 			isa = PBXGroup;
 			children = (
 				81B35D6F1A32482000980E24 /* xibridge.h */,
 			);
-			name = xiwrapper;
+			name = xibridge;
 			sourceTree = "<group>";
 		};
 		81D3E4850F87E8B50059F088 /* API */ = {
@@ -282,7 +282,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xiwrapper";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xibridge";
 				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
@@ -294,7 +294,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xiwrapper";
+				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xibridge";
 				VALID_ARCHS = x86_64;
 			};
 			name = Release;
