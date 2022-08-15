@@ -394,6 +394,12 @@ namespace xigen
 			{
 			}
 
+			Comment& operator= (const Comment& rhs) {
+				comment = rhs.comment;
+				doxyType = rhs.doxyType;
+				return *this;
+			}
+
 			virtual ~Comment() { }
 
 			std::string getComment() const { return comment; }
