@@ -84,20 +84,20 @@ do { \
 
 #define XI_normal_to_calibrate(fvalue, value, mvalue, coeff) \
 do { \
-if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
-	return result_value_error; \
+	if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
+		return result_value_error; \
 	(fvalue) = (float)(((coeff)->A) * ((float)(value)+((float)(mvalue)) / powi(2, (coeff)->MicrostepMode - 1))); \
 } while (0)
 
 #define XI_normal_to_calibrate_short(fvalue, value, coeff) \
-do { \
-	(fvalue) = (float)(((coeff)->A) * ((float)(value))); \
-} while (0)
+	do { \
+		(fvalue) = (float)(((coeff)->A) * ((float)(value))); \
+	} while (0)
 
 #define XI_calibrate_to_normal(fvalue, value, mvalue, coeff) \
 do { \
-if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
-	return result_value_error; \
+	if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
+		return result_value_error; \
 	(value) = (int)((fvalue) / (coeff)->A); \
 	(mvalue) = (int)(((fvalue) / ((coeff)->A) - (value)) * powi(2, (coeff)->MicrostepMode - 1)); \
 } while (0)
@@ -120,7 +120,7 @@ do { \
   do { \
   (fvalue) = (float) (((coeff)->A) * ((float)(value) )); \
   if (rewers_correction(&(table), &(fvalue)) == 0) \
-	return result_value_error; \
+		return result_value_error; \
   } while (0)
 
 #define XI_calibrate_to_normal_corr(fvalue, value, mvalue, coeff, table) \
@@ -145,17 +145,17 @@ do { \
 
 #define XI_calibrate_to_normal_Dcorr(fvalue, value, mvalue, coeff, table) \
 do {\
-if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
-	return result_value_error; \
+	if ((coeff)->MicrostepMode == 0 || (coeff)->MicrostepMode > MAX_ENUM_MICROSTEP_MODE) \
+		return result_value_error; \
 	float fvalue1, fvalue2;	\
 	get_position_calb_t the_get_position_calb;\
 	get_position_calb(table, &(the_get_position_calb), coeff); \
 	fvalue2 = (the_get_position_calb).Position; \
 	fvalue1 = (fvalue)+(fvalue2); \
-if (normal_correction(&(table), &(fvalue1)) == 0) \
-	return result_value_error; \
-if (normal_correction(&(table), &(fvalue2)) == 0) \
-	return result_value_error; \
+	if (normal_correction(&(table), &(fvalue1)) == 0) \
+		return result_value_error; \
+	if (normal_correction(&(table), &(fvalue2)) == 0) \
+		return result_value_error; \
 	(value) = (int)((fvalue1 - fvalue2) / (coeff)->A); \
 	(mvalue) = (int)(((fvalue1 - fvalue2) / ((coeff)->A) - (value)) * powi(2, (coeff)->MicrostepMode - 1)); \
 } while (0)
