@@ -87,7 +87,7 @@
  * - Linux debian-based 32 and 64 bit. DEB package is built against Debian Squeeze 7
  * - Linux debian-based ARM. DEB package is built on Ubuntu 14.04
  * - Linux rpm-based. RPM is built against OpenSUSE 12
- * - Java 7 64-bit or 32-bit
+ * - Java 7-9 64-bit or 32-bit
  * - .NET 2.0 (32-bit only)
  * - Delphi (32-bit only)
  
@@ -96,7 +96,7 @@
  * - Windows: Microsoft Visual C++ 2013 or mingw (currently not supported)
  * - UNIX: gcc 4, gmake
  * - Mac OS X: XCode 4
- * - JDK 7
+ * - JDK 7-9
  *
  *
 
