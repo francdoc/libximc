@@ -1,4 +1,4 @@
-﻿Summary: Library for controlling DC brush motor
+Summary: Library for controlling DC brush motor
 Name: libximc7
 Version: 2.14.3
 Release: 1
@@ -37,7 +37,7 @@ It uses a common virtual serial port driver embedded in all OS.
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT 
+rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install-strip
 install -d $RPM_BUILD_ROOT/%{_udevrulesdir}
 install -m 0644 debian/%{name}.udev $RPM_BUILD_ROOT/%{_udevrulesdir}/50-%{name}.rules
