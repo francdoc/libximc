@@ -27,7 +27,7 @@ if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
 echo Found xibridge ver %XIBRIDGEVER%
 
 :: debug flag
-set DEBUG=true
+::set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
