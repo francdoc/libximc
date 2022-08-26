@@ -2343,7 +2343,7 @@ fields:
 command "network_settings" universal "net" (38)
 fields:
 	int8u DCHPEnabled			/**< \english Indicates method to get the IP-address. It can be: 0 — static, 1 — DCHP \endenglish \russian Определяет способ получения IP-адреса каналов. Может принимать значения: 0 — статически, 1 — через DCHP \endrussian */
-	int8u IPv4Address[4]		/**< \english IP-address of the device in format x.x.x.x. \nIt must be specified as four numbers separated by spaces, not dots \endenglish \russian IP-адрес устройства в формате x.x.x.x. Он должен задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
+	int8u IPv4Address[4]		/**< \english IP-address of the device in format x.x.x.x. It must be specified as four numbers separated by spaces, not dots \endenglish \russian IP-адрес устройства в формате x.x.x.x. Он должен задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	int8u SubnetMask[4]			/**< \english Mask of the subnet in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Маска подсети в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	int8u DefaultGateway[4]		/**< \english Default value of the gateway in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Шлюз сети по умолчанию в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	reserved 19
