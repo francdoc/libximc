@@ -1,4 +1,4 @@
-gilibximc7: hardening-no-fortify-functions usr/lib/libjximc.so*
+libximc7: hardening-no-fortify-functions usr/lib/libjximc.so*
 libximc7: hardening-no-relro usr/lib/libxibridge.so
 libximc7: hardening-no-fortify-functions usr/lib/libxibridge.so
 libximc7: shlib-without-versioned-soname usr/lib/libxibridge.so libxibridge.so
