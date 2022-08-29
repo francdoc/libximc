@@ -28,6 +28,14 @@ ssize_t read_port_serial (device_metadata_t *metadata, void *buf, size_t amount)
 ssize_t write_port_serial (device_metadata_t *metadata, const void *buf, size_t amount);
 
 /*
+* Default ports values for tcp-, udp-
+*/
+
+#define XIMC_UDP_PORT 1818
+#define XIMC_TCP_PORT 1820
+
+
+/*
 * Platform-specific udp routines
 */
 /**

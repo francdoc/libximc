@@ -759,8 +759,8 @@ int check_state_version (AllParamsStr* blob)
 	char actual_version[sizeof(blob->version)+1] = { 0 };
 	char *tmp;
 
-	strncpy( file_version, blob->version, sizeof(blob->version) );
-	strncpy( actual_version, PROTOCOL_VERSION_Q, sizeof(blob->version) );
+	memcpy( file_version, blob->version, sizeof(blob->version) );
+	memcpy( actual_version, PROTOCOL_VERSION_Q, sizeof(PROTOCOL_VERSION_Q) );
 
 	/* cut major version */
 	if ((tmp = strstr( file_version, "." )) != NULL)

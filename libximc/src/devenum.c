@@ -299,7 +299,7 @@ void store_device_name (char* name, void* arg)
 	encoded_name = uri_copy(name);
 
 	devenum->names[devenum->count] = (char*)malloc(max_name_len);
-	if (*encoded_name && *encoded_name == '/')
+    if (*encoded_name && *encoded_name == '/')
 	{
 		/* absolute path - make file:// uri, like xi-com:///dev/tty */
 		/* skip first slash for absolute pathes */
@@ -317,11 +317,210 @@ void store_device_name (char* name, void* arg)
 	++devenum->count;
 }
 
+
+/* Concrete callback function that saves provided device name with some xi-prefix into enumerator */
+void store_device_name_with_xi_prefix(char* name, void* arg)
+{
+	device_enumeration_opaque_t* devenum = (device_enumeration_opaque_t*)arg;
+	int i;
+	size_t max_name_len = 4096;
+	char *encoded_name;
+
+	for (i = 0; i < devenum->count; ++i)
+	{
+		if (is_same_device(name, devenum->raw_names[i]))
+		{
+			log_debug(L"Skipping duplicate device %hs", name);
+			return;
+		}
+	}
+
+	log_debug(L"Storing device uri %hs", name);
+
+	if (devenum->count >= devenum->allocated_count)
+	{
+		devenum->allocated_count = (int)(devenum->allocated_count * 1.5);
+		devenum->names = (char**)realloc(devenum->names, devenum->allocated_count*sizeof(char*));
+		devenum->raw_names = (char**)realloc(devenum->raw_names, devenum->allocated_count*sizeof(char*));
+		devenum->serials = (uint32_t*)realloc(devenum->serials, devenum->allocated_count*sizeof(uint32_t));
+		devenum->infos = (device_information_t*)realloc(devenum->infos, devenum->allocated_count*sizeof(device_information_t));
+		devenum->controller_names = (controller_name_t*)realloc(devenum->controller_names, devenum->allocated_count*sizeof(controller_name_t));
+		devenum->stage_names = (stage_name_t*)realloc(devenum->stage_names, devenum->allocated_count*sizeof(stage_name_t));
+		devenum->dev_net_infos = (device_network_information_t*)realloc(devenum->dev_net_infos, devenum->allocated_count*sizeof(device_network_information_t));
+	}
+
+	encoded_name = uri_copy(name);
+
+	devenum->names[devenum->count] = (char*)malloc(max_name_len);
+	portable_snprintf(devenum->names[devenum->count], max_name_len - 1, "%s", encoded_name);
+	
+	devenum->names[devenum->count][max_name_len - 1] = '\0';
+	devenum->raw_names[devenum->count] = portable_strdup(name);
+	free(encoded_name);
+	++devenum->count;
+}
+
+#ifdef HAVE_XIWRAPPER
+/*
+ * The next three  funcions are unavilable without wrapper library
+*/
+void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, char **rel_data)
+{
+	char *addr, *ptr, *new_ptr, *p;
+	int  i, n_count;
+	size_t len_out, len, hint_length;
+
+	*rel_data = NULL;
+	n_count = 0;
+	hint_length = len_out = len = 0;
+
+
+	if (hints == NULL) return;
+	hint_length = strlen(hints);
+	addr = (char *)malloc(hint_length + 1);
+	memset(addr, 0, hint_length + 1);
+
+    
+	if (!find_key(hints, "addr", addr, (int)strlen(hints))) // addr is to be filled
+	{
+
+		free(addr);
+		return;
+	}
+	ptr = addr;
+	while (ptr != NULL)
+	{ // exit when no new item is found in strchr() function
+        n_count++;
+		new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+		if (new_ptr != NULL)
+		{   // NULL means there is no commas left and we must quit
+			*new_ptr = 0;
+		}
+		len = strlen(ptr);
+		if ((strlen(xi_prefix) == 0 && strstr(ptr, ":/") == NULL) ||
+			(strlen(xi_prefix) != 0 && portable_strncasecmp(ptr, xi_prefix, strlen(xi_prefix)) == 0))
+		{
+			len_out += (len + 1);
+		}
+
+		if (new_ptr != NULL)
+		{   // NULL means there is no commas left and we must quit
+			ptr = new_ptr + 1; // Continue with string after the comma
+		}
+		else ptr = NULL;
+	}
+	if (len_out == 0) len_out++;
+	*rel_data = p = (char *)malloc(len_out);
+	memset(p, 0, len_out);
+	ptr = addr;
+	for (i = 0; i < n_count; i++)
+	{
+		len = strlen(ptr);
+		if ((strlen(xi_prefix) == 0 && strstr(ptr, ":/") == NULL) ||
+			(strlen(xi_prefix) != 0 && portable_strncasecmp(ptr, xi_prefix, strlen(xi_prefix)) == 0))
+		{
+			memcpy(p, ptr, len);
+			memcpy(p + len, ",", 1);
+			p += (len + 1);
+		}
+		ptr += (len + 1);
+	}
+
+	if (p > *rel_data) *(p - 1) = 0;
+	free(addr);
+}
+
+
+result_t enumerate_udp_devices(
+	enumerate_devices_directory_callback_t callback,
+	device_enumeration_opaque_t *devenum,
+	const char *hints
+	)
+{
+	char *hints_udp, *ptr, *new_ptr;
+	get_addresses_from_hints_by_type(hints, "xi-udp", &hints_udp);
+	if (hints_udp == NULL)
+	{
+		// no addr key was found
+		return result_ok;
+	}
+	ptr = hints_udp;
+	if (strlen(hints_udp) == 0)
+	{
+		// to do network enumerate (network discover)
+		
+	}
+    else
+    {
+        while (ptr != NULL)
+        { // exit when no new item is found in strchr() function
+            new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                *new_ptr = 0;
+            }
+            callback(ptr, devenum);
+
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                ptr = new_ptr + 1; // Continue with string after the comma
+            }
+            else ptr = NULL;
+        }
+    }
+	free(hints_udp);
+	return result_ok;
+}
+
+result_t enumerate_tcp_devices(
+	enumerate_devices_directory_callback_t callback,
+	device_enumeration_opaque_t *devenum,
+	const char *hints
+	)
+{
+	char *hints_tcp, *ptr, *new_ptr;
+	get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
+	if (hints_tcp == NULL)
+	{
+		// no addr key was found
+		return result_ok;
+	}
+	if (strlen(hints_tcp) == 0)
+	{
+		// to do network enumerate (network discover)
+	}
+    else
+    {
+        ptr = hints_tcp;
+        while (ptr != NULL)
+        { // exit when no new item is found in strchr() function
+            new_ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                *new_ptr = 0;
+            }
+            callback(ptr, devenum);
+
+            if (new_ptr != NULL)
+            {   // NULL means there is no commas left and we must quit
+                ptr = new_ptr + 1; // Continue with string after the comma
+            }
+            else ptr = NULL;
+        }
+    }
+	free(hints_tcp);
+	return result_ok;
+}
+
+#endif 
+
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char *hints)
 {
 	device_enumeration_opaque_t* devenum;
 	device_description desc;
+	result_t enumresult;
+	char * addr;
 	size_t max_name_len = 4096;
 
 	/* ensure one-thread mutex init */
@@ -355,6 +554,25 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		return result_error;
 	}
 
+	if (enumerate_flags & ENUMERATE_NETWORK)
+	{
+#ifdef HAVE_XIWRAPPER
+		enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints);
+		if (enumresult != result_ok)
+		{
+			log_debug( L"enumerate_tcp_devices failed with error %d", enumresult);
+		}
+
+		enumresult = enumerate_udp_devices(store_device_name_with_xi_prefix, devenum, hints);
+		if (enumresult != result_ok)
+		{
+			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
+		}
+#else
+        return result_error;
+#endif
+	}
+
 	/* Check all found devices in threads */
 	if ((enumerate_flags & ENUMERATE_PROBE) && devenum->count > 0)
 	{
@@ -366,22 +584,20 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 			log_error( L"network layer init failed" );
 			return result_error;
 		}
-		char* addr;
+		
 		char* adapter_addr;
 		if (hints == NULL) {
-			log_error(L"hints string is null");
+			log_error(L"addr hints string is null");
 			return result_ok; // null hints is fine too
-		} else {
-			int hint_length = (int)strlen(hints);
-			addr = malloc(hint_length+1);
-			memset(addr, 0, hint_length+1);
-		
-			if (!find_key(hints, "addr", addr, hint_length)) {
+		}
+		else
+		{
+			get_addresses_from_hints_by_type(hints, "", &addr);
+			if (addr == NULL) {
 				log_error(L"no \"addr\" substring in hints");
-				free(addr);
 				return result_ok; // empty hints string is not a critical error
 			}
-			
+			int hint_length = (int)strlen(hints);
 			adapter_addr = malloc(hint_length+1);
 			memset(adapter_addr, 0, hint_length+1);
 			find_key(hints, "adapter_addr", adapter_addr, hint_length);
@@ -389,9 +605,11 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 
 		const char* delim = ",";
 		int items = 0;
-		if (strlen(addr) == 0) { // broadcast enumerate
+		if (strlen(addr) == 0) 
+		{ // broadcast enumerate
 			items = 1;
-		} else {
+		} else 
+		{
 			char *ptr = addr;
 			while (ptr != NULL) { // exit when no new item is found in strchr() function
 				items++;

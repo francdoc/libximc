@@ -1,3 +1,17 @@
+libximc (2.14.4-1)
+  * Released: Thu, 18 Aug 2022 15:05:43 +0300
+  * Version bump
+  * Feature #67844 Fix warnings issued on GCC 11.2
+
+libximc (2.14.3-1)
+  * Released: Fri, 24 Jun 2022 13:57:01 +0300
+  * Version bump
+  * Feature #64133 Distribute enumerate feature on tcp-, udp-connected devices
+
+libximc (2.14.3-1)
+  * Released: Fri, 24 Jun 2022 12:20:24 +0300
+  * Version bump
+
 libximc (2.14.2-1)
   * Released: Mon, 18 Apr 2022 17:04:25 +0300
   * Version bump

@@ -88,7 +88,7 @@
  * - Linux на основе debian 32 и 64 бита. DEB собирается на Debian Squeeze 7
  * - Linux на основе debian ARM. DEB собирается кросс-компилятором на Ubuntu 14.04
  * - Linux на основе rpm. RPM собирается на OpenSUSE 12
- * - Java 7 64 бит или 32 бит
+ * - Java 7-9 64 бит или 32 бит
  * - .NET 2.0 (только 32 бит)
  * - Delphi (только 32 бит)
  *
@@ -96,7 +96,7 @@
  * - Windows: Microsoft Visual C++ 2013 или mingw (в данный момент не поддерживается)
  * - UNIX: gcc 4, gmake
  * - Mac OS X: XCode 4
- * - JDK 7
+ * - JDK 7-9
  *
  * \page building_sec Как пересобрать библиотеку
  *
@@ -237,6 +237,8 @@
  *
  * В случае, если планируется использовать Ethernet-адаптер 8SMC4-USB-Eth1, в файле testapp.c перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enumerate_hints).
  * 
+ * Также существует <a href="https://github.com/EPC-MSU/ximc_embarcaderro_builder_example">пример использования библитеки libximc</a> в проекте С++ Builder, но он не поддерживается.
+ *
  * \subsection howtouse_c_xcode_sec XCode
  *
  * Test app должен быть собран проектом XCode testapp.xcodeproj. Используйте конфигурацию Release.

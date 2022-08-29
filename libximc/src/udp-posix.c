@@ -61,9 +61,13 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
     memset(saddress, 0, 64);
     strncpy(saddress, ip4_port, strlen(ip4_port));
     char * port_start = strchr(saddress, ':');
-    if (port_start == NULL) return result_error;
+	if (port_start == NULL)
+	{
+		port_start = strchr(saddress, 0);
+		portable_snprintf(port_start, 64 - strlen(saddress), ":%u", XIMC_UDP_PORT);
+	}
     unsigned int port;
-    if (sscanf(port_start + 1, "%ud", &port) != 1) return result_error;
+    if (sscanf(port_start + 1, "%u", &port) != 1) return result_error;
     *port_start = 0;
     in_addr_t addr = inet_addr(saddress);
     if (addr == INADDR_NONE) return result_error;
@@ -73,17 +77,13 @@ result_t open_udp(device_metadata_t *metadata, const char* ip4_port)
     metadata->handle = (uint32_t)socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if ((int)metadata->handle == -1) return result_error;
 
-    // setting  socket option
-    int OptVal = 1;
-    int OptLen = sizeof(int);
-
     struct timeval timeout;
     timeout.tv_sec = metadata->timeout / 1000;            // second part of timeout (which ordinary in milliseconds)
     timeout.tv_usec = (metadata->timeout % 1000) * 1000;  // millisecond part of timeout in microseconds
-    int result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    int result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
     if (result != -1)
     {
-        result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (timeout));
+        result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof (struct timeval));
     }
     if (result == -1)
     {
