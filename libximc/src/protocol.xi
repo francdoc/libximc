@@ -1,4 +1,4 @@
-protocol "v20.5"
+protocol "v20.6"
 defaults with crc, answer, public
 
 /** \english
@@ -2289,6 +2289,64 @@ fields:
 	int32u Speed									/**< \english UART speed (in bauds) \endenglish \russian Cкорость UART (в бодах) \endrussian */
 	int16u flag UARTSetupFlags of UARTSetupFlags	/**< \english UART setup flags. This is a bit mask for bitwise operations. \endenglish \russian Флаги настройки UART. Это битовая маска для побитовых операций. \endrussian */
 	reserved 4
+
+/** $XIR
+	* \english
+	* Read network settings.
+	* This function returns current network settings.
+	* @see net_settings_t
+	* @param DHCPEnabled[4] DHCP enabled (1) or not (0)
+	* @param IPv4Address[4] Array[4] with IP address
+	* @param SubnetMask[4] Array[4] with subnet mask address
+	* @param DefaultGateway[4] Array[4] with default gateway address
+	* \endenglish
+	* \russian
+	* Команда чтения сететвых настроек.
+	* Эта функция возвращает текущие сетевые настройки.
+	* @param DHCPEnabled DHCP включен (1) или нет (0)
+	* @param IPv4Address[4] Массив[4] с IP-адресом
+	* @param SubnetMask[4] Массив[4] с маской подсети
+	* @param DefaultGateway[4] Массив[4] со шлюзом сети
+	* \endrussian
+	*/
+/** $XIW
+	* \english
+	* Set network settings.
+	* This function sets desired network settings.
+	* @see net_settings_t
+	* @param DHCPEnabled DHCP enabled (1) or not (0)
+	* @param IPv4Address[4] Array[4] with IP address
+	* @param SubnetMask[4] Array[4] with subnet mask address
+	* @param DefaultGateway[4] Array[4] with default gateway address
+	* \endenglish
+	* \russian
+	* Команда записи сететвых настроек.
+	* Эта функция меняет сетевые настройки на заданные.
+	* @param DHCPEnabled DHCP включен (1) или нет (0)
+	* @param IPv4Address[4] Массив[4] с IP-адресом
+	* @param SubnetMask[4] Массив[4] с маской подсети
+	* @param DefaultGateway[4] Массив[4] со шлюзом сети
+	* \endrussian
+	*/
+/** $XIS
+	* \english
+	* Network settings.
+	* This structure contains network settings.
+	* \endenglish
+	* \russian
+	* Настройки сети.
+	* Эта структура содержит настройки сети.
+	* \endrussian
+	* @see get_network_settings
+	* @see set_network_settings
+	*/
+command "network_settings" universal "net" (38)
+fields:
+	int8u DHCPEnabled			/**< \english Indicates method to get the IP-address. It can be: 0 — static, 1 — DHCP \endenglish \russian Определяет способ получения IP-адреса каналов. Может принимать значения: 0 — статически, 1 — через DHCP \endrussian */
+	int8u IPv4Address[4]		/**< \english IP-address of the device in format x.x.x.x. It must be specified as four numbers separated by spaces, not dots \endenglish \russian IP-адрес устройства в формате x.x.x.x. Он должен задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
+	int8u SubnetMask[4]			/**< \english Mask of the subnet in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Маска подсети в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
+	int8u DefaultGateway[4]		/**< \english Default value of the gateway in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Шлюз сети по умолчанию в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
+	reserved 19
 
 /** $XIR
 	* \english
