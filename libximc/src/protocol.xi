@@ -2295,7 +2295,7 @@ fields:
 	* Read network settings.
 	* This function returns current network settings.
 	* @see net_settings_t
-	* @param DCHPEnabled[4] DCHP enabled (1) or not (0)
+	* @param DHCPEnabled[4] DHCP enabled (1) or not (0)
 	* @param IPv4Address[4] Array[4] with IP address
 	* @param SubnetMask[4] Array[4] with subnet mask address
 	* @param DefaultGateway[4] Array[4] with default gateway address
@@ -2303,7 +2303,7 @@ fields:
 	* \russian
 	* Команда чтения сететвых настроек.
 	* Эта функция возвращает текущие сетевые настройки.
-	* @param DCHPEnabled DCHP включен (1) или нет (0)
+	* @param DHCPEnabled DHCP включен (1) или нет (0)
 	* @param IPv4Address[4] Массив[4] с IP-адресом
 	* @param SubnetMask[4] Массив[4] с маской подсети
 	* @param DefaultGateway[4] Массив[4] со шлюзом сети
@@ -2314,7 +2314,7 @@ fields:
 	* Set network settings.
 	* This function sets desired network settings.
 	* @see net_settings_t
-	* @param DCHPEnabled DCHP enabled (1) or not (0)
+	* @param DHCPEnabled DHCP enabled (1) or not (0)
 	* @param IPv4Address[4] Array[4] with IP address
 	* @param SubnetMask[4] Array[4] with subnet mask address
 	* @param DefaultGateway[4] Array[4] with default gateway address
@@ -2322,7 +2322,7 @@ fields:
 	* \russian
 	* Команда записи сететвых настроек.
 	* Эта функция меняет сетевые настройки на заданные.
-	* @param DCHPEnabled DCHP включен (1) или нет (0)
+	* @param DHCPEnabled DHCP включен (1) или нет (0)
 	* @param IPv4Address[4] Массив[4] с IP-адресом
 	* @param SubnetMask[4] Массив[4] с маской подсети
 	* @param DefaultGateway[4] Массив[4] со шлюзом сети
@@ -2342,7 +2342,7 @@ fields:
 	*/
 command "network_settings" universal "net" (38)
 fields:
-	int8u DCHPEnabled			/**< \english Indicates method to get the IP-address. It can be: 0 — static, 1 — DCHP \endenglish \russian Определяет способ получения IP-адреса каналов. Может принимать значения: 0 — статически, 1 — через DCHP \endrussian */
+	int8u DHCPEnabled			/**< \english Indicates method to get the IP-address. It can be: 0 — static, 1 — DHCP \endenglish \russian Определяет способ получения IP-адреса каналов. Может принимать значения: 0 — статически, 1 — через DHCP \endrussian */
 	int8u IPv4Address[4]		/**< \english IP-address of the device in format x.x.x.x. It must be specified as four numbers separated by spaces, not dots \endenglish \russian IP-адрес устройства в формате x.x.x.x. Он должен задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	int8u SubnetMask[4]			/**< \english Mask of the subnet in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Маска подсети в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	int8u DefaultGateway[4]		/**< \english Default value of the gateway in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Шлюз сети по умолчанию в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
