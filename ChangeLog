@@ -1,3 +1,8 @@
+libximc (2.14.5-1)
+  * Released: Thu, 01 Sep 2022 18:21:37 +0300
+  * Version bump
+  * Feature #64745 Code blocks examples refactoring made
+
 libximc (2.14.4-1)
   * Released: Thu, 18 Aug 2022 15:05:43 +0300
   * Version bump
