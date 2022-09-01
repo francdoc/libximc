@@ -226,7 +226,7 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python testprofile_C test_CodeBlocks test_LabWindows; do
+	for example in testapp_C testappeasy_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python testprofile_C test_LabWindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
@@ -243,9 +243,20 @@ makedist()
 		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/$example/compiled-win32/
 		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/$example/compiled-win64/
 	done
+	
+	for example in testapp_C testappeasy_C; do
+		echo Copying compiled example for codeblocks $example
+		for arch in macosx win32 win64 ; do
+			mkdir $DISTEXAM/$example/cb_compiled-$arch
+		done
+		
+		cp -R $DL/macosx/$example.app $DISTEXAM/$example/cb_compiled-macosx/
+		cp -R $DL/win32/$example-cb_compiled-win32/* $DISTEXAM/$example/cb_compiled-win32/
+		cp -R $DL/win64/$example-cb_compiled-win64/* $DISTEXAM/$example/cb_compiled-win64/
+	done
 	rm -f $DISTEXAM/test_Python/Makefile
 		
-	for example in test_CSharp test_VBNET test_CodeBlocks; do
+	for example in test_CSharp test_VBNET; do
 		echo Copying compiled example $example
 		for arch in win32 win64 ; do
 			mkdir -p $DISTEXAM/$example/compiled-$arch
