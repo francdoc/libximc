@@ -1,3 +1,9 @@
+libximc (2.14.6-1)
+  * Released: Wed, 07 Sep 2022 13:48:57 +0300
+  * Version bump
+  * Feature #67711 Network settings control via USB added 
+  * Feature #67712 Network settings control via web added
+
 libximc (2.14.5-1)
   * Released: Thu, 01 Sep 2022 18:21:37 +0300
   * Version bump
