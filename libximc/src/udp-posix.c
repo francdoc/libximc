@@ -19,7 +19,6 @@
 #include "platform.h"
 
 #include "protosup.h"
-#include "wrapper.h"
 
 #ifdef STRERROR_R_CHAR_P
 #error GNU variant of strerror_r is not supported

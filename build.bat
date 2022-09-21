@@ -22,16 +22,12 @@
 @if "x%JDK_HOME%"=="x" goto FAIL
 
 :: read vers
-set BINDYVER=
-set XIWRAPPERVER=
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set BINDYVER=%%i
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
-if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
-if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
-echo Found bindy ver %BINDYVER%
-echo Found xiwrapper ver %XIWRAPPERVER%
+for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
+if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
+echo Found xibridge ver %XIBRIDGEVER%
 
 :: debug flag
+::set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
@@ -75,14 +71,11 @@ goto :eof
 :: ---------- build entry point -----------
 :LIB
 ::goto SKIP_DEPS
-call :DEPS_BINDY win64 x64
+call :DEPS_XIBRIDGE win64 x64
 @if not %errorlevel% == 0 goto FAIL
-call :DEPS_XIWRAPPER win64 x64
+call :DEPS_XIBRIDGE win32 Win32
 @if not %errorlevel% == 0 goto FAIL
-call :DEPS_BINDY win32 Win32
-@if not %errorlevel% == 0 goto FAIL
-call :DEPS_XIWRAPPER win32 Win32
-@if not %errorlevel% == 0 goto FAIL
+
 
 :SKIP_DEPS
 call :LIBXIMC win32 Win32
@@ -104,94 +97,51 @@ call :WRAPPER_MATLAB
 goto :eof
 
 :: --------------------------------------
-:: ------------ deps bindy --------------
-:DEPS_BINDY
+:: ------------ deps xibridge --------------
+:DEPS_XIBRIDGE
 @set DISTARCH=%DEPSDIR%\%1
 @set ARCH=%2
-@echo Building bindy for %ARCH%...
+@echo Building xibridge for %ARCH%...
 
-rmdir /S /Q %DISTARCH%\bindy
-mkdir %DISTARCH%\bindy
+rmdir /S /Q %DISTARCH%\xibridge
+mkdir %DISTARCH%\xibridge
 
-@set URL="https://github.com/EPC-MSU/Bindy.git"
-::@set URL=%USERPROFILE%\Documents\bindy
+@set URL="https://github.com/EPC-MSU/xibridge.git"
+::@set URL=%USERPROFILE%\Documents\xibridge
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\bindy
+"%GIT%" clone --recursive %URL% %DISTARCH%\xibridge
 @if not %errorlevel% == 0 goto FAIL
-cd %DISTARCH%\bindy
-"%GIT%" checkout %BINDYVER%
+cd %DISTARCH%\xibridge
+"%GIT%" checkout %XIBRIDGEVER%
 @if not %errorlevel% == 0 goto FAIL
 "%GIT%" submodule update --init --recursive
 @if not %errorlevel% == 0 goto FAIL
 "%GIT%" submodule update --recursive
 @if not %errorlevel% == 0 goto FAIL
 
-"%GIT%" --no-pager show --stat %BINDYVER%
+"%GIT%" --no-pager show --stat %XIBRIDGEVER%
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 %CMAKE% -G "%GENERATOR%" .
 @set LASTERR=%errorlevel%
 cd %BASEDIR%
 @if not %LASTERR% == 0 goto FAIL
-%MSBUILD% %DISTARCH%\bindy\bindy.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+%MSBUILD% %DISTARCH%\xibridge\xibridge.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
-if not exist %DISTARCH%\bindy\%CONFIGURATION%\bindy.dll goto FAIL
+if not exist %DISTARCH%\xibridge\%CONFIGURATION%\xibridge.dll goto FAIL
 @if not exist %DISTDIR%\%1 mkdir %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.dll %DISTDIR%\%1
+copy %DISTARCH%\xibridge\%CONFIGURATION%\xibridge.dll %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.lib %DISTDIR%\%1
-@if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\bindy\sample_keyfile.sqlite %DISTDIR%\%1\keyfile.sqlite
+copy %DISTARCH%\xibridge\%CONFIGURATION%\xibridge.lib %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
 
-@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_BINDY
-copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
+@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_XIB
+copy %DISTARCH%\xibridge\%CONFIGURATION%\xibridge.pdb %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
-:SKIP_PDB_COPY_BINDY
+:SKIP_PDB_COPY_XIB
 
-@echo Building bindy for %ARCH% completed
-@goto :eof
-
-:: --------------------------------------
-:: ------------ deps xiwrapper -------------
-:DEPS_XIWRAPPER
-@set DISTARCH=%DEPSDIR%\%1
-@set ARCH=%2
-@echo Building xiwrapper for %ARCH%...
-
-rmdir /S /Q %DISTARCH%\xiwrapper
-mkdir %DISTARCH%\xiwrapper
-
-@set URL="https://anonymous:anonymous@hg.ximc.ru/libxiwrapper"
-::@set URL=%USERPROFILE%\Documents\xiwrapper
-%MERCURIAL% clone %URL% %DISTARCH%\xiwrapper
-@if not %errorlevel% == 0 goto FAIL
-cd %DISTARCH%\xiwrapper
-%MERCURIAL% checkout %XIWRAPPERVER%
-@if not %errorlevel% == 0 goto FAIL
-%MERCURIAL% log -r %XIWRAPPERVER%
-@if not %errorlevel% == 0 goto FAIL
-@set GENERATOR=Visual Studio 12 2013
-if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
-%CMAKE% -G "%GENERATOR%" -DBINDY_PATH=%BASEDIR%\%DISTARCH%\bindy .
-@set LASTERR=%errorlevel%
-cd %BASEDIR%
-@if not %LASTERR% == 0 goto FAIL
-%MSBUILD% %DISTARCH%\xiwrapper\xiwrapper.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
-@if not %errorlevel% == 0 goto FAIL
-if not exist %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.dll goto FAIL
-@if not exist %DISTDIR%\%1 mkdir %DISTDIR%\%1
-@if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.dll %DISTDIR%\%1
-@if not %errorlevel% == 0 goto FAIL
-
-@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_XIWRAPPER
-copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
-@if not %errorlevel% == 0 goto FAIL
-:SKIP_PDB_COPY_XIWRAPPER
-
-@echo Building xiwrapper for %ARCH% completed
+@echo Building xibridge for %ARCH% completed
 @goto :eof
 
 
@@ -326,8 +276,7 @@ copy %BINDIR%\libjximc.dll %DISTARCH%
 @if not exist %BINDIR% mkdir %BINDIR%
 @if not %errorlevel% == 0 goto FAIL
 
-copy %DISTARCH%\bindy.dll wrappers\matlab\
-copy %DISTARCH%\xiwrapper.dll wrappers\matlab\
+copy %DISTARCH%\xibridge.dll wrappers\matlab\
 copy %DISTARCH%\libximc.dll wrappers\matlab\
 
 @if not %errorlevel% == 0 goto FAIL

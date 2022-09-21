@@ -9,7 +9,7 @@ examples/test_MATLAB. Install XCode compatible with Matlab.
 to the directory examples/test_MATLAB. Install gcc compatible with Matlab.
 For XCode and gcc version compability check document https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/SystemRequirements-Release2014a_SupportedCompilers.pdf or similar.
  * On Windows before the start nothing needs to be done. Change current directory in the MATLAB to the examples/matlab.
- The library with dependencies is located in the ximc/win** folders. For the example to work, you need the following files: bindy.dll, libximc.dll, xiwrapper.dll, keyfile.sqlite.
+ The library with dependencies is located in the ximc/win** folders. For the example to work, you need the following files: libximc.dll, xibridge.dll.
 2. Then launch in MATLAB prompt.
 
 For modify:
@@ -27,7 +27,7 @@ examples/test_MATLAB. Установите XCode, совместимый с Matl
 в каталог examples/test_MATLAB. Установите gcc, совместимый с Matlab.
 Для проверки совместимости версий XCode и gcc изучите документы https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/SystemRequirements-Release2014a_SupportedCompilers.pdf или аналогичные.
 * В Windows перед запуском ничего не нужно делать. Изменить текущий каталог в среде MATLAB в examples/matlab.
-Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: bindy.dll, libximc.dll, xiwrapper.dll, keyfile.sqlite.
+Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: libximc.dll, xibridge.dll.
 2. Затем запустите программу в командной строке MATLAB.
 
  

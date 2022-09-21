@@ -28,8 +28,8 @@ if [ $FULL_LIBRARY_PATH != "None" ]
 then
   echo "${FULL_LIBRARY_PATH}"
   export LD_LIBRARY_PATH=${FULL_LIBRARY_PATH}
-  gcc testapp_C.c -L$FULL_LIBRARY_PATH -lximc -lbindy -lxiwrapper -I $LIBRARY_PATH -o testapp_C
-  #gcc testapp_C.c -L ../../ximc/debian-amd64 -lximc -lbindy -lxiwrapper -I ../../ximc -o testapp_C
-  #gcc testapp_C.c -lximc -lbindy -lxiwrapper -I ../../ximc -o testapp_C
+  gcc testapp_C.c -L$FULL_LIBRARY_PATH -lximc -lxibridge -I $LIBRARY_PATH -o testapp_C
+  #gcc testapp_C.c -L ../../ximc/debian-amd64 -lximc -lxibridge -I ../../ximc -o testapp_C
+  #gcc testapp_C.c -lximc -lxibridge -I ../../ximc -o testapp_C
   ./testapp_C  xi-com:/dev/ttyACM0
 fi

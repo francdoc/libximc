@@ -55,10 +55,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so.*
 %{_libdir}/libjximc.so.*
 %{_libdir}/libjximc.so
-%{_libdir}/libbindy.so
-%{_libdir}/libxiwrapper.so
+%{_libdir}/libxibridge.so
 %{_javadir}/libjximc.jar
-%{_resourcedir}/keyfile.sqlite
 %{_udevrulesdir}/50-%{name}.rules
 %doc COPYING AUTHORS README NEWS
 %{_datadir}/doc/%{name}/doc-ru/%{name}-ru.pdf

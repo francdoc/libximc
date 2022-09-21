@@ -6,9 +6,6 @@
 #include "metadata.h"
 #include "platform.h"
 #include "protosup.h"
-#ifdef HAVE_XIWRAPPER
-#include "wrapper.h"
-#endif
 
 #include "sglib.h"
 
@@ -131,20 +128,7 @@ int command_port_send (device_metadata_t *metadata, const byte* command, size_t 
 		#endif
 		filelog_data("W", metadata->type, (uint32_t)metadata->handle, (char*)command + k, amount);
 
-		if (metadata->type == dtNet)
-		{
-#ifdef HAVE_XIWRAPPER
-			// any failure results in nodevice
-			if ( ! bindy_write ( metadata->conn_id, command+k, amount ) )
-				return result_serial_nodevice;
-			// XXX bindy does not report resulting amount
-			n = amount;
-#else
-			log_error( L"network device support is not built" );
-			return result_serial_nodevice;
-#endif
-		}
-		else if (metadata->type == dtVirtual)
+	    if (metadata->type == dtVirtual)
 		{
 			// Call writer function (that analyzes a buffer with request)
 			n = write_port_virtual( metadata, command+k, amount );
@@ -214,29 +198,7 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
 		else if (amount == 0)
 			break;
 		
-		if (metadata->type == dtNet)
-		{
-#ifdef HAVE_XIWRAPPER
-			const int tick_time_ms = 1;
-			int wait_time_ms = 0;
-			do {
-				n = bindy_read( metadata->conn_id, response+k, amount );
-				wait_time_ms += tick_time_ms;
-				msec_sleep(tick_time_ms);
-			}
-			while (n == 0 && wait_time_ms < DEFAULT_TIMEOUT_TIME);
-			failed = n <= 0;
-			if (n == 0)
-			{
-				// will be replaced in buffered xiwrapper
-				set_error_nodevice();
-			}
-#else
-			log_error( L"network device support is not built" );
-			failed = 1;
-#endif
-		}
-		else if (metadata->type == dtVirtual)
+		if (metadata->type == dtVirtual)
 		{
 			// Call reader function (that analyzes a buffer with response)
 			n = read_port_virtual( metadata, response+k, amount );
@@ -313,15 +275,27 @@ int command_port_receive (device_metadata_t *metadata, byte* response, size_t re
  */
 
 // Returns 0 if synchronization succeeds
-int send_synchronization_zeroes (device_metadata_t *metadata)
+int send_synchronization_zeroes(device_metadata_t *metadata)
 {
 	byte zeroes[SYNC_ZERO_COUNT];
 	int res;
 	int received = SYNC_ZERO_COUNT;
 
-	log_info( L"synchronize: sending sync zeroes" );
+	log_info(L"synchronize: sending sync zeroes");
 
-	memset( zeroes, 0, SYNC_ZERO_COUNT );
+	memset(zeroes, 0, SYNC_ZERO_COUNT);
+	if (metadata->type == dtNet)
+	{
+#ifdef HAVE_XIBRIDGE
+		res = (int)xibridge_device_request_response(&(metadata->xi_conn), (uint8_t *)zeroes, SYNC_ZERO_COUNT, (uint8_t *)zeroes, SYNC_ZERO_COUNT);
+		log_info(res == 0 ? L"synchronize: got zeros, done" :L"synchronize: command_port_send sync failed");
+	    return res == 0 ? 0 : 1;
+
+#else
+		log_error(L"network device support is not built");
+        return result_serial_nodevice;
+#endif
+	}
 
 	res = command_port_send( metadata, zeroes, SYNC_ZERO_COUNT );
 	if (res < 0)
@@ -472,34 +446,57 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 		log_error( L"command_checked can't read to empty buffer" );
 	}
 
-	// send command
-	res = command_port_send( dm, command, command_len );
-	switch (res)
+	if (dm->type == dtNet)
+#ifdef HAVE_XIBRIDGE
 	{
+		filelog_data("W", dm->type, (uint32_t)dm->handle, (char*)command, command_len);
+		res = (int)xibridge_device_request_response(&(dm->xi_conn), (uint8_t *)command, (uint32_t)command_len, (uint8_t *)response, (uint32_t)response_len);
+		filelog_data("R", dm->type, (uint32_t)dm->handle, (char*)response, response_len);
+		if (res)
+		{
+			// error type of xibridge does not matter
+			log_error(L"command_checked device lost: %s", xibridge_get_err_expl(res));
+			return result_nodevice;
+		}
+
+#else
+	{
+		log_error(L"network device support is not built");
+	    return result_serial_nodevice;
+#endif
+    }
+	else
+	{
+		// send command
+		res = command_port_send(dm, command, command_len);
+		switch (res)
+		{
 		case result_ok:
 			break;
 		case result_serial_nodevice:
-			log_error( L"command_checked device lost" );
+			log_error(L"command_checked device lost");
 			return result_nodevice;
 		case result_serial_timeout:
 		case result_serial_error:
-			log_error( L"command_checked failed" );
+			log_error(L"command_checked failed");
 			return result_nodevice;
+		}
 	}
-
 	if (response)
 	{
 		// read first byte until it's non-zero
-		do
+		if (dm->type != dtNet)
 		{
-			if ((result = receive_synchronized( dm, response, 1, need_sync )) != result_ok)
+			do
+			{
+				if ((result = receive_synchronized(dm, response, 1, need_sync)) != result_ok)
+					return result;
+			} while (response[0] == 0);
+
+			// read three bytes
+			if ((result = receive_synchronized(dm, response + 1, 3, need_sync)) != result_ok)
 				return result;
-		} while (response[0] == 0);
-
-		// read three bytes
-		if ((result = receive_synchronized( dm, response+1, 3, need_sync )) != result_ok)
-			return result;
-
+		}
 		// check is it an errv answer
 		if (memcmp( errv, response, (size_t)4 ) == 0)
 		{
@@ -528,7 +525,8 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 		}
 
 		// receive remaining bytes
-		if ((result = receive_synchronized( dm, response+4, response_len-4, need_sync )) != result_ok)
+		
+		if (dm->type != dtNet && (result = receive_synchronized( dm, response+4, response_len-4, need_sync )) != result_ok)
 			return result;
 	}
 
@@ -1004,29 +1002,21 @@ void unlock_metadata ()
 #endif
 
 /*
- * Open bindy port
+ * Open xibridge port
  */
-#ifdef HAVE_XIWRAPPER
-result_t open_port_net(device_metadata_t *metadata, const char* host, const char* serial)
+#ifdef HAVE_XIBRIDGE
+result_t open_port_net_xibridge(device_metadata_t *metadata, const char* xi_uri)
 {
-	uint32_t serial32;
-	uint32_t conn_id;
-
-	if (sscanf(serial, "%08X", &serial32) != 1)
-		return result_error;
-
-	conn_id = bindy_open(host, serial32, DEFAULT_TIMEOUT_TIME);
-	if ( conn_id == 0 ) {
-		log_system_error( L"can't open net device %hs due to network error", host);
+    uint32_t err = xibridge_open_device_connection(xi_uri, &(metadata->xi_conn));
+	if (err)
+	{
+		log_system_error(L"can't open net device %hs due to network error: %s", xi_uri, xibridge_get_err_expl(err));
 		return result_error;
 	}
 
 	/* save metadata */
-	metadata->handle = (handle_t)serial32; // serves as unique id for unified file logging interface
+	metadata->handle = (handle_t)metadata -> xi_conn.conn_id; // serves as unique id for unified file logging interface
 	metadata->type = dtNet;
-	metadata->serial = serial32;
-	metadata->conn_id = conn_id;
-
 	return result_ok;
 }
 #endif
@@ -1046,7 +1036,7 @@ result_t open_port_net(device_metadata_t *metadata, const char* host, const char
  */
 result_t open_port (device_metadata_t *metadata, const char* name)
 {
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	char uri_scheme[1024], uri_host[1024], uri_path[1024], decoded_path[1024],
 		 uri_paramname[1024], uri_paramvalue[1024],
 		 abs_path[1024], *tmp, *serial;
@@ -1082,7 +1072,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 	}
 	else if (!portable_strcasecmp(uri_scheme, "xi-net"))
 	{
-		return open_port_net( metadata, uri_host, decoded_path );
+		return open_port_net_xibridge( metadata, name );
 	}
 	else if (!portable_strcasecmp(uri_scheme, "xi-emu"))
 	{
@@ -1121,7 +1111,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 
 result_t close_port (device_metadata_t *metadata)
 {
-#ifdef HAVE_XIWRAPPER
+#ifdef HAVE_XIBRIDGE
 	filelog_text("-", metadata->type, (uint32_t)metadata->handle, "Closing port...");
 	switch (metadata->type)
 	{
@@ -1129,7 +1119,7 @@ result_t close_port (device_metadata_t *metadata)
 			return close_port_serial( metadata ) == result_serial_ok 
 				? result_ok : result_error;
 		case dtNet:
-			bindy_close( metadata->conn_id, DEFAULT_TIMEOUT_TIME );
+			xibridge_close_device_connection( &(metadata->xi_conn));
 			return result_ok;
 		case dtVirtual:
 			return close_port_virtual( metadata );

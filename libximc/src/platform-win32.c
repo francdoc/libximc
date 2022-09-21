@@ -16,7 +16,7 @@
 #include "platform.h"
 
 #include "protosup.h"
-#include "wrapper.h"
+#include "xibridge.h"
 
 /*
  * Serial port and pipe support
@@ -544,16 +544,6 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 	abs_path[len-1] = 0;
 }
 
-/* Returns non-zero on success */
-int set_default_bindy_key()
-{
-#ifdef HAVE_XIWRAPPER
-	/* relative to the current directory of the process which called libximc.dll */
-	return bindy_setkey("keyfile.sqlite");
-#else
-	return 0;
-#endif
-}
 
 /*
  * Lock support

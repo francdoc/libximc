@@ -1,9 +1,6 @@
 libximc7: hardening-no-fortify-functions usr/lib/libjximc.so*
-libximc7: hardening-no-relro usr/lib/libbindy.so
-libximc7: hardening-no-relro usr/lib/libxiwrapper.so
-libximc7: hardening-no-fortify-functions usr/lib/libbindy.so
-libximc7: hardening-no-fortify-functions usr/lib/libxiwrapper.so
-libximc7: shlib-without-versioned-soname usr/lib/libbindy.so libbindy.so
-libximc7: shlib-without-versioned-soname usr/lib/libxiwrapper.so libxiwrapper.so
+libximc7: hardening-no-relro usr/lib/libxibridge.so
+libximc7: hardening-no-fortify-functions usr/lib/libxibridge.so
+libximc7: shlib-without-versioned-soname usr/lib/libxibridge.so libxibridge.so
 libximc7: non-dev-pkg-with-shlib-symlink usr/lib/libjximc.so*
-libximc7: embedded-library usr/lib/libbindy.so: sqlite
+libximc7: embedded-library usr/lib/libxibridge.so: sqlite

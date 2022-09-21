@@ -24,6 +24,14 @@ libximc (2.14.3-1)
   * Version bump
 
 libximc (2.14.2-1)
+  * Released: Mon, 06 Jun 2022 16:06:21 +0300
+  * Version bump
+
+libximc (2.14.2-1)
+  * Released: Mon, 06 Jun 2022 16:05:20 +0300
+  * Version bump
+
+libximc (2.14.2-1)
   * Released: Mon, 18 Apr 2022 17:04:25 +0300
   * Version bump
   * Feature #50500 Organize the addition of UDP support to libximc

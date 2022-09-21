@@ -17,10 +17,10 @@ if [ ! -f "$VERSION_FILE" ] ; then
 fi
 VER=`sed 'q' "$VERSION_FILE"`
 SOVER=`sed '2q;d' "$VERSION_FILE"`
-BINDYVER=`sed '3q;d' "$VERSION_FILE"`
-XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
-if [ -z "$XIWRAPPERVER" ] ; then
-	XIWRAPPERVER=default
+XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
+
+if [ -z "$XIBRIDGEVER" ] ; then
+	XIBRIDGEVER=default
 fi
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
@@ -54,7 +54,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper"
+	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -170,8 +170,7 @@ makedist()
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
-			cp -R $DL/deb/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
-			
+						
 			rm -rf $DL/deb/$arch
 			rm -rf $DL/deb/dev-$arch
 			
@@ -191,10 +190,8 @@ makedist()
 
 	for arch in win32 win64 ; do
 		cp -R $DL/$arch/libximc.* $DISTLIB/$arch/
-		cp -R $DL/$arch/bindy.dll $DISTLIB/$arch/
-		cp -R $DL/$arch/bindy.lib $DISTLIB/$arch/
-		cp -R $DL/$arch/xiwrapper.dll $DISTLIB/$arch/
-		cp -R $DL/$arch/keyfile.sqlite $DISTLIB/$arch/
+		cp -R $DL/$arch/xibridge.dll $DISTLIB/$arch/
+		cp -R $DL/$arch/xibridge.lib $DISTLIB/$arch/
 		if [ -f $DL/$arch/libjximc.dll ] ; then
 			cp -R $DL/$arch/libjximc.* $DISTLIB/$arch/
 		fi
@@ -269,20 +266,16 @@ makedist()
 		mkdir -p $DISTEXAM/$example/compiled-win32
 		cp $DL/win32/$example.exe $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/libximc.* $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/bindy.dll $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/bindy.lib $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/xibridge.dll $DISTEXAM/$example/compiled-win32
+		cp -R $DL/win32/xibridge.lib $DISTEXAM/$example/compiled-win32
 	done
 	
 	for example in test_LabWindows ; do
 		for namexample in testcli testgui ; do
 			echo Copying example $example/$namexample
 			cp -R $DL/win32/libximc.* $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/bindy.dll $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/bindy.lib $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/xibridge.dll $DISTEXAM/$example/$namexample
+			cp -R $DL/win32/xibridge.lib $DISTEXAM/$example/$namexample
 		done
 	done
 
@@ -298,10 +291,8 @@ makedist()
 		cp $DL/macosx/java-README.txt $DISTEXAM/$example/README.txt
 		for arch in win32 win64 ; do
 			cp -R $DL/$arch/libximc.* $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/bindy.dll $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/bindy.lib $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/xiwrapper.dll $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/keyfile.sqlite $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/xibridge.dll $DISTEXAM/$example/compiled-$arch
+			cp -R $DL/$arch/xibridge.lib $DISTEXAM/$example/compiled-$arch
 			if [ -f $DL/$arch/libjximc.dll ] ; then
 				cp -R $DL/$arch/libjximc.* $DISTEXAM/$example/compiled-$arch
 			fi
@@ -345,10 +336,10 @@ build_to_local()
 {
 	DL=ximc
 	DISTLATEST=$DL/$DISTNAME
-	#USE_CPPFLAGS="-I$DEPS/xiwrapper"
+	#USE_CPPFLAGS="-I$DEPS/xibridge"
 	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch"
 	USE_CXXFLAGS="$USE_CXXFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -Wno-unused-parameter -Wno-parentheses"
-	#USE_LDFLAGS="-L$DEPS/xiwrapper"
+	#USE_LDFLAGS="-L$DEPS/xibridge"
 
 	echo Using env $SPECIAL_ENV
 
@@ -364,11 +355,11 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
@@ -400,59 +391,33 @@ copydist()
 	if [ -d "$LOCAL/share/java" ] ; then
 		cp -a $LOCAL/share/java/*.jar $DISTLATEST
 	fi
-	if [ -d "$LOCAL/share/libximc" ] ; then
-		cp -a $LOCAL/share/libximc/keyfile.sqlite $DISTLATEST
-	fi
 }
 
-build_dep_bindy()
+build_dep_xibridge()
 {
-	if [ -n "$URL_BINDY" ] ; then
-		URL=$URL_BINDY
+	if [ -n "$URL_XIBRIDGE" ] ; then
+		URL=$URL_XIBRIDGE
 	else
-		URL="https://github.com/EPC-MSU/Bindy.git"
+		URL="https://github.com/EPC-MSU/xibridge.git"
 	fi
-	echo "--- Building bindy ---"
+	echo "--- Building xibridge ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
-		rm -rf $DEPS/bindy
-		(cd $DEPS && git clone --recursive $URL bindy)
-		(cd $DEPS/bindy && git checkout $BINDYVER)
-		(cd $DEPS/bindy && git submodule update --init --recursive)
-		(cd $DEPS/bindy && git submodule update --recursive)
+		rm -rf $DEPS/xibridge
+		(cd $DEPS && git clone --recursive $URL xibridge)
+		(cd $DEPS/xibridge && git checkout $XIBRIDGEVER)
+		(cd $DEPS/xibridge && git submodule update --init --recursive)
+		(cd $DEPS/xibridge && git submodule update --recursive)
 	fi
-	(cd $DEPS/bindy && git --no-pager show --stat $BINDYVER)
-	(cd $DEPS/bindy && cmake $DEPS_CMAKE_OPT $* .)
-	$MAKE -C $DEPS/bindy
-}
-
-build_dep_xiwrapper()
-{
-	if [ -n "$URL_XIWRAPPER" ] ; then
-		URL=$URL_XIWRAPPER
-	else
-		URL=https://anonymous:anonymous@hg.ximc.ru/libxiwrapper
-	fi
-	echo "--- Building xiwrapper ---"
-	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
-		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
-	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
-	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
-	$MAKE -C $DEPS/xiwrapper
-	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
+	(cd $DEPS/xibridge && git --no-pager show --stat $XIBRIDGEVER)
+	(cd $DEPS/xibridge && cmake $DEPS_CMAKE_OPT $* .)
+	$MAKE -C $DEPS/xibridge
 }
 
 build_depends()
 {
 	echo Building depends with flags $*
 	mkdir -p $DEPS
-	build_dep_bindy $*
-	build_dep_xiwrapper $*
-	echo Seed keyfile to libximc, seems like a hack
-	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
-	cp $DEPS/bindy/sample_keyfile.sqlite examples/testapp_C/keyfile.sqlite
+	build_dep_xibridge $*
 }
 
 build_deb_package()

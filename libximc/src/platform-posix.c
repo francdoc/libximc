@@ -25,8 +25,8 @@
 #include "platform.h"
 
 #include "protosup.h"
-#ifdef HAVE_XIWRAPPER
-#include "wrapper.h"
+#ifdef HAVE_XIBRIDGE
+#include "xibridge.h"
 #endif
 
 #ifdef STRERROR_R_CHAR_P
@@ -704,54 +704,7 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 	abs_path[len-1] = 0;
 }
 
-/* Returns non-zero on success */
-int set_default_bindy_key()
-{
-#ifdef HAVE_XIWRAPPER
-	char path[PATH_MAX] = { 0 };
-#if defined(__APPLE__) && !defined(HAVE_CONFIG_H)
-	/* get keyfile from resource */
-	CFStringRef keyfilePath;
-	CFURLRef keyfileURL;
-	CFBundleRef bundleRef = CFBundleGetBundleWithIdentifier(CFSTR("ru.ximc.libximc"));
-	if (bundleRef)
-	{
-		keyfileURL = CFBundleCopyResourceURL(bundleRef, CFSTR("keyfile.sqlite"), NULL, NULL);
-		if (keyfileURL)
-		{
-			keyfilePath = CFURLCopyFileSystemPath(keyfileURL, kCFURLPOSIXPathStyle);
-			if (keyfilePath)
-			{
-				if (!CFStringGetCString(keyfilePath, path, sizeof(path), kCFStringEncodingASCII))
-				{
-					CFRelease(keyfileURL);
-					return 0;
-				}
-			}
-			else
-			{
-				CFRelease(keyfileURL);
-				return 0;
-			}
-			CFRelease(keyfileURL);
-		}
-		else
-			return 0;
-	}
-	else
-		return 0;
-#else
-	#ifndef DATADIR
-	#error Please check DATADIR
-	#endif
-	strcpy(path, DATADIR "/libximc/keyfile.sqlite");
-#endif
-	log_debug( L"Setting standard resource key %hs", path);
-	return strlen(path) && bindy_setkey(path);
-#else
-	return 0;
-#endif
-}
+
 
 /*
  * Lock support

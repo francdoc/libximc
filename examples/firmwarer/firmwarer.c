@@ -171,7 +171,7 @@ int main (int argc, char* argv[])
 	if (key_specified)
 		key_file = argv[3];
 
-	devenum = enumerate_devices( 0 );
+	devenum = enumerate_devices( 0, "" );
 	if (!devenum)
 	{
 		printf( "error opening\n" );
