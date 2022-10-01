@@ -30,7 +30,8 @@ from ctypes import *
 import os
 import sys
 import platform
-import netifaces
+# import netifaces
+import ifaddr
 import getpass
 
 if sys.version_info >= (3,0):
@@ -943,27 +944,28 @@ def device_selection_dialog():
         # This is device search and enumeration with probing. It gives more information about devices.
         probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK # + EnumerateFlags.ENUMERATE_ALL_COM
         print("Search on network interfaces")
-        interfaces = netifaces.interfaces()
+        interfaces = ifaddr.get_adapters()
         device_set = set()
-        for interface in interfaces:
-            addrs = netifaces.ifaddresses(interface).get(netifaces.AF_INET)
-            if addrs is None:
-                continue
-            enum_hints = "addr=\nadapter_addr=" + addrs[0]["addr"]
+        fd = sys.stdout.fileno()
+        for adapter in interfaces:
+            for addrs in adapter.ips:                
+                if addrs is None:
+                    continue
+                enum_hints = "addr=\nadapter_addr=" + addrs.ip[0]
+                os.write(fd, b'.')
             
-            print(addrs[0]["addr"])
-            
-            if type(enum_hints) is str:
-                enum_hints = enum_hints.encode()
+                if type(enum_hints) is str:
+                    enum_hints = enum_hints.encode()
                 
-            devenum = lib.enumerate_devices(probe_flags, enum_hints)
+                devenum = lib.enumerate_devices(probe_flags, enum_hints)
 
-            dev_count = lib.get_device_count(devenum)
-            controller_name = controller_name_t()
-            for dev_ind in range(0, dev_count):
-                enum_name = lib.get_device_name(devenum, dev_ind)
-                device_set.add(enum_name)
-                
+                dev_count = lib.get_device_count(devenum)
+                controller_name = controller_name_t()
+                for dev_ind in range(0, dev_count):
+                    enum_name = lib.get_device_name(devenum, dev_ind)
+                    device_set.add(enum_name)
+        
+        print()
         device_list = list(device_set)
         for i in range(0, len(device_list)):
             print("Enumerated device #{} name (port name){}: ".format(i, device_list[i]))
