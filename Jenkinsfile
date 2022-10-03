@@ -21,6 +21,7 @@ pipeline {
   options {
     disableConcurrentBuilds()
     parallelsAlwaysFailFast()
+    timeout(time: 2, unit: 'HOURS')
   }
 
   environment {
