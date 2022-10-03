@@ -951,19 +951,27 @@ def device_selection_dialog():
             for addrs in adapter.ips:                
                 if addrs is None:
                     continue
-                enum_hints = "addr=\nadapter_addr=" + addrs.ip[0]
-                os.write(fd, b'.')
+                if type(addrs.ip) is str:    
+                    # IP4 addres
+                    enum_hints = "addr=\nadapter_addr=" + addrs.ip
+                #else:
+                    # IP6 addres no work
+                    #enum_hints = "addr=\nadapter_addr=" + addrs.ip[0]
+                    # Output of adapter addresses
+                    print(addrs.ip)
+                    # Ellipsis output when searching
+                    #os.write(fd, b'.')
             
-                if type(enum_hints) is str:
-                    enum_hints = enum_hints.encode()
+                    if type(enum_hints) is str:
+                        enum_hints = enum_hints.encode()
                 
-                devenum = lib.enumerate_devices(probe_flags, enum_hints)
+                    devenum = lib.enumerate_devices(probe_flags, enum_hints)
 
-                dev_count = lib.get_device_count(devenum)
-                controller_name = controller_name_t()
-                for dev_ind in range(0, dev_count):
-                    enum_name = lib.get_device_name(devenum, dev_ind)
-                    device_set.add(enum_name)
+                    dev_count = lib.get_device_count(devenum)
+                    controller_name = controller_name_t()
+                    for dev_ind in range(0, dev_count):
+                        enum_name = lib.get_device_name(devenum, dev_ind)
+                        device_set.add(enum_name)
         
         print()
         device_list = list(device_set)
