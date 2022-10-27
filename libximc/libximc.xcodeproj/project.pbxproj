@@ -1,5 +1,5 @@
 // !$*UTF8*$!
-{b7f3b16
+{
 	archiveVersion = 1;
 	classes = {
 	};
