@@ -26,7 +26,7 @@
 
 #include "protosup.h"
 #ifdef HAVE_XIBRIDGE
-#include "xibridge.h"
+#include "include/xibridge.h"
 #endif
 
 #ifdef STRERROR_R_CHAR_P
