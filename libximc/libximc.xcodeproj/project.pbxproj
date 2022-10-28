@@ -57,7 +57,7 @@
 		819182A3170B3124001B93C8 /* sglib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sglib.h; path = src/sglib.h; sourceTree = "<group>"; };
 		8195605114EFF39100C65881 /* libximc.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = libximc.xcconfig; sourceTree = SOURCE_ROOT; };
 		8195608214EFFFCF00C65881 /* version.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = version.xcconfig; sourceTree = SOURCE_ROOT; };
-		81B35D6F1A32482000980E24 /* xibridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xibridge.h; path = ../deps/xibridge/include/xibridge.h; sourceTree = "<group>"; };
+		81B35D6F1A32482000980E24 /* xibridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xibridge.h; path = ../deps/xibridge/xibridge.h; sourceTree = "<group>"; };
 		81B86F6E1A35D11C00636CE4 /* libxibridge.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxibridge.dylib; path = ../deps/xibridge/libxibridge.dylib; sourceTree = "<group>"; };
 		81BAFE851ACB26A10096F411 /* devvirt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = devvirt.c; path = src/devvirt.c; sourceTree = "<group>"; };
 		81BAFE861ACB26A10096F411 /* fwprotocol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fwprotocol.c; path = src/fwprotocol.c; sourceTree = "<group>"; };

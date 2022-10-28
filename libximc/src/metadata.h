@@ -5,7 +5,7 @@
  * Device metadata
  */
 #ifdef HAVE_XIBRIDGE
-  #include "include/xibridge.h"
+  #include "xibridge.h"
 #endif
 
 typedef enum { dtUnknown, dtSerial, dtVirtual, dtNet, dtUdp, dtTcp } device_type_t;
