@@ -1,7 +1,14 @@
+﻿libximc7 (2.15.1-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #67954 libxibridge updated (version 1.0.4)
+  * Feature #70737 libxibridge updated: doxygen file added
+
+ -- XIMC <info@ximc.ru>  Fri, 28 Oct 2022 12:28:08 +0300
+
 libximc7 (2.15.0-1) unstable; urgency=low
 
   * Version bump
-  * Feature #60243 xi-net protocol 3 made
   * Feature #60457 API libxibridge made
   * Feature #61787 API libxibridge updated
   * Feature #67954 API libxibridge improved

@@ -1,3 +1,9 @@
+﻿libximc (2.15.1-1)
+  * Released: Fri, 28 Oct 2022 12:28:08 +0300
+  * Version bump
+  * Feature #67954 libxibridge updated (version 1.0.4)
+  * Feature #70737 libxibridge updated: doxygen file added
+
 libximc (2.15.0-1)
   * Released: Wed, 21 Sep 2022 15:51:16 +0300
   * Version bump
