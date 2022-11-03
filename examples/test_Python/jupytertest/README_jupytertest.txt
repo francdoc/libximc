@@ -10,6 +10,7 @@ pip install -r requirements.txt
 4. Perform the necessary Notebook blocks following the instructions in the comments.
 5. You do not need to run the example as a package, because there are several blocks in it that
 allow you to open different devices by connection type (for completeness of the example), and you need to run only one of them.
+6. In Colab, you will not be able to use a real controller, only a virtual one.
 
 
 Rus.
@@ -24,3 +25,4 @@ pip install -r requirements.txt
 4. Выполнять необходимые блоки Notebook руководствуясь инструкциями в комментариях.
 5. Не нужно выполнять пример пакетом, поскольку в нем есть несколько блоков которые 
 позволяют открывать разные устройства по типу подключения (для полноты примера), и нужно выполнить только один из них.
+6. В Colab не получится использовать реальный контроллер, только виртуальный.
