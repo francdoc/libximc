@@ -1,3 +1,10 @@
+libximc (2.14.7-1)
+  * Released: Wed, 09 Nov 2022 17:56:14 +0300
+  * Version bump
+  * Feature #69053 extendtest example bug fixed
+  * Feature #67205 jupiter example added
+  * Feature #69542 extendspython example: netifaces module changed for ifaddr
+
 libximc (2.14.6-1)
   * Released: Wed, 07 Sep 2022 13:48:57 +0300
   * Version bump
