@@ -1,58 +1,55 @@
 Eng.
 
-This example shows how to work with a profile for a specific positioner in the user program.
+What are the example:
+This example shows how to work with a profile for a specific positioner in a user application.
 
+How to work with example:
+* For macOS X:
+	- copy ximc/macosx/libximc.framework, ximc/ximc.h in the examples/testprofile_C directory
+	- install XCode
+	- build an example of testprofile_C.xcodeproj using XCode
+	- run the testprofile_C.app application and check its operation in Console.app
 
-For run:
+* For Linux: 
+	- must be installed .deb packages libximc7_x.x.x and libximc7-dev_x.x.x for the required architecture strictly in the specified order, from the  /ximc/deb folder
+	- copy ximc/ximc.h to the examples/testprofile_C directory. 
+	- install gcc 
+	- build an example using the installed library:
+		$ make
+	- run the example:
+		$ make run
+	- for a quick build and run the example on Linux, you can run the testprofile_C.sh script. You don't need to install a library for it to work. The script will automatically build and run the example. If the script outputs a message that the device has not been found, you need to change the device address in the script to the correct one: ./testprofile_C xi-com:/dev/ttyACM0
 
- * On OS X: library is a Mac OS X framework, and at example application it’s bundled inside testprofile_C.app.
-Copy ximc/macosx/libximc.framework, ximc/ximc.h to the directory examples/testprofile_C.
-Install XCode. Test app should be built with XCode project testprofile_C.xcodeproj.
-Then launch application testprofile_C.app and check activity output in Console.app.
- * For Linux: install libximc*.deb and libximc-dev*.deb of the target architecture in the specified order. 
-! IT is IMPORTANT to install the library only of the appropriate Linux bit depth and only in the specified order.
-Then copy ximc/ximc.h to the directory
-examples/testprofile_C. Install gcc. Test application can be built with the installed library with the following script:
-$ make
-In case of cross-compilation (target architecture differs from the current system architecture) feed -m64 or -m32 flag
-to compiler.
-Then launch the application as:
-$ make run
-
-To quickly build and run the example on Linux, you can run the script testprofile_C.sh . You don't need to install libraries for it to work.
-It will automatically build and run the example. If the script outputs a message that the device has not been found, 
-you can change the device address to the correct one in the script line:
-./testprofile_C  xi-com:/dev/ttyACM0
-
- * In Windows: testprofile_C can be built using testprofile_C.sln. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed.
-Open solution examples/testprofile_C/testprofile_C.sln, build and run from the IDE.
-
+* For Windows:
+	- to build and run the example, you need to use the Visual Studio 2013. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
+	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work: libximc.dll, xibridge.dll
+	- open the example /testprofile_C/testprofile_C.sln, compile and run it from the IDE
 
 
 Rus.
 
+Что представляет собой пример:
 Данный пример показывает как работать с профилем для конкретного позиционера в пользовательском приложении.
 
- 
-Для запуска примера:
+Как работать с примером:
+* Для macOS X: 
+	- скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог examples/testprofile_C
+	- установите XCode
+	- соберите пример testprofile_C.xcodeproj используя XCode
+	- запустите приложение testprofile_C.app и проверте его работу в Console.app
 
-* На OS X: библиотека для Mac OS поставляется в формате Mac OS X framework. Скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог
-examples/testprofile_C. Должен быть установлен XCode. Пример testprofile_C дорлжен быть собран проектом XCode testprofile_C.xcodeproj.
-Запустите приложение testprofile_C.app и проверте его работу в Console.app.
-* Для Linux: установите libximc*.deb и libximc-dev*.deb целевой архитектуры в указанном порядке. 
-! ВАЖНО устанавливать библиотеку только соответствующей разрядности Linux и только в указанном порядке.
-Затем скопируйте ximc/ximc.h в каталог
-examples/testprofile_C. Установите gcc. Тестовое приложение может быть собрано с помощью установленной библиотеки командой:
-$ make
-Выполнить приложение можно командой:
-$ make run
+* Для Linux: 
+	- необходимо установить .deb пакеты libximc7_x.x.x и libximc7-dev_x.x.x для требуемой архитектуры строго в указанном порядке, из папки /ximc/deb
+	- скопируйте ximc/ximc.h в каталог examples/testprofile_C
+	- установите gcc 
+	- собирите пример с помощью установленной библиотеки:
+		$ make
+	- запустите пример:
+		$ make run
+	- для быстрой сборки и запуска примера на Linux можно запустить скрипт testprofile_C.sh. Для его работы не нужно устанавливать библиотеку. Скрипт автоматически соберет и запустит пример. Если скрипт выведет сообщение, что не найдено устройство нужно поменять в скрипте адрес устройства на правильный: ./testprofile_C  xi-com:/dev/ttyACM0
 
-Для быстрой сборки и запуска примера на Linux можно запустить скрипт testprofile_C.sh. Для его работы не нужно устанавливать библиотеки. 
-Он автоматически соберет и запустит пример. Если скрипт выведет сообщение, что не найдено устройство можно поменять в строке скрипта: 
-./testprofile_C  xi-com:/dev/ttyACM0
-адрес устройства на правильный.
-
-* В Windows для компиляции необходимо использовать MS Visual C++. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен. 
-Библиотека с зависимостями находится в папках ximc/win**. Для работы примера неоходимы следующие файлы: libximc.dll, xibridge.dll.
-Откройте пример /testprofile_C/testprofile_C.sln, создайте и запустите их из среды IDE.
+* Для Windows:
+	- для сборки и запуска примера нужно использовать среду Visual Studio 2013. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен
+	- библиотека с зависимостями расположена в папках ximc/winX. Для работы примера необходимы файлы: libximc.dll, xibridge.dll
+	- откройте пример /testprofile_C/testprofile_C.sln, скомпилируйте и запустите его из среды IDE
 

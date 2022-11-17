@@ -1,10 +1,9 @@
 Eng.
 
-
-For run:
+How to work with example:
 1. To run the example for win32 or win64, you need to install java and register the JDK variable. 
 2. Create in the environment variables JDK_HOME and JDK32_HOME with the value C:\Program Files\Java\jdk-9.0.4
-3. Add a value to the Path variable C:\Program Files\Java\jdk-9.0.4\bin
+3. Add a value to the Path variable C:\Program Files\Java\jdk-9.0.4\bin and C:\Program Files (86)\Java\jdk-9.0.4\bin
 
  Example: JDK is installed in C:\Program Files\Java\jdk-9.0.4 => My Computer -> Properties -> Additional System Parameters -> Environment Variables -> System variables, there we create the variables JDK_HOME and JDK32_HOME with the value C:\Program Files\Java\jdk-9.0.4
  Adding a value to the Path variable C:\Program Files\Java\jdk-9.0.4\bin
@@ -13,12 +12,12 @@ For run:
  java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
 
 5. For other platforms, use the compiled folder. You will need to copy the dependencies into it:
-xibridge.dll, xibridge.lib, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll.
+xibridge.lib, xibridge.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll from ximc\winX folder
 
-For modify:
+To modify the example:
 1. Unpack jar:
  jar xvf test_Java.jar ru META-INF
-2. Modyfy sources
+2. Modyfy example
 3. Build example:
  javac -classpath libjximc.jar -Xlint ru/ximc/TestJava.java
  jar cmf META-INF\MANIFEST.MF test_Java.jar ru
@@ -26,13 +25,13 @@ For modify:
  When assembling the example, it is necessary to pay attention to the fact that only one path to the Java developer's system is registered in the system paths, otherwise a situation may arise when compilation will be performed by one version of the package, 
  and assembly or execution by another, which may lead to errors.
 
-Rus.
 
+Rus.
  
-Для запуска примера:
+Как работать с примером:
 1. Для запуска примера для win32 или win64 необходимо установить java и прописать переменную JDK. 
 2. Создать в переменных средах JDK_HOME и JDK32_HOME со значением C:\Program Files\Java\jdk-9.0.4
-3. Добавит в переменную Path значение C:\Program Files\Java\jdk-9.0.4\bin
+3. Добавит в переменную Path значение C:\Program Files\Java\jdk-9.0.4\bin и C:\Program Files (86)\Java\jdk-9.0.4\bin
 
  Пример: JDK установлен в C:\Program Files\Java\jdk-9.0.4 => Мой компьютер -> Свойства -> Дополнительные параметры системы -> Переменные среды -> Системные переменные, там мы создаем переменные JDK_HOME и JDK32_HOME со значением C:\Program Files\Java\jdk-9.0.4
  Добавляем в переменную Path значение C:\Program Files\Java\jdk-9.0.4\bin
@@ -41,7 +40,7 @@ Rus.
  java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
 
 5. Для других платформ используйте папку compiled. В нее понадобится скопировать зависимости: 
- xibridge.lib, xibridge.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll. 
+ xibridge.lib, xibridge.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll из папки ximc\winX
  
 Для модификации примера:
 1. Распакуйте jar командой:
