@@ -21,11 +21,11 @@ How to work with example:
 	- to quickly build and run the example on Linux, you can run the script testapp_C.sh . You don't need to install a library for it to work. The script will automatically build and run the example. If the script outputs a message that the device has not been found, you need to change the device address in the script to the correct one: ./testapp_C xi-com:/dev/ttyACM0
 
 * For Windows:
-	- to build and run the example, you need to use the Visual Studio 2013 environment. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
+	- to build and run the example, you need to use the Visual Studio 2013. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
 	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work: libximc.dll , xibridge.dll
 	- open the example /testapp_C/testapp_C.sln, compile and run it from the IDE
 
-To work with the example in the CodeBlocks environment:
+To work with the example in the CodeBlocks:
 * For macOS X:
 	- Copy ximc/macosx/libximc.framework, ximc/ximc.h to the examples/testapp_C directory. 
 	- Install XCode compatible with CodeBlocks.
@@ -36,11 +36,11 @@ To work with the example in the CodeBlocks environment:
 	- install gcc compatible with CodeBlocks.
 	
 * For Windows:
-	- to build and run the example, you need to use the Visual Studio 2013 environment. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
+	- to build and run the example, you need to use the Visual Studio 2013. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
 	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work: libximc.dll , xibridge.dll
 	- to build and run the example, open the examples/teachapp_C/testapp_C.cbp project in CodeBlocks
 	- select Win32 or Win64 configuration
-	- build and run the application from the development environment
+	- build and run the application from the IDE
 
 
 Rus.
