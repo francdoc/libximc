@@ -252,15 +252,15 @@ extern "C"
 
 	/**
 		\english
-		* Calibration companion structure
+		* Calibration structure
 		\endenglish
 		\russian
 		* Структура калибровок
 		\endrussian	 */
 	typedef struct calibration_t
 	{
-		double A;					/**< Mulitiplier */
-		unsigned int MicrostepMode;	/**< Microstep mode */
+		double A;					/**< is a conversion factor which is equal number of millimeters (or other units) per one step. */
+		unsigned int MicrostepMode;	/**< is a controller setting which is determine a step division mode */
 	} calibration_t;
 
 	/**
