@@ -2603,7 +2603,7 @@ fields:
 	*/
 /**  $XIW
 	* \english
-	* Set extended settings. Currently not in use
+	* Set extended settings. Currently not in use.
 	* @see get_extended_settings
 	* @param id an identifier of device
 	* @param[in] extended_settings EST settings
@@ -2633,14 +2633,7 @@ fields:
 	*/
 command "extended_settings" universal "est" (46)
 fields:	
-	int16u Param1			
-	/**
-		\english    
-		* 
-		\endenglish 
-		\russian   
-		* 
-		\endrussian */
+	int16u Param1				/**< \english \endenglish \russian \endrussian */
 	reserved 38
 
 //@}
