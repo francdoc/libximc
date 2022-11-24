@@ -2589,13 +2589,13 @@ fields:
 
 /**  $XIR
 	* \english
-	* Read extended settings.
+	* Read extended settings. Currently not in use.
 	* @see set_extended_settings 
 	* @param id an identifier of device
 	* @param[out] extended_settings EST settings
 	* \endenglish
 	* \russian
-	* Чтение расширенных настроек. 
+	* Чтение расширенных настроек. В настоящее время не используется.
 	* @see set_extended_settings
 	* @param id идентификатор устройства
 	* @param[out] extended_settings настройки EST
@@ -2603,13 +2603,13 @@ fields:
 	*/
 /**  $XIW
 	* \english
-	* Set extended settings.
+	* Set extended settings. Currently not in use
 	* @see get_extended_settings
 	* @param id an identifier of device
 	* @param[in] extended_settings EST settings
 	* \endenglish
 	* \russian
-	* Запись расширенных настроек. 
+	* Запись расширенных настроек. В настоящее время не используется.
 	* @see get_extended_settings
 	* @param id идентификатор устройства
 	* @param[in] extended_settings настройки EST
@@ -2619,18 +2619,28 @@ fields:
 	* \english
 	* EST settings.
 	* This structure EST.
+	* This data is stored in the controller's flash memory.
+	* This structure is designed for the future. Currently not in use.
 	* \endenglish
 	* \russian
 	* Настройки EAS.
 	* Эта структура EST.
 	* Эти данные хранятся во flash памяти контроллера.
+	* Эта структура на будущее. В настоящее время не используется.
 	* \endrussian
 	* @see set_extended_settings
 	* @see get_extended_settings
 	*/
 command "extended_settings" universal "est" (46)
 fields:	
-	int16u Param1			/**< \english    \endenglish \russian   \endrussian */
+	int16u Param1			
+	/**
+		\english    
+		* 
+		\endenglish 
+		\russian   
+		* 
+		\endrussian */
 	reserved 38
 
 //@}
