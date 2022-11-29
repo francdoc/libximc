@@ -241,10 +241,11 @@ int main (int argc, char* argv[])
 	{
 		if (names_count == 0)
 		{
-			wprintf( L"No devices found\n" );
-			return 1;
+			wprintf( L"The real controller is not found or busy with another app.\nThe virtual controller is opened to check the operation of the library.\n" );
+			strcpy(device_name, "xi-emu:///temp.bin");
 		}
-		strcpy( device_name, get_device_name( devenum, 0 ) );
+		else
+			strcpy( device_name, get_device_name( devenum, 0 ) );
 	}
 
 	free_enumerate_devices( devenum );
