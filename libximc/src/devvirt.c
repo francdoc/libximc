@@ -49,6 +49,8 @@ typedef struct /* BCDFlashParamsStr. This structure is for parameters that are s
 	snmf_cmd_str SNMF;
 	snvm_cmd_str SNVM;
 	semf_cmd_str SEMF;
+	seas_cmd_str SEAS;
+	sest_cmd_str SEST;
 	uint32_t crc; 
 
 } BCDFlashParamsStr;
@@ -380,6 +382,8 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 			S(EDS, Flash);
 			S(PID, Flash);
 			S(EMF, Flash);
+			S(EAS, Flash);
+			S(EST, Flash);
 			S(HOM, Flash);
 			S(MOV, Flash);
 			S(ENG, Flash);
@@ -519,6 +523,8 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 
 		G(PID, Flash);
 		G(EMF, Flash);
+		G(EAS, Flash);
+		G(EST, Flash);
 		G(EDS, Flash);
 		G(ENG, Flash);
 		G(MOV, Flash);
@@ -681,6 +687,12 @@ void create_empty_state (AllParamsStr* blob, const char* serial)
 	bcd->SEMF.Km = (FLT32) 0.0025;
 	bcd->SEMF.L = (FLT32) 0.0054;
 	bcd->SEMF.R = (FLT32) 7.4;
+	/* SEAS settings */
+	bcd->SEAS.stepcloseloop_Kw = 0;
+	bcd->SEAS.stepcloseloop_Kp_low = 0;
+	bcd->SEAS.stepcloseloop_Kp_high = 0;
+	/* SEST settings */
+	bcd->SEST.Param1 = 0;
 	/* SSNI settings */
 	bcd->SSNI.SyncInFlags = 0;
 	bcd->SSNI.ClutterTime = 2000;
