@@ -1,3 +1,10 @@
+libximc7 (2.15.2-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #72227 libxibridge updated (version 1.0.6)
+
+ -- XIMC <info@ximc.ru>  Wed, 30 Nov 2022 17:59:27 +0300
+
 libximc7 (2.15.1-1) unstable; urgency=low
 
   * Version bump

@@ -1,3 +1,8 @@
+libximc (2.15.2-1)
+  * Released: Wed, 30 Nov 2022 17:59:27 +0300
+  * Version bump
+  * Feature #72227 libxibridge updated (version 1.0.6)
+
 libximc (2.15.1-1)
   * Released: Fri, 28 Oct 2022 13:36:01 +0300
   * Version bump
