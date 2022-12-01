@@ -250,6 +250,13 @@ makedist()
 		cp -R $DL/macosx/$example.app $DISTEXAM/$example/cb_compiled-macosx/
 		cp -R $DL/win32/$example-cb_compiled-win32/* $DISTEXAM/$example/cb_compiled-win32/
 		cp -R $DL/win64/$example-cb_compiled-win64/* $DISTEXAM/$example/cb_compiled-win64/
+		
+		for arch in win32 win64 ; do
+			cp -R $DL/$arch/bindy.dll $DISTEXAM/$example/cb_compiled-$arch/
+			cp -R $DL/$arch/libximc.dll $DISTEXAM/$example/cb_compiled-$arch/
+			cp -R $DL/$arch/xiwrapper.dll $DISTEXAM/$example/cb_compiled-$arch/
+			cp -R $DL/$arch/keyfile.sqlite $DISTEXAM/$example/cb_compiled-$arch/
+		done
 	done
 	rm -f $DISTEXAM/test_Python/Makefile
 		
