@@ -357,22 +357,22 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: -----
 @set NAME=testapp_C
 @echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+mkdir %DISTDIR%\win32\test_C\%NAME%-compiled-win32
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\test_C\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+mkdir %DISTDIR%\win64\test_C\%NAME%-compiled-win64
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\test_C\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_TESTAPP
 :: TODO: Bug will be here
-copy examples\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32
+copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
 @if not %errorlevel% == 0 goto FAIL
-copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
+copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
 @if not %errorlevel% == 0 goto FAIL
 :SKIP_PDB_COPY_TESTAPP
 :: ----- in CodeBlocks
@@ -383,23 +383,23 @@ copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
 @SET PATH_BASE=%PATH%;
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win32" 
+"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\cb_obj /Q
-mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
-copy examples\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win32\test_C\%NAME%-cb_compiled-win32
+copy examples\test_C\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\test_C\%NAME%-cb_compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
 :: Win64
 @SET PATH=%PATH_BASE%;%MINGW64%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win64"
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win64"
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\cb_obj /Q
-mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
-copy examples\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win64\test_C\%NAME%-cb_compiled-win64
+copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\test_C\%NAME%-cb_compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 ::   clear env
 @SET PATH=%PATH_BASE%
@@ -407,15 +407,15 @@ copy examples\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win6
 :: -----
 @set NAME=testappeasy_C
 @echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+mkdir %DISTDIR%\win32\test_C\%NAME%-compiled-win32
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\test_C\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+mkdir %DISTDIR%\win64\test_C\%NAME%-compiled-win64
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\test_C\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
@@ -425,23 +425,23 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @SET PATH_BASE=%PATH%;
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win32" 
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\cb_obj /Q
-mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
-copy examples\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win32\test_C\%NAME%-cb_compiled-win32
+copy examples\test_C\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\test_C\%NAME%-cb_compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
 :: Win64
 @SET PATH=%PATH_BASE%;%MINGW64%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win64"
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win64"
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\cb_obj /Q
-mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
-copy examples\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win64\test_C\%NAME%-cb_compiled-win64
+copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\test_C\%NAME%-cb_compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 ::   clear env
 @SET PATH=%PATH_BASE%
@@ -449,15 +449,15 @@ copy examples\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win6
 :: -----
 @set NAME=testprofile_C
 @echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+mkdir %DISTDIR%\win32\test_C\%NAME%-compiled-win32
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\test_C\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+mkdir %DISTDIR%\win64\test_C\%NAME%-compiled-win64
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\test_C\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 
 :: -----

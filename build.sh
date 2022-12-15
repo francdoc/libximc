@@ -226,33 +226,33 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python testprofile_C test_LabWindows; do
+	for example in test_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python test_LabWindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
 
 	for example in testapp_C testappeasy_C testprofile_C; do
 		echo Cleaning example $example
-		rm -f $DISTEXAM/$example/Makefile.am
+		rm -f $DISTEXAM/test_C/$example/Makefile.am
 		echo Copying compiled example $example
 		for arch in macosx win32 win64 ; do
-			mkdir $DISTEXAM/$example/compiled-$arch
+			mkdir $DISTEXAM/test_C/$example/compiled-$arch
 		done
 		
-		cp -R $DL/macosx/$example.app $DISTEXAM/$example/compiled-macosx/
-		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/$example/compiled-win32/
-		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/$example/compiled-win64/
+		cp -R $DL/macosx/test_C/$example.app $DISTEXAM/test_C/$example/compiled-macosx/
+		cp -R $DL/win32/test_C/$example-compiled-win32/* $DISTEXAM/test_C/$example/compiled-win32/
+		cp -R $DL/win64/test_C/$example-compiled-win64/* $DISTEXAM/test_C/$example/compiled-win64/
 	done
 	
 	for example in testapp_C testappeasy_C; do
 		echo Copying compiled example for codeblocks $example
 		for arch in macosx win32 win64 ; do
-			mkdir $DISTEXAM/$example/cb_compiled-$arch
+			mkdir $DISTEXAM/test_C/$example/cb_compiled-$arch
 		done
 		
-		cp -R $DL/macosx/$example.app $DISTEXAM/$example/cb_compiled-macosx/
-		cp -R $DL/win32/$example-cb_compiled-win32/* $DISTEXAM/$example/cb_compiled-win32/
-		cp -R $DL/win64/$example-cb_compiled-win64/* $DISTEXAM/$example/cb_compiled-win64/
+		cp -R $DL/macosx/test_C/$example.app $DISTEXAM/test_C/$example/cb_compiled-macosx/
+		cp -R $DL/win32/test_C/$example-cb_compiled-win32/* $DISTEXAM/test_C/$example/cb_compiled-win32/
+		cp -R $DL/win64/test_C/$example-cb_compiled-win64/* $DISTEXAM/test_C/$example/cb_compiled-win64/
 	done
 	rm -f $DISTEXAM/test_Python/Makefile
 		
@@ -452,7 +452,7 @@ build_depends()
 	build_dep_xiwrapper $*
 	echo Seed keyfile to libximc, seems like a hack
 	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
-	cp $DEPS/bindy/sample_keyfile.sqlite examples/testapp_C/keyfile.sqlite
+	cp $DEPS/bindy/sample_keyfile.sqlite examples/test_C/testapp_C/keyfile.sqlite
 }
 
 build_deb_package()
@@ -508,8 +508,8 @@ build_osx_impl()
 	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
 	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
 	for exam in testapp_C testappeasy_C testprofile_C; do
-		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
-		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
+		(cd examples/test_C/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
+		cp -a examples/test_C/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done
 	(cd examples/test_Java && $MAKE) || false
 	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/
