@@ -45,13 +45,13 @@
 					<Add option="-s" />
 					<Add option="-m32" />
 					<Add option="-static-libgcc -static-libstdc++" />
-					<Add library="../../ximc/win32/libximc.lib" />
+					<Add library="../../../ximc/win32/libximc.lib" />
 				</Linker>
 				<ExtraCommands>
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win32\bindy.dll&quot; &quot;cb_compiled-win32\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win32\xiwrapper.dll&quot; &quot;cb_compiled-win32\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win32\libximc.dll&quot; &quot;cb_compiled-win32\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win32\keyfile.sqlite&quot; &quot;cb_compiled-win32\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\bindy.dll&quot; &quot;cb_compiled-win32\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\xiwrapper.dll&quot; &quot;cb_compiled-win32\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\libximc.dll&quot; &quot;cb_compiled-win32\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\keyfile.sqlite&quot; &quot;cb_compiled-win32\&quot;' />
 				</ExtraCommands>
 			</Target>
 			<Target title="win64">
@@ -69,7 +69,7 @@
 					<Add option="-s" />
 					<Add option="-m64" />
 					<Add option="-static-libgcc -static-libstdc++" />
-					<Add library="../../ximc/win64/libximc.lib" />
+					<Add library="../../../ximc/win64/libximc.lib" />
 				</Linker>
 				<ExtraCommands>
 					<Add after='cmd /c copy /Y &quot;..\..\ximc\win64\bindy.dll&quot; &quot;cb_compiled-win64\&quot;' />
@@ -81,8 +81,8 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="../../ximc" />
-			<Add directory="../../ximc/win32" />
+			<Add directory="../../../ximc" />
+			<Add directory="../../../ximc/win32" />
 		</Compiler>
 		<Unit filename="testapp_C.c">
 			<Option compilerVar="CC" />

@@ -1,10 +1,10 @@
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
-CFLAGS += -F../../ximc/macosx
-LDFLAGS += -framework libximc -rpath '@executable_path/' -rpath '../../ximc/macosx'
+CFLAGS += -F../../../ximc/macosx
+LDFLAGS += -framework libximc -rpath '@executable_path/' -rpath '../../../ximc/macosx'
 else
-CFLAGS += -I../../ximc/ -I../../ximc/macosx
-LDFLAGS += -L../../ximc/macosx -lximc
+CFLAGS += -I../../../ximc/ -I../../../ximc/macosx
+LDFLAGS += -L../../../ximc/macosx -lximc
 endif
 
 CC ?= gcc
