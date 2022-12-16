@@ -72,10 +72,10 @@
 					<Add library="../../../ximc/win64/libximc.lib" />
 				</Linker>
 				<ExtraCommands>
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win64\bindy.dll&quot; &quot;cb_compiled-win64\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win64\xiwrapper.dll&quot; &quot;cb_compiled-win64\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win64\libximc.dll&quot; &quot;cb_compiled-win64\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\ximc\win64\keyfile.sqlite&quot; &quot;cb_compiled-win64\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\bindy.dll&quot; &quot;cb_compiled-win64\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\xiwrapper.dll&quot; &quot;cb_compiled-win64\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\libximc.dll&quot; &quot;cb_compiled-win64\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\keyfile.sqlite&quot; &quot;cb_compiled-win64\&quot;' />
 				</ExtraCommands>
 			</Target>
 		</Build>
