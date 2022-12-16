@@ -12,9 +12,9 @@
 
 #define 8MT195X_740_5_BUILDER_VERSION_MAJOR  0
 #define 8MT195X_740_5_BUILDER_VERSION_MINOR  9
-#define 8MT195X_740_5_BUILDER_VERSION_BUGFIX 10
+#define 8MT195X_740_5_BUILDER_VERSION_BUGFIX 16
 #define 8MT195X_740_5_BUILDER_VERSION_SUFFIX ""
-#define 8MT195X_740_5_BUILDER_VERSION        "0.9.10"
+#define 8MT195X_740_5_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MT195X_740_5(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -569,7 +569,7 @@ static inline result_t set_profile_8MT195X_740_5(device_t id)
   memset((void*)&gear_information, 0, sizeof(gear_information_t));
   const int8_t gear_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(gear_information.Manufacturer, gear_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t gear_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t gear_information_PartNumber_temp[24] = {0, 48, 47, 49, 32, 49, 54, 58, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(gear_information.PartNumber, gear_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_gear_information(id, &gear_information);
 
@@ -583,8 +583,8 @@ static inline result_t set_profile_8MT195X_740_5(device_t id)
 
   gear_settings_t gear_settings;
   memset((void*)&gear_settings, 0, sizeof(gear_settings_t));
-  gear_settings.ReductionIn = 0;
-  gear_settings.ReductionOut = 0;
+  gear_settings.ReductionIn = 1;
+  gear_settings.ReductionOut = 1;
   gear_settings.RatedInputTorque = 0;
   gear_settings.RatedInputSpeed = 0;
   gear_settings.MaxOutputBacklash = 0;
@@ -613,7 +613,7 @@ static inline result_t set_profile_8MT195X_740_5(device_t id)
   accessories_settings.TSMin = 0;
   accessories_settings.TSMax = 0;
   accessories_settings.TSGrad = 0;
-  accessories_settings.TSSettings = TS_TYPE_UNKNOWN;
+  accessories_settings.TSSettings = TS_TYPE_THERMOCOUPLE | TS_TYPE_UNKNOWN;
   accessories_settings.LimitSwitchesSettings = 0;
   result = set_accessories_settings(id, &accessories_settings);
 

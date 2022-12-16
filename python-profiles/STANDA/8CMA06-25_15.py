@@ -388,7 +388,7 @@ def set_profile_8CMA06_25_15(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -445,8 +445,8 @@ def set_profile_8CMA06_25_15(lib, id):
 
     stage_information = stage_information_t()
 
-    stage_information.Manufacturer = bytes([0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([56, 67, 77, 65, 48, 54, 45, 50, 53, 95, 49, 53, 0, 50, 48, 48, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,10 +455,10 @@ def set_profile_8CMA06_25_15(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 0.25
-    stage_settings.Units = bytes([0, 109, 0, 114, 101, 101, 0, 0])
-    stage_settings.MaxSpeed = 6
-    stage_settings.TravelRange = 25
+    stage_settings.LeadScrewPitch = 0
+    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
+    stage_settings.MaxSpeed = 0
+    stage_settings.TravelRange = 0
     stage_settings.SupplyVoltageMin = 0
     stage_settings.SupplyVoltageMax = 0
     stage_settings.MaxCurrentConsumption = 0

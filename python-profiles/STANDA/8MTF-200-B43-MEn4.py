@@ -86,7 +86,7 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
         ENGINE_MAX_SPEED = 4
         ENGINE_CURRENT_AS_RMS = 2
         ENGINE_REVERSE = 1
-    engine_settings.EngineFlags = EngineFlags_.ENGINE_LIMIT_RPM | EngineFlags_.ENGINE_LIMIT_CURR | EngineFlags_.ENGINE_ACCEL_ON
+    engine_settings.EngineFlags = EngineFlags_.ENGINE_LIMIT_RPM | EngineFlags_.ENGINE_ACCEL_ON | EngineFlags_.ENGINE_REVERSE
     engine_settings.Antiplay = -30474
     class MicrostepMode_:
         MICROSTEP_MODE_FRAC_256 = 9
@@ -361,7 +361,7 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
         CTP_ALARM_ON_ERROR = 4
         CTP_BASE = 2
         CTP_ENABLED = 1
-    ctp_settings.CTPFlags = CTPFlags_.CTP_ERROR_CORRECTION | CTPFlags_.CTP_ENABLED
+    ctp_settings.CTPFlags = CTPFlags_.CTP_ERROR_CORRECTION | CTPFlags_.REV_SENS_INV | CTPFlags_.CTP_ENABLED
     result = lib.set_ctp_settings(id, byref(ctp_settings))
 
     if result != Result.Ok:
@@ -388,7 +388,7 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -446,7 +446,7 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([83, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([56, 77, 84, 70, 45, 50, 48, 48, 45, 66, 52, 51, 45, 77, 69, 110, 52, 0, 49, 48, 48, 0, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 84, 70, 45, 50, 48, 48, 45, 66, 52, 51, 45, 77, 69, 110, 52, 0, 49, 48, 48, 0, 65, 83])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -473,7 +473,7 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
     motor_information = motor_information_t()
 
     motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
-    motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.PartNumber = bytes([0, 67, 45, 105, 45, 52, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 
     if result != Result.Ok:
@@ -518,8 +518,8 @@ def set_profile_8MTF_200_B43_MEn4(lib, id):
 
     encoder_information = encoder_information_t()
 
-    encoder_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    encoder_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.Manufacturer = bytes([0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.PartNumber = bytes([0, 54, 45, 69, 65, 83, 89, 45, 49, 48, 50, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_encoder_information(id, byref(encoder_information))
 
     if result != Result.Ok:

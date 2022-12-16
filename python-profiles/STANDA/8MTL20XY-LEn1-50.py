@@ -388,7 +388,7 @@ def set_profile_8MTL20XY_LEn1_50(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -571,8 +571,8 @@ def set_profile_8MTL20XY_LEn1_50(lib, id):
 
     gear_information = gear_information_t()
 
-    gear_information.Manufacturer = bytes([0, 97, 120, 111, 110, 32, 109, 111, 116, 111, 114, 0, 0, 0, 0, 0])
-    gear_information.PartNumber = bytes([0, 52, 52, 48, 50, 55, 0, 58, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    gear_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    gear_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_gear_information(id, byref(gear_information))
 
     if result != Result.Ok:
@@ -581,8 +581,8 @@ def set_profile_8MTL20XY_LEn1_50(lib, id):
 
     gear_settings = gear_settings_t()
 
-    gear_settings.ReductionIn = 1
-    gear_settings.ReductionOut = 1
+    gear_settings.ReductionIn = 0
+    gear_settings.ReductionOut = 0
     gear_settings.RatedInputTorque = 0
     gear_settings.RatedInputSpeed = 0
     gear_settings.MaxOutputBacklash = 0

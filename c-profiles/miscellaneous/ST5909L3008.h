@@ -12,9 +12,9 @@
 
 #define ST5909L3008_BUILDER_VERSION_MAJOR  0
 #define ST5909L3008_BUILDER_VERSION_MINOR  9
-#define ST5909L3008_BUILDER_VERSION_BUGFIX 10
+#define ST5909L3008_BUILDER_VERSION_BUGFIX 16
 #define ST5909L3008_BUILDER_VERSION_SUFFIX ""
-#define ST5909L3008_BUILDER_VERSION        "0.9.10"
+#define ST5909L3008_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_ST5909L3008(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -356,7 +356,7 @@ static inline result_t set_profile_ST5909L3008(device_t id)
   emf_settings.L = 0;
   emf_settings.R = 0;
   emf_settings.Km = 0;
-  emf_settings.BackEMFFlags = 0;
+  emf_settings.BackEMFFlags = BACK_EMF_KM_AUTO | BACK_EMF_RESISTANCE_AUTO | BACK_EMF_INDUCTANCE_AUTO;
   result = set_emf_settings(id, &emf_settings);
 
   if (result != result_ok)
@@ -465,7 +465,7 @@ static inline result_t set_profile_ST5909L3008(device_t id)
 
   motor_settings_t motor_settings;
   memset((void*)&motor_settings, 0, sizeof(motor_settings_t));
-  motor_settings.MotorType = MOTOR_TYPE_STEP | MOTOR_TYPE_UNKNOWN;
+  motor_settings.MotorType = MOTOR_TYPE_UNKNOWN;
   motor_settings.ReservedField = 0;
   motor_settings.Poles = 0;
   motor_settings.Phases = 0;
@@ -483,7 +483,7 @@ static inline result_t set_profile_ST5909L3008(device_t id)
   motor_settings.SpeedConstant = 0;
   motor_settings.SpeedTorqueGradient = 0;
   motor_settings.MechanicalTimeConstant = 0;
-  motor_settings.MaxSpeed = 5000;
+  motor_settings.MaxSpeed = 0;
   motor_settings.MaxCurrent = 0;
   motor_settings.MaxCurrentTime = 0;
   motor_settings.NoLoadCurrent = 0;
@@ -516,11 +516,11 @@ static inline result_t set_profile_ST5909L3008(device_t id)
 
   encoder_settings_t encoder_settings;
   memset((void*)&encoder_settings, 0, sizeof(encoder_settings_t));
-  encoder_settings.MaxOperatingFrequency = 100;
+  encoder_settings.MaxOperatingFrequency = 0;
   encoder_settings.SupplyVoltageMin = 0;
   encoder_settings.SupplyVoltageMax = 0;
   encoder_settings.MaxCurrentConsumption = 0;
-  encoder_settings.PPR = 500;
+  encoder_settings.PPR = 0;
   encoder_settings.EncoderSettings = 0;
   result = set_encoder_settings(id, &encoder_settings);
 
@@ -583,8 +583,8 @@ static inline result_t set_profile_ST5909L3008(device_t id)
 
   gear_settings_t gear_settings;
   memset((void*)&gear_settings, 0, sizeof(gear_settings_t));
-  gear_settings.ReductionIn = 1;
-  gear_settings.ReductionOut = 1;
+  gear_settings.ReductionIn = 0;
+  gear_settings.ReductionOut = 0;
   gear_settings.RatedInputTorque = 0;
   gear_settings.RatedInputSpeed = 0;
   gear_settings.MaxOutputBacklash = 0;
@@ -613,7 +613,7 @@ static inline result_t set_profile_ST5909L3008(device_t id)
   accessories_settings.TSMin = 0;
   accessories_settings.TSMax = 0;
   accessories_settings.TSGrad = 0;
-  accessories_settings.TSSettings = TS_TYPE_THERMOCOUPLE | TS_TYPE_UNKNOWN;
+  accessories_settings.TSSettings = TS_TYPE_UNKNOWN;
   accessories_settings.LimitSwitchesSettings = 0;
   result = set_accessories_settings(id, &accessories_settings);
 
