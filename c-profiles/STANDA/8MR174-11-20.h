@@ -12,9 +12,9 @@
 
 #define 8MR174_11_20_BUILDER_VERSION_MAJOR  0
 #define 8MR174_11_20_BUILDER_VERSION_MINOR  9
-#define 8MR174_11_20_BUILDER_VERSION_BUGFIX 10
+#define 8MR174_11_20_BUILDER_VERSION_BUGFIX 16
 #define 8MR174_11_20_BUILDER_VERSION_SUFFIX ""
-#define 8MR174_11_20_BUILDER_VERSION        "0.9.10"
+#define 8MR174_11_20_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MR174_11_20(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);

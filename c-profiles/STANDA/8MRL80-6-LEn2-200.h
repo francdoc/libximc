@@ -12,9 +12,9 @@
 
 #define 8MRL80_6_LEN2_200_BUILDER_VERSION_MAJOR  0
 #define 8MRL80_6_LEN2_200_BUILDER_VERSION_MINOR  9
-#define 8MRL80_6_LEN2_200_BUILDER_VERSION_BUGFIX 10
+#define 8MRL80_6_LEN2_200_BUILDER_VERSION_BUGFIX 16
 #define 8MRL80_6_LEN2_200_BUILDER_VERSION_SUFFIX ""
-#define 8MRL80_6_LEN2_200_BUILDER_VERSION        "0.9.10"
+#define 8MRL80_6_LEN2_200_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -30,7 +30,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
   memset((void*)&feedback_settings, 0, sizeof(feedback_settings_t));
   feedback_settings.IPS = 0;
   feedback_settings.FeedbackType = FEEDBACK_ENCODER;
-  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_DIFFERENTIAL | FEEDBACK_ENC_REVERSE | FEEDBACK_ENC_TYPE_AUTO;
+  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_DIFFERENTIAL | FEEDBACK_ENC_TYPE_AUTO;
   feedback_settings.CountsPerTurn = 720000;
   result = set_feedback_settings(id, &feedback_settings);
 
@@ -44,13 +44,13 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   home_settings_t home_settings;
   memset((void*)&home_settings, 0, sizeof(home_settings_t));
-  home_settings.FastHome = 100;
+  home_settings.FastHome = 10;
   home_settings.uFastHome = 0;
   home_settings.SlowHome = 50;
   home_settings.uSlowHome = 0;
   home_settings.HomeDelta = 0;
   home_settings.uHomeDelta = 0;
-  home_settings.HomeFlags = HOME_USE_FAST | HOME_STOP_SECOND_REV | HOME_STOP_FIRST_REV | HOME_DIR_SECOND;
+  home_settings.HomeFlags = HOME_STOP_SECOND_REV | HOME_STOP_FIRST_REV | HOME_DIR_SECOND;
   result = set_home_settings(id, &home_settings);
 
   if (result != result_ok)
@@ -63,11 +63,11 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   move_settings_t move_settings;
   memset((void*)&move_settings, 0, sizeof(move_settings_t));
-  move_settings.Speed = 250;
+  move_settings.Speed = 20;
   move_settings.uSpeed = 0;
-  move_settings.Accel = 9;
-  move_settings.Decel = 9;
-  move_settings.AntiplaySpeed = 250;
+  move_settings.Accel = 250;
+  move_settings.Decel = 250;
+  move_settings.AntiplaySpeed = 120;
   move_settings.uAntiplaySpeed = 0;
   move_settings.MoveFlags = 0;
   result = set_move_settings(id, &move_settings);
@@ -84,10 +84,10 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
   memset((void*)&engine_settings, 0, sizeof(engine_settings_t));
   engine_settings.NomVoltage = 1200;
   engine_settings.NomCurrent = 3000;
-  engine_settings.NomSpeed = 500;
+  engine_settings.NomSpeed = 240;
   engine_settings.uNomSpeed = 0;
-  engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_LIMIT_CURR | ENGINE_ACCEL_ON;
-  engine_settings.Antiplay = -18280;
+  engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_ACCEL_ON;
+  engine_settings.Antiplay = 14464;
   engine_settings.MicrostepMode = MICROSTEP_MODE_FRAC_256;
   engine_settings.StepsPerRev = 8;
   result = set_engine_settings(id, &engine_settings);
@@ -174,9 +174,9 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
   pid_settings.KpU = 0;
   pid_settings.KiU = 0;
   pid_settings.KdU = 0;
-  pid_settings.Kpf = 25;
-  pid_settings.Kif = 0.014999999664723873;
-  pid_settings.Kdf = 0.25;
+  pid_settings.Kpf = 300;
+  pid_settings.Kif = 0.07999999821186066;
+  pid_settings.Kdf = 0.800000011920929;
   result = set_pid_settings(id, &pid_settings);
 
   if (result != result_ok)
@@ -255,8 +255,8 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   control_settings_t control_settings;
   memset((void*)&control_settings, 0, sizeof(control_settings_t));
-  control_settings.MaxSpeed[0] = 25;
-  control_settings.MaxSpeed[1] = 250;
+  control_settings.MaxSpeed[0] = 2;
+  control_settings.MaxSpeed[1] = 20;
   control_settings.MaxSpeed[2] = 0;
   control_settings.MaxSpeed[3] = 0;
   control_settings.MaxSpeed[4] = 0;
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -411,9 +411,9 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   stage_information_t stage_information;
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
-  const int8_t stage_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t stage_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_PartNumber_temp[24] = {56, 77, 82, 76, 56, 48, 45, 54, 45, 76, 69, 110, 50, 45, 50, 48, 48, 0, 48, 0, 0, 69, 65, 83};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_stage_information(id, &stage_information);
 
@@ -427,11 +427,11 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   stage_settings_t stage_settings;
   memset((void*)&stage_settings, 0, sizeof(stage_settings_t));
-  stage_settings.LeadScrewPitch = 0;
-  const int8_t stage_settings_Units_temp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+  stage_settings.LeadScrewPitch = 1;
+  const int8_t stage_settings_Units_temp[8] = {0, 101, 103, 114, 101, 101, 0, 0};
   memcpy(stage_settings.Units, stage_settings_Units_temp, sizeof(int8_t) * 8);
-  stage_settings.MaxSpeed = 0;
-  stage_settings.TravelRange = 0;
+  stage_settings.MaxSpeed = 500;
+  stage_settings.TravelRange = 360;
   stage_settings.SupplyVoltageMin = 0;
   stage_settings.SupplyVoltageMax = 0;
   stage_settings.MaxCurrentConsumption = 0;
@@ -449,9 +449,9 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   motor_information_t motor_information;
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
-  const int8_t motor_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t motor_information_PartNumber_temp[24] = {0, 67, 45, 105, 45, 52, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_motor_information(id, &motor_information);
 
@@ -465,7 +465,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   motor_settings_t motor_settings;
   memset((void*)&motor_settings, 0, sizeof(motor_settings_t));
-  motor_settings.MotorType = MOTOR_TYPE_UNKNOWN;
+  motor_settings.MotorType = MOTOR_TYPE_STEP | MOTOR_TYPE_UNKNOWN;
   motor_settings.ReservedField = 0;
   motor_settings.Poles = 0;
   motor_settings.Phases = 0;
@@ -483,7 +483,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
   motor_settings.SpeedConstant = 0;
   motor_settings.SpeedTorqueGradient = 0;
   motor_settings.MechanicalTimeConstant = 0;
-  motor_settings.MaxSpeed = 0;
+  motor_settings.MaxSpeed = 6200;
   motor_settings.MaxCurrent = 0;
   motor_settings.MaxCurrentTime = 0;
   motor_settings.NoLoadCurrent = 0;
@@ -500,9 +500,9 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
 
   encoder_information_t encoder_information;
   memset((void*)&encoder_information, 0, sizeof(encoder_information_t));
-  const int8_t encoder_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_Manufacturer_temp[16] = {0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.Manufacturer, encoder_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t encoder_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_PartNumber_temp[24] = {0, 54, 45, 69, 65, 83, 89, 45, 49, 48, 50, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.PartNumber, encoder_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_encoder_information(id, &encoder_information);
 
@@ -520,7 +520,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_200(device_t id)
   encoder_settings.SupplyVoltageMin = 0;
   encoder_settings.SupplyVoltageMax = 0;
   encoder_settings.MaxCurrentConsumption = 0;
-  encoder_settings.PPR = 0;
+  encoder_settings.PPR = 7200;
   encoder_settings.EncoderSettings = 0;
   result = set_encoder_settings(id, &encoder_settings);
 

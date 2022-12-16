@@ -12,9 +12,9 @@
 
 #define 8MRL80_6_LEN2_100_BUILDER_VERSION_MAJOR  0
 #define 8MRL80_6_LEN2_100_BUILDER_VERSION_MINOR  9
-#define 8MRL80_6_LEN2_100_BUILDER_VERSION_BUGFIX 10
+#define 8MRL80_6_LEN2_100_BUILDER_VERSION_BUGFIX 16
 #define 8MRL80_6_LEN2_100_BUILDER_VERSION_SUFFIX ""
-#define 8MRL80_6_LEN2_100_BUILDER_VERSION        "0.9.10"
+#define 8MRL80_6_LEN2_100_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -30,7 +30,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
   memset((void*)&feedback_settings, 0, sizeof(feedback_settings_t));
   feedback_settings.IPS = 0;
   feedback_settings.FeedbackType = FEEDBACK_ENCODER;
-  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_DIFFERENTIAL | FEEDBACK_ENC_REVERSE | FEEDBACK_ENC_TYPE_AUTO;
+  feedback_settings.FeedbackFlags = FEEDBACK_ENC_TYPE_DIFFERENTIAL | FEEDBACK_ENC_TYPE_AUTO;
   feedback_settings.CountsPerTurn = 1440000;
   result = set_feedback_settings(id, &feedback_settings);
 
@@ -44,13 +44,13 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
 
   home_settings_t home_settings;
   memset((void*)&home_settings, 0, sizeof(home_settings_t));
-  home_settings.FastHome = 100;
+  home_settings.FastHome = 10;
   home_settings.uFastHome = 0;
   home_settings.SlowHome = 50;
   home_settings.uSlowHome = 0;
   home_settings.HomeDelta = 0;
   home_settings.uHomeDelta = 0;
-  home_settings.HomeFlags = HOME_USE_FAST | HOME_STOP_SECOND_REV | HOME_STOP_FIRST_REV | HOME_DIR_SECOND;
+  home_settings.HomeFlags = HOME_STOP_SECOND_REV | HOME_STOP_FIRST_REV | HOME_DIR_SECOND;
   result = set_home_settings(id, &home_settings);
 
   if (result != result_ok)
@@ -63,11 +63,11 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
 
   move_settings_t move_settings;
   memset((void*)&move_settings, 0, sizeof(move_settings_t));
-  move_settings.Speed = 250;
+  move_settings.Speed = 20;
   move_settings.uSpeed = 0;
-  move_settings.Accel = 9;
-  move_settings.Decel = 9;
-  move_settings.AntiplaySpeed = 250;
+  move_settings.Accel = 250;
+  move_settings.Decel = 250;
+  move_settings.AntiplaySpeed = 120;
   move_settings.uAntiplaySpeed = 0;
   move_settings.MoveFlags = 0;
   result = set_move_settings(id, &move_settings);
@@ -84,10 +84,10 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
   memset((void*)&engine_settings, 0, sizeof(engine_settings_t));
   engine_settings.NomVoltage = 1200;
   engine_settings.NomCurrent = 3000;
-  engine_settings.NomSpeed = 500;
+  engine_settings.NomSpeed = 240;
   engine_settings.uNomSpeed = 0;
-  engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_LIMIT_CURR | ENGINE_ACCEL_ON;
-  engine_settings.Antiplay = 28976;
+  engine_settings.EngineFlags = ENGINE_LIMIT_RPM | ENGINE_ACCEL_ON;
+  engine_settings.Antiplay = 28928;
   engine_settings.MicrostepMode = MICROSTEP_MODE_FRAC_256;
   engine_settings.StepsPerRev = 8;
   result = set_engine_settings(id, &engine_settings);
@@ -174,9 +174,9 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
   pid_settings.KpU = 0;
   pid_settings.KiU = 0;
   pid_settings.KdU = 0;
-  pid_settings.Kpf = 25;
-  pid_settings.Kif = 0.014999999664723873;
-  pid_settings.Kdf = 0.25;
+  pid_settings.Kpf = 300;
+  pid_settings.Kif = 0.07999999821186066;
+  pid_settings.Kdf = 0.800000011920929;
   result = set_pid_settings(id, &pid_settings);
 
   if (result != result_ok)
@@ -255,8 +255,8 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
 
   control_settings_t control_settings;
   memset((void*)&control_settings, 0, sizeof(control_settings_t));
-  control_settings.MaxSpeed[0] = 25;
-  control_settings.MaxSpeed[1] = 250;
+  control_settings.MaxSpeed[0] = 2;
+  control_settings.MaxSpeed[1] = 20;
   control_settings.MaxSpeed[2] = 0;
   control_settings.MaxSpeed[3] = 0;
   control_settings.MaxSpeed[4] = 0;
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MRL80_6_LEn2_100(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);

@@ -388,7 +388,7 @@ def set_profile_8MTL120XY_LEn1_025(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -446,7 +446,7 @@ def set_profile_8MTL120XY_LEn1_025(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([56, 77, 84, 76, 49, 50, 48, 88, 89, 45, 76, 69, 110, 49, 45, 48, 50, 53, 0, 51, 0, 48, 0, 0])
+    stage_information.PartNumber = bytes([56, 77, 84, 76, 49, 50, 48, 88, 89, 45, 76, 69, 110, 49, 45, 48, 50, 53, 0, 51, 0, 48, 0, 83])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -473,7 +473,7 @@ def set_profile_8MTL120XY_LEn1_025(lib, id):
     motor_information = motor_information_t()
 
     motor_information.Manufacturer = bytes([0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80])
-    motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.PartNumber = bytes([0, 67, 45, 105, 45, 52, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 
     if result != Result.Ok:
@@ -518,8 +518,8 @@ def set_profile_8MTL120XY_LEn1_025(lib, id):
 
     encoder_information = encoder_information_t()
 
-    encoder_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    encoder_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.Manufacturer = bytes([0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.PartNumber = bytes([0, 54, 45, 69, 65, 83, 89, 45, 49, 48, 50, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_encoder_information(id, byref(encoder_information))
 
     if result != Result.Ok:

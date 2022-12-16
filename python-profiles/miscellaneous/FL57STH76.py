@@ -388,7 +388,7 @@ def set_profile_FL57STH76(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 
@@ -400,9 +400,9 @@ def set_profile_FL57STH76(lib, id):
 
     emf_settings = emf_settings_t()
 
-    emf_settings.L = 0.00559999980032444
-    emf_settings.R = 1.5
-    emf_settings.Km = 0.011599999852478504
+    emf_settings.L = 0
+    emf_settings.R = 0
+    emf_settings.Km = 0
     class BackEMFFlags_:
         BACK_EMF_KM_AUTO = 4
         BACK_EMF_RESISTANCE_AUTO = 2
@@ -446,7 +446,7 @@ def set_profile_FL57STH76(lib, id):
     stage_information = stage_information_t()
 
     stage_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    stage_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    stage_information.PartNumber = bytes([70, 76, 53, 55, 83, 84, 72, 55, 54, 0, 48, 53, 53, 45, 48, 52, 0, 52, 48, 68, 45, 69, 65, 83])
     result = lib.set_stage_information(id, byref(stage_information))
 
     if result != Result.Ok:
@@ -455,10 +455,10 @@ def set_profile_FL57STH76(lib, id):
 
     stage_settings = stage_settings_t()
 
-    stage_settings.LeadScrewPitch = 0
-    stage_settings.Units = bytes([0, 0, 0, 0, 0, 0, 0, 0])
+    stage_settings.LeadScrewPitch = 1
+    stage_settings.Units = bytes([100, 101, 103, 114, 101, 101, 0, 0])
     stage_settings.MaxSpeed = 0
-    stage_settings.TravelRange = 0
+    stage_settings.TravelRange = 360
     stage_settings.SupplyVoltageMin = 0
     stage_settings.SupplyVoltageMax = 0
     stage_settings.MaxCurrentConsumption = 0
@@ -472,8 +472,8 @@ def set_profile_FL57STH76(lib, id):
 
     motor_information = motor_information_t()
 
-    motor_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    motor_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.Manufacturer = bytes([0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    motor_information.PartNumber = bytes([0, 67, 45, 105, 45, 52, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_motor_information(id, byref(motor_information))
 
     if result != Result.Ok:
@@ -518,8 +518,8 @@ def set_profile_FL57STH76(lib, id):
 
     encoder_information = encoder_information_t()
 
-    encoder_information.Manufacturer = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    encoder_information.PartNumber = bytes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.Manufacturer = bytes([0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    encoder_information.PartNumber = bytes([0, 54, 45, 69, 65, 83, 89, 45, 49, 48, 50, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     result = lib.set_encoder_information(id, byref(encoder_information))
 
     if result != Result.Ok:
