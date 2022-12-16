@@ -383,7 +383,7 @@ copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_
 @SET PATH_BASE=%PATH%;
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
 @if not %errorlevel% == 0 goto FAIL
 mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
