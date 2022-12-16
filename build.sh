@@ -239,9 +239,9 @@ makedist()
 			mkdir $DISTEXAM/test_C/$example/compiled-$arch
 		done
 		
-		cp -R $DL/macosx/test_C/$example.app $DISTEXAM/test_C/$example/compiled-macosx/
-		cp -R $DL/win32/test_C/$example-compiled-win32/* $DISTEXAM/test_C/$example/compiled-win32/
-		cp -R $DL/win64/test_C/$example-compiled-win64/* $DISTEXAM/test_C/$example/compiled-win64/
+		cp -R $DL/macosx/$example.app $DISTEXAM/test_C/$example/compiled-macosx/
+		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/test_C/$example/compiled-win32/
+		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/test_C/$example/compiled-win64/
 	done
 	
 	for example in testapp_C testappeasy_C; do
@@ -250,9 +250,9 @@ makedist()
 			mkdir $DISTEXAM/test_C/$example/cb_compiled-$arch
 		done
 		
-		cp -R $DL/macosx/test_C/$example.app $DISTEXAM/test_C/$example/cb_compiled-macosx/
-		cp -R $DL/win32/test_C/$example-cb_compiled-win32/* $DISTEXAM/test_C/$example/cb_compiled-win32/
-		cp -R $DL/win64/test_C/$example-cb_compiled-win64/* $DISTEXAM/test_C/$example/cb_compiled-win64/
+		cp -R $DL/macosx/$example.app $DISTEXAM/test_C/$example/cb_compiled-macosx/
+		cp -R $DL/win32/$example-cb_compiled-win32/* $DISTEXAM/test_C/$example/cb_compiled-win32/
+		cp -R $DL/win64/$example-cb_compiled-win64/* $DISTEXAM/test_C/$example/cb_compiled-win64/
 	done
 	rm -f $DISTEXAM/test_Python/Makefile
 		
