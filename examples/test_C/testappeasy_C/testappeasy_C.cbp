@@ -48,7 +48,7 @@
 					<Add library="../../../ximc/win32/libximc.lib" />
 				</Linker>
 				<ExtraCommands>
-					<Add after='cmd /c copy /Y &quot;..\..\..\imc\win32\xibridge.dll&quot; &quot;cb_compiled-win32\&quot;' />
+					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\xibridge.dll&quot; &quot;cb_compiled-win32\&quot;' />
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\libximc.dll&quot; &quot;cb_compiled-win32\&quot;' />
 				</ExtraCommands>
 			</Target>
