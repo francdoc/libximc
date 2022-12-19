@@ -18,7 +18,7 @@
 #include <unistd.h>
 #endif
 
-
+#include "vendor/miniupnpc/include/miniupnpc.h"
 
 
 /*
@@ -479,6 +479,9 @@ result_t enumerate_tcp_devices(
 	)
 {
 	char *hints_tcp, *ptr, *new_ptr;
+    struct UPNPDev * devlist = 0;
+    int error = 0;
+
 	get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
 	if (hints_tcp == NULL)
 	{
@@ -509,6 +512,23 @@ result_t enumerate_tcp_devices(
         }
     }
 	free(hints_tcp);
+
+    if (devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error))
+    {
+        struct UPNPDev * device;
+        if (devlist)
+        {
+            printf("List of UPNP devices found on the network :\n");
+            for (device = devlist; device; device = device->pNext)
+            {
+                printf(" desc: %s\n st: %s\n\n",
+                    device->descURL, device->st);
+            }
+        }
+
+        freeUPNPDevlist(devlist); devlist = 0;
+    }
+
 	return result_ok;
 }
 
