@@ -15,7 +15,7 @@ How to work with example:
 * On Windows: 
 	- before running example, install dependencies from requirements.txt. To do this, on the command line in the directory with the example, execute:
 	python -m pip install -r requirements.txt
-	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work bindy.dll, libximc.dll, xiwrapper.dll, keyfile.sqlite
+	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work xibridge.dll, libximc.dll.
 3. To run, you need to have python 2 or 3 versions installed
 4. Run the example with the command: python Extendtestpython.py
 
@@ -25,6 +25,8 @@ More detailed information about the example can be found in the file Readme_Exte
 
 
 Rus.
+Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
+Для запуска необходим установленный python 2 или 3 версии. Python версии 3.9 НЕ ПОДДЕРЖИВАЕТСЯ!
  
 Как работать с примером:
 1. Для корректного использования библиотеки libximc в примере используется файловая оболочка, /ximc/crossplatform/wrappers/python/pyximc.py с описанием структуры библиотеки.
@@ -40,7 +42,7 @@ Rus.
 * Для Windows:
 	- перед запуском примера установите зависимости из requirements.txt. Для этого в командой строке в директории с примером выполните команду: 
 	python -m pip install -r requirements.txt
-	- используемые библиотеки: bindy.dll, libximc.dll, xiwrapper.dll, keyfile.sqlite, находятся в папках ximc/winX
+	- используемые библиотеки: xibridge.dll, libximc.dll, находятся в папках ximc/winX
 3. Для запуска необходим установленный python 2 или 3 версии
 4. Запустите пример командой: python Extendtestpython.py
 

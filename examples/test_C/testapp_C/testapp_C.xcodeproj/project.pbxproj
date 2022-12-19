@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		81C68A861551C4D8002E377F /* libximc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C68A851551C4D8002E377F /* libximc.framework */; };
 		81C68A871551C566002E377F /* libximc.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 81C68A851551C4D8002E377F /* libximc.framework */; };
-		81D3E64E0F8804F80059F088 /* testprofile_C.c in Sources */ = {isa = PBXBuildFile; fileRef = 81D3E64D0F8804F80059F088 /* testprofile_C.c */; };
+		81D3E64E0F8804F80059F088 /* testapp_C.c in Sources */ = {isa = PBXBuildFile; fileRef = 81D3E64D0F8804F80059F088 /* testapp_C.c */; };
 		8D0C4E920486CD37000505A6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,14 +24,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE9C49F31FAA07D200E7BA84 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		81C68A851551C4D8002E377F /* libximc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libximc.framework; path = ../../ximc/macosx/libximc.framework; sourceTree = SOURCE_ROOT; };
-		81D3E64D0F8804F80059F088 /* testprofile_C.c */ = {isa = PBXFileReference; fileEncoding = 11; lastKnownFileType = sourcecode.c.c; path = testprofile_C.c; sourceTree = "<group>"; };
+		81C68A851551C4D8002E377F /* libximc.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libximc.framework; path = ../../../ximc/macosx/libximc.framework; sourceTree = SOURCE_ROOT; };
+		81D3E64D0F8804F80059F088 /* testapp_C.c */ = {isa = PBXFileReference; fileEncoding = 11; lastKnownFileType = sourcecode.c.c; path = testapp_C.c; sourceTree = "<group>"; };
 		8D0C4E960486CD37000505A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D0C4E970486CD37000505A6 /* testprofile_C.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testprofile_C.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D0C4E970486CD37000505A6 /* testapp_C.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testapp_C.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,12 +59,12 @@
 		195DF8CFFE9D517E11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D0C4E970486CD37000505A6 /* testprofile_C.app */,
+				8D0C4E970486CD37000505A6 /* testapp_C.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		20286C29FDCF999611CA2CEA /* testprofile_C */ = {
+		20286C29FDCF999611CA2CEA /* testapp_C */ = {
 			isa = PBXGroup;
 			children = (
 				20286C2AFDCF999611CA2CEA /* Sources */,
@@ -63,13 +72,13 @@
 				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
 				195DF8CFFE9D517E11CA2CBB /* Products */,
 			);
-			name = testprofile_C;
+			name = testapp_C;
 			sourceTree = "<group>";
 		};
 		20286C2AFDCF999611CA2CEA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				81D3E64D0F8804F80059F088 /* testprofile_C.c */,
+				81D3E64D0F8804F80059F088 /* testapp_C.c */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -94,23 +103,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D0C4E890486CD37000505A6 /* testprofile_C */ = {
+		8D0C4E890486CD37000505A6 /* testapp_C */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C0E91AC508A95435008D54AB /* Build configuration list for PBXNativeTarget "testprofile_C" */;
+			buildConfigurationList = C0E91AC508A95435008D54AB /* Build configuration list for PBXNativeTarget "testapp_C" */;
 			buildPhases = (
 				8D0C4E8C0486CD37000505A6 /* Resources */,
 				8D0C4E8F0486CD37000505A6 /* Sources */,
 				8D0C4E910486CD37000505A6 /* Frameworks */,
 				8187619E0F88EFB900670136 /* CopyFiles */,
+				CE9C49F31FAA07D200E7BA84 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = testprofile_C;
+			name = testapp_C;
 			productInstallPath = "$(HOME)/Applications";
-			productName = testprofile_C;
-			productReference = 8D0C4E970486CD37000505A6 /* testprofile_C.app */;
+			productName = testapp_C;
+			productReference = 8D0C4E970486CD37000505A6 /* testapp_C.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -118,18 +128,20 @@
 /* Begin PBXProject section */
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "testprofile_C" */;
+			attributes = {
+			};
+			buildConfigurationList = C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "testapp_C" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 20286C29FDCF999611CA2CEA /* testprofile_C */;
+			mainGroup = 20286C29FDCF999611CA2CEA /* testapp_C */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D0C4E890486CD37000505A6 /* testprofile_C */,
+				8D0C4E890486CD37000505A6 /* testapp_C */,
 			);
 		};
 /* End PBXProject section */
@@ -149,7 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81D3E64E0F8804F80059F088 /* testprofile_C.c in Sources */,
+				81D3E64E0F8804F80059F088 /* testapp_C.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,8 +175,8 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/build/Release/testprofile_C.app/Contents/Frameworks\"",
-					"\"$(SRCROOT)/../../ximc/macosx\"",
+					"\"$(SRCROOT)/build/Release/testapp_C.app/Contents/Frameworks\"",
+					"\"$(SRCROOT)/../../../ximc/macosx\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -173,7 +185,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = testprofile_C;
+				PRODUCT_NAME = testapp_C;
 				SKIP_INSTALL = NO;
 			};
 			name = Debug;
@@ -185,15 +197,15 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/build/Release/testprofile_C.app/Contents/Frameworks\"",
-					"\"$(SRCROOT)/../../ximc/macosx\"",
+					"\"$(SRCROOT)/build/Release/testapp_C.app/Contents/Frameworks\"",
+					"\"$(SRCROOT)/../../../ximc/macosx\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = testprofile_C;
+				PRODUCT_NAME = testapp_C;
 			};
 			name = Release;
 		};
@@ -205,9 +217,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PREBINDING = NO;
 				SDKROOT = macosx10.7;
-				VALID_ARCHS = "x86_64";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -220,16 +233,17 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PREBINDING = NO;
 				SDKROOT = macosx10.7;
-				VALID_ARCHS = "x86_64";
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C0E91AC508A95435008D54AB /* Build configuration list for PBXNativeTarget "testprofile_C" */ = {
+		C0E91AC508A95435008D54AB /* Build configuration list for PBXNativeTarget "testapp_C" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C0E91AC608A95435008D54AB /* Debug */,
@@ -238,7 +252,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "testprofile_C" */ = {
+		C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "testapp_C" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C0E91ACA08A95435008D54AB /* Debug */,

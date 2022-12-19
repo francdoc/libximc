@@ -252,15 +252,15 @@ extern "C"
 
 	/**
 		\english
-		* Calibration companion structure
+		* Calibration structure
 		\endenglish
 		\russian
 		* Структура калибровок
 		\endrussian	 */
 	typedef struct calibration_t
 	{
-		double A;					/**< Mulitiplier */
-		unsigned int MicrostepMode;	/**< Microstep mode */
+		double A; 		/**< \english is a conversion factor which is equal number of millimeters (or other units) per one step  \endenglish \russian коэффициент преобразования, равный количеству миллиметров (или других единиц) на один шаг \endrussian */
+		unsigned int MicrostepMode;			/**< \english is a controller setting which is determine a step division mode \endenglish \russian это настройка контроллера, определяющая режим пошагового деления \endrussian */
 	} calibration_t;
 
 	/**
@@ -272,12 +272,13 @@ extern "C"
 		\endrussian	 */
 	typedef struct device_network_information_t
 	{
-		uint32_t ipv4; 				/**< IPv4 address, passed in network byte order (big-endian byte order) */
-		char nodename[16];			/**< Name of the Bindy node which hosts the device */
-		uint32_t axis_state;		/**< Flags representing device state */
-		char locker_username[16];	/**< Name of the user who locked the device (if any) */
-		char locker_nodename[16];	/**< Bindy node name, which was used to lock the device (if any) */
-		time_t locked_time;			/**< Time the lock was acquired at (UTC, microseconds since the epoch) */
+		uint32_t ipv4; 		/**< \english IPv4 address, passed in network byte order (big-endian byte order) \endenglish \russian IPv4-адрес, передаваемый в сетевом байтовом порядке (big-endian byte order) \endrussian */
+		char nodename[16]; 		/**< \english name of the Bindy node which hosts the device \endenglish \russian имя узла Bindy, на котором размещено устройство \endrussian */
+		
+		uint32_t axis_state; 		/**< \english flags representing device state \endenglish \russian флаги, представляющие состояние устройства \endrussian */
+		char locker_username[16]; 		/**< \english name of the user who locked the device (if any) \endenglish \russian имя пользователя, заблокировавшего устройство (если таковое имеется) \endrussian */
+		char locker_nodename[16]; 		/**< \english Bindy node name, which was used to lock the device (if any) \endenglish \russian имя узла Bindy, которое использовалось для блокировки устройства (если таковое имеется) \endrussian */
+		time_t locked_time; 		/**< \english time the lock was acquired at (UTC, microseconds since the epoch) \endenglish \russian время, в которое была получена блокировка (UTC, микросекунды с момента начала эпохи) \endrussian */
 	} device_network_information_t;
 
 

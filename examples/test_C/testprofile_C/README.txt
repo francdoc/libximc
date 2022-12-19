@@ -12,7 +12,7 @@ How to work with example:
 
 * For Linux: 
 	- must be installed .deb packages libximc7_x.x.x and libximc7-dev_x.x.x for the required architecture strictly in the specified order, from the  /ximc/deb folder
-	- copy ximc/ximc.h to the examples/testprofile_C directory. 
+	- copy ximc/ximc.h to the examples/test_C/testprofile_C directory. 
 	- install gcc 
 	- build an example using the installed library:
 		$ make
@@ -40,7 +40,7 @@ Rus.
 
 * Для Linux: 
 	- необходимо установить .deb пакеты libximc7_x.x.x и libximc7-dev_x.x.x для требуемой архитектуры строго в указанном порядке, из папки /ximc/deb
-	- скопируйте ximc/ximc.h в каталог examples/testprofile_C
+	- скопируйте ximc/ximc.h в каталог examples/test_C/testprofile_C
 	- установите gcc 
 	- собирите пример с помощью установленной библиотеки:
 		$ make

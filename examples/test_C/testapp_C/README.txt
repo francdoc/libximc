@@ -5,14 +5,14 @@ A test application showing advanced features of working with the library, includ
  
 How to work with example:
 * For macOS X:
-	- copy ximc/macosx/libximc.framework, ximc/ximc.h to the examples/testapp_C directory
+	- copy ximc/macosx/libximc.framework, ximc/ximc.h to the examples/test_C/testapp_C directory
 	- install XCode
 	- build an example of testapp_C.xcodeproj using xcode
 	- launch the testapp_C.app application and check its operation in Console.app
 
 * For Linux: 
 	- must be installed .deb packages libximc7_x.x.x and libximc7-dev_x.x.x for the required architecture strictly in the specified order, from the folder /ximc/deb
-	- copy ximc/ximc.h to the examples/testapp_C directory
+	- copy ximc/ximc.h to the examples/test_C/testapp_C directory
 	- install gcc 
 	- build an example using the installed library:
 		$make
@@ -27,18 +27,18 @@ How to work with example:
 
 To work with the example in the CodeBlocks:
 * For macOS X:
-	- Copy ximc/macosx/libximc.framework, ximc/ximc.h to the examples/testapp_C directory. 
+	- Copy ximc/macosx/libximc.framework, ximc/ximc.h to the examples/test_C/testapp_C directory. 
 	- Install XCode compatible with CodeBlocks.
 
 * For Linux: 
 	- install .deb packages libximc7_x.x.x and libximc7-dev_x.x.x for the required architecture strictly in the specified order, from the folder /ximc/deb
-	- copy ximc/ximc.h to the examples/testapp_C directory
+	- copy ximc/ximc.h to the examples/test_C/testapp_C directory
 	- install gcc compatible with CodeBlocks.
 	
 * For Windows:
 	- to build and run the example, you need to use the Visual Studio 2013. Make sure that Microsoft Visual C++ Redistributable Package 2013 is installed
 	- the library with dependencies is located in the ximc/winX folders. The following files are required for the example to work: libximc.dll , xibridge.dll
-	- to build and run the example, open the examples/teachapp_C/testapp_C.cbp project in CodeBlocks
+	- to build and run the example, open the examples/test_C/teachapp_C/testapp_C.cbp project in CodeBlocks
 	- select Win32 or Win64 configuration
 	- build and run the application from the IDE
 
@@ -50,14 +50,14 @@ Rus.
  
 Как работать с примером:
 * Для macOS X: 
-	- скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог examples/testapp_C
+	- скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог examples/test_C/testapp_C
 	- установите XCode
 	- соберите пример testapp_C.xcodeproj используя XCode
 	- запустите приложение testapp_C.app и проверте его работу в Console.app
 
 * Для Linux: 
 	- необходимо установить .deb пакеты libximc7_x.x.x и libximc7-dev_x.x.x для требуемой архитектуры строго в указанном порядке, из папки /ximc/deb
-	- скопируйте ximc/ximc.h в каталог examples/testapp_C
+	- скопируйте ximc/ximc.h в каталог examples/test_C/testapp_C
 	- установите gcc 
 	- собирите пример с помощью установленной библиотеки:
 		$ make
@@ -72,18 +72,18 @@ Rus.
 
 Для работы с примером в среде CodeBlocks:
 * Для macOS X: 
-	- скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог examples/testapp_C. 
+	- скопируйте ximc/macosx/libximc.framework, ximc/ximc.h в каталог examples/test_C/testapp_C. 
 	- установите XCode, совместимый с CodeBlocks.
 
 * Для Linux: 
 	- установить .deb пакеты libximc7_x.x.x и libximc7-dev_x.x.x для требуемой архитектуры строго в указанном порядке, из папки /ximc/deb
-	- скопируйте ximc/ximc.h в каталог examples/testapp_C
+	- скопируйте ximc/ximc.h в каталог examples/test_C/testapp_C
 	- установите gcc совместимый с CodeBlocks.
 	
 * Для Windows:
 	- для сборки и запуска примера нужно использовать среду Visual Studio 2013. Убедитесь, что Microsoft Visual C++ Redistributable Package 2013 установлен
 	- библиотека с зависимостями расположена в папках ximc/winX. Для работы примера необходимы файлы: libximc.dll, xibridge.dll
-	- для сборки и запуска примера откройте проект examples/teastapp_C/testapp_C.cbp в CodeBlocks
+	- для сборки и запуска примера откройте проект examples/test_C/teastapp_C/testapp_C.cbp в CodeBlocks
 	- выберите конфигурацию Win32 или Win64
 	- выполните сборку и запустите приложение из среды разработки
 

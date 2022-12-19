@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd) # Текущая директория
-LIBRARY_PATH=$WORKING_DIR/../../ximc
+LIBRARY_PATH=$WORKING_DIR/../../../ximc
 LINUX_ARCH=$(uname -m)
 echo Current architecture: $LINUX_ARCH
 case $LINUX_ARCH in
@@ -28,6 +28,6 @@ if [ $FULL_LIBRARY_PATH != "None" ]
 then
   echo "${FULL_LIBRARY_PATH}"
   export LD_LIBRARY_PATH=${FULL_LIBRARY_PATH}
-  gcc testappeasy_C.c -L$FULL_LIBRARY_PATH -lximc -lxibridge -I $LIBRARY_PATH -o testappeasy_C
-  ./testappeasy_C  xi-com:/dev/ttyACM0
+  gcc testprofile_C.c -L$FULL_LIBRARY_PATH -lximc -lxibridge -I $LIBRARY_PATH -o testprofile_C
+  ./testprofile_C  xi-com:/dev/ttyACM0
 fi

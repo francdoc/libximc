@@ -1,6 +1,10 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
+<<<<<<< HEAD
 Version: 2.15.2
+=======
+Version: 2.14.7
+>>>>>>> dev-2.14
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -73,6 +77,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
+<<<<<<< HEAD
 * Wed Nov 30 2022 XIMC <info@ximc.ru> - 2.15.2
 - version bump
 - Feature #72227 libxibridge updated (version 1.0.6)
@@ -88,6 +93,13 @@ rm -rf $RPM_BUILD_ROOT
 - Feature #60457 API libxibridge made
 - Feature #61787 API libxibridge updated
 - Feature #67954 API libxibridge improved
+=======
+* Wed Nov 09 2022 XIMC <info@ximc.ru> - 2.14.7
+- version bump
+- Feature #69053 extendtest example bug fixed
+- Feature #67205 jupiter example added
+- Feature #69542 extendspython example: netifaces module changed for ifaddr
+>>>>>>> dev-2.14
 
 * Wed Sep 07 2022 XIMC <info@ximc.ru> - 2.14.6
 - version bump
