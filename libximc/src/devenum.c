@@ -18,7 +18,7 @@
 #include <unistd.h>
 #endif
 
-#include "vendor/miniupnpc/include/miniupnpc.h"
+#include <miniupnpc.h>
 
 
 /*
@@ -478,10 +478,13 @@ result_t enumerate_tcp_devices(
 	const char *hints
 	)
 {
-	char *hints_tcp, *ptr, *new_ptr;
+	char *hints_tcp, *ptr, *new_ptr, *ip_start, *ip_end;
+    struct UPNPDev * device;
     struct UPNPDev * devlist = 0;
     int error = 0;
-
+    char discover_ip[64];
+    int ip_len;
+    strcpy(discover_ip, "xi-tcp://");
 	get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
 	if (hints_tcp == NULL)
 	{
@@ -513,19 +516,21 @@ result_t enumerate_tcp_devices(
     }
 	free(hints_tcp);
 
-    if (devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error))
+    if (devlist = upnpDiscover(1000, NULL, NULL, 0, 0, 2, &error))
     {
-        struct UPNPDev * device;
-        if (devlist)
+        for (device = devlist; device; device = device->pNext)
         {
-            printf("List of UPNP devices found on the network :\n");
-            for (device = devlist; device; device = device->pNext)
-            {
-                printf(" desc: %s\n st: %s\n\n",
-                    device->descURL, device->st);
-            }
+            ip_start = strstr(device->descURL, "://");
+            if (ip_start == NULL) continue;
+            ip_end = strchr(ip_start + 3, '/');
+            if (ip_end == NULL) ip_end = strchr(ip_start, 0);
+            if (ip_end == NULL) continue;
+            ip_len = ip + end - ip_start - 3;
+            if (ip_len < 0 || ip_len > 63-9) continue;
+            memcpy(discover_ip + 9, ip_start + 3, ip_len);
+            discover_ip[discover_ip + 9 + ip_len] = 0;
+            callback(discover_ip);
         }
-
         freeUPNPDevlist(devlist); devlist = 0;
     }
 
