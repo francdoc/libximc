@@ -32,6 +32,7 @@ echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
 
 :: debug flag
+set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release

@@ -14,6 +14,11 @@
 
 #if defined(WIN32) || defined(WIN64)
 #include <io.h>
+#include <winioctl.h>
+#include <winsock2.h>
+#include <Ws2tcpip.h>
+#include <ws2def.h>
+#include <ws2def.h>
 #else
 #include <unistd.h>
 #endif
@@ -483,7 +488,10 @@ result_t enumerate_tcp_devices(
     struct UPNPDev * devlist = 0;
     int error = 0;
     char discover_ip[64];
-    int ip_len;
+    size_t ip_len;
+#ifdef _WIN32
+    WSADATA wsaData;
+#endif
     strcpy(discover_ip, "xi-tcp://");
 	get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
 	if (hints_tcp == NULL)
@@ -516,24 +524,35 @@ result_t enumerate_tcp_devices(
     }
 	free(hints_tcp);
 
-    if (devlist = upnpDiscover(1000, NULL, NULL, 0, 0, 2, &error))
+#ifdef _WIN32
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
+    {
+         return result_error;
+    }
+#endif
+    if (devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error))
     {
         for (device = devlist; device; device = device->pNext)
         {
             ip_start = strstr(device->descURL, "://");
             if (ip_start == NULL) continue;
-            ip_end = strchr(ip_start + 3, '/');
+            ip_end = strchr(ip_start + 3, ':');
+            if (ip_end == NULL) ip_end = strchr(ip_start, '/');
             if (ip_end == NULL) ip_end = strchr(ip_start, 0);
-            if (ip_end == NULL) continue;
-            ip_len = ip + end - ip_start - 3;
-            if (ip_len < 0 || ip_len > 63-9) continue;
+            if (ip_end == NULL || ip_end < (ip_start +3)) continue;
+            ip_len = ip_end - ip_start - 3;
+            if (ip_len < 0 || ip_len > 63-9) continue; //"xi-tcp://"- len = 9
             memcpy(discover_ip + 9, ip_start + 3, ip_len);
-            discover_ip[discover_ip + 9 + ip_len] = 0;
-            callback(discover_ip);
+            // add default port number for xi-tcp
+            portable_snprintf(discover_ip+9+ip_len, 64-9-ip_len, ":%u", XIMC_TCP_PORT);
+            callback(discover_ip, devenum);
         }
         freeUPNPDevlist(devlist); devlist = 0;
     }
 
+#ifdef _WIN32
+    WSACleanup();
+#endif
 	return result_ok;
 }
 
