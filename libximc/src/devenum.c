@@ -21,6 +21,18 @@
 #include <ws2def.h>
 #else
 #include <unistd.h>
+
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
+
+#ifdef __APPLE__
+/* We need IOKit */
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/usb/IOUSBLib.h>
+#include <sys/sysctl.h>
 #endif
 
 #include <miniupnpc.h>
