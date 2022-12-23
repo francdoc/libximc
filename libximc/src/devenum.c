@@ -34,7 +34,7 @@
 #include <IOKit/usb/IOUSBLib.h>
 #include <sys/sysctl.h>
 #endif
-
+#define MINIUPNP_STATICLIB
 #include <miniupnpc.h>
 
 

@@ -105,7 +105,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -157,7 +157,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     </ClCompile>
     <Link>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -189,7 +189,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <AdditionalOptions>/w34311 /w34302 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;miniupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -232,7 +232,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <AdditionalOptions>/w34311 /w34302 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;miniupnpc.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;miniupnpc.lib;Ws2_32.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>

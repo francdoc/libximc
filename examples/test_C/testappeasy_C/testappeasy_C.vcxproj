@@ -211,7 +211,7 @@ xcopy /y "..\..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "..\..\..\]ximc\win64\libximc.dll" "$(OutDir)"
+      <Command>xcopy /y "..\..\..\ximc\win64\libximc.dll" "$(OutDir)"
 xcopy /y "..\..\..\ximc\win64\xiwrapper.dll" "$(OutDir)"
 xcopy /y "..\..\..\ximc\win64\bindy.dll" "$(OutDir)"
 xcopy /y "..\..\..\ximc\win64\keyfile.sqlite" "$(OutDir)"</Command>
