@@ -12,7 +12,7 @@
 @set CMAKE="%ProgramFiles(x86)%\CMake\bin\cmake.exe" 
 
 :: avoid node reuse, flag is not enough to stop msbuildtaskhost so set env too
-@set MSBUILD=msbuild -nr:false
+@set MSBUILD=msbuild /nr:false
 @set MSBUILDDISABLENODEREUSE=1
 
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
