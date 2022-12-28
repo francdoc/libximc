@@ -8,6 +8,7 @@
 #include "protosup.h"
 
 #include "sglib.h"
+#include <locale.h>
 
 #ifdef _MSC_VER
 #pragma warning( disable : 4311 ) // because we may cast 64-bit handle ptrs to uint32_t to use as pseudo-ids
@@ -1360,6 +1361,8 @@ extern "C" {
 
 result_t XIMC_API load_correction_table(device_t* id, const char* namefile)
 {
+	setlocale(LC_NUMERIC, "C");
+	
 	device_metadata_t* dm;
 	FILE * fp = NULL;
 
@@ -1457,6 +1460,8 @@ result_t XIMC_API load_correction_table(device_t* id, const char* namefile)
 
 result_t XIMC_API set_correction_table(device_t id, const char* namefile)
 {
+	setlocale(LC_NUMERIC, "C");
+	
 	device_metadata_t* dm;
 	FILE * fp = NULL;
 
