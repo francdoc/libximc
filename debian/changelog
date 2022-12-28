@@ -1,3 +1,13 @@
+libximc7 (2.14.8-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #53770 calibration_t struct description changed
+  * Feature #72516 C example moved to test_C directory
+  * Feature #71035 python jupiter example improved
+  * Feature #72241 libximc virtual controller updated
+
+ -- XIMC <info@ximc.ru>  Wed, 28 Dec 2022 13:49:23 +0300
+
 libximc7 (2.14.7-1) unstable; urgency=low
 
   * Version bump

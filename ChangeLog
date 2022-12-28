@@ -1,3 +1,11 @@
+libximc (2.14.8-1)
+  * Released: Wed, 28 Dec 2022 13:49:23 +0300
+  * Version bump
+  * Feature #53770 calibration_t struct description changed
+  * Feature #72516 C example moved to test_C directory
+  * Feature #71035 python jupiter example improved
+  * Feature #72241 libximc virtual controller updated
+
 libximc (2.14.7-1)
   * Released: Wed, 09 Nov 2022 17:56:14 +0300
   * Version bump
