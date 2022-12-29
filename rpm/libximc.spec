@@ -81,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 - Feature #72516 C example moved to test_C directory
 - Feature #71035 python jupiter example improved
 - Feature #72241 libximc virtual controller updated
+- Feature #65676 The same separator applied for all correction tables
 
 * Wed Nov 09 2022 XIMC <info@ximc.ru> - 2.14.7
 - version bump
