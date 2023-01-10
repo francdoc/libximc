@@ -35,7 +35,7 @@
 #include <sys/sysctl.h>
 #endif
 #define MINIUPNP_STATICLIB
-#include <miniupnpc.h>
+#include <miniupnpc/miniupnpc.h>
 
 
 /*
