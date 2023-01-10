@@ -553,7 +553,7 @@ result_t enumerate_tcp_devices(
             if (ip_end == NULL) ip_end = strchr(ip_start, 0);
             if (ip_end == NULL || ip_end < (ip_start +3)) continue;
             ip_len = ip_end - ip_start - 3;
-            if (ip_len < 0 || ip_len > 63-9) continue; //"xi-tcp://"- len = 9
+            if (ip_end  < 3 + ip_start || ip_len > 63-9) continue; //"xi-tcp://"- len = 9
             memcpy(discover_ip + 9, ip_start + 3, ip_len);
             // add default port number for xi-tcp
             portable_snprintf(discover_ip+9+ip_len, 64-9-ip_len, ":%u", XIMC_TCP_PORT);
