@@ -542,7 +542,7 @@ result_t enumerate_tcp_devices(
          return result_error;
     }
 #endif
-    if (devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error))
+    if ((devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error)) != NULL)
     {
         for (device = devlist; device; device = device->pNext)
         {
