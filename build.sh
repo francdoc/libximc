@@ -347,9 +347,9 @@ build_to_local()
 	DL=ximc
 	DISTLATEST=$DL/$DISTNAME
 	#USE_CPPFLAGS="-I$DEPS/xiwrapper"
-	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch"
+	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -I$DEPS/miniupnpc/include"
 	USE_CXXFLAGS="$USE_CXXFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -Wno-unused-parameter -Wno-parentheses"
-	#USE_LDFLAGS="-L$DEPS/xiwrapper"
+	USE_LDFLAGS="-L$DEPS/miniupnpc/lib"
 
 	echo Using env $SPECIAL_ENV
 
