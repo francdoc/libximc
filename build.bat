@@ -12,7 +12,7 @@
 @set CMAKE="%ProgramFiles(x86)%\CMake\bin\cmake.exe" 
 
 :: avoid node reuse, flag is not enough to stop msbuildtaskhost so set env too
-@set MSBUILD=msbuild -nr:false
+@set MSBUILD=msbuild /nr:false
 @set MSBUILDDISABLENODEREUSE=1
 
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
@@ -234,6 +234,9 @@ copy libximc\include\ximc.h %DISTARCH%
 @set DISTARCH=%DISTDIR%\%1
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
 
+:: allow msbuild processes to finish, sometimes they lock build dir
+timeout /t 30
+
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 @if not exist %DISTARCH% mkdir %DISTARCH%
@@ -353,6 +356,8 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ------------------------------
 :: ---------- examples ---------- 
 :EXAMPLES
+:: allow msbuild processes to finish, sometimes they lock build dir
+timeout /t 30
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
