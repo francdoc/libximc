@@ -415,10 +415,10 @@ copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_TESTAPP
 :: TODO: Bug will be here
-copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
-@if not %errorlevel% == 0 goto FAIL
-copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
-@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
+::@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
+::@if not %errorlevel% == 0 goto FAIL
 :SKIP_PDB_COPY_TESTAPP
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
