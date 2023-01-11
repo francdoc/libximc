@@ -55,7 +55,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper"
+	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -347,9 +347,8 @@ build_to_local()
 	DL=ximc
 	DISTLATEST=$DL/$DISTNAME
 	#USE_CPPFLAGS="-I$DEPS/xiwrapper"
-	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -I$DEPS/miniupnpc/include"
+	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch"
 	USE_CXXFLAGS="$USE_CXXFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -Wno-unused-parameter -Wno-parentheses"
-	USE_LDFLAGS="-L$DEPS/miniupnpc/lib"
 
 	echo Using env $SPECIAL_ENV
 
@@ -365,11 +364,11 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
