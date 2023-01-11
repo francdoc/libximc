@@ -42,7 +42,7 @@
  * Types
  */
 
-typedef struct thread_state_t
+typedef struct enum_thread_state_t
 {
 	char* name;
 	uint32_t serial;
@@ -50,7 +50,7 @@ typedef struct thread_state_t
 	controller_name_t* controller_name;
 	stage_name_t* stage_name;
 	int status;
-} thread_state_t;
+} enum_thread_state_t;
 
 #ifdef _MSC_VER
 #define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
@@ -178,7 +178,7 @@ int enumerate_device_by_ximc_information(const char* addr, const char* adapter_a
 /* Concrete thread function to slowly check a device for beeing XIMC */
 void check_device_thread (void* arg)
 {
-	thread_state_t* ts = (thread_state_t*)arg;
+	enum_thread_state_t* ts = (enum_thread_state_t*)arg;
 	ts->status = check_device_by_ximc_information( ts->name, ts->info, &ts->serial, ts->controller_name, ts->stage_name ) ? 1 : 0;
 }
 
@@ -197,12 +197,12 @@ void network_enumerate_thread(void* arg)
 void launch_check_threads(device_enumeration_opaque_t* devenum)
 {
 	/* Check all found devices in threads */
-	thread_state_t* tstates;
+	enum_thread_state_t* tstates;
 	int i, k;
 
 	log_debug( L"precheck found %d devices, launching check threads", devenum->count );
 
-	tstates = (thread_state_t*)malloc( devenum->count*sizeof(thread_state_t) );
+	tstates = (enum_thread_state_t*)malloc( devenum->count*sizeof(enum_thread_state_t) );
 
 	for (i = 0; i < devenum->count; ++i)
 	{
@@ -213,7 +213,7 @@ void launch_check_threads(device_enumeration_opaque_t* devenum)
 		tstates[i].stage_name = &devenum->stage_names[i];
 	}
 
-	if (fork_join( check_device_thread, devenum->count, tstates, sizeof(thread_state_t) ) != result_ok)
+	if (fork_join( check_device_thread, devenum->count, tstates, sizeof(enum_thread_state_t) ) != result_ok)
 	{
 		log_error( L"fork/join engine failed" );
 		devenum->count = 0;
