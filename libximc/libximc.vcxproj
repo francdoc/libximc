@@ -202,8 +202,8 @@ $(SolutionDir)\deps\win32\xigen\$(Configuration)\xigen.exe --gen-fw-lib -x  $(So
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-header -x $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\include\ximc.h -t $(ProjectDir)\src\ximc-template.h
-$(SolutionDir)\deps\win64\xigen\$(Configuration)xigen.exe --gen-internal-header -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.h -t $(ProjectDir)\src\ximc-gen-template.h
-$(SolutionDir)\deps\win64\xigen\$(Configuration)xigen.exe --gen-code -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.c -t $(ProjectDir)\src\ximc-gen-template.c
+$(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-internal-header -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.h -t $(ProjectDir)\src\ximc-gen-template.h
+$(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-code -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.c -t $(ProjectDir)\src\ximc-gen-template.c
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-def -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\libximc.def -t $(ProjectDir)\src\libximc-template.def
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-header -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\fwprotocol.h -t $(ProjectDir)\src\fwprotocol-template.h
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-lib -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\fwprotocol.c -t $(ProjectDir)\src\fwprotocol-template.c</Command>
@@ -247,7 +247,7 @@ $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-lib -x  $(So
     <PreBuildEvent>
       <Command>$(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-header -x $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\include\ximc.h -t $(ProjectDir)\src\ximc-template.h
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-internal-header -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.h -t $(ProjectDir)\src\ximc-gen-template.h
-$(SolutionDir)\deps\win64\xigen\$(Configuration)ion)-$(Platform)\xigen.exe --gen-code -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.c -t $(ProjectDir)\src\ximc-gen-template.c
+$(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-code -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\ximc-gen.c -t $(ProjectDir)\src\ximc-gen-template.c
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-def -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\libximc.def -t $(ProjectDir)\src\libximc-template.def
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-header -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\fwprotocol.h -t $(ProjectDir)\src\fwprotocol-template.h
 $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-lib -x  $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\src\fwprotocol.c -t $(ProjectDir)\src\fwprotocol-template.c</Command>

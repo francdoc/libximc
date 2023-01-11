@@ -206,26 +206,25 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @set ARCH=%2
 @echo Building xigen for %ARCH%...
 
-rmdir /S /Q %DISTARCH%\xigen
+@if exist %DISTARCH%\xigen rmdir /S /Q %DISTARCH%\xigen
 mkdir %DISTARCH%\xigen
 
 ::@set URL="https://artifacts.ci.ximc.ru/xigen/xigen_src.tar.gz"
 ::bitsadmin.exe /transfer "GetXigen" URL %DISTARCH%\xigen\xigen_src.tar.gz
 ::излечь вместо копирования!!!
-copy ..\xigen_src\* %DISTARCH%\xigen\*
+xcopy ..\xigen %DISTARCH%\xigen /S
 
 @if not %errorlevel% == 0 goto FAIL
+cd %DISTARCH%\xigen
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 %CMAKE% -G "%GENERATOR%"
-@set LASTERR=%errorlevel%
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% xigen.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+@if not %errorlevel% == 0 goto FAIL
+if not exist %CONFIGURATION%\xigen.exe goto FAIL
+@if not %errorlevel% == 0 goto FAIL
 cd %BASEDIR%
-@if not %LASTERR% == 0 goto FAIL
-%MSBUILD% %DISTARCH%\xigen\xigen.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
-@if not %errorlevel% == 0 goto FAIL
-if not exist %DISTARCH%\xigen\%CONFIGURATION%\xigen.exe goto FAIL
-@if not %errorlevel% == 0 goto FAIL
-
 :: --------------------------------------
 :: -------------- libximc ---------------
 :LIBXIMC
