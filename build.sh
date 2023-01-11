@@ -456,6 +456,7 @@ build_dep_miniupnpc()
 	# cmake 3.5 is needed
 	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
 		-DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF \
+		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DCMAKE_INSTALL_PREFIX=$DEPS/miniupnpc $* .)
 	(cd $DEPS/miniupnpc-dist && cmake --build .)
 	(cd $DEPS/miniupnpc-dist && cmake --build . --target install)
