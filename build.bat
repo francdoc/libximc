@@ -287,7 +287,7 @@ copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
-%DISTDIR%\win32\xigen\%CONFIGURATION%\xigen.exe --gen-pascal -x version -i libximc\src\protocol.xi -o wrappers\delphi\ximc.pas -t wrappers\delphi\ximc-template.pas
+%DEPSDIR%\win32\xigen\%CONFIGURATION%\xigen.exe --gen-pascal -x version -i libximc\src\protocol.xi -o wrappers\delphi\ximc.pas -t wrappers\delphi\ximc-template.pas
 @if not %errorlevel% == 0 goto FAIL
 
 copy wrappers\delphi\ximc.pas %DISTARCH%
@@ -311,10 +311,10 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 
 @if not exist %GENDIR% mkdir %GENDIR%
 
-%DISTDIR%\%ARCH%\xigen\%CONFIGURATION%\xigen.exe --gen-java -x version -i libximc\src\protocol.xi -o wrappers\java\src\java\ru\ximc\libximc\JXimc.java -t wrappers\java\src\java\\ru\ximc\libximc\JXimc-template.java
+%DEPSDIR%\%ARCH%\xigen\%CONFIGURATION%\xigen.exe --gen-java -x version -i libximc\src\protocol.xi -o wrappers\java\src\java\ru\ximc\libximc\JXimc.java -t wrappers\java\src\java\ru\ximc\libximc\JXimc-template.java
 @if not %errorlevel% == 0 goto FAIL
 
-%JPATH%\bin\javac -Xlint -d wrappers\java wrappers\java\src\java\ru\ximc\libximc\JXimc.java wrappers\java\src\java\ru\ximc\libximc\XimcError.java wrappers\java\src\java\ru\ximc\libximc\XimcNoDevice.java wrappers\java\src\java\ru\ximc\libximc\XimcNotImplemented.java wrappers\java\src\java\ru\ximc\libximc\XimcValueError.java
+%JPATH%\bin\javac -Xlint -d wrappers\java wrappers\java\src\java\ru\ximc\libximc\JXimc.java wrappers\java\src\java\ru\ximc\libximc\XimcError.java wrappers\java\src\ru\ximc\libximc\XimcNoDevice.java wrappers\java\src\java\ru\ximc\libximc\XimcNotImplemented.java wrappers\java\src\java\ru\ximc\libximc\XimcValueError.java
 @if not %errorlevel% == 0 goto FAIL
 
 %JPATH%\bin\jar cf wrappers\java\libjximc.jar -C wrappers\java ru 
@@ -323,7 +323,7 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 %JPATH%\bin\javah -classpath wrappers\java\libjximc.jar -jni -d %GENDIR% ru.ximc.libximc.JXimc
 @if not %errorlevel% == 0 goto FAIL
 
-%DISTDIR%\%ARCH%\xigen\%CONFIGURATION%\xigen.exe --gen-jni -x version -i libximc\src\protocol.xi -o wrappers\java\src\c\ru_ximc_libximc_JXimc-gen.c -t wrappers\java\src\c\ru_ximc_libximc_JXimc-template.c
+%DEPSDIR%\%ARCH%\xigen\%CONFIGURATION%\xigen.exe --gen-jni -x version -i libximc\src\protocol.xi -o wrappers\java\src\c\ru_ximc_libximc_JXimc-gen.c -t wrappers\java\src\c\ru_ximc_libximc_JXimc-template.c
 @if not %errorlevel% == 0 goto FAIL
 
 %MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:libjximc
