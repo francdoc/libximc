@@ -3,7 +3,7 @@ XIBRIDGE_LINK_EXPR = -lxibridge
 endif
 libximc_la_CPPFLAGS = -I$(top_builddir)/libximc/include -DLIBXIMC_EXPORTS -DDATADIR='"$(datadir)"'
 libximc_la_CFLAGS = -fvisibility=hidden 
-libximc_la_LDFLAGS = $(XIBRIDGE_LINK_EXPR) -version-info 7:0:0 $(extra_ldflags_iokit)-lminiupnpc
+libximc_la_LDFLAGS = $(XIBRIDGE_LINK_EXPR) -version-info 7:0:0 $(extra_ldflags_iokit) -lminiupnpc
 
 # the library name to build
 lib_LTLIBRARIES = libximc.la
