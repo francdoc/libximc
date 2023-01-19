@@ -92,7 +92,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win32\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win32\miniupnpc\include;$(SolutionDir)\deps\win32\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBXIMC_EXPORTS;HAVE_XIWRAPPER;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -105,7 +105,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;libminiupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +114,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win32\xiwrapper\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win32\miniupnpc\lib;$(SolutionDir)\deps\win32\xiwrapper\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-header -x $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\include\ximc.h -t $(ProjectDir)\src\ximc-template.h
@@ -141,7 +141,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win32\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win32\miniupnpc\include;$(SolutionDir)\deps\win32\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBXIMC_EXPORTS;HAVE_XIWRAPPER;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FunctionLevelLinking>
@@ -157,7 +157,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     </ClCompile>
     <Link>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;libminiupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -167,7 +167,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win32\xiwrapper\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win32\miniupnpc\lib;$(SolutionDir)\deps\win32\xiwrapper\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,7 +178,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win64\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win64\miniupnpc\include;$(SolutionDir)\deps\win64\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;_USRDLL;LIBXIMC_EXPORTS;HAVE_XIWRAPPER;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -189,7 +189,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <AdditionalOptions>/w34311 /w34302 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;libminiupnpc.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -198,7 +198,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win64\xiwrapper\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win64\miniupnpc\lib;$(SolutionDir)\deps\win64\xiwrapper\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-header -x $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\include\ximc.h -t $(ProjectDir)\src\ximc-template.h
@@ -220,7 +220,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win64\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\deps\win64\miniupnpc\include;$(SolutionDir)\deps\win64\xiwrapper;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;_USRDLL;LIBXIMC_EXPORTS;HAVE_XIWRAPPER;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -232,7 +232,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <AdditionalOptions>/w34311 /w34302 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Setupapi.lib;xiwrapper.lib;libminiupnpc.lib;Ws2_32.lib;IPHlpApi.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>src\libximc.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -242,7 +242,7 @@ $(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-fw-lib -x  $(Solutio
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win64\xiwrapper\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\deps\win64\miniupnpc\lib;$(SolutionDir)\deps\win64\xiwrapper\$(Configuration)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\$(Configuration)-$(Platform)\xigen.exe --gen-header -x $(SolutionDir)/version -i $(ProjectDir)\src\protocol.xi -o $(ProjectDir)\include\ximc.h -t $(ProjectDir)\src\ximc-template.h

@@ -28,10 +28,13 @@ for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDI
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
 if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
+set MINIUPNPCVER=miniupnpd_2_3_0
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
+echo Set miniupnpc ver %MINIUPNPCVER%
 
 :: debug flag
+set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
@@ -82,6 +85,10 @@ call :DEPS_XIWRAPPER win64 x64
 call :DEPS_BINDY win32 Win32
 @if not %errorlevel% == 0 goto FAIL
 call :DEPS_XIWRAPPER win32 Win32
+@if not %errorlevel% == 0 goto FAIL
+call :DEPS_MINIUPNPC win64 x64
+@if not %errorlevel% == 0 goto FAIL
+call :DEPS_MINIUPNPC win32 Win32
 @if not %errorlevel% == 0 goto FAIL
 
 :SKIP_DEPS
@@ -194,6 +201,39 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @echo Building xiwrapper for %ARCH% completed
 @goto :eof
 
+:: --------------------------------------
+:: ------------ deps miniupnpc ----------
+:DEPS_MINIUPNPC
+@set DISTARCH=%DEPSDIR%\%1
+@set ARCH=%2
+@echo Building miniupnpc for %ARCH%...
+
+rmdir /S /Q %DISTARCH%\miniupnpc-dist
+rmdir /S /Q %DISTARCH%\miniupnpc
+mkdir %DISTARCH%\miniupnpc
+
+@set URL="https://github.com/transmission/miniupnpc.git"
+
+"%GIT%" clone --recursive %URL% %DISTARCH%\miniupnpc-dist -b %MINIUPNPCVER%
+@if not %errorlevel% == 0 goto FAIL
+cd %DISTARCH%\miniupnpc-dist
+
+@set GENERATOR=Visual Studio 12 2013
+if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
+%CMAKE% -G "%GENERATOR%" -DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF -DCMAKE_INSTALL_PREFIX=%BASEDIR%\%DISTARCH%\miniupnpc .
+@set LASTERR=%errorlevel%
+cd %BASEDIR%
+@if not %LASTERR% == 0 goto FAIL
+
+%MSBUILD% %DISTARCH%\miniupnpc-dist\ALL_BUILD.vcxproj
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% %DISTARCH%\miniupnpc-dist\INSTALL.vcxproj
+@if not %errorlevel% == 0 goto FAIL
+
+
+@echo Building miniupnpc for %ARCH% completed
+@goto :eof
+
 
 :: --------------------------------------
 :: -------------- libximc ---------------
@@ -232,6 +272,9 @@ copy libximc\include\ximc.h %DISTARCH%
 @echo Building csharp wrapper
 @set DISTARCH=%DISTDIR%\%1
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
+
+:: allow msbuild processes to finish, sometimes they lock build dir
+timeout /t 30
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -352,6 +395,8 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ------------------------------
 :: ---------- examples ---------- 
 :EXAMPLES
+:: allow msbuild processes to finish, sometimes they lock build dir
+timeout /t 30
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
@@ -370,10 +415,10 @@ copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_TESTAPP
 :: TODO: Bug will be here
-copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
-@if not %errorlevel% == 0 goto FAIL
-copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
-@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
+::@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
+::@if not %errorlevel% == 0 goto FAIL
 :SKIP_PDB_COPY_TESTAPP
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...

@@ -34,6 +34,7 @@
 		81F6942B14F002A9003EEC3C /* protosup.h in Headers */ = {isa = PBXBuildFile; fileRef = 81F6941F14F002A9003EEC3C /* protosup.h */; };
 		81F6942E14F002A9003EEC3C /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 81F6942214F002A9003EEC3C /* util.c */; };
 		81F6942F14F002A9003EEC3C /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 81F6942314F002A9003EEC3C /* util.h */; };
+		84CCFC32297123E0004AE5DB /* libminiupnpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CCFC31297123E0004AE5DB /* libminiupnpc.a */; };
 		8D07F2C40486CC7A007CD1D0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		81F6942214F002A9003EEC3C /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = util.c; path = src/util.c; sourceTree = "<group>"; };
 		81F6942314F002A9003EEC3C /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = src/util.h; sourceTree = "<group>"; };
 		81F6943614F0035A003EEC3C /* libximc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = libximc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		84CCFC31297123E0004AE5DB /* libminiupnpc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libminiupnpc.a; path = ../deps/miniupnpc/lib/libminiupnpc.a; sourceTree = "<group>"; };
 		8D07F2C70486CC7A007CD1D0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				8108B74C1847FA57007E9F48 /* CoreFoundation.framework in Frameworks */,
 				8D07F2C40486CC7A007CD1D0 /* Carbon.framework in Frameworks */,
 				81B86F6C1A35CF0600636CE4 /* libbindy.dylib in Frameworks */,
+				84CCFC32297123E0004AE5DB /* libminiupnpc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +121,7 @@
 		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				84CCFC31297123E0004AE5DB /* libminiupnpc.a */,
 				81B86F6E1A35D11C00636CE4 /* libxiwrapper.dylib */,
 				819BD0741A3597C200238B33 /* libbindy.dylib */,
 				8108B74D1847FA60007E9F48 /* IOKit.framework */,
@@ -303,7 +307,10 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xiwrapper";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../deps/xiwrapper",
+					"$(PROJECT_DIR)/../deps/miniupnpc/lib",
+				);
 				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
@@ -315,7 +322,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/../deps/xiwrapper";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../deps/xiwrapper",
+					"$(PROJECT_DIR)/../deps/miniupnpc/lib",
+				);
 				VALID_ARCHS = x86_64;
 			};
 			name = Release;
@@ -325,6 +335,7 @@
 			baseConfigurationReference = 8195605114EFF39100C65881 /* libximc.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				HEADER_SEARCH_PATHS = ../deps/miniupnpc/include;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				VALID_ARCHS = x86_64;
 			};
@@ -336,6 +347,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = ../deps/miniupnpc/include;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				VALID_ARCHS = x86_64;
 			};

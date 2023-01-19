@@ -22,6 +22,7 @@ XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
 if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
+MINIUPNPCVER=miniupnpd_2_3_0
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -54,7 +55,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper"
+	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -348,7 +349,6 @@ build_to_local()
 	#USE_CPPFLAGS="-I$DEPS/xiwrapper"
 	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch"
 	USE_CXXFLAGS="$USE_CXXFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -Wno-unused-parameter -Wno-parentheses"
-	#USE_LDFLAGS="-L$DEPS/xiwrapper"
 
 	echo Using env $SPECIAL_ENV
 
@@ -364,11 +364,11 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
@@ -444,12 +444,32 @@ build_dep_xiwrapper()
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
 }
 
+build_dep_miniupnpc()
+{
+	URL=https://github.com/transmission/miniupnpc
+
+	echo "--- Building miniupnpc ---"
+	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
+		(cd $DEPS && git clone $URL miniupnpc-dist -b $MINIUPNPCVER)
+	fi
+	# cmake 3.5 is needed
+	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
+		-DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_PREFIX=$DEPS/miniupnpc $* .)
+	(cd $DEPS/miniupnpc-dist && cmake --build .)
+	(cd $DEPS/miniupnpc-dist && cmake --build . --target install)
+}
+
+
 build_depends()
 {
 	echo Building depends with flags $*
 	mkdir -p $DEPS
 	build_dep_bindy $*
 	build_dep_xiwrapper $*
+	build_dep_miniupnpc $*
 	echo Seed keyfile to libximc, seems like a hack
 	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
 	cp $DEPS/bindy/sample_keyfile.sqlite examples/test_C/testapp_C/keyfile.sqlite
