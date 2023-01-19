@@ -40,8 +40,8 @@ Rus.
  java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
 
 5. Для других платформ используйте папку compiled. В нее понадобится скопировать зависимости: 
- xibridge.lib, xibridge.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll из папки ximc\winX
- 
+<xibridge.lib, xibridge.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll из папки ximc\winX
+
 Для модификации примера:
 1. Распакуйте jar командой:
  jar xvf test_Java.jar ru META-INF

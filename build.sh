@@ -22,6 +22,7 @@ XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
 if [ -z "$XIBRIDGEVER" ] ; then
 	XIBRIDGEVER=default
 fi
+MINIUPNPCVER=miniupnpd_2_3_0
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -419,6 +420,25 @@ build_dep_xibridge()
 	(cd $DEPS/xibridge && cmake $DEPS_CMAKE_OPT $* .)
 	$MAKE -C $DEPS/xibridge
 }
+
+build_dep_miniupnpc()
+{
+	URL=https://github.com/transmission/miniupnpc
+
+	echo "--- Building miniupnpc ---"
+	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
+		(cd $DEPS && git clone $URL miniupnpc-dist -b $MINIUPNPCVER)
+	fi
+	# cmake 3.5 is needed
+	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
+		-DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_PREFIX=$DEPS/miniupnpc $* .)
+	(cd $DEPS/miniupnpc-dist && cmake --build .)
+	(cd $DEPS/miniupnpc-dist && cmake --build . --target install)
+}
+
 
 build_depends()
 {

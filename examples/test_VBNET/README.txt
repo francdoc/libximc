@@ -8,6 +8,7 @@ How to work with example:
 5. To run the compiled example, you need to copy all the dependencies specified in step 4 to the folder with the executable file
 
 
+
 Rus.
 
 Как работать с примером:

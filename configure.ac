@@ -213,6 +213,20 @@ AM_CONDITIONAL([HAVE_XIBRIDGE], [test "x$with_xibridge" != "xno"])
 
 AC_CHECK_HEADERS([xibridge.h])
 
+# miniupnpc support
+AC_MSG_CHECKING([for miniupnpc support])
+AC_ARG_WITH([miniupnpc],
+						[AS_HELP_STRING([--with-miniupnpc], [use miniupnpc at path])],
+						[with_miniupnpc=$withval],
+						[with_miniupnpc=no])
+AC_MSG_RESULT([$with_miniupnpc])
+
+if test "x$with_miniupnpc" != "xno" ; then
+	CPPFLAGS="$CPPFLAGS -I$with_miniupnpc/include"
+	LDFLAGS="$LDFLAGS -L$with_miniupnpc/lib"
+fi
+
+
 # Checks for typedefs, structures, and compiler characteristics.
 
 AC_OUTPUT
@@ -230,7 +244,7 @@ echo "
   Locks support.......: ${with_locks:-NO}
   Java support........: ${with_java:-NO}
   XCode build.........: ${with_xcode_build:-NO} ${with_xcode_compiler}
-  Xibridge support...: ${with_xibridge}
+  Xibridge support....: ${with_xibridge}
   Unit testing........: ${with_unittests}"
 if test "x$with_java" = "xyes" ; then
 JAVAC_VERSION=`javac -version 2>&1`
