@@ -26,6 +26,9 @@ for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDI
 if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
 echo Found xibridge ver %XIBRIDGEVER%
 
+set MINIUPNPCVER=miniupnpd_2_3_0
+echo Set miniupnpc ver %MINIUPNPCVER%
+
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
