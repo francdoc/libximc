@@ -1,3 +1,8 @@
+- Feature #53770 calibration_t struct description changed
+- Feature #72516 C example moved to test_C directory
+- Feature #71035 python jupiter example improved
+- Feature #72241 libximc virtual controller updated
+- Feature #65676 The same separator applied for all correction tables
 #!/bin/sh
 set -e
 
@@ -55,7 +60,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge"
+	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -363,11 +368,11 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
@@ -445,6 +450,7 @@ build_depends()
 	echo Building depends with flags $*
 	mkdir -p $DEPS
 	build_dep_xibridge $*
+	build_dep_miniupnpc $*
 
 }
 
