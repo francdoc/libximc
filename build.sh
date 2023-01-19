@@ -1,8 +1,3 @@
-- Feature #53770 calibration_t struct description changed
-- Feature #72516 C example moved to test_C directory
-- Feature #71035 python jupiter example improved
-- Feature #72241 libximc virtual controller updated
-- Feature #65676 The same separator applied for all correction tables
 #!/bin/sh
 set -e
 
