@@ -222,7 +222,7 @@ copy libximc\include\ximc.h %DISTARCH%
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
 
 :: allow msbuild processes to finish, sometimes they lock build dir
-timeout /t 30
+timeout /t 30 /NOBREAK
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -343,7 +343,7 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ---------- examples ---------- 
 :EXAMPLES
 :: allow msbuild processes to finish, sometimes they lock build dir
-timeout /t 30
+timeout /t 30 /NOBREAK
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
