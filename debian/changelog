@@ -1,10 +1,17 @@
-libximc7 (2.15.2-1) unstable; urgency=low
+libximc7 (2.15.3-1) unstable; urgency=low
+
   * Version bump
   * Feature #53770 calibration_t struct description changed
   * Feature #72516 C example moved to test_C directory
   * Feature #71035 python jupiter example improved
   * Feature #72241 libximc virtual controller updated
   * Feature #65676 The same separator applied for all correction tables
+  * Feature #72852 XIMC-device net discovering added (miniupnpc used)
+
+ -- XIMC <info@ximc.ru>  Fri, 20 Jan 2023 10:55:55 +0300
+
+libximc7 (2.15.2-1) unstable; urgency=low
+  * Version bump
   * Feature #72227 libxibridge updated (version 1.0.6)
 
  -- XIMC <info@ximc.ru>  Wed, 30 Nov 2022 17:59:27 +0300
