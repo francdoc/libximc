@@ -316,12 +316,6 @@ $(SolutionDir)\deps\win64\xigen\$(Configuration)\xigen.exe --gen-fw-lib -x  $(So
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\xigen\xigen.vcxproj">
-      <Project>{666f535c-4ca3-4604-b151-cc84a9b1bc76}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

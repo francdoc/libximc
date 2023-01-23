@@ -267,6 +267,8 @@ if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 if not exist %CONFIGURATION%\xigen.exe goto FAIL
 @if not %errorlevel% == 0 goto FAIL
 cd %BASEDIR%
+@echo Building xigen for %ARCH% completed
+@goto :eof
 :: --------------------------------------
 :: -------------- libximc ---------------
 :LIBXIMC

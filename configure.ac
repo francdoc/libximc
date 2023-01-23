@@ -15,9 +15,6 @@ AC_CONFIG_FILES([Makefile
 								 libximc/docs/doc-en/Makefile
 								 libximc/docs/doc-ru/Doxyfile
 								 libximc/docs/doc-ru/Makefile
-								 xigen/Makefile
-								 xigen/src/Makefile
-								 xigen/tests/Makefile
 								 wrappers/Makefile
 								 wrappers/java/Makefile
 								 wrappers/java/src/Makefile

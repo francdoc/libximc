@@ -444,6 +444,21 @@ build_dep_xiwrapper()
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
 }
 
+build_dep_xigen()
+{
+	echo "--- Building xigen ---"
+	URL="https://artifacts.ci.ximc.ru/xigen/xigen_src.tar.gz"
+	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+		rm -rf $DEPS/xigen-dist  $DEPS/xigen
+		(cd $DEPS && mkdir xigen-dist) || false
+		(scp URL xigen-dist && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
+	fi
+	cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
+		-DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)
+	(cd $DEPS/xigen-dist && cmake --build .)
+	(cd $DEPS/xigen-dist && cmake --build . --target install)
+}
+
 build_dep_miniupnpc()
 {
 	URL=https://github.com/transmission/miniupnpc
@@ -469,6 +484,7 @@ build_depends()
 	mkdir -p $DEPS
 	build_dep_bindy $*
 	build_dep_xiwrapper $*
+	build_dep_xigen $*
 	build_dep_miniupnpc $*
 	echo Seed keyfile to libximc, seems like a hack
 	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
@@ -624,19 +640,19 @@ libfreebsd)
 	;;
 
 genfwheader)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./xigen/src/fwprotocol-template.h
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./$DEPS/xigen-dist/src/fwprotocol-template.h
 	;;
 
 genfwlib)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./xigen/src/fwprotocol-template.c
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./$DEPS/xigen-dist/src/fwprotocol-template.c
 	;;
 
 genwikiru)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language russian -o protocol_ru.wiki
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language russian -o protocol_ru.wiki
 	;;
 
 genwikien)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language english -o protocol_en.wiki
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language english -o protocol_en.wiki
 	;;
 
 abicc-dump)
