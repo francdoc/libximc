@@ -1,3 +1,10 @@
+libximc7 (2.14.9-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #72852 XIMC-device net discovering added (miniupnpc used)
+
+ -- XIMC <info@ximc.ru>  Fri, 20 Jan 2023 13:41:06 +0300
+
 libximc7 (2.14.8-1) unstable; urgency=low
 
   * Version bump
