@@ -256,11 +256,6 @@
  *
  * Убедитесь, что пользователь принадлежит к группе, позволяющей доступ к COM-порту (например, dip или serial).
  *
- * Скопируйте файл /usr/share/libximc/keyfile.sqlite в директорию с проектом командой
- * \code
- * $ cp /usr/share/libximc/keyfile.sqlite .
- * \endcode
- *
  * testapp может быть собран следующим образом с установленной библиотекой:
  * \code
  * $ make
@@ -305,7 +300,6 @@
  *
  * Как запустить пример на Linux. Перейдите в ximc-2.x.x/examples/test_Java/compiled/ и выполните
  * \code
- * $ cp /usr/share/libximc/keyfile.sqlite .
  * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
