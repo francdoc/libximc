@@ -453,7 +453,7 @@ build_dep_xigen()
 		(cd $DEPS && mkdir xigen-dist) || false
 		(scp URL xigen-dist && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
 	fi
-	cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
+	(cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
 		-DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)
 	(cd $DEPS/xigen-dist && cmake --build .)
 	(cd $DEPS/xigen-dist && cmake --build . --target install)
