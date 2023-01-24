@@ -395,8 +395,6 @@ copydist()
 	if [ -d "$LOCAL/share/java" ] ; then
 		cp -a $LOCAL/share/java/*.jar $DISTLATEST
 	fi
-	if [ -d "$LOCAL/share/libximc" ] ; then
-	fi
 }
 
 build_dep_bindy()
@@ -464,7 +462,6 @@ build_depends()
 	build_dep_bindy $*
 	build_dep_xiwrapper $*
 	build_dep_miniupnpc $*
-	echo Seed keyfile to libximc, seems like a hack
 
 
 build_deb_package()
