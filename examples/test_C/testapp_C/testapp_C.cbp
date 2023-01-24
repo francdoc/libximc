@@ -51,7 +51,6 @@
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\bindy.dll&quot; &quot;cb_compiled-win32\&quot;' />
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\xiwrapper.dll&quot; &quot;cb_compiled-win32\&quot;' />
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\libximc.dll&quot; &quot;cb_compiled-win32\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win32\keyfile.sqlite&quot; &quot;cb_compiled-win32\&quot;' />
 				</ExtraCommands>
 			</Target>
 			<Target title="win64">
@@ -75,7 +74,6 @@
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\bindy.dll&quot; &quot;cb_compiled-win64\&quot;' />
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\xiwrapper.dll&quot; &quot;cb_compiled-win64\&quot;' />
 					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\libximc.dll&quot; &quot;cb_compiled-win64\&quot;' />
-					<Add after='cmd /c copy /Y &quot;..\..\..\ximc\win64\keyfile.sqlite&quot; &quot;cb_compiled-win64\&quot;' />
 				</ExtraCommands>
 			</Target>
 		</Build>

@@ -149,8 +149,6 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.dll %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
 copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.lib %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\bindy\sample_keyfile.sqlite %DISTDIR%\%1\keyfile.sqlite
-@if not %errorlevel% == 0 goto FAIL
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_BINDY
 copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
