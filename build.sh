@@ -462,7 +462,7 @@ build_depends()
 	build_dep_bindy $*
 	build_dep_xiwrapper $*
 	build_dep_miniupnpc $*
-
+}
 
 build_deb_package()
 {
