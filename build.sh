@@ -451,7 +451,7 @@ build_dep_xigen()
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xigen-dist  $DEPS/xigen
 		(cd $DEPS && mkdir xigen-dist) || false
-		(curl -o xigen-dist/xigen_src.tar.gz  URL && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
+		(curl -o xigen-dist/xigen_src.tar.gz $URL && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
 	fi
 	(cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
 		-DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)
