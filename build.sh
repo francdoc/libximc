@@ -447,11 +447,11 @@ build_dep_xiwrapper()
 build_dep_xigen()
 {
 	echo "--- Building xigen ---"
-	URL="https://artifacts.ci.ximc.ru/xigen/xigen_src.tar.gz"
+	URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xigen-dist  $DEPS/xigen
 		(cd $DEPS && mkdir xigen-dist) || false
-		(scp URL xigen-dist && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
+		(curl -o xigen-dist/xigen_src.tar.gz  URL && tar -xvzf xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
 	fi
 	(cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
 		-DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)

@@ -249,11 +249,11 @@ cd %BASEDIR%
 @if exist %DISTARCH%\xigen rmdir /S /Q %DISTARCH%\xigen
 mkdir %DISTARCH%\xigen
 
-::@set URL="https://artifacts.ci.ximc.ru/xigen/xigen_src.tar.gz"
-::bitsadmin.exe /transfer "GetXigen" URL %DISTARCH%\xigen\xigen_src.tar.gz
+@set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+bitsadmin.exe /transfer "GetXigen" %URL% %BASEDIR%\%DISTARCH%\xigen\xigen_src.tar.gz
 ::излечь вместо копирования!!!
 ::xcopy ..\xigen %DISTARCH%\xigen /S
-copy ..\xigen\xigen_src.tar.gz %DISTARCH%\xigen
+::copy ..\xigen\xigen_src.tar.gz %DISTARCH%\xigen
 tar -xvzf %DISTARCH%\xigen\xigen_src.tar.gz -C %DISTARCH%\xigen
 
 @if not %errorlevel% == 0 goto FAIL
