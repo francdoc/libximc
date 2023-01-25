@@ -6,6 +6,7 @@
 @set BASEDIR=%CD%
 @set DISTDIR=ximc
 @set DEPSDIR=deps
+set PATH=c:\cygwin\bin;%PATH%
 
 :: set by CI
 :: @set GIT="%ProgramFiles%\Git\bin\git.exe"
@@ -250,11 +251,8 @@ cd %BASEDIR%
 mkdir %DISTARCH%\xigen
 
 @set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
-bitsadmin.exe /transfer "GetXigen" %URL% %BASEDIR%\%DISTARCH%\xigen\xigen_src.tar.gz
-::излечь вместо копирования!!!
-::xcopy ..\xigen %DISTARCH%\xigen /S
-::copy ..\xigen\xigen_src.tar.gz %DISTARCH%\xigen
-tar -xvzf %DISTARCH%\xigen\xigen_src.tar.gz -C %DISTARCH%\xigen
+curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
+tar xzf %DISTARCH%\xigen\xigen_src.tar.gz -C %DISTARCH%\xigen
 
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xigen
