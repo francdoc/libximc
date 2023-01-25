@@ -449,15 +449,12 @@ build_dep_xigen()
 	echo "--- Building xigen ---"
 	URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
-		rm -rf $DEPS/xigen-dist  $DEPS/xigen
-		(cd $DEPS && mkdir xigen-dist) || false
-		(curl -o $DEPS/xigen-dist/xigen_src.tar.gz $URL && tar -xvzf $DEPS/xigen-dist/xigen_src.tar.gz -C $DEPS/xigen-dist) || false
+		rm -rf $DEPS/xigen
+		(cd $DEPS && mkdir xigen) || false
+		(curl -o $DEPS/xigen/xigen_src.tar.gz $URL && tar -xvzf $DEPS/xigen/xigen_src.tar.gz -C $DEPS/xigen) || false
 	fi
-	(cd $DEPS/xigen-dist && cmake $DEPS_CMAKE_OPT \
-		-DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)
-	(cd $DEPS/xigen-dist && cmake --build .)
-	#$MAKE -C $DEPS/xigen-dist
-	(cd $DEPS/xigen-dist && cmake --build . --target install)
+	(cd $DEPS/xigen && cmake $DEPS_CMAKE_OPT $* .)
+	$MAKE -C $DEPS/xigen
 }
 
 build_dep_miniupnpc()
@@ -641,11 +638,11 @@ libfreebsd)
 	;;
 
 genfwheader)
-	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./$DEPS/xigen-dist/src/fwprotocol-template.h
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./$DEPS/xigen/src/fwprotocol-template.h
 	;;
 
 genfwlib)
-	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./$DEPS/xigen-dist/src/fwprotocol-template.c
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./$DEPS/xigen/src/fwprotocol-template.c
 	;;
 
 genwikiru)
