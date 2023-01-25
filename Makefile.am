@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4 -I config
 AM_DISTCHECK_CONFIGURE_FLAGS = --with-docs
 
-SUBDIRS = xigen libximc wrappers
+SUBDIRS = libximc wrappers
 
 EXTRA_DIST = aminclude.am version debian rpm
 
