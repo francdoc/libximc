@@ -144,7 +144,7 @@ xcopy /y "..\..\..\ximc\win32\bindy.dll" "$(OutDir)"</Command>
     <PostBuildEvent>
       <Command>xcopy /y "..\..\..\ximc\win32\libximc.dll" "$(OutDir)"
 xcopy /y "..\..\..\ximc\win32\xiwrapper.dll" "$(OutDir)"
-xcopy /y "..\..\..\imc\win32\bindy.dll" "$(OutDir)"</Command>
+xcopy /y "..\..\..\ximc\win32\bindy.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
