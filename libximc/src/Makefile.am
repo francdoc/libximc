@@ -24,21 +24,20 @@ uninstall-local:
 	rm -f "$(DESTDIR)$(libdir)"/libxiwrapper$(DEP_EXT)
 
 XIGEN = ${top_builddir}/deps/xigen/src/xigen
-XIGEN_DEP = ${top_builddir}/deps/xigen/src/xigen.stamp
 
-ximc-gen.c: protocol.xi $(XIGEN_DEP) ximc-gen-template.c ximc-gen.h
+ximc-gen.c: protocol.xi
 	$(XIGEN) --gen-code -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-gen-template.c
 
-ximc-gen.h: protocol.xi $(XIGEN_DEP) ximc-gen-template.h 
+ximc-gen.h: protocol.xi
 	$(XIGEN) --gen-internal-header -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-gen-template.h
 
-fwprotocol.c: protocol.xi $(XIGEN_DEP) fwprotocol-template.c
+fwprotocol.c: protocol.xi
 	$(XIGEN) --gen-fw-lib -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/fwprotocol-template.c
 
-fwprotocol.h: protocol.xi $(XIGEN_DEP) fwprotocol-template.h
+fwprotocol.h: protocol.xi
 	$(XIGEN) --gen-fw-header -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/fwprotocol-template.h
 
-$(top_builddir)/libximc/include/ximc.h: protocol.xi $(XIGEN_DEP) ximc-template.h 
+$(top_builddir)/libximc/include/ximc.h: protocol.xi
 	-mkdir -p $(top_builddir)/libximc/include
 	$(XIGEN) --gen-header -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-template.h 
 
