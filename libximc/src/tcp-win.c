@@ -31,6 +31,7 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 	
 	// check parameter ip4_port : address:port
 	char saddress[64];
+	int optval = 1; // set option =true
 	memset(saddress, 0, 64);
 	strncpy_s(saddress, 64, ip4_port, strlen(ip4_port));
 	char * port_start = strchr(saddress, ':');
@@ -40,6 +41,7 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		portable_snprintf(port_start, 64 - strlen(saddress), ":%u", XIMC_TCP_PORT);
 	}
 	unsigned int port;
+	int optval = 1;
 	if (sscanf_s(port_start + 1, "%u", &port) != 1) return result_error;
 	*port_start = 0;
 	ULONG addr = inet_addr(saddress);
@@ -100,6 +102,10 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		if (result != SOCKET_ERROR)
 		{
 			result = setsockopt((SOCKET)metadata->handle, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+		}
+		if (result != SOCKET_ERROR)
+		{
+			result = setsockopt((SOCKET)metadata->handle, IPPROTO_TCP, TCP_NODELAY, (char *)&optval, sizeof(int));
 		}
 	}
 	if (result == SOCKET_ERROR)
