@@ -1,4 +1,4 @@
-XIGEN = ${top_builddir}/xigen/bin/xigen
+XIGEN = ${top_builddir}/deps/xigen/bin/xigen
 
 
 jarfile = libjximc.jar
