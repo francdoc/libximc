@@ -25,19 +25,19 @@ uninstall-local:
 
 XIGEN = ${top_builddir}/deps/xigen/bin/xigen
 
-ximc-gen.c: protocol.xi
+ximc-gen.c: protocol.xi ximc-gen-template.c ximc-gen.h
 	$(XIGEN) --gen-code -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-gen-template.c
 
-ximc-gen.h: protocol.xi
+ximc-gen.h: protocol.xi ximc-gen-template.h 
 	$(XIGEN) --gen-internal-header -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-gen-template.h
 
-fwprotocol.c: protocol.xi
+fwprotocol.c: protocol.xi fwprotocol-template.c
 	$(XIGEN) --gen-fw-lib -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/fwprotocol-template.c
 
-fwprotocol.h: protocol.xi
+fwprotocol.h: protocol.xi fwprotocol-template.h
 	$(XIGEN) --gen-fw-header -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/fwprotocol-template.h
 
-$(top_builddir)/libximc/include/ximc.h: protocol.xi
+$(top_builddir)/libximc/include/ximc.h: protocol.xi ximc-template.h 
 	-mkdir -p $(top_builddir)/libximc/include
 	$(XIGEN) --gen-header -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-template.h 
 
