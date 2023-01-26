@@ -41,7 +41,6 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		portable_snprintf(port_start, 64 - strlen(saddress), ":%u", XIMC_TCP_PORT);
 	}
 	unsigned int port;
-	int optval = 1;
 	if (sscanf_s(port_start + 1, "%u", &port) != 1) return result_error;
 	*port_start = 0;
 	ULONG addr = inet_addr(saddress);
