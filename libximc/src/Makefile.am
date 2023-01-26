@@ -23,7 +23,7 @@ uninstall-local:
 	rm -f "$(DESTDIR)$(libdir)"/libbindy$(DEP_EXT)
 	rm -f "$(DESTDIR)$(libdir)"/libxiwrapper$(DEP_EXT)
 
-XIGEN = ${top_builddir}/deps/xigen/src/xigen
+XIGEN = ${top_builddir}/deps/xigen/bin/xigen
 
 ximc-gen.c: protocol.xi
 	$(XIGEN) --gen-code -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-gen-template.c
