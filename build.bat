@@ -493,6 +493,9 @@ copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_VBNET.pdb
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_VBNET.xml
 :: x64
 copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 %MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
@@ -500,6 +503,9 @@ copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_VBNET.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_VBNET.xml
 :: -----
 @set NAME=test_Delphi
 @echo Building example %NAME%...
