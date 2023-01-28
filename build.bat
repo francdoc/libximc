@@ -531,8 +531,8 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 
 del %DISTDIR%\win32\%NAME%-compiled-win32\test_CSharp.exe.config
-del %DISTDIR%\win64\%NAME%-compiled-win32\test_CSharp.pdb
-del %DISTDIR%\win32\%NAME%-compiled-win64\test_CSharp.exe.config
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_CSharp.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_CSharp.exe.config
 del %DISTDIR%\win64\%NAME%-compiled-win64\test_CSharp.pdb
 :: -----
 @set NAME=test_VBNET
