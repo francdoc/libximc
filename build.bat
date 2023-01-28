@@ -393,6 +393,9 @@ del examples\test_C\%NAME%\cb_obj /Q
 mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
 copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testapp_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testapp_C.pdb
 ::   clear env
 @SET PATH=%PATH_BASE%
 
@@ -435,6 +438,9 @@ del examples\test_C\%NAME%\cb_obj /Q
 mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
 copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testappeasy_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testappeasy_C.pdb
 ::   clear env
 @SET PATH=%PATH_BASE%
 
@@ -451,6 +457,9 @@ copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testprofile_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testprofile_C.pdb
 
 :: -----
 @set NAME=test_CSharp
@@ -469,6 +478,9 @@ copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_CSharp.exe.config
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_CSharp.pdb
 :: -----
 @set NAME=test_VBNET
 @echo Building example %NAME%...
