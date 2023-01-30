@@ -404,11 +404,13 @@ timeout /t 30 /NOBREAK
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win32\%NAME%-compiled-win32\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 %MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win64\%NAME%-compiled-win64\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_TESTAPP
@@ -433,6 +435,7 @@ mingw32-make --directory examples\test_C\%NAME%
 del examples\test_C\%NAME%\cb_obj /Q
 mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
 copy examples\test_C\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win32\%NAME%-cb_compiled-win32\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 :: Win64
 @SET PATH=%PATH_BASE%;%MINGW64%
@@ -443,6 +446,7 @@ mingw32-make --directory examples\test_C\%NAME%
 del examples\test_C\%NAME%\cb_obj /Q
 mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
 copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win64\%NAME%-cb_compiled-win64\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 
 del %DISTDIR%\win32\%NAME%-compiled-win32\testapp_C.pdb
