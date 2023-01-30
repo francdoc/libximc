@@ -330,7 +330,7 @@ int main (int argc, char* argv[])
 	}
 	print_state( &state );
 
-	char* ch1 = "table.txt";
+	char* ch1 = "Corr_table_example.tbl";
 
 	// The device_t device parameter in this function is a C pointer, unlike most library functions that use this parameter
 	if ((result = set_correction_table(device, ch1)) != result_ok)
