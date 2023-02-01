@@ -12,7 +12,7 @@ Python wrapper for working with stepper motor controllers using the [libximc](ht
    - **install_for_py_36_37.sh** if you work in *Linux* with *Python* version 3.6-3.7;
    - **install_for_py_38_311.sh** if you work in *Linux* with *Python* version 3.8-3.11.
 
-2. At the prompt, go to the **scripts** folder and run the command:
+2. At the prompt, go to the **jupyter_demo** folder and run the command:
 
    - if you work in *Windows*:
 
@@ -62,7 +62,7 @@ Python-обертка для работы с контроллерами шаго
    - **install_for_py_36_37.sh**, если вы работаете в *Linux* с *Python* версии 3.6-3.7;
    - **install_for_py_38_311.sh**, если вы работаете в *Linux* с *Python* версии 3.8-3.11.
    
-2. В командной строке перейдите в папку **scripts** и выполните команду:
+2. В командной строке перейдите в папку **jupyter_demo** и выполните команду:
    - если вы работаете в *Windows*:
    
      ```bash
