@@ -37,9 +37,9 @@ fwprotocol.c: protocol.xi fwprotocol-template.c
 fwprotocol.h: protocol.xi fwprotocol-template.h
 	$(XIGEN) --gen-fw-header -w -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/fwprotocol-template.h
 
-$(top_builddir)/libximc/include/ximc.h: protocol.xi ximc-template.h 
-	-mkdir -p $(top_builddir)/libximc/include
-	$(XIGEN) --gen-header -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-template.h 
+#$(top_builddir)/libximc/include/ximc.h: protocol.xi ximc-template.h 
+#	-mkdir -p $(top_builddir)/libximc/include
+#	$(XIGEN) --gen-header -x $(top_srcdir)/version -i $< -o $@ -t ${srcdir}/ximc-template.h 
 
 # the sources to add to the library and to add to the distribution
 libximc_la_SOURCES = \
