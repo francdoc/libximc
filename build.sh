@@ -360,7 +360,7 @@ build_to_local()
 	clean
 	rm -rf $LOCAL
 	mkdir -p $LOCAL $DL $DISTLATEST
-
+	build_dep_xigen
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
