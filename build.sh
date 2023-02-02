@@ -362,7 +362,6 @@ build_to_local()
 	mkdir -p $LOCAL $DL $DISTLATEST
 	
 	./autogen.sh
-	build_dep_xigen
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
 		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
