@@ -377,76 +377,97 @@ void store_device_name_with_xi_prefix(char* name, void* arg)
 /*
 for finding key in libximc without using c++ functions.
 */
-int find_key(const char* hints, const char* key, char* buf, unsigned int length)
+int find_key(const char* hints, const char* key, char* buf, size_t length)
 {
-	if (hints == NULL) return 0;
-	char *s, *ptr, *ptoc;
+    if (hints == NULL) return 0;
+    char *s, *ptr, *ptoc, *eptr, *pbuf;
     int key_count, i;
-    size_t len;
-	char delim, eq;
-	bool ret;
-	s = (char *)malloc(strlen(hints) + 1);
-	memcpy(s, hints, strlen(hints));
-	s[strlen(hints)] = 0;
+    size_t len, final_len;
+    char delim, eq;
+    int ret;
+    s = (char *)malloc(strlen(hints) + 1);
+    memcpy(s, hints, strlen(hints));
+    s[strlen(hints)] = 0;
 
-	delim = ',';
-	eq = '=';
-	key_count = 0;
-	ret = 1;
-	do
-	{ // exit when no new item is found in strrchr() function
-		ptr = strrchr(s, eq);
-		if (ptr == NULL) break;
-		key_count++;
-		while (ptr != s && *ptr != delim) // find the nearest left delimiter
-			ptr--;
-		if (ptr == s) break;
-		*ptr-- = 0;
-	} while (1);
-	ptr = s;
-	for (i = 0; i < key_count; i++)
-	{
-		len = strlen(ptr);
-		ptoc = ptr;
-		ptoc += strspn(ptoc, " \t");
-		if (portable_strncasecmp(ptoc, key, strlen(key)) == 0 && strchr(ptoc, eq) != NULL)
-		{
-			ptoc += strlen(key);
-			ptoc += strspn(ptoc, " \t");
-			if (*ptoc++ == eq)
-			{
-				ptoc += strspn(ptoc, " \t");
-				if (length < strlen(ptoc) + 1) ret = 0;
-				else  memcpy(buf, ptoc, strlen(ptoc) + 1);
-				free(s);
-				return ret;
-			}
-		}
-		ptr += (len + 1);
-	}
-	free(s);
-	return 0;
+    delim = '\n';
+    eq = '=';
+    key_count = 0;
+    ret = 1;
+    do
+    { // exit when no new item is found in strrchr() function
+        ptr = strrchr(s, eq);
+        if (ptr == NULL) break;
+        key_count++;
+        while (ptr != s && *ptr != delim) // find the nearest left delimiter
+            ptr--;
+        if (ptr == s) break;
+        *ptr-- = 0;
+    } while (1);
+    ptr = s;
+    for (i = 0; i < key_count; i++)
+    {
+        len = strlen(ptr);
+        ptoc = ptr;
+        ptoc += strspn(ptoc, " \t");
+        if (portable_strncasecmp(ptoc, key, strlen(key)) == 0 && strchr(ptoc, eq) != NULL)
+        {
+            ptoc += strlen(key);
+            ptoc += strspn(ptoc, " \t");
+            if (*ptoc++ == eq)
+            {
+                ptoc += strspn(ptoc, " \t");
+                eptr = ptoc + strlen(ptoc) - 1;
+                // trailng spaces to zero
+                while (eptr != ptoc && (*eptr == ' ' || *eptr == '\t'))
+                    *eptr-- = 0;
+                final_len = 0;
+                pbuf = buf;
+                while (ptoc != NULL)
+                {
+                    ptoc += strspn(ptoc, " \t");
+                    eptr = strchr(ptoc, ',');
+                    if (eptr == NULL) eptr = strchr(ptoc, 0);
+                    if (eptr != NULL)
+                    {
+                        eptr--;
+                        while (eptr != ptoc && (*eptr == ' ' || *eptr == '\t'))
+                            eptr--;
+                        eptr++;
+                        if (length >= (size_t)(final_len + eptr - ptoc + 1))
+                        {
+                            memcpy(pbuf, ptoc, eptr - ptoc);
+                            final_len += (eptr - ptoc);
+                            buf[final_len++] = ',';
+                            pbuf += eptr - ptoc + 1;
+                            ptoc = strchr(ptoc, ',');
+                            if (ptoc) ptoc++;
+                        }
+                        else
+                        {
+                            // buffer size is not enough
+                            ptoc = NULL;
+                            ret = 0;
+                        }
+                    }
+                    else
+                    {
+                        // some invalid data
+                        ptoc = NULL;
+                        ret = 0;
+                    }
+                }
+                if (final_len) final_len--;
+                buf[final_len] = 0;
+                free(s);
+                return ret;
+            }
+        }
+        ptr += (len + 1);
+    }
+    free(s);
+    return 0;
 }
 
-/*
-bool test_find_key()
-{
-	ZF_LOGD("Starting test_find_key...");
-	char * hints = "addr= abb, c,dd, xi-net=  888, 999, ";
-	char *hints_empty = "addr=";
-	char *bad_hints = " addr = 8 = 9";
-	char result[128];
-	if (!find_key(hints, "addr", result, 128))
-		return false;
-	if (!find_key(hints, "xi-net", result, 128))
-		return false;
-	if (!find_key(hints_empty, "addr", result, 128))
-		return false;
-	if (!find_key(bad_hints, "addr", result, 128))
-		return false;
-	return true;
-}
-*/
 
 #ifdef HAVE_XIBRIDGE
 /*
@@ -469,7 +490,7 @@ void get_addresses_from_hints_by_type(const char *hints, const char *xi_prefix, 
 	memset(addr, 0, hint_length + 1);
 
     
-	if (!find_key(hints, "addr", addr, (int)strlen(hints))) // addr is to be filled
+	if (!find_key(hints, "addr", addr, strlen(hints))) // addr is to be filled
 	{
 
 		free(addr);
@@ -661,7 +682,7 @@ result_t enumerate_xinet_devices(
 	hint_length = strlen(hints);
 	adapter = (char *)malloc(hint_length + 1);
 	memset(adapter, 0, hint_length + 1);
-    find_key(hints, "adapter_addr", adapter, (unsigned int)hint_length);
+    find_key(hints, "adapter_addr", adapter, hint_length);
 	items = 1; // anyway one item presents 
     token = hints_net;
     while (*token != 0)
