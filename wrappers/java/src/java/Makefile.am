@@ -1,6 +1,3 @@
-XIGEN = ${top_builddir}/deps/xigen/bin/xigen
-
-
 jarfile = libjximc.jar
 jarpath = $(top_builddir)/wrappers/java/$(jarfile)
 # why?

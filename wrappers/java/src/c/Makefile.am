@@ -1,5 +1,3 @@
-XIGEN = ${top_builddir}/deps/xigen/bin/xigen
-
 gendir = ${top_builddir}/wrappers/java/gen
 
 dist_libjximc_la_SOURCES = ru_ximc_libximc_JXimc.c
