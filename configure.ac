@@ -223,6 +223,19 @@ if test "x$with_miniupnpc" != "xno" ; then
 	LDFLAGS="$LDFLAGS -L$with_miniupnpc/lib"
 fi
 
+# xigen support
+AC_MSG_CHECKING([for xigen support])
+AC_ARG_WITH([xigen],
+						[AS_HELP_STRING([--with-xigen], [use xigen binary])],
+						[with_xigen=$withval],
+						[with_xigen=no])
+AC_MSG_RESULT([$with_xigen])
+AC_CHECK_FILE($with_xigen, [], [AC_MSG_ERROR([Could not find xigen])])
+
+if test "x$with_xigen" != "xno" ; then
+	AC_SUBST([XIGEN], [$with_xigen])
+fi
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 
@@ -243,6 +256,7 @@ echo "
   XCode build.........: ${with_xcode_build:-NO} ${with_xcode_compiler}
   Xiwrapper support...: ${with_xiwrapper}
   Miniupnpc support...: ${with_miniupnpc}
+  Xigen tool..........: ${with_xigen}
   Unit testing........: ${with_unittests}"
 if test "x$with_java" = "xyes" ; then
 JAVAC_VERSION=`javac -version 2>&1`
