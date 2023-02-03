@@ -55,7 +55,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc"
+	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc --with-xigen=$DEPS/xigen/bin/xigen"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -364,11 +364,13 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc \
+		--with-xigen=$DEPS/xigen/bin/xigen $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc \
+		--with-xigen=$DEPS/xigen/bin/xigen $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
