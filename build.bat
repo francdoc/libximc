@@ -518,10 +518,6 @@ del %DISTDIR%\win64\%NAME%-compiled-win64\test_VBNET.xml
 copy examples\%NAME%\%NAME%.exe %DISTDIR%\win32
 @if not %errorlevel% == 0 goto FAIL
 
-del %DISTDIR%\win32\libximc.def
-del %DISTDIR%\win32\libximc.lib
-del %DISTDIR%\win32\libximc.pdb
-
 :: -----
 @set NAME=test_Java
 @echo Building example %NAME% 64-bit...
