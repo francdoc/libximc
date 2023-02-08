@@ -200,16 +200,16 @@ cd %BASEDIR%
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\libximc.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
-@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_LIBXIMC
-copy %BINDIR%\*.pdb %DISTARCH%
-@if not %errorlevel% == 0 goto FAIL
-:SKIP_PDB_COPY_LIBXIMC
 copy %BINDIR%\libximc.lib %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 copy libximc\src\libximc.def %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 copy libximc\include\ximc.h %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
+@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_LIBXIMC
+copy %BINDIR%\*.pdb %DISTARCH%
+@if not %errorlevel% == 0 goto FAIL
+:SKIP_PDB_COPY_LIBXIMC
 
 @echo Building for %ARCH% completed
 @goto :eof
