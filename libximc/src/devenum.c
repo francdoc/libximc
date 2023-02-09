@@ -571,7 +571,7 @@ result_t enumerate_tcp_devices(
             descXML = miniwget(device->descURL, &descXMLsize,
                                0, &code);
                         
-            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) && strstr(nam, "XIMC") != NULL)
+            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) && strstr(name, "XIMC") != NULL)
             {
                 ip_start = strstr(device->descURL, "://");
                 if (ip_start == NULL) continue;
@@ -586,6 +586,8 @@ result_t enumerate_tcp_devices(
                 portable_snprintf(discover_ip + 9 + ip_len, 64 - 9 - ip_len, ":%u", XIMC_TCP_PORT);
                 callback(discover_ip, devenum);
             }
+            if (descXML)
+                free(descXML);
         }
         freeUPNPDevlist(devlist); devlist = 0;
     }
