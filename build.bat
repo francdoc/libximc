@@ -7,7 +7,9 @@
 @set DISTDIR=ximc
 @set DEPSDIR=deps
 
-set CYGWIN_PATH=c:\cygwin\bin
+@set CYGWIN_PATH=c:\cygwin\bin
+@set MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
+@set MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 
 :: set by CI
 :: @set GIT="%ProgramFiles%\Git\bin\git.exe"
@@ -450,10 +452,8 @@ copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win
 :SKIP_PDB_COPY_TESTAPP
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
-@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
-@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
-@SET PATH_BASE=%PATH%;
+@SET PATH_BASE=%PATH%
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
 "%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
@@ -492,10 +492,8 @@ copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win
 @if not %errorlevel% == 0 goto FAIL
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
-@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
-@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
-@SET PATH_BASE=%PATH%;
+@SET PATH_BASE=%PATH%
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
 "%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
