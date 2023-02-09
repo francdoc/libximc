@@ -6,7 +6,8 @@
 @set BASEDIR=%CD%
 @set DISTDIR=ximc
 @set DEPSDIR=deps
-set PATH=c:\cygwin\bin;%PATH%
+
+set CYGWIN_PATH=c:\cygwin\bin
 
 :: set by CI
 :: @set GIT="%ProgramFiles%\Git\bin\git.exe"
@@ -251,8 +252,9 @@ cd %BASEDIR%
 mkdir %DISTARCH%\xigen
 
 @set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
-curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
-tar xzf %DISTARCH%\xigen\xigen_src.tar.gz -C %DISTARCH%\xigen
+%CYGWIN_PATH%\curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
+%CYGWIN_PATH%\gzip -d %DISTARCH%\xigen\xigen_src.tar.gz
+%CYGWIN_PATH%\tar xf %DISTARCH%\xigen\xigen_src.tar -C %DISTARCH%\xigen
 
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xigen
