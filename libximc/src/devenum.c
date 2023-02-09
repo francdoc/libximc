@@ -489,16 +489,37 @@ result_t enumerate_udp_devices(
 	return result_ok;
 }
 
+// simply find first entry occurance
+int get_entry_simple(const char *data, const char *entry_start, const char *entry_end, char *dist, size_t dsize)
+{
+    char *ch = strstr(data, entry_start);
+    size_t len;
+    if (ch == NULL) return  1;
+
+    char *ech = strstr(data + strlen(entry_start), entry_end);
+
+    if (ech == NULL) return 1;
+
+    ch += strlen(entry_start);
+    if ((len = (ech - ch)) > (dsize + 1)) return 1;
+    memcpy(dist, ch, len);
+    dist[len] = 0;
+    return 0;
+}
+
 result_t enumerate_tcp_devices(
 	enumerate_devices_directory_callback_t callback,
 	device_enumeration_opaque_t *devenum,
 	const char *hints
 	)
 {
-	char *hints_tcp, *ptr, *new_ptr, *ip_start, *ip_end;
+	char *hints_tcp, *ptr, *new_ptr, *ip_start, *ip_end, *descXML;
     struct UPNPDev * device;
     struct UPNPDev * devlist = 0;
     int error = 0;
+    int descXMLsize = 0;
+    int code;
+    char name[256];
     char discover_ip[64];
     size_t ip_len;
 #ifdef _WIN32
@@ -546,18 +567,25 @@ result_t enumerate_tcp_devices(
     {
         for (device = devlist; device; device = device->pNext)
         {
-            ip_start = strstr(device->descURL, "://");
-            if (ip_start == NULL) continue;
-            ip_end = strchr(ip_start + 3, ':');
-            if (ip_end == NULL) ip_end = strchr(ip_start, '/');
-            if (ip_end == NULL) ip_end = strchr(ip_start, 0);
-            if (ip_end == NULL || ip_end < (ip_start +3)) continue;
-            ip_len = ip_end - ip_start - 3;
-            if (ip_end  < 3 + ip_start || ip_len > 63-9) continue; //"xi-tcp://"- len = 9
-            memcpy(discover_ip + 9, ip_start + 3, ip_len);
-            // add default port number for xi-tcp
-            portable_snprintf(discover_ip+9+ip_len, 64-9-ip_len, ":%u", XIMC_TCP_PORT);
-            callback(discover_ip, devenum);
+                     
+            descXML = miniwget(device->descURL, &descXMLsize,
+                               0, &code);
+                        
+            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) && strstr(nam, "XIMC") != NULL)
+            {
+                ip_start = strstr(device->descURL, "://");
+                if (ip_start == NULL) continue;
+                ip_end = strchr(ip_start + 3, ':');
+                if (ip_end == NULL) ip_end = strchr(ip_start, '/');
+                if (ip_end == NULL) ip_end = strchr(ip_start, 0);
+                if (ip_end == NULL || ip_end < (ip_start + 3)) continue;
+                ip_len = ip_end - ip_start - 3;
+                if (ip_end  < 3 + ip_start || ip_len > 63 - 9) continue; //"xi-tcp://"- len = 9
+                memcpy(discover_ip + 9, ip_start + 3, ip_len);
+                // add default port number for xi-tcp
+                portable_snprintf(discover_ip + 9 + ip_len, 64 - 9 - ip_len, ":%u", XIMC_TCP_PORT);
+                callback(discover_ip, devenum);
+            }
         }
         freeUPNPDevlist(devlist); devlist = 0;
     }
