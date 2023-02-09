@@ -26,8 +26,8 @@ set CYGWIN_PATH=c:\cygwin\bin
 :: read vers
 set BINDYVER=
 set XIWRAPPERVER=
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set BINDYVER=%%i
-for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
+for /F %%i in ( ' %CYGWIN_PATH%\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set BINDYVER=%%i
+for /F %%i in (' %CYGWIN_PATH%\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
 if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
 set MINIUPNPCVER=miniupnpd_2_3_0
