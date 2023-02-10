@@ -35,6 +35,7 @@
 #include <sys/sysctl.h>
 #endif
 #define MINIUPNP_STATICLIB
+#include <miniupnpc/miniwget.h>
 #include <miniupnpc/miniupnpc.h>
 
 
@@ -507,13 +508,12 @@ int get_entry_simple(const char *data, const char *entry_start, const char *entr
     return 0;
 }
 
-result_t enumerate_tcp_devices(
-	enumerate_devices_directory_callback_t callback,
-	device_enumeration_opaque_t *devenum,
-	const char *hints
-	)
+result_t discover_ssdp_add_as_tcp(
+    enumerate_devices_directory_callback_t callback,
+    device_enumeration_opaque_t *devenum
+    )
 {
-	char *hints_tcp, *ptr, *new_ptr, *ip_start, *ip_end, *descXML;
+    char *ip_start, *ip_end, *descXML;
     struct UPNPDev * device;
     struct UPNPDev * devlist = 0;
     int error = 0;
@@ -526,7 +526,57 @@ result_t enumerate_tcp_devices(
     WSADATA wsaData;
 #endif
     strcpy(discover_ip, "xi-tcp://");
-	get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
+   
+#ifdef _WIN32
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
+    {
+        return result_error;
+    }
+#endif
+    if ((devlist = upnpDiscoverAll(2000, NULL, NULL, 0, 0, 2, &error)) != NULL)
+    {
+        for (device = devlist; device; device = device->pNext)
+        {
+            descXML = NULL;
+            descXML = miniwget(device->descURL, &descXMLsize,
+                0, &code);
+
+            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) == 0 && strstr(name, "Standa") != NULL)
+            {
+                ip_start = strstr(device->descURL, "://");
+                if (ip_start == NULL) continue;
+                ip_end = strchr(ip_start + 3, ':');
+                if (ip_end == NULL) ip_end = strchr(ip_start, '/');
+                if (ip_end == NULL) ip_end = strchr(ip_start, 0);
+                if (ip_end == NULL || ip_end < (ip_start + 3)) continue;
+                ip_len = ip_end - ip_start - 3;
+                if (ip_end  < 3 + ip_start || ip_len > 63 - 9) continue; //"xi-tcp://"- len = 9
+                memcpy(discover_ip + 9, ip_start + 3, ip_len);
+                // add default port number for xi-tcp
+                portable_snprintf(discover_ip + 9 + ip_len, 64 - 9 - ip_len, ":%u", XIMC_TCP_PORT);
+                callback(discover_ip, devenum);
+            }
+            if (descXML)
+                free(descXML);
+        }
+        freeUPNPDevlist(devlist); devlist = 0;
+    }
+
+#ifdef _WIN32
+    WSACleanup();
+#endif
+    return result_ok;
+}
+
+
+result_t enumerate_tcp_devices(
+	enumerate_devices_directory_callback_t callback,
+	device_enumeration_opaque_t *devenum,
+	const char *hints
+	)
+{
+    char *hints_tcp, *ptr, *new_ptr;
+    get_addresses_from_hints_by_type(hints, "xi-tcp", &hints_tcp);
 	if (hints_tcp == NULL)
 	{
 		// no addr key was found
@@ -556,46 +606,7 @@ result_t enumerate_tcp_devices(
         }
     }
 	free(hints_tcp);
-
-#ifdef _WIN32
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
-    {
-         return result_error;
-    }
-#endif
-    if ((devlist = upnpDiscover(2000, NULL, NULL, 0, 0, 2, &error)) != NULL)
-    {
-        for (device = devlist; device; device = device->pNext)
-        {
-                     
-            descXML = miniwget(device->descURL, &descXMLsize,
-                               0, &code);
-                        
-            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) && strstr(name, "XIMC") != NULL)
-            {
-                ip_start = strstr(device->descURL, "://");
-                if (ip_start == NULL) continue;
-                ip_end = strchr(ip_start + 3, ':');
-                if (ip_end == NULL) ip_end = strchr(ip_start, '/');
-                if (ip_end == NULL) ip_end = strchr(ip_start, 0);
-                if (ip_end == NULL || ip_end < (ip_start + 3)) continue;
-                ip_len = ip_end - ip_start - 3;
-                if (ip_end  < 3 + ip_start || ip_len > 63 - 9) continue; //"xi-tcp://"- len = 9
-                memcpy(discover_ip + 9, ip_start + 3, ip_len);
-                // add default port number for xi-tcp
-                portable_snprintf(discover_ip + 9 + ip_len, 64 - 9 - ip_len, ":%u", XIMC_TCP_PORT);
-                callback(discover_ip, devenum);
-            }
-            if (descXML)
-                free(descXML);
-        }
-        freeUPNPDevlist(devlist); devlist = 0;
-    }
-
-#ifdef _WIN32
-    WSACleanup();
-#endif
-	return result_ok;
+    return result_ok;
 }
 
 #endif 
@@ -654,6 +665,13 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
+
+        enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum);
+        if (enumresult != result_ok)
+        {
+            log_debug(L"network discover failed with error %d", enumresult);
+        }
+            
 #else
         return result_error;
 #endif
