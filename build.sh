@@ -438,7 +438,7 @@ build_dep_xiwrapper()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/transmission/miniupnpc
+	URL=https://github.com/EPC-MSU/miniupnpc
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
