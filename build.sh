@@ -23,6 +23,7 @@ if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
 MINIUPNPCVER=miniupnpd_2_3_0
+XIGENVER=v1.0.0
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -449,11 +450,16 @@ build_dep_xiwrapper()
 build_dep_xigen()
 {
 	echo "--- Building xigen ---"
-	URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+	#URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+	#if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+	#	rm -rf $DEPS/xigen
+	#	(cd $DEPS && mkdir xigen) || false
+	#	(curl -o $DEPS/xigen/xigen_src.tar.gz $URL && tar -xvzf $DEPS/xigen/xigen_src.tar.gz -C $DEPS/xigen) || false
+	#fi
+	URL=https://github.com/EPC-MSU/xigen.git
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xigen
-		(cd $DEPS && mkdir xigen) || false
-		(curl -o $DEPS/xigen/xigen_src.tar.gz $URL && tar -xvzf $DEPS/xigen/xigen_src.tar.gz -C $DEPS/xigen) || false
+		(cd $DEPS && git clone $URL xigen -b $XIGENVER)
 	fi
 	(cd $DEPS/xigen && cmake $DEPS_CMAKE_OPT $* .)
 	$MAKE -C $DEPS/xigen

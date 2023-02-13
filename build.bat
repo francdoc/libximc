@@ -36,6 +36,8 @@ set MINIUPNPCVER=miniupnpd_2_3_0
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
 echo Set miniupnpc ver %MINIUPNPCVER%
+set XIGENVER=v1.0.0
+echo Set xigen ver %XIGENVER%
 
 :: debug flag
 ::set DEBUG=true
@@ -253,13 +255,17 @@ cd %BASEDIR%
 @if exist %DISTARCH%\xigen rmdir /S /Q %DISTARCH%\xigen
 mkdir %DISTARCH%\xigen
 
-@set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
-%CYGWIN_PATH%\curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
-%CYGWIN_PATH%\gzip -d %DISTARCH%\xigen\xigen_src.tar.gz
-%CYGWIN_PATH%\tar xf %DISTARCH%\xigen\xigen_src.tar -C %DISTARCH%\xigen
+::@set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+::%CYGWIN_PATH%\curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
+::%CYGWIN_PATH%\gzip -d %DISTARCH%\xigen\xigen_src.tar.gz
+::%CYGWIN_PATH%\tar xf %DISTARCH%\xigen\xigen_src.tar -C %DISTARCH%\xigen
 
+@set URL="https://github.com/EPC-MSU/xigen.git"
+
+"%GIT%" clone --recursive %URL% %DISTARCH%\xigen -b %XIGENVER%
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xigen
+@if not %errorlevel% == 0 goto FAIL
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 %CMAKE% -G "%GENERATOR%"
