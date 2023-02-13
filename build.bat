@@ -28,7 +28,8 @@ for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDI
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
 if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
-set MINIUPNPCVER=miniupnpd_2_3_0
+::set MINIUPNPCVER=miniupnpd_2_3_0
+set MINIUPNPCVER=1c29f47
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
 echo Set miniupnpc ver %MINIUPNPCVER%
@@ -210,11 +211,13 @@ rmdir /S /Q %DISTARCH%\miniupnpc-dist
 rmdir /S /Q %DISTARCH%\miniupnpc
 mkdir %DISTARCH%\miniupnpc
 
-@set URL="https://github.com/transmission/miniupnpc.git"
+@set URL="https://github.com/EPC-MSU/miniupnpc.git"
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\miniupnpc-dist -b %MINIUPNPCVER%
+"%GIT%" clone --recursive %URL% %DISTARCH%\miniupnpc-dist
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\miniupnpc-dist
+"%GIT%" checkout %MINIUPNPCVER%
+@if not %errorlevel% == 0 goto FAIL
 
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64

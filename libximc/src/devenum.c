@@ -35,7 +35,6 @@
 #include <sys/sysctl.h>
 #endif
 #define MINIUPNP_STATICLIB
-#include <miniupnpc/miniwget.h>
 #include <miniupnpc/miniupnpc.h>
 
 
@@ -490,36 +489,16 @@ result_t enumerate_udp_devices(
 	return result_ok;
 }
 
-// simply find first entry occurance
-int get_entry_simple(const char *data, const char *entry_start, const char *entry_end, char *dist, size_t dsize)
-{
-    char *ch = strstr(data, entry_start);
-    size_t len;
-    if (ch == NULL) return  1;
-
-    char *ech = strstr(data + strlen(entry_start), entry_end);
-
-    if (ech == NULL) return 1;
-
-    ch += strlen(entry_start);
-    if ((len = (ech - ch)) > (dsize + 1)) return 1;
-    memcpy(dist, ch, len);
-    dist[len] = 0;
-    return 0;
-}
-
+// discovers by ssdp, adds as xi-tcp-device
 result_t discover_ssdp_add_as_tcp(
     enumerate_devices_directory_callback_t callback,
     device_enumeration_opaque_t *devenum
     )
 {
-    char *ip_start, *ip_end, *descXML;
+    char *ip_start, *ip_end;
     struct UPNPDev * device;
     struct UPNPDev * devlist = 0;
     int error = 0;
-    int descXMLsize = 0;
-    int code;
-    char name[256];
     char discover_ip[64];
     size_t ip_len;
 #ifdef _WIN32
@@ -537,11 +516,7 @@ result_t discover_ssdp_add_as_tcp(
     {
         for (device = devlist; device; device = device->pNext)
         {
-            descXML = NULL;
-            descXML = miniwget(device->descURL, &descXMLsize,
-                0, &code);
-
-            if (get_entry_simple(descXML, "<friendlyName>", "</friendlyName>", name, 256) == 0 && strstr(name, "Standa") != NULL)
+            if (strstr(device->server, "8SMC5-USB") != NULL)
             {
                 ip_start = strstr(device->descURL, "://");
                 if (ip_start == NULL) continue;
@@ -556,8 +531,6 @@ result_t discover_ssdp_add_as_tcp(
                 portable_snprintf(discover_ip + 9 + ip_len, 64 - 9 - ip_len, ":%u", XIMC_TCP_PORT);
                 callback(discover_ip, devenum);
             }
-            if (descXML)
-                free(descXML);
         }
         freeUPNPDevlist(devlist); devlist = 0;
     }
