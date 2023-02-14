@@ -279,6 +279,50 @@ void fork_join_with_timeout(fork_join_thread_function_t function, int count, voi
 	free(mutexes);
 }
 
+void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int condition1, fork_join_thread_function_t function2, void* args2, int condition2)
+{
+    HANDLE handles[2];
+    int i, count_launched;
+    count_launched = 0;
+
+    if (condition1)
+    {
+        handles[0] = _beginthreadex(NULL, 0, function1, args1, 0, NULL);
+        if (handles[0] == 0)
+        {
+            log_system_error(L"Failed to create a luanch_sheck_threads thread due to: ");
+        }
+        else
+            count_launched++;
+
+    }
+    if (condition2)
+    {
+        handles[count_launched] = _beginthreadex(NULL, 0, function2, args2, 0, NULL);
+        if (handles[count_launched] == 0)
+        {
+             log_system_error(L"Failed to create a single_wrapper thread due to: ");
+        }
+        else
+            count_launched++;
+    }
+
+    /* Join threads or say there are no devices at all */
+    switch (WaitForMultipleObjects(count_launched, handles, TRUE, INFINITE))
+    {
+    case WAIT_OBJECT_0:
+        break;
+    case WAIT_FAILED:
+        log_system_error(L"Failed to wait for threads termination due to: ");
+        break;
+    default:
+        log_error(L"Failed to wait for threads termination due to strange reason");
+    }
+    for (i = 0; i < count_launched; ++i)
+        CloseHandle(handles[i]);
+}
+
+
 unsigned long long get_thread_id()
 {
 	return (unsigned long long)GetCurrentThreadId();
