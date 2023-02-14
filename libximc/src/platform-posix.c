@@ -363,7 +363,7 @@ void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int
     
     if (condition1)
     {
-        if (pthread_create(tids[0], &thread_attr, function1, args1))
+        if (pthread_create(&tids[0], &thread_attr, function1, args1))
         {
             log_system_error(L"Failed to create a pthread due to: ");
         }
@@ -372,7 +372,7 @@ void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int
     }
     if (condition2)
     {
-        if (pthread_create(tids[count_launched], &thread_attr, function2, args2))
+        if (pthread_create(&tids[count_launched], &thread_attr, function2, args2))
         {
             log_system_error(L"Failed to create a pthread due to: ");
         }
