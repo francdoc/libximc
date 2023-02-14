@@ -584,14 +584,17 @@ result_t enumerate_tcp_devices(
 
 #endif 
 
-void enumerate_ssdp_launch_probe_thread(device_enumeration_opaque_t* devenum)
+void enumerate_ssdp_launch_probe_thread(void *arg)
 {
     int enumerate_flags;
+    int enumresult;
+    device_enumeration_opaque_t *devenum;
+    
     enumerate_flags = devenum->flags;
-
+    devenum = (device_enumeration_opaque_t *)arg;
     if ((enumerate_flags & ENUMERATE_NETWORK) != 0)
     {
-        if (discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum) != result_pk)
+        if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_pk)
         {
             log_debug(L"network discover failed with error %d", enumresult);
         }
@@ -623,6 +626,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 	result_t enumresult;
 	char * addr;
 	size_t max_name_len = 4096;
+    net_enum_t net_enum;
 
 	/* ensure one-thread mutex init */
 	lock_metadata();
@@ -728,7 +732,6 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
             }
         }
 
-        net_enum_t net_enum;
         net_enum.server_count = items;
         net_enum.device_count = (int*)malloc(sizeof (int)* items);
         net_enum.addrs = (char**)malloc(sizeof (char*)* items);
@@ -756,7 +759,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
     }
     //single_thread_wrapper_function(&net_enum); // returns after a timeout
     //ssdd+device_enumerate and prallel network enumerate 
-    launch_ssdp_enum_netenum_threads(devenum, net_enum);
+    launch_ssdp_enum_netenum_threads(devenum, &net_enum);
 
     if (enumerate_flags & ENUMERATE_NETWORK) {
         //log_info( L"libximc found %d network devices", devices );
