@@ -586,12 +586,12 @@ result_t enumerate_tcp_devices(
 
 void enumerate_ssdp_launch_probe_thread(void *arg)
 {
+    device_enumeration_opaque_t *devenum;
     int enumerate_flags;
     int enumresult;
-    device_enumeration_opaque_t *devenum;
-    
-    enumerate_flags = devenum->flags;
+       
     devenum = (device_enumeration_opaque_t *)arg;
+    enumerate_flags = devenum->flags;
     if ((enumerate_flags & ENUMERATE_NETWORK) != 0)
     {
         if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_ok)
