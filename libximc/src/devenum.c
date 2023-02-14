@@ -594,7 +594,7 @@ void enumerate_ssdp_launch_probe_thread(void *arg)
     devenum = (device_enumeration_opaque_t *)arg;
     if ((enumerate_flags & ENUMERATE_NETWORK) != 0)
     {
-        if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_pk)
+        if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_ok)
         {
             log_debug(L"network discover failed with error %d", enumresult);
         }
