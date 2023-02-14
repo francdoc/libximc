@@ -291,7 +291,7 @@ void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int
     {
         carry[0].function = function1;
         carry[0].arg = (byte*)args1;
-        handles[0] = _beginthreadex(NULL, 0, check_thread_wrapper_win32, &carry[0], 0, NULL);
+        handles[0] = (HANDLE)_beginthreadex(NULL, 0, check_thread_wrapper_win32, &carry[0], 0, NULL);
         if (handles[0] == 0)
         {
             log_system_error(L"Failed to create a luanch_sheck_threads thread due to: ");
@@ -304,7 +304,7 @@ void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int
     {
         carry[count_launched].function = function2;
         carry[count_launched].arg = (byte*)args2;
-        handles[count_launched] = _beginthreadex(NULL, 0, check_thread_wrapper_win32, &carry[count_launched], 0, NULL);
+        handles[count_launched] = (HANDLE)_beginthreadex(NULL, 0, check_thread_wrapper_win32, &carry[count_launched], 0, NULL);
         if (handles[count_launched] == 0)
         {
              log_system_error(L"Failed to create a single_wrapper thread due to: ");
