@@ -675,7 +675,18 @@ result_t enumerate_tcp_devices(
     return result_ok;
 }
 
-result_t enumerate_xinet_devices(
+void enumerate_ssdp(void *arg)
+{
+    device_enumeration_opaque_t *devenum;
+    int enumresult;
+    devenum = (device_enumeration_opaque_t *)arg;
+    if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_ok)
+    {
+        log_debug(L"network discover failed with error %d", enumresult);
+    }
+ }
+
+result_t enumerate_xinet_devices_enumerate_ssdp(
     enumerate_devices_directory_callback_t callback,
     device_enumeration_opaque_t *devenum,
     const char *hints
@@ -733,7 +744,10 @@ result_t enumerate_xinet_devices(
             token = strtok(NULL, ",");
         }
     }
-    single_thread_wrapper_function(&net_enum); // returns after a timeout
+    //single_thread_wrapper_function(&net_enum); // returns after a timeout
+    fork_join_2_threads(enumerate_ssdp, devenum, 1,
+        single_thread_wrapper_function, &net_enum, 1
+        );
     for (server = 0; server < net_enum.server_count; server++)
     {
         pdev = pxis = (char *)*net_enum.pbufs[server];
@@ -756,49 +770,11 @@ result_t enumerate_xinet_devices(
 
 #endif 
 
-void enumerate_ssdp_launch_probe_thread(void *arg)
-{
-    device_enumeration_opaque_t *devenum;
-    int enumerate_flags;
-    int enumresult;
-       
-    devenum = (device_enumeration_opaque_t *)arg;
-    enumerate_flags = devenum->flags;
-    if ((enumerate_flags & ENUMERATE_NETWORK) != 0)
-    {
-        if ((enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum)) != result_ok)
-        {
-            log_debug(L"network discover failed with error %d", enumresult);
-        }
-    }
-    /* Check all found devices in threads */
-    if ((enumerate_flags & ENUMERATE_PROBE) != 0 && devenum->count > 0)
-    {
-        launch_check_threads(devenum);
-    }
-}
-
-
-void launch_ssdp_enum_netenum_threads(device_enumeration_opaque_t* devenum, net_enum_t * netenum)
-{
-    int enumerate_flags;
-    enumerate_flags = devenum->flags;
-
-    fork_join_2_threads(enumerate_ssdp_launch_probe_thread, devenum, 1,
-        single_thread_wrapper_function, netenum, (enumerate_flags & ENUMERATE_NETWORK) != 0
-        );
-
-}
-
 /* Enumerate devices main function */
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char * hints)
 {
     device_enumeration_opaque_t* devenum;
-    device_description desc;
     result_t enumresult;
-    char * addr;
-    size_t max_name_len = 4096;
-    net_enum_t net_enum;
 
     /* ensure one-thread mutex init */
     lock_metadata();
@@ -810,170 +786,61 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
     devenum->flags = enumerate_flags;
     devenum->count = 0;
     devenum->allocated_count = 40;
-    devenum->names = (char**)malloc( devenum->allocated_count * sizeof(char*) );
-    devenum->raw_names = (char**)malloc( devenum->allocated_count * sizeof(char*) );
-    devenum->serials = (uint32_t*)malloc( devenum->allocated_count * sizeof(uint32_t) );
-    devenum->infos = (device_information_t*)malloc( devenum->allocated_count * sizeof(device_information_t) );
-    devenum->controller_names = (controller_name_t*)malloc( devenum->allocated_count * sizeof(controller_name_t) );
-    devenum->stage_names = (stage_name_t*)malloc( devenum->allocated_count * sizeof(stage_name_t) );
-    devenum->dev_net_infos = (device_network_information_t*)malloc( devenum->allocated_count * sizeof(device_network_information_t) );
-    memset( devenum->infos, 0, devenum->allocated_count * sizeof(device_information_t) );
-    memset( devenum->controller_names, 0, devenum->allocated_count * sizeof(controller_name_t) );
-    memset( devenum->stage_names, 0, devenum->allocated_count * sizeof(stage_name_t) );
-    memset( devenum->dev_net_infos, 0, devenum->allocated_count * sizeof(device_network_information_t) );
+    devenum->names = (char**)malloc(devenum->allocated_count * sizeof(char*));
+    devenum->raw_names = (char**)malloc(devenum->allocated_count * sizeof(char*));
+    devenum->serials = (uint32_t*)malloc(devenum->allocated_count * sizeof(uint32_t));
+    devenum->infos = (device_information_t*)malloc(devenum->allocated_count * sizeof(device_information_t));
+    devenum->controller_names = (controller_name_t*)malloc(devenum->allocated_count * sizeof(controller_name_t));
+    devenum->stage_names = (stage_name_t*)malloc(devenum->allocated_count * sizeof(stage_name_t));
+    devenum->dev_net_infos = (device_network_information_t*)malloc(devenum->allocated_count * sizeof(device_network_information_t));
+    memset(devenum->infos, 0, devenum->allocated_count * sizeof(device_information_t));
+    memset(devenum->controller_names, 0, devenum->allocated_count * sizeof(controller_name_t));
+    memset(devenum->stage_names, 0, devenum->allocated_count * sizeof(stage_name_t));
+    memset(devenum->dev_net_infos, 0, devenum->allocated_count * sizeof(device_network_information_t));
 
     /* Call implementation-specific directory enumerator */
-    if (enumerate_devices_directory( store_device_name, devenum,
-                enumerate_flags ) != result_ok)
+    if (enumerate_devices_directory(store_device_name, devenum,
+        enumerate_flags) != result_ok)
     {
-        log_debug( L"enumerate_devices_directory failed" );
+        log_debug(L"enumerate_devices_directory failed");
         devenum->count = 0;
         return result_error;
     }
 
     if (enumerate_flags & ENUMERATE_NETWORK)
     {
+#ifdef HAVE_XIBRIDGE
         enumresult = enumerate_tcp_devices(store_device_name_with_xi_prefix, devenum, hints);
         if (enumresult != result_ok)
         {
-            log_debug( L"enumerate_tcp_devices failed with error %d", enumresult);
+            log_debug(L"enumerate_tcp_devices failed with error %d", enumresult);
         }
 
         enumresult = enumerate_udp_devices(store_device_name_with_xi_prefix, devenum, hints);
         if (enumresult != result_ok)
         {
-            log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
+            log_debug(L"enumerate_udp_devices failed with error %d", enumresult);
         }
-    }
-
-    
-    // prepare some data for network enumerate
-    if (enumerate_flags & ENUMERATE_NETWORK) {
-#ifdef HAVE_XIBRIDGE
-        char* adapter_addr;
-        if (hints == NULL) {
-            log_error(L"addr hints string is null");
-            return result_ok; // null hints is fine too
-        }
-        else
+        enumresult = enumerate_xinet_devices_enumerate_ssdp(store_device_name_with_xi_prefix, devenum, hints);
+        if (enumresult != result_ok)
         {
-            get_addresses_from_hints_by_type(hints, "", &addr);
-            if (addr == NULL) {
-                log_error(L"no \"addr\" substring in hints");
-                return result_ok; // empty hints string is not a critical error
-            }
-            int hint_length = (int)strlen(hints);
-            adapter_addr = malloc(hint_length + 1);
-            memset(adapter_addr, 0, hint_length + 1);
-            find_key(hints, "adapter_addr", adapter_addr, hint_length);
+            log_debug(L"enumerate_xinet_devices failed with error %d", enumresult);
         }
 
-        const char* delim = ",";
-        int items = 0;
-        if (strlen(addr) == 0)
-        { // broadcast enumerate
-            items = 1;
-        }
-        else
-        {
-            char *ptr = addr;
-            while (ptr != NULL) { // exit when no new item is found in strchr() function
-                items++;
-                ptr = strchr(ptr, ','); // Find location of the next comma or get NULL instead
-                if (ptr != NULL) { // NULL means there is no commas left and we must quit
-                    ptr++; // Continue with string after the comma
-                }
-            }
-        }
-
-        net_enum.server_count = items;
-        net_enum.device_count = (int*)malloc(sizeof (int)* items);
-        net_enum.addrs = (char**)malloc(sizeof (char*)* items);
-        net_enum.pbufs = (uint8_t***)malloc(sizeof(uint8_t**)* items);
-        net_enum.adapter_addr = adapter_addr;
-
-        if (strlen(addr) == 0) { // broadcast enumerate
-            net_enum.addrs[0] = addr;
-            net_enum.pbufs[0] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
-            *(net_enum.pbufs[0]) = NULL;
-            net_enum.device_count[0] = 0;
-        }
-        else {
-            char* token = strtok(addr, delim);
-            int i = 0;
-            while (i < items) {
-                net_enum.addrs[i] = token;
-                net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
-                *(net_enum.pbufs[i]) = NULL;
-                net_enum.device_count[i] = 0;
-                i++;
-                token = strtok(NULL, delim);
-            }
-        }
-    }
-    
-    launch_ssdp_enum_netenum_threads(devenum, &net_enum);
-
-    if (enumerate_flags & ENUMERATE_NETWORK) {
-        //log_info( L"libximc found %d network devices", devices );
-        int server;
-        for (server = 0; server < net_enum.server_count; server++) {
-            if (net_enum.device_count[server] > 0) {
-                int i;
-                for (i = 0; i < net_enum.device_count[server]; ++i) {
-                    if (devenum->count < devenum->allocated_count) {
-                        desc = *(((device_description*)*(net_enum.pbufs[server])) + i);
-                        devenum->serials[devenum->count] = desc.serial;
-
-                        memcpy(devenum->infos[devenum->count].Manufacturer, &desc.my_device_information.Manufacturer, sizeof (desc.my_device_information.Manufacturer));
-                        memcpy(devenum->infos[devenum->count].ManufacturerId, &desc.my_device_information.ManufacturerId, sizeof (desc.my_device_information.ManufacturerId));
-                        memcpy(devenum->infos[devenum->count].ProductDescription, &desc.my_device_information.ProductDescription, sizeof (desc.my_device_information.ProductDescription));
-                        devenum->infos[devenum->count].Major = desc.my_device_information.Major;
-                        devenum->infos[devenum->count].Minor = desc.my_device_information.Minor;
-                        devenum->infos[devenum->count].Release = desc.my_device_information.Release;
-
-                        /* compose name from IPv4 passed in host byte order */
-                        devenum->names[devenum->count] = (char*)malloc(max_name_len);
-                        devenum->raw_names[devenum->count] = NULL;
-                        uint8_t *ip_bytes = (uint8_t*)&desc.ipv4;
-                        portable_snprintf(devenum->names[devenum->count], max_name_len - 1, "xi-net://%d.%d.%d.%d/%08X",
-                            ip_bytes[0], ip_bytes[1], ip_bytes[2], ip_bytes[3], desc.serial);
-                        devenum->names[devenum->count][max_name_len - 1] = '\0';
-
-                        memcpy(devenum->controller_names[devenum->count].ControllerName, &desc.my_cname.ControllerName, sizeof (desc.my_cname.ControllerName));
-                        devenum->controller_names[devenum->count].CtrlFlags = desc.my_cname.CtrlFlags;
-
-                        memcpy(devenum->stage_names[devenum->count].PositionerName, &desc.my_sname.PositionerName, sizeof (desc.my_sname.PositionerName));
-
-                        /* fill dev_net_info from passed structure */
-                        memcpy(&devenum->dev_net_infos[devenum->count].ipv4, &desc.ipv4, sizeof(desc.ipv4));
-                        memcpy(&devenum->dev_net_infos[devenum->count].nodename, &desc.nodename, sizeof(desc.nodename) - 1);
-                        memcpy(&devenum->dev_net_infos[devenum->count].axis_state, &desc.axis_state, sizeof(desc.axis_state));
-                        memcpy(&devenum->dev_net_infos[devenum->count].locker_username, &desc.locker_username, sizeof(desc.locker_username) - 1);
-                        memcpy(&devenum->dev_net_infos[devenum->count].locker_nodename, &desc.locker_nodename, sizeof(desc.locker_nodename) - 1);
-                        memcpy(&devenum->dev_net_infos[devenum->count].locked_time, &desc.locked_time, sizeof(desc.locked_time));
-
-                        devenum->count++;
-                    } 
-                }
-            }
-            xibridge_free_enumerate_devices((char *)*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
-        }
-        free(addr); // free after last use of net_enum.addrs, because we use ptrs into this string
-        // also free the net_enum
-        free(net_enum.device_count);
-        free(net_enum.addrs);
-        free(net_enum.pbufs);
 #else
         return result_error;
 #endif
     }
 
+    /* Check all found devices in threads */
+    if ((enumerate_flags & ENUMERATE_PROBE) && devenum->count > 0)
+    {
+        launch_check_threads(devenum);
+    }
+
     log_debug(L"found %d devices", devenum->count);
     return result_ok;
 }
-
-
 /*
  * Exported device enumeration functions
  */
