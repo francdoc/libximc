@@ -957,6 +957,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
                     } 
                 }
             }
+            xibridge_free_enumerate_devices((char *)*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
         }
         free(addr); // free after last use of net_enum.addrs, because we use ptrs into this string
         // also free the net_enum
