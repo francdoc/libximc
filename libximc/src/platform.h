@@ -177,4 +177,7 @@ void single_thread_launcher(XIMC_RETTYPE(XIMC_CALLCONV *func)(void*), void *arg)
 /* Platform-specific fork/join function with timeout*/
 void fork_join_with_timeout(fork_join_thread_function_t function, int count, void* args, size_t arg_element_size, int timeout_ms, net_enum_t *net_enum);
 
+/* Platform-specific fork/join function for 2 fucntions launched on a specified condition*/
+void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int condition1, fork_join_thread_function_t function2, void* args2, int condition2);
+
 #endif

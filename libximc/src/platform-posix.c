@@ -350,6 +350,53 @@ void fork_join_with_timeout(fork_join_thread_function_t function, int count, voi
 	free(carry);
 }
 
+void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int condition1, fork_join_thread_function_t function2, void* args2, int condition2)
+{
+    
+    pthread_t tids[2];
+    pthread_attr_t thread_attr;
+    int i, count_launched;
+    fork_join_carry_t* carry;
+
+    pthread_attr_init(&thread_attr);
+    pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_JOINABLE);
+    count_launched = 0;
+    carry = (fork_join_carry_t*)malloc(2*sizeof(fork_join_carry_t));
+    if (condition1)
+    {
+        carry[0].function = function1;
+        carry[0].arg = (byte*)args1;
+        if (pthread_create(&tids[0], &thread_attr, &check_thread_wrapper_posix, &carry[0]))
+        {
+            log_system_error(L"Failed to create a pthread due to: ");
+        }
+        else
+            count_launched++;
+    }
+    if (condition2)
+    {
+        carry[count_launched].function = function2;
+        carry[count_launched].arg = (byte*)args2;
+        if (pthread_create(&tids[count_launched], &thread_attr, &check_thread_wrapper_posix, &carry[count_launched]))
+        {
+            log_system_error(L"Failed to create a pthread due to: ");
+        }
+        else
+            count_launched++;
+
+    }
+
+    for (i = 0; i < count_launched; ++i)
+    {
+        if (pthread_join(tids[i], NULL))
+        {
+            log_system_error(L"Failed to join a pthread due to: ");
+        }
+    }
+    free(carry);
+}
+
+
 unsigned long long get_thread_id()
 {
 	return (unsigned long long)(uintptr_t)pthread_self();

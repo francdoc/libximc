@@ -22,7 +22,7 @@ XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
 if [ -z "$XIBRIDGEVER" ] ; then
 	XIBRIDGEVER=default
 fi
-MINIUPNPCVER=miniupnpd_2_3_0
+MINIUPNPCVER=1c29f47
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -171,7 +171,6 @@ makedist()
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
-						
 			rm -rf $DL/deb/$arch
 			rm -rf $DL/deb/dev-$arch
 			
@@ -193,6 +192,7 @@ makedist()
 		cp -R $DL/$arch/libximc.* $DISTLIB/$arch/
 		cp -R $DL/$arch/xibridge.dll $DISTLIB/$arch/
 		cp -R $DL/$arch/xibridge.lib $DISTLIB/$arch/
+
 		if [ -f $DL/$arch/libjximc.dll ] ; then
 			cp -R $DL/$arch/libjximc.* $DISTLIB/$arch/
 		fi
@@ -423,12 +423,13 @@ build_dep_xibridge()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/transmission/miniupnpc
+	URL=https://github.com/EPC-MSU/miniupnpc
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
-		(cd $DEPS && git clone $URL miniupnpc-dist -b $MINIUPNPCVER)
+		(cd $DEPS && git clone $URL miniupnpc-dist)
+		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
 	fi
 	# cmake 3.5 is needed
 	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
@@ -446,7 +447,6 @@ build_depends()
 	mkdir -p $DEPS
 	build_dep_xibridge $*
 	build_dep_miniupnpc $*
-
 }
 
 build_deb_package()

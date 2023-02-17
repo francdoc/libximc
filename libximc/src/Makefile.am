@@ -71,8 +71,8 @@ EXTRA_DIST = protocol.xi ximc-gen-template.h ximc-gen-template.c ximc-template.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
-# keyfile
-# these variables are implicitly required, keep their names
+## keyfile
+## these variables are implicitly required, keep their names
 #keyfilepath = $(top_srcdir)/libximc/src/keyfile.sqlite
 #keyfiledir = $(datadir)/libximc
 #dist_keyfile_DATA = $(keyfilepath)

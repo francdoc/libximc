@@ -174,10 +174,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
+   <PostBuildEvent>
 if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\libximc.dll $(TargetDir)
 if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\xibridge.dll $(TargetDir)
-
 if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\libximc.dll $(TargetDir)
 if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\xibridge.dll $(TargetDir)</PostBuildEvent>
   </PropertyGroup>

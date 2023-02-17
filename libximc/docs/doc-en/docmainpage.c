@@ -40,7 +40,7 @@
  * \section about_sec About library
  *
  * This document contains all information about libximc library.
- * It utilizes well known virtual COM-port interface, so you can use it on Windows 7, Windows, Vista, Windows XP, Windows Server 2003, Windows 2000, Linux, Mac OS X.
+ * It utilizes well known virtual COM-port interface, so you can use it on Windows 11, Windows 10, Windows 8, Windows 7, Windows Vista, Windows XP SP3, Linux, Mac OS for intel and Apple Silicone (via Rosetta 2) including 64-bit versions.
  * Multi-platform programing library supports plug/unplug on the fly.
  * Each device can be controlled only by one program at once. Multiple processes (programs) that control one device simultaneously are not allowed.
  *
@@ -51,7 +51,16 @@
  * On Windows:
  * - Windows 2000 or later, 64-bit system (if compiling both arhitectures) or 32-bit system. 
  * - Microsoft Visual C++ 2013 or later
- * - cygwin with tar, bison, flex, curl installed
+ * - MATLAB
+ * - Code::Blocks
+ * - MinGW-w64
+ * - Delphi
+ * - Java 
+ * - Python
+ * - cygwin with tar
+ * - bison
+ * - flex
+ * - curl
  * - 7z
  *
  * On Linux:

@@ -75,6 +75,15 @@ rm -rf $RPM_BUILD_ROOT
 
 * Fri Jan 20 2023 XIMC <info@ximc.ru> - 2.15.3
 - version bump
+- Feature #74028 Updated wiring diagrams
+- Feature #74036 keyfile.sqlite removed
+- Feature #74552 Nagle algorithm off in xi-tcp
+- Feature #74671 Unused files removed from example projects
+- Feature #74594 Jupiter_demo added
+- Feature #70732 Virtual controller updated
+- Feature #74575 emumerate_device function made multithreaded
+- Feature #74580 Miniupnpc using improved
+- Feature #72852 XIMC-device net discovering added (miniupnpc used)
 - Feature #53770 calibration_t struct description changed
 - Feature #72516 C example moved to test_C directory
 - Feature #71035 python jupiter example improved

@@ -7,6 +7,7 @@
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <sys/socket.h>
 
 #ifdef HAVE_LOCKS
@@ -57,6 +58,7 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 
 	// check parameter ip4_port : address:port
 	char saddress[64];
+	int optval = 1; // set option == true
 	memset(saddress, 0, 64);
 	strncpy(saddress, ip4_port, strlen(ip4_port));
 	char * port_start = strchr(saddress, ':');
@@ -98,6 +100,10 @@ result_t open_tcp(device_metadata_t *metadata, const char* ip4_port)
 		if (result != -1)
 		{
 			result = setsockopt((int)metadata->handle, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
+		}
+		if (result != -1)
+		{
+            result = setsockopt((int)metadata->handle, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof(int));
 		}
 	}
 	if (result == -1)
