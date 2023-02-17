@@ -672,22 +672,10 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
 		{
 			log_debug( L"enumerate_udp_devices failed with error %d", enumresult);
 		}
-        /*
-        enumresult = discover_ssdp_add_as_tcp(store_device_name_with_xi_prefix, devenum);
-        if (enumresult != result_ok)
-        {
-            log_debug(L"network discover failed with error %d", enumresult);
-        }
-        */
+        
 	}
 
-	/* Check all found devices in threads */
-    /*
-    if ((enumerate_flags & ENUMERATE_PROBE) && devenum->count > 0)
-	{
-		launch_check_threads( devenum );
-	}
-    */
+	
     // prepare some data for network enumerate
     if (enumerate_flags & ENUMERATE_NETWORK) {
 #ifdef HAVE_XIWRAPPER
@@ -757,8 +745,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
             }
         }
     }
-    //single_thread_wrapper_function(&net_enum); // returns after a timeout
-    //ssdd+device_enumerate and prallel network enumerate 
+    
     launch_ssdp_enum_netenum_threads(devenum, &net_enum);
 
     if (enumerate_flags & ENUMERATE_NETWORK) {
@@ -801,7 +788,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
                         memcpy(&devenum->dev_net_infos[devenum->count].locked_time, &desc.locked_time, sizeof(desc.locked_time));
 
                         devenum->count++;
-                    } //else {
+                    } 
                 }
             }
             bindy_free(net_enum.pbufs[server]); // free the buffer allocations
