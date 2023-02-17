@@ -794,6 +794,7 @@ void launch_ssdp_enum_netenum_threads(device_enumeration_opaque_t* devenum, net_
 result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration, int enumerate_flags, const char * hints)
 {
     device_enumeration_opaque_t* devenum;
+    device_description desc;
     result_t enumresult;
     char * addr;
     size_t max_name_len = 4096;
@@ -848,12 +849,7 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
     
     // prepare some data for network enumerate
     if (enumerate_flags & ENUMERATE_NETWORK) {
-#ifdef HAVE_XIWRAPPER
-        if (!bindy_init()) {
-            log_error(L"network layer init failed");
-            return result_error;
-        }
-
+#ifdef HAVE_XIBRIDGE
         char* adapter_addr;
         if (hints == NULL) {
             log_error(L"addr hints string is null");
@@ -961,7 +957,6 @@ result_t enumerate_devices_impl(device_enumeration_opaque_t** device_enumeration
                     } 
                 }
             }
-            bindy_free(net_enum.pbufs[server]); // free the buffer allocations
         }
         free(addr); // free after last use of net_enum.addrs, because we use ptrs into this string
         // also free the net_enum
