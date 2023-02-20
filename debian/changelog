@@ -1,3 +1,17 @@
+libximc7 (2.14.10-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #74028 Updated wiring diagrams
+  * Feature #74036 keyfile.sqlite removed
+  * Feature #74552 Nagle algorithm off in xi-tcp
+  * Feature #74671 Unused files removed from example projects
+  * Feature #74594 Jupiter_demo added
+  * Feature #70732 Virtual controller updated
+  * Feature #74575 emumerate_device function made multithreaded
+  * Feature #74580 Miniupnpc using improved  
+
+ -- XIMC <info@ximc.ru>  Fri, 17 Feb 2023 12:21:46 +0300
+
 libximc7 (2.14.9-1) unstable; urgency=low
 
   * Version bump

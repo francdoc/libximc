@@ -22,7 +22,7 @@ XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
 if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
-MINIUPNPCVER=miniupnpd_2_3_0
+MINIUPNPCVER=1c29f47
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -438,12 +438,13 @@ build_dep_xiwrapper()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/transmission/miniupnpc
+	URL=https://github.com/EPC-MSU/miniupnpc
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
-		(cd $DEPS && git clone $URL miniupnpc-dist -b $MINIUPNPCVER)
+		(cd $DEPS && git clone $URL miniupnpc-dist)
+		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
 	fi
 	# cmake 3.5 is needed
 	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
