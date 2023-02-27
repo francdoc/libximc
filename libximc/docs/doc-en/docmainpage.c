@@ -112,7 +112,7 @@
  * \section building_unix_deb Building on debian-based linux systems
  * Requirement: 64-bit and 32-bit debian system, ubuntu
  * Typical set of packages: gcc, autotools, autoconf, libtool, dpkg-dev, flex, libfl-dev, bison, doxygen, texlive
- * Full set of packages: apt-get install ruby1.9.1 debhelper vim sudo g++ git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
+ * Full set of packages: apt-get install ruby1.9.1 debhelper vim sudo g++ git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
  * For ARM cross-compiling install gcc-arm-linux-gnueabihf from your ARM toolchain.
  *
  * It's required to match library and host architecture: 32-bit library can be built only at 32-bit host,
