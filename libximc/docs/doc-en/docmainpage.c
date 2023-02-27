@@ -125,7 +125,7 @@
  * \section building_unix_deb Building on debian-based linux systems
  * Requirement: 64-bit and 32-bit debian system, ubuntu
  * Typical set of packages: gcc, autotools, autoconf, libtool, dpkg-dev, flex, libfl-dev, bison, doxygen, texlive, mercurial
- * Full set of packages: apt-get install ruby1.9.1 debhelper vim sudo g++ mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
+ * Full set of packages: apt-get install ruby1.9.1 debhelper vim sudo g++ mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
  * For ARM cross-compiling install gcc-arm-linux-gnueabihf from your ARM toolchain.
  *
  * It's required to match library and host architecture: 64-bit library can be built only at 64-bit host,
@@ -143,7 +143,7 @@
  * \section building_unix_rpm Building on redhat-based linux systems
  * Requirement: 64-bit redhat-based system (Fedora, Red Hat, SUSE)
  * Typical set of packages: gcc, autotools, autoconf, libtool, flex, libfl-dev, bison, doxygen, texlive, mercurial
- * Full set of packages: autoconf automake bison doxygen flex libfl-dev gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make mercurial rpm-build rpm-devel rpmlint texlive texlive-fonts-extra texlive-latex 
+ * Full set of packages: autoconf automake bison doxygen flex libfl-dev gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make mercurial rpm-build rpm-devel rpmlint texlive texlive-collection-fontsextra texlive-latex
  *
  * It's possible to build both 32- and 64-bit libraries on 64-bit host system.
  * 64-bit library can't be built on 32-bit system.
