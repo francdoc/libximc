@@ -418,11 +418,11 @@ build_dep_bindy()
 
 build_dep_xiwrapper()
 {
-	if [ -n "$URL_XIWRAPPER" ] ; then
-		URL=$URL_XIWRAPPER
-	else
-		URL=https://gitlab.ximc.ru/ximc/libxiwrapper.git
-	fi
+	#if [ -n "$URL_XIWRAPPER" ] ; then
+	#	URL=$URL_XIWRAPPER
+	#else
+	URL=https://gitlab.ximc.ru/ximc/libxiwrapper.git
+	#fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
