@@ -63,7 +63,7 @@ python -m pip install -r requirements.txt
  * В Windows:
 	- перед запуском примера установите зависимости из requirements.txt. Для этого в командой строке в директории с примером выполните команду:
  python -m pip install -r requirements.txt
- Используемые библиотеки: bindy.dll, libximc.dll, xiwrapper.dll, keyfile.sqlite, находится в папке для соответствующих версий Windows.
+ Используемые библиотеки: bindy.dll, libximc.dll, xiwrapper.dll находится в папке для соответствующих версий Windows.
 	- запустите пример командой: python Extendtestpython.py
 
  

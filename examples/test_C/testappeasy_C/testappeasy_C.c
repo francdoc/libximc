@@ -38,11 +38,6 @@ int main (int argc, char* argv[])
 	ximc_version( ximc_version_str );
 	printf( "libximc version %s\n", ximc_version_str );
 
-//  Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-//  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-//  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-//	set_bindy_key( "keyfile.sqlite" );
-
 //	Device enumeration function. Returns an opaque pointer to device enumeration data.
 	devenum = enumerate_devices( probe_flags, enumerate_hints );
 

@@ -60,10 +60,6 @@ begin
         device_names := nil;
 
         try
-                // Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-                // wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-                // relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-                set_bindy_key('keyfile.sqlite');
                 probe_flags := 1 + 4; // ENUMERATE_PROBE | ENUMERATE_NETWORK
                 enum_hints := 'addr=192.168.0.1,172.16.2.3';
 
