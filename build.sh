@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-[ -n "$MERCURIAL" ] || MERCURIAL=hg
 [ -n "$GIT" ] || GIT=git
 BASEROOT=`pwd`
 LOCAL=`pwd`/dist/local
@@ -422,15 +421,15 @@ build_dep_xiwrapper()
 	if [ -n "$URL_XIWRAPPER" ] ; then
 		URL=$URL_XIWRAPPER
 	else
-		URL=https://anonymous:anonymous@hg.ximc.ru/libxiwrapper
+		URL=https://gitlab.ximc.ru/ximc/libxiwrapper.git
 	fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
+		(cd $DEPS && git clone $URL xiwrapper) || false
+		(cd $DEPS/xiwrapper && git checkout $XIWRAPPERVER) || false
 	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
+	(cd $DEPS/xiwrapper && git --no-pager show --stat $XIWRAPPERVER) || false
 	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
 	$MAKE -C $DEPS/xiwrapper
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
