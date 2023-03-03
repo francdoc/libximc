@@ -421,7 +421,7 @@ build_dep_xiwrapper()
 	#if [ -n "$URL_XIWRAPPER" ] ; then
 	#	URL=$URL_XIWRAPPER
 	#else
-	URL=https://gitlab.ximc.ru/ximc/libxiwrapper.git
+	URL=git://gitlab.ximc.ru/ximc/libxiwrapper.git
 	#fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
