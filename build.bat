@@ -273,6 +273,7 @@ copy %BINDIR%\*.pdb %DISTARCH%
 
 :: allow msbuild processes to finish, sometimes they lock build dir
 waitfor XimcBuildLock /t 30
+@cmd /C exit 0
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -289,6 +290,7 @@ copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
 waitfor XimcBuildLock /t 30
+@cmd /C exit 0
 
 @echo Building sharp wrapper completed
 @goto :eof
@@ -397,6 +399,8 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :EXAMPLES
 :: allow msbuild processes to finish, sometimes they lock build dir
 waitfor XimcBuildLock /t 30
+@cmd /C exit 0
+
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
