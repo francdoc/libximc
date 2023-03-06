@@ -744,7 +744,8 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
             token = strtok(NULL, ",");
         }
     }
-    //single_thread_wrapper_function(&net_enum); // returns after a timeout
+    // instead of single_thread_wrapper_function(&net_enum)
+    // enumerate ssdp and xi-net enumerate(single_thread_wrapper_function) to be called concurrently
     fork_join_2_threads(enumerate_ssdp, devenum, 1,
         single_thread_wrapper_function, &net_enum, 1
         );
