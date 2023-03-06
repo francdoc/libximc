@@ -398,7 +398,7 @@ copydist()
 
 build_dep_bindy()
 {
-	if [ -n "$URL_BINDY" ] ; then
+	if [ -z "$URL_BINDY" ] ; then
 	  URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 	fi
 	echo "--- Building bindy ---"
@@ -416,7 +416,7 @@ build_dep_bindy()
 
 build_dep_xiwrapper()
 {
-	if [ -n "$URL_XIWRAPPER" ] ; then
+	if [ -z "$URL_XIWRAPPER" ] ; then
 	  URL_XIWRAPPER="https://gitlab.ximc.ru/ximc/libxiwrapper.git"
 	fi
 	echo "--- Building xiwrapper ---"
@@ -433,7 +433,7 @@ build_dep_xiwrapper()
 
 build_dep_miniupnpc()
 {
-	if [ -n "$URL_MINIUPNPC" ] ; then
+	if [ -z "$URL_MINIUPNPC" ] ; then
 	  URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc"
 	fi
 
