@@ -288,6 +288,8 @@ copy %BINDIR%\ximcnet.dll %DISTARCH%
 copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
+waitfor XimcBuildLock /t 30
+
 @echo Building sharp wrapper completed
 @goto :eof
 
