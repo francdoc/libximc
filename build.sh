@@ -399,14 +399,12 @@ copydist()
 build_dep_bindy()
 {
 	if [ -n "$URL_BINDY" ] ; then
-		URL=$URL_BINDY
-	else
-		URL="https://github.com/EPC-MSU/Bindy.git"
+	  URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 	fi
 	echo "--- Building bindy ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/bindy
-		(cd $DEPS && git clone --recursive $URL bindy)
+		(cd $DEPS && git clone --recursive $URL_BINDY bindy)
 		(cd $DEPS/bindy && git checkout $BINDYVER)
 		(cd $DEPS/bindy && git submodule update --init --recursive)
 		(cd $DEPS/bindy && git submodule update --recursive)
@@ -418,15 +416,13 @@ build_dep_bindy()
 
 build_dep_xiwrapper()
 {
-	#if [ -n "$URL_XIWRAPPER" ] ; then
-	#	URL=$URL_XIWRAPPER
-	#else
-	URL=git://gitlab.ximc.ru:ximc/libxiwrapper.git
-	#fi
+	if [ -n "$URL_XIWRAPPER" ] ; then
+	  URL_XIWRAPPER="https://gitlab.ximc.ru/ximc/libxiwrapper.git"
+	fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && git clone $URL xiwrapper) || false
+		(cd $DEPS && git clone $URL_XIWRAPPER xiwrapper) || false
 		(cd $DEPS/xiwrapper && git checkout $XIWRAPPERVER) || false
 	fi
 	(cd $DEPS/xiwrapper && git --no-pager show --stat $XIWRAPPERVER) || false
@@ -437,12 +433,14 @@ build_dep_xiwrapper()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/EPC-MSU/miniupnpc
+	if [ -n "$URL_MINIUPNPC" ] ; then
+	  URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc"
+	fi
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
-		(cd $DEPS && git clone $URL miniupnpc-dist)
+		(cd $DEPS && git clone $URL_MINIUPNPC miniupnpc-dist)
 		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
 	fi
 	# cmake 3.5 is needed

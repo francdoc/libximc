@@ -119,10 +119,9 @@ goto :eof
 rmdir /S /Q %DISTARCH%\bindy
 mkdir %DISTARCH%\bindy
 
-@set URL="https://github.com/EPC-MSU/Bindy.git"
-::@set URL=%USERPROFILE%\Documents\bindy
+@if "x%URL_BINDY%" == "x" set URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\bindy
+"%GIT%" clone --recursive %URL_BINDY% %DISTARCH%\bindy
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\bindy
 "%GIT%" checkout %BINDYVER%
@@ -167,9 +166,9 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
 rmdir /S /Q %DISTARCH%\xiwrapper
 mkdir %DISTARCH%\xiwrapper
 
-@set URL="https://gitlab.ximc.ru/ximc/libxiwrapper.git"
+@if "x%URL_XIWRAPPER%" == "x" set URL_XIWRAPPER="https://gitlab.ximc.ru/ximc/libxiwrapper.git"
 
-"%GIT%" clone %URL% %DISTARCH%\xiwrapper
+"%GIT%" clone %URL_XIWRAPPER% %DISTARCH%\xiwrapper
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xiwrapper
 %GIT% checkout %XIWRAPPERVER%
@@ -209,9 +208,9 @@ rmdir /S /Q %DISTARCH%\miniupnpc-dist
 rmdir /S /Q %DISTARCH%\miniupnpc
 mkdir %DISTARCH%\miniupnpc
 
-@set URL="https://github.com/EPC-MSU/miniupnpc.git"
+@if "x%URL_MINIUPNPC%" == "x" set URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc.git"
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\miniupnpc-dist
+"%GIT%" clone --recursive %URL_MINIUPNPC% %DISTARCH%\miniupnpc-dist
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\miniupnpc-dist
 "%GIT%" checkout %MINIUPNPCVER%
