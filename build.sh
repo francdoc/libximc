@@ -403,15 +403,13 @@ copydist()
 
 build_dep_xibridge()
 {
-	if [ -n "$URL_XIBRIDGE" ] ; then
-		URL=$URL_XIBRIDGE
-	else
-		URL="https://github.com/EPC-MSU/xibridge.git"
+	if [ -z "$URL_XIBRIDGE" ] ; then
+		URL_XIBRIDGE="https://github.com/EPC-MSU/xibridge.git"
 	fi
 	echo "--- Building xibridge ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xibridge
-		(cd $DEPS && git clone --recursive $URL xibridge)
+		(cd $DEPS && git clone --recursive $URL_XIBRIDGE xibridge)
 		(cd $DEPS/xibridge && git checkout $XIBRIDGEVER)
 		(cd $DEPS/xibridge && git submodule update --init --recursive)
 		(cd $DEPS/xibridge && git submodule update --recursive)
@@ -423,12 +421,14 @@ build_dep_xibridge()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/EPC-MSU/miniupnpc
+	if [ -z "$URL_MINIUPNPC" ] ; then
+	  URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc"
+	fi
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
-		(cd $DEPS && git clone $URL miniupnpc-dist)
+		(cd $DEPS && git clone $URL_MINIUPNPC miniupnpc-dist)
 		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
 	fi
 	# cmake 3.5 is needed

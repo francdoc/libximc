@@ -112,10 +112,10 @@ goto :eof
 rmdir /S /Q %DISTARCH%\xibridge
 mkdir %DISTARCH%\xibridge
 
-@set URL="https://github.com/EPC-MSU/xibridge.git"
-::@set URL=%USERPROFILE%\Documents\xibridge
+@if "x%URL_XIBRIDGE%" == "x" set URL_XIBRIDGE="https://github.com/EPC-MSU/xibridge.git"
+::@set URL_XIBRIDGE=%USERPROFILE%\Documents\xibridge
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\xibridge
+"%GIT%" clone --recursive %URL_XIBRIDGE% %DISTARCH%\xibridge
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xibridge
 "%GIT%" checkout %XIBRIDGEVER%
@@ -161,9 +161,9 @@ rmdir /S /Q %DISTARCH%\miniupnpc-dist
 rmdir /S /Q %DISTARCH%\miniupnpc
 mkdir %DISTARCH%\miniupnpc
 
-@set URL="https://github.com/EPC-MSU/miniupnpc.git"
+@if "x%URL_MINIUPNPC%" == "x" set URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc.git"
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\miniupnpc-dist
+"%GIT%" clone --recursive %URL_MINIUPNPC% %DISTARCH%\miniupnpc-dist
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\miniupnpc-dist
 "%GIT%" checkout %MINIUPNPCVER%
