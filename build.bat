@@ -273,7 +273,7 @@ copy %BINDIR%\*.pdb %DISTARCH%
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
 
 :: allow msbuild processes to finish, sometimes they lock build dir
-timeout /t 30 /NOBREAK
+waitfor XimcBuildLock /t 30
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -395,7 +395,7 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ---------- examples ---------- 
 :EXAMPLES
 :: allow msbuild processes to finish, sometimes they lock build dir
-timeout /t 30 /NOBREAK
+waitfor XimcBuildLock /t 30
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
