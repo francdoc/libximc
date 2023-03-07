@@ -1,3 +1,10 @@
+libximc7 (2.14.11-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #74036 additionally: set_bindy_key calls removed from examples
+
+ -- XIMC <info@ximc.ru>  Tue, 07 Mar 2023 18:56:56 +0300
+
 libximc7 (2.14.10-1) unstable; urgency=low
 
   * Version bump
