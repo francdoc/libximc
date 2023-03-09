@@ -166,7 +166,7 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
 rmdir /S /Q %DISTARCH%\xiwrapper
 mkdir %DISTARCH%\xiwrapper
 
-@if "x%URL_XIWRAPPER%" == "x" set URL_XIWRAPPER="https://gitlab.ximc.ru/ximc/libxiwrapper.git"
+@if "x%URL_XIWRAPPER%" == "x" set URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
 
 "%GIT%" clone %URL_XIWRAPPER% %DISTARCH%\xiwrapper
 @if not %errorlevel% == 0 goto FAIL
