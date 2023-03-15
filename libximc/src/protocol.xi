@@ -2386,7 +2386,7 @@ fields:
 	* @see get_password_settings
 	* @see set_password_settings
 	*/
-command "password_settings" universal "pwd" (38)
+command "password_settings" universal "pwd" (36)
 fields:
 	int8u UserPassword[20]		/**< \english Password-string to web-page that user can change with usb command or via web-page. \endenglish \russian Строчка-пароль для доступа к веб-странице, который пользователь может поменять с помощью USB команды или на веб-странице. \endrussian */
 	reserved 10
