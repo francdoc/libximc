@@ -2350,6 +2350,49 @@ fields:
 
 /** $XIR
 	* \english
+	* Read password settings.
+	* This function reads user password to the device web-page.
+	* @see pwd_settings_t
+	* @param UserPassword[20] Password-string to web-page
+	* \endenglish
+	* \russian
+	* Команда чтения пароля к веб-странице.
+	* Эта функция пользователяет прочитать пользовательский пароль к веб-странице из памяти контроллера.
+	* @param UserPassword[20] Строчка-пароль для доступа к веб-странице
+	* \endrussian
+	*/
+/** $XIW
+	* \english
+	* Sets password settings.
+	* This function sets user password to the device web-page.
+	* @see pwd_settings_t
+	* @param UserPassword[20] Password-string to web-page
+	* \endenglish
+	* \russian
+	* Команда записи пароля к веб-странице.
+	* Эта функция меняет пользовательский пароль к веб-странице.
+	* @param UserPassword[20] Строчка-пароль для доступа к веб-странице
+	* \endrussian
+	*/
+/** $XIS
+	* \english
+	* Network settings.
+	* This structure contains network settings.
+	* \endenglish
+	* \russian
+	* Настройки сети.
+	* Эта структура содержит настройки сети.
+	* \endrussian
+	* @see get_password_settings
+	* @see set_password_settings
+	*/
+command "password_settings" universal "pwd" (38)
+fields:
+	int8u UserPassword[20]		/**< \english Password-string to web-page that user can change with usb command or via web-page. \endenglish \russian Строчка-пароль для доступа к веб-странице, который пользователь может поменять с помощью USB команды или на веб-странице. \endrussian */
+	reserved 10
+
+/** $XIR
+	* \english
 	* Read calibration settings.
 	* This function fill structure with calibration settings.
 	* @see calibration_settings_t
