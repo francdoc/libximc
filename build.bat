@@ -1,4 +1,3 @@
-@if 'x%MERCURIAL%'=='x' set MERCURIAL=hg
 @if 'x%GIT%'=='x' set GIT=git
 :: reset errorrevel
 @cmd /C exit 0
@@ -170,14 +169,14 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
 rmdir /S /Q %DISTARCH%\xiwrapper
 mkdir %DISTARCH%\xiwrapper
 
-@set URL="https://anonymous:anonymous@hg.ximc.ru/libxiwrapper"
-::@set URL=%USERPROFILE%\Documents\xiwrapper
-%MERCURIAL% clone %URL% %DISTARCH%\xiwrapper
+@if "x%URL_XIWRAPPER%" == "x" set URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
+
+"%GIT%" clone %URL_XIWRAPPER% %DISTARCH%\xiwrapper
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xiwrapper
-%MERCURIAL% checkout %XIWRAPPERVER%
+%GIT% checkout %XIWRAPPERVER%
 @if not %errorlevel% == 0 goto FAIL
-%MERCURIAL% log -r %XIWRAPPERVER%
+"%GIT%" --no-pager show --stat %XIWRAPPERVER%
 @if not %errorlevel% == 0 goto FAIL
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64

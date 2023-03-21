@@ -424,21 +424,18 @@ build_dep_bindy()
 	(cd $DEPS/bindy && cmake $DEPS_CMAKE_OPT $* .)
 	$MAKE -C $DEPS/bindy
 }
-
 build_dep_xiwrapper()
 {
-	if [ -n "$URL_XIWRAPPER" ] ; then
-		URL=$URL_XIWRAPPER
-	else
-		URL=https://anonymous:anonymous@hg.ximc.ru/libxiwrapper
+	if [ -z "$URL_XIWRAPPER" ] ; then
+	  URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
 	fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
+		(cd $DEPS && git clone $URL_XIWRAPPER xiwrapper) || false
+		(cd $DEPS/xiwrapper && git checkout $XIWRAPPERVER) || false
 	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
+	(cd $DEPS/xiwrapper && git --no-pager show --stat $XIWRAPPERVER) || false
 	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
 	$MAKE -C $DEPS/xiwrapper
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
