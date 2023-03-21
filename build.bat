@@ -33,7 +33,7 @@ echo Found xiwrapper ver %XIWRAPPERVER%
 echo Set miniupnpc ver %MINIUPNPCVER%
 
 :: debug flag
-set DEBUG=true
+::set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
