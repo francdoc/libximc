@@ -13,7 +13,6 @@ Warning:
     getch for linux and macos, if the package keyboard is blocked due to lack of root user rights.
     pyximc.py for correct usage of the library libximc you need to add the file  wrapper with the structures of the library to python path.
 
-  -To search for network devices, you must have a file keyfile.sqlite
 
   -Required libraries for Windows:
     bindy.dll

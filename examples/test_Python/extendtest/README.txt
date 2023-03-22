@@ -26,7 +26,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:usr/lib - specify the correct path for i
  
  * On Windows: 
 	- before running the example, install the dependencies from requirements.txt . To do this, on the command line in the directory with the example, run the command: python -m pip install -r requirements.txt
-	Libraries used: bindy.dll, libximc.dll, xiwrapper.dll, key file.sqlite, is located in the folder for the corresponding Windows versions.
+	Libraries used: bindy.dll, libximc.dll, xiwrapper.dll, is located in the folder for the corresponding Windows versions.
 	- run the example with the command: python Extendtestpython.py
 
 
