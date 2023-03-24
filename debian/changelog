@@ -1,6 +1,13 @@
+libximc7 (2.14.12-1) unstable; urgency=low
+
+  * Version bump
+
+ -- XIMC <info@ximc.ru>  Fri, 24 Mar 2023 14:24:02 +0300
+
 libximc7 (2.14.9-1) unstable; urgency=low
 
   * Version bump
+  * Feature #76749 DEBUG flag removed from build.bat, xiwrapper moved to gitlab (url and crc updated)
   * Feature #72852 XIMC-device net discovering added (miniupnpc used)
 
  -- XIMC <info@ximc.ru>  Fri, 20 Jan 2023 13:41:06 +0300
