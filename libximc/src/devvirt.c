@@ -228,6 +228,8 @@ static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
 	gets_value.CurPosition = (uint32_t)(long long)new_pos;		
 	gets_value.uCurPosition = (int16_t)((new_pos - (long long)new_pos)*micromult);
 	
+	last_tick = this_tick;
+
 	return gets_value;
 }
 
@@ -328,6 +330,11 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 			case ASIA_CMD: break;
 			case MOVE_CMD:
 			{
+				all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+					all->BCDFlashParams.SENG,
+					all->BCDRamParams.GETS,
+					all->BCDRamParams.MOVE,
+					all->last_tick);
 			   move_cmd_str MoveArr;
 			   READ_STRUCTURE(MoveArr);
 			   all->BCDRamParams.MOVE.Position = MoveArr.Position;
@@ -340,6 +347,11 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 
 			case MOVR_CMD:
 			{
+				all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+					all->BCDFlashParams.SENG,
+					all->BCDRamParams.GETS,
+					all->BCDRamParams.MOVE,
+					all->last_tick);
 			   movr_cmd_str MovrArr;
 			   READ_STRUCTURE(MovrArr);
 			   all->BCDRamParams.MOVE.Position += MovrArr.DeltaPosition;
@@ -409,16 +421,31 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 	switch (command32)
 	{
 		case STOP_CMD:
+		   all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+				all->BCDFlashParams.SENG,
+				all->BCDRamParams.GETS,
+				all->BCDRamParams.MOVE,
+				all->last_tick);
 		   all->BCDRamParams.GETS.MvCmdSts = MVCMD_STOP;
 		   all->BCDRamParams.GETS.CurSpeed = 0;
 		   all->BCDRamParams.GETS.uCurSpeed = 0;
 		   break;
 		case SSTP_CMD:
+		  all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+				all->BCDFlashParams.SENG,
+				all->BCDRamParams.GETS,
+				all->BCDRamParams.MOVE,
+				all->last_tick);
 		   all->BCDRamParams.GETS.MvCmdSts = MVCMD_SSTP;
 		   all->BCDRamParams.GETS.CurSpeed = 0;
 		   all->BCDRamParams.GETS.uCurSpeed = 0;
 		   break;
 		case ZERO_CMD:
+		  all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+				all->BCDFlashParams.SENG,
+				all->BCDRamParams.GETS,
+				all->BCDRamParams.MOVE,
+				all->last_tick);
 		   all->BCDRamParams.GETS.CurPosition = 0;
 		   all->BCDRamParams.GETS.uCurPosition = 0;
 		   all->BCDRamParams.GETS.EncPosition = 0;
@@ -429,6 +456,11 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		   all->BCDRamParams.GETS.MvCmdSts = MVCMD_HOME;
 		   break;
 		case LEFT_CMD:
+			all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+				all->BCDFlashParams.SENG,
+				all->BCDRamParams.GETS,
+				all->BCDRamParams.MOVE,
+				all->last_tick);
 		   all->BCDRamParams.GETS.MvCmdSts = MVCMD_LEFT | MVCMD_RUNNING;
 		   all->BCDRamParams.GETS.CurSpeed = all->BCDFlashParams.SMOV.Speed;
 		   all->BCDRamParams.GETS.uCurSpeed = all->BCDFlashParams.SMOV.uSpeed;
@@ -436,6 +468,11 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		   all->BCDRamParams.GETS.uCurSpeed = -all->BCDRamParams.GETS.uCurSpeed;
 		   break;
 		case RIGT_CMD:
+			all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+				all->BCDFlashParams.SENG,
+				all->BCDRamParams.GETS,
+				all->BCDRamParams.MOVE,
+				all->last_tick);
 		   all->BCDRamParams.GETS.MvCmdSts = MVCMD_RIGHT | MVCMD_RUNNING;
 		   all->BCDRamParams.GETS.CurSpeed = all->BCDFlashParams.SMOV.Speed;
 		   all->BCDRamParams.GETS.uCurSpeed = all->BCDFlashParams.SMOV.uSpeed;
@@ -454,7 +491,7 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 										   all->BCDRamParams.GETS,
 										   all->BCDRamParams.MOVE,
 										   all->last_tick);
-		   get_wallclock_us(&all->last_tick);
+		   //get_wallclock_us(&all->last_tick);
 
 		   WRITE_STRUCTURE(all->BCDRamParams.GETS);
 		   break;
