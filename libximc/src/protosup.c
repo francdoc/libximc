@@ -419,10 +419,11 @@ result_t receive_synchronized (device_metadata_t *metadata, byte* response, size
 	return result;
 }
 
+
 result_t command_checked_impl (device_t id, const void* command, size_t command_len, byte* response, size_t response_len, int need_sync)
 {
 	result_t result;
-	int res;
+	uint32_t res;
 	byte errv[4] = { 'e', 'r', 'r', 'v' };
 	byte errd[4] = { 'e', 'r', 'r', 'd' };
 	device_metadata_t* dm;
@@ -456,7 +457,7 @@ result_t command_checked_impl (device_t id, const void* command, size_t command_
 		if (res)
 		{
 			// error type of xibridge does not matter
-			log_error(L"command_checked device lost: %s", xibridge_get_err_expl(res));
+            log_error(L"command_checked device lost: %hs", xibridge_get_err_expl(res));
 			return result_nodevice;
 		}
 
@@ -1011,7 +1012,7 @@ result_t open_port_net_xibridge(device_metadata_t *metadata, const char* xi_uri)
     uint32_t err = xibridge_open_device_connection(xi_uri, &(metadata->xi_conn));
 	if (err)
 	{
-		log_system_error(L"can't open net device %hs due to network error: %s", xi_uri, xibridge_get_err_expl(err));
+		log_system_error(L"can't open net device %hs due to network error: %hs", xi_uri, xibridge_get_err_expl(err));
 		return result_error;
 	}
 
@@ -1047,7 +1048,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 				uri_paramname, sizeof(uri_paramname),
 				uri_paramvalue, sizeof(uri_paramvalue)))
 	{
-		log_error( L"unknown device URI %s", name );
+		log_error( L"unknown device URI %ls", L(name) );
 		return result_error;
 	}
 	tmp = uri_copy(uri_path);
