@@ -1048,7 +1048,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 				uri_paramname, sizeof(uri_paramname),
 				uri_paramvalue, sizeof(uri_paramvalue)))
 	{
-		log_error( L"unknown device URI %ls", L(name) );
+		log_error( L"unknown device URI %hs", name);
 		return result_error;
 	}
 	tmp = uri_copy(uri_path);
