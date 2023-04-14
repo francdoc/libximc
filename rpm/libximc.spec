@@ -76,7 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Apr 14 2023 XIMC <info@ximc.ru> - 2.15.5
 - version bump
 - Feature #75438 Enumerate devices function improved
-- Bug #77617 xibridge-client error fixed (enumerate incorrect return value when no device found
+- Bug #77617 xibridge-client error fixed (enumerate with no devices)
 - Bug #77702 xibridge error text logging error fixed
 - Feature 77979 xibridge 1.1.3 used
 
