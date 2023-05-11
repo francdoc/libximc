@@ -1,3 +1,8 @@
+libximc (2.14.13-1)
+  * Released: Thu, 11 May 2023 11:55:23 +0300
+  * Version bump
+  * Feature #77391 Wrong position returned in virtual controllers fixed
+
 libximc (2.14.11-1)
   * Released: Tue, 07 Mar 2023 18:56:56 +0300
   * Version bump
