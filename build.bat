@@ -27,7 +27,7 @@ for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDI
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
 if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
-set MINIUPNPCVER=1c29f47
+set MINIUPNPCVER=8ddbb71
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
 echo Set miniupnpc ver %MINIUPNPCVER%
