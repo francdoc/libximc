@@ -580,13 +580,13 @@ extern "C"
 		* Enumerate all devices that looks like valid.
 		* @param[in] enumerate_flags enumerate devices flags
 		* @param[in] hints extended information
-		* hints is a string of form "key=value \n key2=value2". Unrecognized key-value pairs are ignored.
+		* \par
+		* hints is a string of form "key=value \n key2=value2". <em>Unrecognized key-value pairs are ignored</em>.
 		* Key list: addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a remote host name or a comma-separated list of host names which contain the devices to be found, absent value means broadcast discovery.
 		* adapter_addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a IP address of network adapter. Remote ximc device must be on the same local network as the adapter.
-		* When using the adapter_addr key, you must install the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
-		* To enumerate network devices you must call {@link set_bindy_key} first.
+		* When using the adapter_addr key, you <b>must set</b> the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
 		* \endenglish
 		* \russian
 		* Перечисляет все XIMC-совместимые устройства.
