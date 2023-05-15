@@ -21,7 +21,7 @@ XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
 if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
-MINIUPNPCVER=1c29f47
+MINIUPNPCVER=8ddbb71
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
