@@ -22,7 +22,7 @@ XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
 if [ -z "$XIBRIDGEVER" ] ; then
 	XIBRIDGEVER=default
 fi
-MINIUPNPCVER=1c29f47
+MINIUPNPCVER=8ddbb71
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
