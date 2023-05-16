@@ -1,6 +1,9 @@
 #!/bin/bash
 
-WORKING_DIR=$(pwd) # Текущая директория
+WORKING_DIR=$(pwd) # current/working directory
+sudo apt update
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
 LIBRARY_PATH=$WORKING_DIR/../../../ximc
 LINUX_ARCH=$(uname -m)
 echo Current architecture: $LINUX_ARCH
