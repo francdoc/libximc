@@ -44,75 +44,40 @@
  * Multi-platform programing library supports plug/unplug on the fly.
  * Each device can be controlled only by one program at once. Multiple processes (programs) that control one device simultaneously are not allowed.
  *
- * \section sysreq_sec System requirements
- *
- * \subsection sysreq_build For rebuilding library
- *
- * On Windows:
- * - Microsoft Visual C++ 2013 or newer
- * - MATLAB
- * - Code::Blocks
- * - MinGW-w64
- * - Delphi
- * - Java 
- * - Python
- * - cygwin with tar
- * - bison
- * - flex
- * - curl
- * - 7z
- *
- * On Linux:
- * - gcc 4 or newer
- * - common autotools: autoconf, autoheader, aclocal, automake, autoreconf, libtool
- * - gmake
- * - doxygen - for building docs
- * - LaTeX distribution (teTeX or texlive) - for building docs
- * - flex 2.5.30+
- * - bison 2.3+
- *
- * On MacOS X:
- * - XCode 4
- * - doxygen - for building docs
- * - mactex
- * - autotools: autoconf, autoheader, aclocal, automake, autoreconf, libtool
- *
- * \subsection sysreq_usage For using library
- *
- * Supported operating systems (32 or 64 bit) and environment requirements:
+ * \subsection sysreq_usage Supported OS and environment requirements:
  * - MacOS X 10.6 or newer
  * - Windows 2000 or newer
- * - Autotools-compatible unix. Package is installed from sources.
- * - Linux debian-based 32 and 64 bit. DEB package is built against Debian Squeeze 7
+ * - Linux debian-based. DEB package is built against Debian Squeeze 7
  * - Linux debian-based ARM. DEB package is built on Ubuntu 14.04
  * - Linux rpm-based. RPM is built against OpenSUSE 12
- * - Java 7-9 32-bit or 64-bit
- * - .NET 2.0 (32-bit only)
- * - Delphi (32-bit only)
  *
  * Build requirements:
- * - Windows: Microsoft Visual C++ 2013 or mingw (currently not supported)
- * - UNIX: gcc 4, gmake
- * - MacOS X: XCode 4
- * - JDK 7-9
- *
+ * - Windows: Microsoft Visual C++ 2013 or newer, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin with tar, bison, flex, curl, 7z <b>mingw (currently not supported)</b>
+ * - UNIX: gcc 4 or newer, gmake, doxygen, LaTeX, flex 2.5.30+, bison 2.3+, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
+ * - MacOS X: XCode 4 or newer, doxygen, mactex, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
  *
  * \page building_sec How to rebuild library
  *
- * \section building_unix Building on generic UNIX
+ * \section building_win Buliding on Windows
  *
- * Generic version could be built with standard autotools.
+ * Requirements: 64-bit windows (build script builds both architectures), cygwin (must be installed to a default path).
+ *
+ * Invoke a script:
  * \code
- *   ./build.sh lib
+ * $ ./build.bat
  * \endcode
- * Built files (library, headers, documentation) are installed to ./dist/local directory.
- * It is a generic developer build. Sometimes you need to specify additional parameters to
- * command line for your machine. Please look to following OS sections.
+ *
+ * Grab packages from ./deb/win32 and ./deb/win64 
+ *
+ * To build debug version of the library set environment variable "DEBUG" to "true" before running the build script.
  *
  * \section building_unix_deb Building on debian-based linux systems
  * Requirement: 64-bit and 32-bit debian system, ubuntu
- * Typical set of packages: gcc, autotools, autoconf, libtool, dpkg-dev, flex, libfl-dev, bison, doxygen, texlive
- * Full set of packages: apt-get install ruby1.9.1 debhelper vim sudo g++ git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
+ * Typical set of packages: 
+ * \code
+ * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * \endcode
+ *
  * For ARM cross-compiling install gcc-arm-linux-gnueabihf from your ARM toolchain.
  *
  * It's required to match library and host architecture: 32-bit library can be built only at 32-bit host,
@@ -127,22 +92,6 @@
  *
  * Grab packages from ./ximc/deb and locally installed binaries from ./dist/local.
  *
- * \section building_unix_rpm Building on redhat-based linux systems
- * Requirement: 64-bit redhat-based system (Fedora, Red Hat, SUSE)
- * Typical set of packages: gcc, autotools, autoconf, libtool, flex, libfl-dev, bison, doxygen, texlive
- * Full set of packages: autoconf automake bison doxygen flex libfl-dev gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make rpm-build rpm-devel rpmlint texlive texlive-fonts-extra texlive-latex 
- *
- * It's possible to build both 32- and 64-bit libraries on 64-bit host system.
- * 64-bit library can't be built on 32-bit system.
- *
- * To build library and package invoke a script:
- * \code
- * $ ./build.sh librpm
- * \endcode
- * 
- * Grab packages from ./ximc/rpm and locally installed binaries from ./dist/local.
- *
- *
  * \section building_osx_generic Buliding on MacOS X
  *
  * To build and package a script invoke a script:
@@ -153,18 +102,32 @@
  * Built library (classical and framework), examples (classical and .app), documentation
  * are located at ./ximc/macosx, locally installed binaries from ./dist/local.
  *
- * \section building_win Buliding on Windows
+ * \section building_unix Building on generic UNIX
  *
- * Requirements: 64-bit windows (build script builds both architectures), cygwin (must be installed to a default path).
- *
- * Invoke a script:
+ * Generic version could be built with standard autotools.
  * \code
- * $ ./build.bat
+ *   ./build.sh lib
+ * \endcode
+ * Built files (library, headers, documentation) are installed to ./dist/local directory.
+ * It is a generic developer build. Sometimes you need to specify additional parameters to
+ * command line for your machine. Please look to following OS sections.
+ *
+ * \section building_unix_rpm Building on redhat-based linux systems
+ * Requirement: 64-bit redhat-based system (Fedora, Red Hat, SUSE)
+ * Typical set of packages: 
+ * \code
+ * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint 
  * \endcode
  *
- * Grab packages from ./deb/win32 and ./deb/win64 
+ * It's possible to build both 32- and 64-bit libraries on 64-bit host system.
+ * 64-bit library can't be built on 32-bit system.
  *
- * To build debug version of the library set environment variable "DEBUG" to "true" before running the build script.
+ * To build library and package invoke a script:
+ * \code
+ * $ ./build.sh librpm
+ * \endcode
+ * 
+ * Grab packages from ./ximc/rpm and locally installed binaries from ./dist/local.
  *
  * \section building_src Source code access
  * The source codes of the libximc library can be found on <a href="https://github.com/EPC-MSU/libximc">github</a>.
@@ -396,8 +359,13 @@
  *
  * \section howtouse_cprofiles C-profiles
  * 
- * C-profiles are header files distributed with the libximc library. They enable one to set all controller settings for any of the supported stages with a single function call in a C/C++ program.
- * You may see how to use C-profiles in "testcprofile" example directory.
+ * C-profiles are header files distributed with the libximc library. They enable one to set all controller settings for any of the supported stages with a single function call in a C/C++ program. <br>
+ * You may see how to use C-profiles in the example directory "examples/test_C/testprofile_C".
+ *
+ * \section howtouse_pyprofiles Python-profiles
+ *
+ * Python-profiles this is a set of configuration functions distributed with the libximc library. They enable one to set all controller settings for any of the supported stages with a single function call in a Python program. <br>
+ * You may see how to use Python-profiles in the example directory "examples/test_Python/profiletest/testpythonprofile.py".
  *
  * \page userunit_sec Working with user units
  *

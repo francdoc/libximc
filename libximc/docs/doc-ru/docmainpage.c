@@ -44,72 +44,41 @@
  * Библиотека поддерживает подключение и отключение устройств "на лету". 
  * C одним устройством в каждый момент может работать не более одного экземпляра управляющей программы - множественный доступ управляющих программ к одному и тому же устройству не допускается!
  *
- * \section sysreq_sec Требования к установленному программному обеспечению
+ * \subsection sysreq_usage Поддерживаемые операционные системы и требования к окружению:
  *
- * \subsection sysreq_build Для сборки библиотеки
- *
- * Для Windows:
- * - Microsoft Visual C++ 2013 или новее
- * - MATLAB
- * - Code::Blocks
- * - MinGW-w64
- * - Delphi
- * - Java 
- * - Python
- * - cygwin с tar
- * - bison
- * - flex
- * - curl
- * - 7z
- *
- * Для Linux:
- * - gcc 4 или новее
- * - стандартные autotools: autoconf, autoheader, aclocal, automake, autoreconf, libtool
- * - gmake
- * - doxygen - для сборки документации
- * - LaTeX distribution (teTeX or texlive) - для сборки документации
- * - flex 2.5.30+
- * - bison 2.3+
- *
- * Для MacOS X:
- * - XCode 4
- * - doxygen - для сборки документации
- * - mactex
- * - стандартные autotools: autoconf, autoheader, aclocal, automake, autoreconf, libtool
- *
- * \subsection sysreq_usage Для использования библиотеки
- *
- * Поддерживаемые операционные системы (32 и 64 бита) и требования к окружению:
  * - MacOS X 10.6 или новее
  * - Windows 2000 или новее
- * - Autotools-совместимый unix. Библиотека устанавливается из бинарного вида.
- * - Linux на основе debian 32 и 64 бита. DEB собирается на Debian Squeeze 7
+ * - Linux на основе debian. DEB собирается на Debian Squeeze 7
  * - Linux на основе debian ARM. DEB собирается кросс-компилятором на Ubuntu 14.04
  * - Linux на основе rpm. RPM собирается на OpenSUSE 12
- * - Java 7-9 32 бит или 64 бит
- * - .NET 2.0 (только 32 бит)
- * - Delphi (только 32 бит)
  *
  * Требования сборки:
- * - Windows: Microsoft Visual C++ 2013 или mingw (в данный момент не поддерживается)
- * - UNIX: gcc 4, gmake
- * - Mac OS X: XCode 4
- * - JDK 7-9
+ * - Windows: Microsoft Visual C++ 2013 или новее, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin с tar, bison, flex, curl, 7z. <b>mingw (в данный момент не поддерживается)</b>
+ * - UNIX: gcc 4 или новее, gmake, doxygen, LaTeX, flex 2.5.30+, bison 2.3+, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
+ * - Mac OS X: XCode 4 или новее, doxygen, mactex, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
+ * - JDK 7 - 9
  *
  * \page building_sec Как пересобрать библиотеку
  *
- * \section building_unix Сборка для UNIX
+ * \section building_win Сборка для ОС Windows
  *
- * Обобщенная версия собирается обычными autotools.
+ * Требования: 64-битный windows (сборочный скрипт собирает обе архитектуры), cygwin (должен быть установлен в пути по умолчанию).
+ * 
+ * Запустите скрипт:
  * \code
- *   ./build.sh lib
+ * $ ./build.bat
  * \endcode
- * Собранные файлы (библиотека, заголовочные файлы, документация) устанавливаются в локальную директорию  ./dist/local.
- * Это билд для разработчика, при необходимости можно указать дополнительные параметры командной строки для вашей системы.
+ * 
+ * Собранные файлы располагаются в ./ximc/win32 и ./ximc/win64
+ *
+ * Если вы хотите собрать дебаг-версию библиотеки, то перед запуском скрипта сборки установите переменную окружения "DEBUG" в значение "true".
  *
  * \section building_unix_deb Сборка для Linux на основе Debian
- * Примерный набор пакетов: gcc, autotools, autoconf, libtool, dpkg-dev, flex, libfl-dev, bison, doxygen, texlive, mercurial
- * Полный набор пакетов: apt-get install ruby1.9.1 debhelper vim sudo g++ mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk dpkg-dev lintian texlive texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check
+ * Полный набор пакетов: 
+ * \code
+ * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * \endcode
+ *
  * Для кросс-компиляции ARM установите gcc-arm-linux-gnueabihf из вашего инструментария ARM.
  *
  * Необходимо соблюдать парность архитектуры библиотеки и системы: 32-битная библиотека может быть собрана только на 32-битной системе,
@@ -120,25 +89,8 @@
  * $ ./build.sh libdeb
  * \endcode
  * 
- * Для библиотеки ARM замените 'libdeb' на 'libdebarm'.
- *
+ * Для библиотеки ARM замените 'libdeb' на 'libdebarm'. <br>
  * Пакеты располагаются в ./ximc/deb, локально инсталированные файлы в ./dist/local.
- *
- * \section building_unix_rpm Сборка для Linux на основе RedHat
- * Требования: 64-битная система на основе redhat (Fedora, Red Hat, SUSE)
- *
- * Примерный набор пакетов: gcc, autotools, autoconf, libtool, flex, libfl-dev, bison, doxygen, texlive, mercurial 
- * Полный набор пакетов: autoconf automake bison doxygen flex libfl-dev gcc gcc-32bit gcc-c++ gcc-c++-32bit java-1_7_0-openjdk java-1_7_0-openjdk-devel libtool lsb-release make mercurial rpm-build rpm-devel rpmlint texlive texlive-fonts-extra texlive-latex 
- *
- * Возможно собрать 32-битную и 64-битную библиотеки на 64-битной системе, однако 64-битная
- * библиотека не может быть собрана на 32-битной системе.
- *
- * Для сборки библиотеки и пакета запустите скрипт:
- * \code
- * $ ./build.sh librpm
- * \endcode
- * 
- * Пакеты располагаются в ./ximc/rpm, локально инсталированные файлы в ./dist/local.
  *
  * \section building_osx_framework Сборка для MacOS X
  *
@@ -150,40 +102,49 @@
  * Собранная библиотека (классическая и фреймворк), приложения (классическая и фреймворк) и документация
  * располагаются в ./ximc/macosx, локально инсталированные файлы в ./dist/local.
  *
- * \section building_win Сборка в ОС Windows
+ * \section building_unix Сборка для UNIX
  *
- * Требования: 64-битный windows (сборочный скрипт собирает обе архитектуры), cygwin (должен быть установлен в
- * пути по умолчанию).
- * 
- * Запустите скрипт:
+ * Обобщенная версия собирается обычными autotools.
  * \code
- * $ ./build.bat
+ *   ./build.sh lib
+ * \endcode
+ * Собранные файлы (библиотека, заголовочные файлы, документация) устанавливаются в локальную директорию  ./dist/local.
+ * Это билд для разработчика, при необходимости можно указать дополнительные параметры командной строки для вашей системы.
+ *
+ * \section building_unix_rpm Сборка на Linux на основе RedHat
+ * Требования: 64-битная система на основе redhat (Fedora, Red Hat, SUSE)
+ *
+ * Полный набор пакетов: 
+ * \code
+ * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * \endcode
+ *
+ * Возможно собрать 32-битную и 64-битную библиотеки на 64-битной системе, однако 64-битная
+ * библиотека не может быть собрана на 32-битной системе.
+ *
+ * Для сборки библиотеки и пакета запустите скрипт:
+ * \code
+ * $ ./build.sh librpm
  * \endcode
  * 
- * Собранные файлы располагаются в ./ximc/win32 и ./ximc/win64
- *
- * Если вы хотите собрать дебаг-версию библиотеки, то перед запуском скрипта сборки установите переменную окружения "DEBUG" в значение "true".
+ * Пакеты располагаются в ./ximc/rpm, локально инсталированные файлы в ./dist/local.
  *
  * \section building_src Доступ к исходным кодам
  * Исходные коды библиотеки libximc можно найти на <a href="https://github.com/EPC-MSU/libximc">github</a>.
  *
  * \page howtouse_sec Как использовать с...
  *
- * Для приобретения первых навыков использования библиотеки создано простое тестовое приложение testappeasy_C. 
+ * Для приобретения первых навыков использования библиотеки создано простое тестовое приложение testappeasy_C. <br>
  * Языки, отличные от C-подобных, поддерживаются с помощью вызовов с преобразованием аргументов типа stdcall.
- * Простое тестовое приложение на языке C расположено в директории 'examples/test_C', проект на C# - в 'examples/test_CSharp',
- * на VB.NET - в 'examples/test_VBNET', для delphi 6 - в 'example/test_Delphi', для matlab - 'examples/test_MATLAB',
- * для Java - 'examples/test_Java', для Python - 'examples/test_Python', для LabWindows - 'examples/test_LabWindows'.
- * Библиотеки, заголовочные файлы и другие необходимые файлы расположены в директориях 'ximc/win32','ximc/win64','ximc/macosx' и подобных.
- * В комплект разработчика также входят уже скомпилированные примеры: testapp и testappeasy x32 и x64 бита под windows и только x64 бита под macOS X,
- * test_CSharp, test_VBNET, test_Delphi - только x32 бита, test_Java - кроссплатформенный, test_MATLAB и test_Python не требуют компиляции,
- * test_LabWindows - по умолчанию установлена 64-битная сборка.
  *
  * \note
  * Для работы с SDK требуется Microsoft Visual C++ Redistributable Package (поставляется с SDK, файлы vcredist_x86 или vcredist_x64).
  *
  * \note
- * Для работы на Linux требуется установить оба пакета libximc7_x.x.x и libximc7-dev_x.x.x целевой архитектуры в указанном порядке. Для установки пакетов можно воспользоваться .deb командой: dpkg -i <имя_пакета>.deb. Запускать dpkg необходимо с правами суперпользователя (root). 
+ * Для работы на Linux требуется установить оба пакета libximc7_x.x.x и libximc7-dev_x.x.x целевой архитектуры в указанном порядке. Для установки пакетов можно воспользоваться .deb командой: 
+ * \code
+ * $ sudo dpkg -i <имя_пакета>.deb 
+ * \endcode
  *
  * \section howtouse_c_sec Использование на C
  *
@@ -393,6 +354,11 @@
  *
  * Си-профили это набор заголовочных файлов, распространяемых вместе с библиотекой libximc. Они позволяют в программе на языке C/C++ загрузить в контроллер настройки одной из поддерживаемых подвижек вызовом всего одной функции.
  * Пример использования си-профилей вы можете посмотреть в директории примеров "examples/test_C/testprofile_C".
+ *
+ * \section howtouse_pyprofiles Python-профили
+ *
+ * Python-профили это набор конфигурационных функций, распространяемых вместе с библиотекой libximc. Они позволяют в программе на языке Python загрузить в контроллер настройки одной из поддерживаемых подвижек вызовом всего одной функции. <br>
+ * Пример использования python-профилей вы можете посмотреть в директории примеров "examples/test_Python/profiletest/testpythonprofile.py".
  *
  * \page userunit_sec Работа с пользовательскими единицами
  *
