@@ -12,14 +12,13 @@
  *
  * Полная документация по API libximc доступна на странице <a href="https://libximc.xisupport.com/doc-ru/ximc_8h.html"> ximc.h.</a>
  * 
- * \section what_the_controller_does Что делает контроллер 8SMC4-USB и 8SMC5-USB.
+ * \section what_the_controller_does Что делает контроллер 8SMC4-USB и 8SMC5-USB
  *
  * - Поддерживает входные и выходные сигналы синхронизации для обеспечения совместной работы нескольких устройств в рамках сложной системы;
  * - Работает со всеми компактными шаговыми двигателями с током обмотки до 3 А, без обратной связи, а так же с шаговыми двигателями, оснащенными энкодером в цепи обратной связи, в том числе линейным энкодером на позиционере;
- * - Управляет контроллером с помощью готового ПО <a href="https://files.xisupport.com/Software.ru.html#xilab">XILab</a> или с помощью примеров написанных на разных языках программирования: С/C++, C#, Java, Visual Basic, Python, .NET, Delphi, интеграция со средами программирования MS Visual Studio, gcc, Xcode;
- * - Работает с научными средами разработки путем интеграции LabWindows, LabVIEW и MATLAB;
+ * - Управляет контроллером с помощью готового ПО <a href="https://files.xisupport.com/Software.ru.html#xilab">XILab</a> или с помощью примеров, которые позволяют быстро начать программирование с использованием C++, C#, .NET, Delphi, Visual Basic, Xcode, Python, Matlab, Java, LabWindows и LabVIEW.
  *
- * \section what_can_do_library Что умеет библиотека libximc.
+ * \section what_can_do_library Что умеет библиотека libximc
  *
  * - Libximc управляет контроллером с использованием интерфейсов: USB 2.0, RS232 и Ethernet, также использует распространенный и проверенный интерфейс виртуального последовательного порта, поэтому вы можете работать с модулями управления моторами через эту библиотеку практически под всеми ОС, в том числе под Windows, Linux и Mac OS X. 
  * - Библиотека libximc поддерживает подключение и отключение устройств "на лету". C одним устройством в каждый момент может работать не более одного экземпляра управляющей программы - <b>множественный доступ управляющих программ к одному и тому же устройству не допускается!</b> 
@@ -31,7 +30,7 @@
  *
  * Для того, чтобы использовать libximc в проекте, ознакомьтесь со страницей <a href="https://libximc.xisupport.com/doc-ru/howtouse_sec.html">Как использовать с...</a>
  *
- * \section assistance Содействие.
+ * \section assistance Содействие
  *
  * Большое спасибо всем, кто отправляет нам <a href="https://en.xisupport.com">ошибки</a> и <a href="mailto:8smc4@standa.lt">предложения</a>. Мы ценим ваше время и стараемся сделать наш продукт лучше! 
  *
@@ -41,8 +40,8 @@
  *
  * Этот документ содержит всю необходимую информацию о библиотеке libximc. 
  * Библиотека libximc использует распространенный и проверенный интерфейс виртуального последовательного порта, поэтому вы можете работать с модулями управления моторами через эту библиотеку практически под всеми ОС: Windows, Linux, MacOS X для intel и Apple Silicone (с использованием Rosetta 2), в том числе с 64-битными версиями.
- * Библиотека поддерживает подключение и отключение устройств "на лету". 
- * C одним устройством в каждый момент может работать не более одного экземпляра управляющей программы - множественный доступ управляющих программ к одному и тому же устройству не допускается!
+ * Библиотека поддерживает подключение и отключение устройств "на лету". <br>
+ * <b>C одним устройством в каждый момент может работать не более одного экземпляра управляющей программы - множественный доступ управляющих программ к одному и тому же устройству не допускается!</b>
  *
  * \subsection sysreq_usage Поддерживаемые операционные системы и требования к окружению:
  *
@@ -53,7 +52,7 @@
  * - Linux на основе rpm. RPM собирается на OpenSUSE 12
  *
  * Требования сборки:
- * - Windows: Microsoft Visual C++ 2013 или новее, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin с tar, bison, flex, curl, 7z. <b>mingw (в данный момент не поддерживается)</b>
+ * - Windows: Microsoft Visual C++ 2013 или новее, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin с tar, bison, flex, curl, 7z. mingw
  * - UNIX: gcc 4 или новее, gmake, doxygen, LaTeX, flex 2.5.30+, bison 2.3+, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
  * - Mac OS X: XCode 4 или новее, doxygen, mactex, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
  * - JDK 7 - 9
@@ -76,7 +75,7 @@
  * \section building_unix_deb Сборка для Linux на основе Debian
  * Полный набор пакетов: 
  * \code
- * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * 	sudo apt-get install build-essential make cmake curl git ruby1.9.1 autotools-dev automake autoconf libtool doxygen bison flex debhelper lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic java-1_7_0-openjdk java-1_7_0-openjdk-devel default-jre-headless default-jdk openjdk-6-jdk rpm-build rpm-devel rpmlint pkg-config check dh-autoreconf hardening-wrapper libfl-dev lsb-release 
  * \endcode
  *
  * Для кросс-компиляции ARM установите gcc-arm-linux-gnueabihf из вашего инструментария ARM.
@@ -86,7 +85,7 @@
  *
  * Для сборки библиотеки и пакета запустите скрипт:
  * \code
- * $ ./build.sh libdeb
+ * 	./build.sh libdeb
  * \endcode
  * 
  * Для библиотеки ARM замените 'libdeb' на 'libdebarm'. <br>
@@ -96,7 +95,7 @@
  *
  * Для сборки библиотеки и пакета запустите скрипт:
  * \code
- * $ ./build.sh libosx
+ * 	./build.sh libosx
  * \endcode
  *
  * Собранная библиотека (классическая и фреймворк), приложения (классическая и фреймворк) и документация
@@ -116,7 +115,7 @@
  *
  * Полный набор пакетов: 
  * \code
- * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * 	sudo apt-get install build-essential make cmake curl git ruby1.9.1 autotools-dev automake autoconf libtool doxygen bison flex debhelper lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic java-1_7_0-openjdk java-1_7_0-openjdk-devel default-jre-headless default-jdk openjdk-6-jdk rpm-build rpm-devel rpmlint pkg-config check dh-autoreconf hardening-wrapper libfl-dev lsb-release 
  * \endcode
  *
  * Возможно собрать 32-битную и 64-битную библиотеки на 64-битной системе, однако 64-битная
@@ -124,7 +123,7 @@
  *
  * Для сборки библиотеки и пакета запустите скрипт:
  * \code
- * $ ./build.sh librpm
+ * 	./build.sh librpm
  * \endcode
  * 
  * Пакеты располагаются в ./ximc/rpm, локально инсталированные файлы в ./dist/local.
@@ -143,7 +142,7 @@
  * \note
  * Для работы на Linux требуется установить оба пакета libximc7_x.x.x и libximc7-dev_x.x.x целевой архитектуры в указанном порядке. Для установки пакетов можно воспользоваться .deb командой: 
  * \code
- * $ sudo dpkg -i <имя_пакета>.deb 
+ * 	sudo dpkg -i <имя_пакета>.deb 
  * \endcode
  *
  * \section howtouse_c_sec Использование на C
@@ -151,7 +150,7 @@
  * \subsection howtouse_c_vcpp_sec Visual C++
  *
  * Тестовое приложение может быть собрано с помощью testapp.sln. 
- * Для компиляции необходимо использовать также MS Visual C++, <b>mingw-library не поддерживается</b>. 
+ * Для компиляции необходимо использовать также MS Visual C++, mingw-library. 
  * 
  * Убедитесь, что Microsoft Visual C++ Redistributable Package установлен.
  * Откройте проект examples/test_C/testapp_C/testapp.sln, выполните сборку и запустите приложение из среды разработки.
@@ -161,7 +160,7 @@
  * \subsection howtouse_c_codeblocks CodeBlocks
  *
  * Тестовое приложение может быть собрано с помощью testappeasy_C.cbp или testapp_C.cbp.
- * Для компиляции необходимо использовать также MS Visual C++, <b>mingw-library не поддерживается</b>. 
+ * Для компиляции необходимо использовать также MS Visual C++, mingw-library. 
  * 
  * Убедитесь, что Microsoft Visual C++ Redistributable Package установлен.
  * Откройте проект examples/test_C/testappeasy_C/testappeasy_C/testappeasy_C.cbp или examples/test_C/testapp_C/testapp_C.cbp, выполните сборку и запустите приложение из среды разработки.
@@ -169,11 +168,10 @@
  * \subsection howtouse_c_mingw_sec MinGW
  *
  * MinGW это вариант GCC для платформы win32. Требует установки пакета MinGW.
- * <b>В данный момент не поддерживается.</b>
  *
  * testapp, скомпилированный с помощью MinGW, может быть собран с MS Visual C++ или библиотеками mingw:
  * \code
- * $ mingw32-make -f Makefile.mingw all
+ * 	mingw32-make -f Makefile.mingw all
  * \endcode
  *
  * Далее скопируйте libximc.dll в текущую директорию и запустите testapp.exe.
@@ -185,12 +183,12 @@
  * В первую очередь вы должны создать подходящую для C++ Builder библиотеку. <b>Библиотеки Visual C++ и Builder не совместимы</b>. 
  * Выполните: 
  * \code
- * $ implib libximc.lib libximc.def
+ * 	implib libximc.lib libximc.def
  * \endcode
  *
  * Затем скомпилируйте тестовое приложение:
  * \code
- * $ bcc32 -I..\..\ximc\win32 -L..\..\ximc\win32 -DWIN32 -DNDEBUG -D_WINDOWS testapp.c libximc.lib
+ * 	bcc32 -I..\..\ximc\win32 -L..\..\ximc\win32 -DWIN32 -DNDEBUG -D_WINDOWS testapp.c libximc.lib
  * \endcode
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле testapp.c перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enumerate_hints).
@@ -216,7 +214,7 @@
  *
  * testapp может быть собран следующим образом с установленной библиотекой:
  * \code
- * $ make
+ * 	make
  * \endcode
  *
  * Для кросс-компиляции (архитектура целевой системы отличается от архитектуры хоста) следует передать флаг -m64 или -m32
@@ -225,7 +223,7 @@
  *
  * Затем запустите приложение с помощью:
  * \code
- * $ make run
+ * 	make run
  * \endcode
  *
  * Примечание: make run на MacOS X копирует библиотеку в текущую директорию. 
@@ -258,32 +256,32 @@
  *
  * Как запустить пример на Linux. Перейдите в examples/test_Java/compiled-winX/ и выполните
  * \code
- * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
+ * 	java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
  * Как запустить пример на Windows. Перейдите в examples/test_Java/compiled-winX/.
  * Запустите:
  * \code
- * $ java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
+ * 	java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
  * \endcode
  *
  * Как модифицировать и пересобрать пример.
  * Исходный текст расположен внутри test_Java.jar. Перейдите в examples/test_Java/compiled.
  * Распакуйте jar:
  * \code
- * $ jar xvf test_Java.jar ru META-INF
+ * 	jar xvf test_Java.jar ru META-INF
  * \endcode
  * Затем пересоберите исходные тексты:
  * \code
- * $ javac -classpath /usr/share/java/libjximc.jar -Xlint ru/ximc/TestJava.java
+ * 	javac -classpath /usr/share/java/libjximc.jar -Xlint ru/ximc/TestJava.java
  * \endcode
  * или для Windows или MacOS X:
  * \code
- * $ javac -classpath libjximc.jar -Xlint ru/ximc/TestJava.java
+ * 	javac -classpath libjximc.jar -Xlint ru/ximc/TestJava.java
  * \endcode
  * Затем соберите jar:
  * \code
- * $ jar cmf MANIFEST.MF test_Java.jar ru
+ * 	jar cmf MANIFEST.MF test_Java.jar ru
  * \endcode
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле TestJava.java перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная ENUM_HINTS).
@@ -300,7 +298,7 @@
  * На Linux: может понадобиться установить LD_LIBRARY_PATH, чтобы Python мог найти библиотеки с RPATH.
  * Например, запустите:
  * \code
- * export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
+ * 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
  * \endcode
  *
  * На Windows: перед запуском ничего делать не нужно. Все необходимые связи и зависимости прописаны в коде примера.
@@ -308,7 +306,7 @@
  *
  * Запустите:
  * \code
- * python test_Python.py
+ * 	python test_Python.py
  * \endcode
  * 
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле test_Python.py перед запуском нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).
@@ -333,7 +331,7 @@
  * Измените текущую директорию в MATLAB на examples/test_MATLAB.
  * Затем запустите в MATLAB:
  * \code
- * testximc
+ * 	testximc
  * \endcode
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле testximc.m перед запуском нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).

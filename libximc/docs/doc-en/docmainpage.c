@@ -12,12 +12,11 @@
  *
  * Full documentation about libximc API is available on the page <a href="https://libximc.xisupport.com/doc-en/ximc_8h.html">ximc.h.</a>
  *
- * \section what_the_controller_does What the controller does.
+ * \section what_the_controller_does What the controller does
  *
  * - Supports input and output synchronization signals to ensure the joint operation of multiple devices within a complex system ;.
  * - Works with all compact stepper motors with a winding current of up to 3 A, without feedback, as well as with stepper motors equipped with an encoder in the feedback circuit, including a linear encoder on the positioner.
- * - Manages controller using ready-made <a href="https://files.xisupport.com/Software.en.html#xilab">xilab software</a> or using libraries for programming languages: C/C ++, C#, JAVA, Visual Basic, Python, .NET, Delphi, integration with MS Visual Studio programming environments, gcc, Xcode.
- * - Works with scientific development environments by integrating LabWindows, LabVIEW and MATLAB;
+ * - Manages controller using ready-made <a href="https://files.xisupport.com/Software.en.html#xilab">xilab software</a> or using examples which allow rapid development using C++, C#, .NET, Delphi, Visual Basic, Xcode, Python, Matlab, Java, LabWindows and LabVIEW.
  *
  * \section what_can_do_library What can do libximc library
  *
@@ -31,7 +30,7 @@
  *
  * To use libximc in your project please consult with <a href="https://libximc.xisupport.com/doc-en/howtouse_sec.html"> How to use with...</a>
  *
- * \section assistance Assistance.
+ * \section assistance Assistance
  *
  * Many thanks to everyone who sends us <a href="https://en.xisupport.com">errors</a> and <a href="mailto:8smc4@standa.lt">suggestions</a>. We appreciate your suggestions and try to make our product better!
  *
@@ -41,8 +40,8 @@
  *
  * This document contains all information about libximc library.
  * It utilizes well known virtual COM-port interface, so you can use it on Windows, Linux, MacOS X for intel and Apple Silicone (via Rosetta 2) including 64-bit versions.
- * Multi-platform programing library supports plug/unplug on the fly.
- * Each device can be controlled only by one program at once. Multiple processes (programs) that control one device simultaneously are not allowed.
+ * Multi-platform programing library supports plug/unplug on the fly. <br>
+ * <b>Each device can be controlled only by one program at once. Multiple processes (programs) that control one device simultaneously are not allowed.</b>
  *
  * \subsection sysreq_usage Supported OS and environment requirements:
  * - MacOS X 10.6 or newer
@@ -52,7 +51,7 @@
  * - Linux rpm-based. RPM is built against OpenSUSE 12
  *
  * Build requirements:
- * - Windows: Microsoft Visual C++ 2013 or newer, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin with tar, bison, flex, curl, 7z <b>mingw (currently not supported)</b>
+ * - Windows: Microsoft Visual C++ 2013 or newer, MATLAB, Code::Blocks, Delphi, Java, Python, cygwin with tar, bison, flex, curl, 7z mingw
  * - UNIX: gcc 4 or newer, gmake, doxygen, LaTeX, flex 2.5.30+, bison 2.3+, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
  * - MacOS X: XCode 4 or newer, doxygen, mactex, autotools (autoconf, autoheader, aclocal, automake, autoreconf, libtool)
  *
@@ -64,7 +63,7 @@
  *
  * Invoke a script:
  * \code
- * $ ./build.bat
+ * 	./build.bat
  * \endcode
  *
  * Grab packages from ./deb/win32 and ./deb/win64 
@@ -75,7 +74,7 @@
  * Requirement: 64-bit and 32-bit debian system, ubuntu
  * Typical set of packages: 
  * \code
- * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint
+ * 	sudo apt-get install build-essential make cmake curl git ruby1.9.1 autotools-dev automake autoconf libtool doxygen bison flex debhelper lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic java-1_7_0-openjdk java-1_7_0-openjdk-devel default-jre-headless default-jdk openjdk-6-jdk rpm-build rpm-devel rpmlint pkg-config check dh-autoreconf hardening-wrapper libfl-dev lsb-release 
  * \endcode
  *
  * For ARM cross-compiling install gcc-arm-linux-gnueabihf from your ARM toolchain.
@@ -85,7 +84,7 @@
  *
  * To build library and package invoke a script:
  * \code
- * $ ./build.sh libdeb
+ * 	./build.sh libdeb
  * \endcode
  * 
  * For ARM library replace 'libdeb' with 'libdebarm'.
@@ -96,7 +95,7 @@
  *
  * To build and package a script invoke a script:
  * \code
- * $ ./build.sh libosx
+ * 	./build.sh libosx
  * \endcode
  *
  * Built library (classical and framework), examples (classical and .app), documentation
@@ -106,7 +105,7 @@
  *
  * Generic version could be built with standard autotools.
  * \code
- *   ./build.sh lib
+ * 	./build.sh lib
  * \endcode
  * Built files (library, headers, documentation) are installed to ./dist/local directory.
  * It is a generic developer build. Sometimes you need to specify additional parameters to
@@ -116,7 +115,7 @@
  * Requirement: 64-bit redhat-based system (Fedora, Red Hat, SUSE)
  * Typical set of packages: 
  * \code
- * $ sudo apt-get install build-essential ruby1.9.1 debhelper mercurial git curl make cmake autotools-dev automake autoconf libtool default-jre-headless default-jdk openjdk-6-jdk lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic dh-autoreconf hardening-wrapper bison flex libfl-dev doxygen lsb-release pkg-config check java-1_7_0-openjdk java-1_7_0-openjdk-devel rpm-build rpm-devel rpmlint 
+ * 	sudo apt-get install build-essential make cmake curl git ruby1.9.1 autotools-dev automake autoconf libtool doxygen bison flex debhelper lintian texlive texlive-latex-extra texlive-latex texlive-fonts-extra texlive-lang-cyrillic java-1_7_0-openjdk java-1_7_0-openjdk-devel default-jre-headless default-jdk openjdk-6-jdk rpm-build rpm-devel rpmlint pkg-config check dh-autoreconf hardening-wrapper libfl-dev lsb-release 
  * \endcode
  *
  * It's possible to build both 32- and 64-bit libraries on 64-bit host system.
@@ -124,7 +123,7 @@
  *
  * To build library and package invoke a script:
  * \code
- * $ ./build.sh librpm
+ * 	./build.sh librpm
  * \endcode
  * 
  * Grab packages from ./ximc/rpm and locally installed binaries from ./dist/local.
@@ -155,7 +154,7 @@
  * \subsection howtouse_c_vcpp_sec Visual C++
  *
  * Testapp can be built using testapp.sln. 
- * Library must be compiled with MS Visual C++ too, <b>mingw-library isn't supported</b>.
+ * Library must be compiled with MS Visual C++ too, mingw-library.
  * Make sure that Microsoft Visual C++ Redistributable Package is installed. 
  *
  * Open solution examples/testapp/testapp.sln, build and run from the IDE.
@@ -165,7 +164,7 @@
  * \subsection howtouse_c_codeblocks CodeBlocks
  *
  * Testappeasy_C and testapp_C can be built using testappeasy_C.cbp and testapp_C.cbp respectively.
- * Library must be compiled with MS Visual C++ too, <b>mingw-library isn't supported</b>.
+ * Library must be compiled with MS Visual C++ too, mingw-library.
  * Make sure that Microsoft Visual C++ Redistributable Package is installed.  *
  *
  * Open solution examples/test_C/testappeasy_C/testappeasy_C/testappeasy_C.cbp or examples/test_C/testapp_C/testapp_C.cbp, build and run from the IDE.
@@ -174,11 +173,10 @@
  *
  * MinGW is a port of GCC to win32 platform.
  * It's required to install MinGW package.
- * <b>Currently not supported</b>
  *
  * MinGW-compiled testapp can be built with MS Visual C++ or mingw library.
  * \code
- * $ mingw32-make -f Makefile.mingw all
+ * 	mingw32-make -f Makefile.mingw all
  * \endcode
  *
  * Then copy library libximc.dll to current directory and launch testapp.exe.
@@ -190,12 +188,12 @@
  * First of all, you should create a library suitable for C++ Builder. <b>Visual C++ and Builder libraries are not compatible</b>
  * Invoke:
  * \code
- * $ implib libximc.lib libximc.def
+ * 	implib libximc.lib libximc.def
  * \endcode
  *
  * Then compile test application:
  * \code
- * $ bcc32 -I..\..\ximc\win32 -L..\..\ximc\win32 -DWIN32 -DNDEBUG -D_WINDOWS testapp.c libximc.lib
+ * 	bcc32 -I..\..\ximc\win32 -L..\..\ximc\win32 -DWIN32 -DNDEBUG -D_WINDOWS testapp.c libximc.lib
  * \endcode
  *
  * In case of the 8Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testapp.c file before build (see enumerate_hints variable).
@@ -222,7 +220,7 @@
  *
  * Test application can be built with the installed library with the following script:
  * \code
- * $ make
+ * 	make
  * \endcode
  *
  * In case of cross-compilation (target architecture differs from the current system architecture)
@@ -231,7 +229,7 @@
  *
  * Then launch the application as:
  * \code
- * $ make run
+ * 	make run
  * \endcode
  *
  * Note: make run on MacOS X copies a library to the current directory.
@@ -265,32 +263,32 @@
  *
  * How to run example on Linux. Go to to examples/test_Java/compiled-winX/ and run:
  * \code
- * $ java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
+ * 	java -cp /usr/share/java/libjximc.jar:test_Java.jar ru.ximc.TestJava
  * \endcode
  *
  * How to run example on Windows. Go to to examples/test_Java/compiled-winX/.
  * Then run:
  * \code
- * $ java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
+ * 	java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
  * \endcode
  
  * How to modify and recompile an example.
  * Go to to examples/test_Java/compiled. Sources are embedded in a test_Java.jar.
  * Extract them:
  * \code
- * $ jar xvf test_Java.jar ru META-INF
+ * 	jar xvf test_Java.jar ru META-INF
  * \endcode
  * Then rebuild sources:
  * \code
- * $ javac -classpath /usr/share/java/libjximc.jar -Xlint ru/ximc/TestJava.java
+ * 	javac -classpath /usr/share/java/libjximc.jar -Xlint ru/ximc/TestJava.java
  * \endcode
  * or for Windows or MacOS X
  * \code
- * $ javac -classpath libjximc.jar -Xlint ru/ximc/TestJava.java
+ * 	javac -classpath libjximc.jar -Xlint ru/ximc/TestJava.java
  * \endcode
  * Then build a jar:
  * \code
- * $ jar cmf META-INF/MANIFEST.MF test_Java.jar ru
+ * 	jar cmf META-INF/MANIFEST.MF test_Java.jar ru
  * \endcode
  * 
  * In case of the 8Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in TestJava.java file before build (see ENUM_HINTS variable).
