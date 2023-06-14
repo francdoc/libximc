@@ -145,8 +145,6 @@
  * 	sudo dpkg -i <имя_пакета>.deb 
  * \endcode
  *
- * \section howtouse_c_sec Использование на C
- *
  * \subsection howtouse_c_vcpp_sec Visual C++
  *
  * Тестовое приложение может быть собрано с помощью testapp.sln. 
@@ -232,7 +230,7 @@
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле testapp.c перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enumerate_hints).
  * 
- * \section howtouse_dotnet_sec .NET
+ * \subsection howtouse_dotnet_sec .NET
  * 
  * Для использования в .NET предлагается обертка ximc/winX/wrappers/csharp/ximcnet.dll.
  * Она распространяется в двух различных архитектурах. Тестировалось на платформах .NET от 2.0 до 4.5.1.
@@ -242,7 +240,7 @@
  * 
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле testapp.cs или testapp.vb (в зависимости от языка) перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enumerate_hints для C#, переменная enum_hints для VB).
  *
- * \section howtouse_delphi_sec Delphi
+ * \subsection howtouse_delphi_sec Delphi
  *
  * Обертка для использования в Delphi libximc.dll предлагается как модуль ximc/winX/wrappers/pascal/ximc.pas
  *
@@ -252,7 +250,7 @@
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле test_Delphi.dpr перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).
  * 
- * \section howtouse_java_sec Java
+ * \subsection howtouse_java_sec Java
  *
  * Как запустить пример на Linux. Перейдите в examples/test_Java/compiled-winX/ и выполните
  * \code
@@ -286,7 +284,7 @@
  *
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле TestJava.java перед сборкой нужно прописать IP адрес Ethernet-адаптера (переменная ENUM_HINTS).
  * 
- * \section howtouse_python_sec Python
+ * \subsection howtouse_python_sec Python
  *
  * Измените текущую директорию на examples/test_Python.
  * Для корректного использования библиотеки libximc, в примере используется файл обертка, ximc/crossplatform/wrappers/python/pyximc.py с описанием структур библиотеки.
@@ -311,7 +309,7 @@
  * 
  * В случае, если планируется использовать Ethernet-адаптер 8Eth1, в файле test_Python.py перед запуском нужно прописать IP адрес Ethernet-адаптера (переменная enum_hints).
  *
- * \section howtouse_matlab_sec MATLAB
+ * \subsection howtouse_matlab_sec MATLAB
  *
  * Тестовая программа на MATLAB testximc.m располагается в директории examples/test_MATLAB.
  *

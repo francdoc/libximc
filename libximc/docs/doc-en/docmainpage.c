@@ -149,8 +149,6 @@
  * \note
  * On Linux both the libximc7_x.x.x and libximc7-dev_x.x.x target architecture in the specified order. For install packages, you can use the .deb command: dpkg -i filename.deb, where filename.deb is the name of the package (packages in Debian have the extension .deb). You must run dpkg with superuser privileges (root).
  *
- * \section howtouse_c_sec Usage with C
- *
  * \subsection howtouse_c_vcpp_sec Visual C++
  *
  * Testapp can be built using testapp.sln. 
@@ -239,7 +237,7 @@
  *
  * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testapp.c file before build (see enumerate_hints variable).
  * 
- * \section howtouse_dotnet_sec .NET
+ * \subsection howtouse_dotnet_sec .NET
  * 
  * Wrapper assembly for libximc.dll is ximc/winX/wrappers/csharp/ximcnet.dll.
  * It is provided with two different architectures. Tested on platforms .NET from 2.0 to 4.5.1
@@ -249,7 +247,7 @@
  * 
  * In case of the 8SMC4-USB-Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in testapp.cs or testapp.vb file (depending on programming language) before build (see enumerate_hints variable for C# or enum_hints variable for VB).
  *
- * \section howtouse_delphi_sec Delphi
+ * \subsection howtouse_delphi_sec Delphi
  *
  * Wrapper for libximc.dll is a unit ximc/winX/wrappers/delphi/ximc.pas
  *
@@ -259,7 +257,7 @@
  * 
  * In case of the 8Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in test_Delphi.dpr file before build (see enum_hints variable).
  *
- * \section howtouse_java_sec Java
+ * \subsection howtouse_java_sec Java
  *
  * How to run example on Linux. Go to to examples/test_Java/compiled-winX/ and run:
  * \code
@@ -293,7 +291,7 @@
  * 
  * In case of the 8Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in TestJava.java file before build (see ENUM_HINTS variable).
  *
- * \section howtouse_python_sec Python
+ * \subsection howtouse_python_sec Python
  *
  * Change current directory to the examples/test_Python.
  * For correct usage of the library libximc, the example uses the file wrapper, ximc/crossplatform/wrappers/python/pyximc.py with a description of the structures of the library.
@@ -318,7 +316,7 @@
  * 
  * In case of the 8Eth1 Ethernet adapter usage it is necessary to set correct IP address of the Ethernet adapter in test_Python.py file before launch (see enum_hints variable).
  *
- * \section howtouse_matlab_sec MATLAB
+ * \subsection howtouse_matlab_sec MATLAB
  *
  * Sample MATLAB program testximc.m is provided at the directory examples/test_MATLAB.
  * On windows copy ximc.h, libximc.dll, bindy.dll, xiwrapper.dll and contents of ximc/(win32,win64)/wrappers/matlab/ directory to the current directory.
