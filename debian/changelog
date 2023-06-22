@@ -1,3 +1,10 @@
+libximc7 (2.15.6-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #78659 xibridge 1.1.4 used
+
+ -- XIMC <info@ximc.ru>  Thu, 22 Jun 2023 18:05:15 +0300
+
 libximc7 (2.15.5-1) unstable; urgency=low
 
   * Version bump
