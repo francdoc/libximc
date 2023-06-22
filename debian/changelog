@@ -1,3 +1,14 @@
+libximc7 (2.14.14-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #70712 jupiter libximc improved
+  * Feature #74546 readme added to the pypi libximc example
+  * Feature #75619 hints argument description corrected
+  * Feature #76913 Documentation start pages reviewed
+  * Feature #79128 libximc .sh scripts improved
+
+ -- XIMC <info@ximc.ru>  Thu, 22 Jun 2023 13:56:12 +0300
+
 libximc7 (2.14.13-1) unstable; urgency=low
 
   * Version bump
