@@ -25,7 +25,7 @@ import libximc as ximc
 # In case you have real hardware set correct device URI here
 
 device_uri = "xi-emu:///virtual_motor_controller.bin"  # Virtual device
-# device_uri = "xi-com:\\\\.\\COM111"                  # Seril port
+# device_uri = "xi-com:\\\\.\\COM111"                  # Serial port
 # device_uri = "xi-tcp://172.16.130.155:1820"          # Raw TCP connection
 # device_uri = "xi-net://192.168.1.120/abcd"           # XiNet connection
 
