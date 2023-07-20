@@ -1,7 +1,8 @@
 from datetime import date
 import logging
 import os
-from typing import List, Tuple
+import subprocess
+from typing import Dict, List, Tuple
 from pypi_creator import utils as ut
 
 
@@ -22,18 +23,22 @@ class PyPICreator:
         self._dir_for_pypi_src: str = os.path.join(self._dir_for_pypi, "src", "libximc")
         self._dir_for_release: str = os.path.join(self._dir, "libximc_release")
         self._dir_templates: str = os.path.join(self._dir, "templates")
-
-        self._dst_and_src = {self._dir_for_pypi: [os.path.join(self._dir_templates, "LICENSE"),
-                                                  os.path.join(self._dir_templates, "pyproject.toml")],
-                             self._dir_for_pypi_src: [os.path.join(self._dir_templates, "__init__.py")]}
+        self._dst_and_src: Dict[str, List[str]] = {}
         self._version: str = None
 
     def _add_dst_and_src(self) -> None:
+        self._dst_and_src = {self._dir_for_pypi: [os.path.join(self._dir_templates, "LICENSE"),
+                                                  os.path.join(self._dir_templates, "pyproject.toml")],
+                             self._dir_for_pypi_src: [os.path.join(self._dir_templates, "__init__.py")]}
         for dir_name in PyPICreator.FOLDERS_FROM_RELEASE:
             src_path = os.path.join(self._dir_ximc, dir_name)
             self._dst_and_src[self._dir_for_pypi_src].append(src_path)
 
         self._dst_and_src[self._dir_for_pypi_src].append(os.path.join(self._dir_ximc, PyPICreator.FILE_FROM_RELEASE))
+
+        repo_dir = os.path.dirname(os.path.abspath(self._dir))
+        readme_path = os.path.join(repo_dir, "wrappers", "python", "README.md")
+        self._dst_and_src[self._dir_for_pypi].append(readme_path)
 
     def _check_archive(self) -> bool:
         """

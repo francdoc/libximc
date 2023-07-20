@@ -2,9 +2,13 @@ build
 dist
 release
 venv
-*/__pycache__
+libximc_release/
+package/
+__pycache__
 *.pyc
 *.o
 # Intellij Idea files
 .idea
+*/.idea
 *.iml
+*.tar.gz
