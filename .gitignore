@@ -1,0 +1,10 @@
+build
+dist
+release
+venv
+*/__pycache__
+*.pyc
+*.o
+# Intellij Idea files
+.idea
+*.iml
