@@ -1,6 +1,6 @@
 @echo off
 cd ..
-venv\Scripts\python run.py
+python run.py
 if exist ".\package\" (
     echo.
     echo Building distribution...
