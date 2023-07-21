@@ -34,7 +34,7 @@ class PyPICreator:
                                               os.path.join(self._dir_templates, "pyproject.toml")],
                              self._dir_pypi_src: [os.path.join(self._dir_templates, "__init__.py")]}
 
-        dirs_from_release = ["debian-amd64", "debian-armhf", "debian-i386", "win32", "win64"]
+        dirs_from_release = ["debian-amd64", "debian-armhf", "debian-i386", "macosx", "win32", "win64"]
         for dir_name in dirs_from_release:
             src_path = os.path.join(self._dir_release_ximc, dir_name)
             self._dst_and_src[self._dir_pypi_src].append(src_path)
