@@ -66,6 +66,14 @@ def _load_lib():
         else:
             return lib
 
+    if os_kind == "darwin":
+        try:
+            lib = CDLL("libximc.framework/libximc")
+        except Exception as exc:
+            errors.append(str(exc))
+        else:
+            return lib
+
     error_msg = "Unable to load library. Paths tried:\n" + "\n".join(errors)
     raise RuntimeError(error_msg)
 

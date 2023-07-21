@@ -63,7 +63,7 @@ def find_release_archive(dir_path: str) -> Tuple[str, str]:
     logging.info("Searching for libximc release archive in folder '%s'...", os.path.abspath(dir_path))
     archives = []
     good_name_archives = []
-    name_pattern = re.compile(r"^libximc-(?P<version>\d+\.\d+\.\d+)-.*\.tar\.gz$")
+    name_pattern = re.compile(r"^libximc-(?P<version>\d+\.\d+\.\d+)(.*)?\.tar\.gz$")
     for file_name in os.listdir(dir_path):
         path = os.path.join(dir_path, file_name)
         if os.path.isfile(path):
