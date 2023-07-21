@@ -6,7 +6,7 @@
 
    - **run.bat**, если Вы работаете в *Windows*;
 
-   - **run.sh**, если Вы работаете в *Linux*:
+   - **run.sh**, если Вы работаете в *Linux/macOS*:
 
      ```bash
      bash run.sh
