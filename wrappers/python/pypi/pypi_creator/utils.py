@@ -4,60 +4,60 @@ import os
 import shutil
 import tarfile
 from configparser import ConfigParser
-from typing import Dict, Optional
+from typing import Optional, Tuple
 
 
-def copy_dir(src_path: str, dst_path: str) -> bool:
+def check_success(func):
+    """
+    Decorator catches error while executing function.
+    :param func: function to decorate.
+    """
+
+    def wrapper(*args, **kwargs):
+        result = True
+        try:
+            func(*args, **kwargs)
+        except Exception as exc:
+            logging.error("Error occurred while executing function '%s(%s, %s)' (%s)", func.__name__, args, kwargs, exc)
+            result = False
+        return result
+
+    return wrapper
+
+
+@check_success
+def copy_dir(src_path: str, dst_path: str) -> None:
     """
     :param src_path: path to folder to be copied;
     :param dst_path: path to folder where to copy folder.
-    :return: True if folder copied successfully.
     """
 
-    result = False
-    try:
-        shutil.copytree(src_path, dst_path)
-    except Exception as exc:
-        logging.error("Error occurred while copying folder '%s' to folder '%s' (%s)", src_path, dst_path, exc)
-    else:
-        result = True
-    return result
+    shutil.copytree(src_path, dst_path)
 
 
-def copy_file(src_path: str, dst_dir_path: str) -> bool:
+@check_success
+def copy_file(src_path: str, dst_dir_path: str) -> None:
     """
     :param src_path: path to file to be copied;
     :param dst_dir_path: path to folder where to copy file.
-    :return: True if file copied successfully.
     """
 
-    result = False
-    try:
-        shutil.copy(src_path, dst_dir_path)
-    except Exception as exc:
-        logging.error("Error occurred while copying file '%s' to folder '%s' (%s)", src_path, dst_dir_path, exc)
-    else:
-        result = True
-    return result
+    shutil.copy(src_path, dst_dir_path)
 
 
-def create_dir(dir_path: str) -> bool:
+@check_success
+def create_dir(dir_path: str) -> None:
     """
     :param dir_path: folder to be created.
-    :return: True if folder created.
     """
 
-    try:
-        os.makedirs(dir_path)
-    except Exception as exc:
-        logging.error("Error occurred while creating folder '%s' (%s)", dir_path, exc)
-    return os.path.exists(dir_path)
+    os.makedirs(dir_path)
 
 
-def find_release_archive(dir_path: str) -> Dict[str, str]:
+def find_release_archive(dir_path: str) -> Tuple[str, str]:
     """
     :param dir_path: folder where to find possible archive with release of libximc.
-    :return: dictionary with path to possible archive with libximc release and its version.
+    :return: path to possible archive with libximc release and its version.
     """
 
     logging.info("Searching for libximc release archive in folder '%s'...", os.path.abspath(dir_path))
@@ -81,11 +81,14 @@ def find_release_archive(dir_path: str) -> Dict[str, str]:
     elif archives:
         data = archives[0]
 
-    if data.get("archive"):
+    archive = data.get("archive", None)
+    version = data.get("version", None)
+
+    if archive:
         logging.info("Possible libximc release archive found: '%s'", data["archive"])
     else:
         logging.warning("Unable to find libximc release archive")
-    return data
+    return archive, version
 
 
 def get_config_path() -> Optional[str]:
@@ -95,23 +98,20 @@ def get_config_path() -> Optional[str]:
 
     config_path = os.path.join(os.path.curdir, "config.ini")
     if not os.path.exists(config_path):
-        logging.warning("Configuration file '%s' not found. Script will try to find archive with libximc release on "
-                        "its own and determine release version", os.path.basename(config_path))
+        logging.warning("Config file '%s' not found. Script will try to determine release version from archive name",
+                        config_path)
         config_path = None
     return config_path
 
 
-def parse_input_arguments(config_path: Optional[str] = None) -> Dict[str, str]:
+def parse_input_arguments(config_path: Optional[str] = None) -> str:
     """
     :param config_path: path to configuration file.
-    :return: dictionary with path to possible archive with libximc release and its version.
+    :return: version for release.
     """
 
-    config_file = os.path.basename(config_path)
-    logging.info("Parsing config file '%s'...", config_file)
-    config_structure = {"MAIN": [{"name": "archive",
-                                  "type": str},
-                                 {"name": "version",
+    logging.info("Parsing config file '%s'...", config_path)
+    config_structure = {"MAIN": [{"name": "version",
                                   "type": str}]}
     config_parser = ConfigParser()
     config_parser.read(config_path)
@@ -129,44 +129,47 @@ def parse_input_arguments(config_path: Optional[str] = None) -> Dict[str, str]:
                     except Exception as exc:
                         logging.warning("Invalid value of option '%s' in section '%s' (%s)", option_name, section, exc)
                 else:
-                    logging.warning("Config file '%s' has no option '%s' in section '%s'", config_file, option_name,
+                    logging.warning("Config file '%s' has no option '%s' in section '%s'", config_path, option_name,
                                     section)
         else:
-            logging.warning("Config file '%s' has no section '%s'", config_file, section)
+            logging.warning("Config file '%s' has no section '%s'", config_path, section)
 
     if data.get("MAIN"):
-        data = {"archive": data["MAIN"].get("archive"),
-                "version": data["MAIN"].get("version")}
+        version = data["MAIN"].get("version", None)
     else:
-        data = {"archive": None,
-                "version": None}
-    logging.info("Parsing competed: archive = '%s', version = '%s'", data["archive"], data["version"])
-    return data
+        version = None
+
+    if not version:
+        logging.warning("Release version not found in config file '%s'", config_path)
+    else:
+        logging.info("Release version '%s' found in config file '%s'", version, config_path)
+    return version
 
 
 def read_file(file_path: str) -> str:
+    """
+    :param file_path: path to file to be read.
+    :return: text in file.
+    """
+
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
 
 
-def remove_dir(dir_path: str) -> bool:
+@check_success
+def remove_dir(dir_path: str) -> None:
     """
     :param dir_path: directory to be removed.
-    :return: True if directory was successfully removed.
     """
 
-    try:
-        shutil.rmtree(dir_path)
-    except Exception as exc:
-        logging.error("Error occurred while deleting folder '%s' (%s)", dir_path, exc)
-    return not os.path.exists(dir_path)
+    shutil.rmtree(dir_path)
 
 
 def unzip_archive(archive_path: str, dir_path: str) -> bool:
     """
     :param archive_path: path to archive with libximc release;
     :param dir_path: folder where to unpack archive.
-    :return: True if archive could not be unpacked.
+    :return: True if archive was successfully unpacked.
     """
 
     if not os.path.exists(archive_path):
@@ -179,7 +182,7 @@ def unzip_archive(archive_path: str, dir_path: str) -> bool:
         archive_file = tarfile.open(archive_path)
         archive_file.extractall(dir_path)
         result = True
-        logging.info("Archive '%s' is unpacked into folder '%s'", archive_path, dir_path)
+        logging.info("Archive '%s' unpacked into folder '%s'", archive_path, dir_path)
     except Exception as exc:
         logging.error("Failed to unpack archive '%s' with libximc release into folder '%s' (%s)", archive_path,
                       dir_path, exc)
@@ -189,5 +192,10 @@ def unzip_archive(archive_path: str, dir_path: str) -> bool:
 
 
 def write_file(file_path: str, text: str) -> None:
+    """
+    :param file_path: path to file to be written;
+    :param text: text for file.
+    """
+
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(text)
