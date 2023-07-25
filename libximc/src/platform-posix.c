@@ -434,7 +434,7 @@ bool is_device_name_ok (char* directory, char* name, int flags)
 				like_com_device_by_prefix( "ttyUSB", name ) ||
 				like_com_device_by_prefix( "ttyACM", name )))
 		||
-        ((!strcmp(directory, "/dev/ximc") || (!strcmp(directory, "/dev/mdrive")) &&
+        ((!strcmp(directory, "/dev/ximc") || !strcmp(directory, "/dev/mdrive")) &&
 		 		is_hex( name ));
 }
 #endif
