@@ -134,7 +134,7 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
 		if (get_device_information_impl_unsynced( device, pinfo ) == result_ok)
 		{
 			log_debug( L"enum thread: successfully got GETI" );
-			if (!strcmp( pinfo->Manufacturer, "XIMC" ))
+            if (!strcmp(pinfo->Manufacturer, "XIMC") || !strcmp(pinfo->Manufacturer, "EPC MSU"))
 			{
 				is_ximc_device = 1;
 				if (serial)
@@ -175,7 +175,7 @@ int enumerate_device_by_ximc_information(const char* addr, const char* adapter_a
 #endif
 }
 
-/* Concrete thread function to slowly check a device for beeing XIMC */
+/* Concrete thread function to slowly check a device for beeing XIMC or mDrive */
 void check_device_thread (void* arg)
 {
 	enum_thread_state_t* ts = (enum_thread_state_t*)arg;
