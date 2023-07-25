@@ -516,7 +516,7 @@ result_t discover_ssdp_add_as_tcp(
     {
         for (device = devlist; device; device = device->pNext)
         {
-            if (strstr(device->server, "8SMC5-USB") != NULL)
+            if (strstr(device->server, "8SMC5-USB") != NULL || strstr (device->server, "mDrive") != NULL)
             {
                 ip_start = strstr(device->descURL, "://");
                 if (ip_start == NULL) continue;
