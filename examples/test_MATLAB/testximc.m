@@ -34,10 +34,6 @@ if not(libisloaded('libximc'))
 		end
 end
 
-% Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-% wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-% relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-calllib('libximc','set_bindy_key', '../../ximc/win32/keyfile.sqlite')
 
 probe_flags = 1 + 4; % ENUMERATE_PROBE and ENUMERATE_NETWORK flags used
 enum_hints = 'addr=192.168.1.1,172.16.2.3';

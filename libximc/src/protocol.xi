@@ -1,4 +1,4 @@
-protocol "v20.6"
+protocol "v20.7"
 defaults with crc, answer, public
 
 /** \english
@@ -2347,6 +2347,49 @@ fields:
 	int8u SubnetMask[4]			/**< \english Mask of the subnet in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Маска подсети в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	int8u DefaultGateway[4]		/**< \english Default value of the gateway in format x.x.x.x. The value must be specified as four numbers separated by spaces, not dots \endenglish \russian Шлюз сети по умолчанию в формате x.x.x.x. Значение должно задаваться в виде четырёх чисел, разделённых пробелами, а не точками \endrussian */
 	reserved 19
+
+/** $XIR
+	* \english
+	* Read password settings.
+	* This function reads user password to the device web-page.
+	* @see pwd_settings_t
+	* @param UserPassword[20] Password-string to web-page
+	* \endenglish
+	* \russian
+	* Команда чтения пароля к веб-странице.
+	* Эта функция пользователяет прочитать пользовательский пароль к веб-странице из памяти контроллера.
+	* @param UserPassword[20] Строчка-пароль для доступа к веб-странице
+	* \endrussian
+	*/
+/** $XIW
+	* \english
+	* Sets password settings.
+	* This function sets user password to the device web-page.
+	* @see pwd_settings_t
+	* @param UserPassword[20] Password-string to web-page
+	* \endenglish
+	* \russian
+	* Команда записи пароля к веб-странице.
+	* Эта функция меняет пользовательский пароль к веб-странице.
+	* @param UserPassword[20] Строчка-пароль для доступа к веб-странице
+	* \endrussian
+	*/
+/** $XIS
+	* \english
+	* Network settings.
+	* This structure contains network settings.
+	* \endenglish
+	* \russian
+	* Настройки сети.
+	* Эта структура содержит настройки сети.
+	* \endrussian
+	* @see get_password_settings
+	* @see set_password_settings
+	*/
+command "password_settings" universal "pwd" (36)
+fields:
+	int8u UserPassword[20]		/**< \english Password-string to web-page that user can change with usb command or via web-page. \endenglish \russian Строчка-пароль для доступа к веб-странице, который пользователь может поменять с помощью USB команды или на веб-странице. \endrussian */
+	reserved 10
 
 /** $XIR
 	* \english

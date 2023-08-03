@@ -45,11 +45,7 @@ class TestJava
 			boolean deviceSpecified = args.length == 1 && !args[0].startsWith("-psn");
 			if (deviceSpecified)
 				deviceName = args[0];
-			//  Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-			//  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-			//  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-			JXimc.set_bindy_key( "keyfile.sqlite" );
-
+			
 			long deviceEnumeration = JXimc.enumerate_devices(PROBE_FLAGS, ENUM_HINTS);
 			if (deviceEnumeration == 0)
 				throw new RuntimeException("Error enumerating devices");

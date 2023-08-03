@@ -1,3 +1,49 @@
+libximc7 (2.14.15-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #83712 mDrive enumerate and discovery added
+
+ -- XIMC <info@ximc.ru>  Tue, 25 Jul 2023 19:34:58 +0300
+
+libximc7 (2.14.14-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #70712 jupiter libximc improved
+  * Feature #74546 readme added to the pypi libximc example
+  * Feature #75619 hints argument description corrected
+  * Feature #76913 Documentation start pages reviewed
+  * Feature #79128 libximc .sh scripts improved
+
+ -- XIMC <info@ximc.ru>  Thu, 22 Jun 2023 13:56:12 +0300
+
+libximc7 (2.14.13-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #77391 Wrong position returned in virtual controllers fixed
+
+ -- XIMC <info@ximc.ru>  Thu, 11 May 2023 11:55:23 +0300
+
+libximc7 (2.14.11-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #74036 additionally: set_bindy_key calls removed from examples
+
+ -- XIMC <info@ximc.ru>  Tue, 07 Mar 2023 18:56:56 +0300
+
+libximc7 (2.14.10-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #74028 Updated wiring diagrams
+  * Feature #74036 keyfile.sqlite removed
+  * Feature #74552 Nagle algorithm off in xi-tcp
+  * Feature #74671 Unused files removed from example projects
+  * Feature #74594 Jupiter_demo added
+  * Feature #70732 Virtual controller updated
+  * Feature #74575 emumerate_device function made multithreaded
+  * Feature #74580 Miniupnpc using improved  
+
+ -- XIMC <info@ximc.ru>  Fri, 17 Feb 2023 12:21:46 +0300
+
 libximc7 (2.14.9-1) unstable; urgency=low
 
   * Version bump

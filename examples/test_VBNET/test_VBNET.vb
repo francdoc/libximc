@@ -20,11 +20,6 @@ Namespace test_VBNET
                 Dim device_enumeration As IntPtr
                 Dim device_count As Integer
 
-                ' Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-                ' wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-                ' relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-                API.set_bindy_key("keyfile.sqlite")
-
                 device_enumeration = API.enumerate_devices(probe_flags, enum_hints)
                 If device_enumeration = IntPtr.Zero Then
                     Throw New Exception("Error " & res.ToString())

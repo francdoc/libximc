@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.14.9
+Version: 2.14.15
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -58,7 +58,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libbindy.so
 %{_libdir}/libxiwrapper.so
 %{_javadir}/libjximc.jar
-%{_resourcedir}/keyfile.sqlite
 %{_udevrulesdir}/50-%{name}.rules
 %doc COPYING AUTHORS README NEWS
 %{_datadir}/doc/%{name}/doc-ru/%{name}-ru.pdf
@@ -74,6 +73,37 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Tue Jul 25 2023 XIMC <info@ximc.ru> - 2.14.15
+- version bump
+- Feature #83712 mDrive enumerate and discovery added
+
+* Thu Jun 22 2023 XIMC <info@ximc.ru> - 2.14.14
+- version bump
+- Feature #70712 jupiter libximc improved
+- Feature #74546 readme added to the pypi libximc example
+- Feature #75619 hints argument description corrected
+- Feature #76913 Documentation start pages reviewed
+- Feature #79128 libximc .sh scripts improved
+
+* Thu May 11 2023 XIMC <info@ximc.ru> - 2.14.13
+- version bump
+- Feature #77391 Wrong position returned in virtual controllers fixed
+
+* Tue Mar 07 2023 XIMC <info@ximc.ru> - 2.14.11
+- version bump
+- Feature #74036 additionally: set_bindy_key calls removed from examples
+
+* Fri Feb 17 2023 XIMC <info@ximc.ru> - 2.14.10
+- version bump
+- Feature #74028 Updated wiring diagrams
+- Feature #74036 keyfile.sqlite removed
+- Feature #74552 Nagle algorithm off in xi-tcp
+- Feature #74671 Unused files removed from example projects
+- Feature #74594 Jupiter_demo added
+- Feature #70732 Virtual controller updated
+- Feature #74575 emumerate_device function made multithreaded
+- Feature #74580 Miniupnpc using improved
 
 * Fri Jan 20 2023 XIMC <info@ximc.ru> - 2.14.9
 - version bump

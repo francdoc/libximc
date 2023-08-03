@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-[ -n "$MERCURIAL" ] || MERCURIAL=hg
 [ -n "$GIT" ] || GIT=git
 BASEROOT=`pwd`
 LOCAL=`pwd`/dist/local
@@ -22,8 +21,12 @@ XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
 if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
+<<<<<<< HEAD
 MINIUPNPCVER=miniupnpd_2_3_0
 XIGENVER=v1.0.0
+=======
+MINIUPNPCVER=8ddbb71
+>>>>>>> dev-2.14
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -172,7 +175,6 @@ makedist()
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
-			cp -R $DL/deb/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
 			
 			rm -rf $DL/deb/$arch
 			rm -rf $DL/deb/dev-$arch
@@ -196,7 +198,6 @@ makedist()
 		cp -R $DL/$arch/bindy.dll $DISTLIB/$arch/
 		cp -R $DL/$arch/bindy.lib $DISTLIB/$arch/
 		cp -R $DL/$arch/xiwrapper.dll $DISTLIB/$arch/
-		cp -R $DL/$arch/keyfile.sqlite $DISTLIB/$arch/
 		if [ -f $DL/$arch/libjximc.dll ] ; then
 			cp -R $DL/$arch/libjximc.* $DISTLIB/$arch/
 		fi
@@ -274,7 +275,6 @@ makedist()
 		cp -R $DL/win32/bindy.dll $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/bindy.lib $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
 	done
 	
 	for example in test_LabWindows ; do
@@ -284,7 +284,6 @@ makedist()
 			cp -R $DL/win32/bindy.dll $DISTEXAM/$example/$namexample
 			cp -R $DL/win32/bindy.lib $DISTEXAM/$example/$namexample
 			cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/$namexample
 		done
 	done
 
@@ -303,7 +302,6 @@ makedist()
 			cp -R $DL/$arch/bindy.dll $DISTEXAM/$example/compiled-$arch
 			cp -R $DL/$arch/bindy.lib $DISTEXAM/$example/compiled-$arch
 			cp -R $DL/$arch/xiwrapper.dll $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/keyfile.sqlite $DISTEXAM/$example/compiled-$arch
 			if [ -f $DL/$arch/libjximc.dll ] ; then
 				cp -R $DL/$arch/libjximc.* $DISTEXAM/$example/compiled-$arch
 			fi
@@ -403,22 +401,17 @@ copydist()
 	if [ -d "$LOCAL/share/java" ] ; then
 		cp -a $LOCAL/share/java/*.jar $DISTLATEST
 	fi
-	if [ -d "$LOCAL/share/libximc" ] ; then
-		cp -a $LOCAL/share/libximc/keyfile.sqlite $DISTLATEST
-	fi
 }
 
 build_dep_bindy()
 {
-	if [ -n "$URL_BINDY" ] ; then
-		URL=$URL_BINDY
-	else
-		URL="https://github.com/EPC-MSU/Bindy.git"
+	if [ -z "$URL_BINDY" ] ; then
+	  URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 	fi
 	echo "--- Building bindy ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/bindy
-		(cd $DEPS && git clone --recursive $URL bindy)
+		(cd $DEPS && git clone --recursive $URL_BINDY bindy)
 		(cd $DEPS/bindy && git checkout $BINDYVER)
 		(cd $DEPS/bindy && git submodule update --init --recursive)
 		(cd $DEPS/bindy && git submodule update --recursive)
@@ -430,18 +423,16 @@ build_dep_bindy()
 
 build_dep_xiwrapper()
 {
-	if [ -n "$URL_XIWRAPPER" ] ; then
-		URL=$URL_XIWRAPPER
-	else
-		URL=https://anonymous:anonymous@hg.ximc.ru/libxiwrapper
+	if [ -z "$URL_XIWRAPPER" ] ; then
+	  URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
 	fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
+		(cd $DEPS && git clone $URL_XIWRAPPER xiwrapper) || false
+		(cd $DEPS/xiwrapper && git checkout $XIWRAPPERVER) || false
 	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
+	(cd $DEPS/xiwrapper && git --no-pager show --stat $XIWRAPPERVER) || false
 	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
 	$MAKE -C $DEPS/xiwrapper
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
@@ -467,12 +458,15 @@ build_dep_xigen()
 
 build_dep_miniupnpc()
 {
-	URL=https://github.com/transmission/miniupnpc
+	if [ -z "$URL_MINIUPNPC" ] ; then
+	  URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc"
+	fi
 
 	echo "--- Building miniupnpc ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
-		(cd $DEPS && git clone $URL miniupnpc-dist -b $MINIUPNPCVER)
+		(cd $DEPS && git clone $URL_MINIUPNPC miniupnpc-dist)
+		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
 	fi
 	# cmake 3.5 is needed
 	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
@@ -492,9 +486,6 @@ build_depends()
 	build_dep_xiwrapper $*
 	build_dep_xigen $*
 	build_dep_miniupnpc $*
-	echo Seed keyfile to libximc, seems like a hack
-	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
-	cp $DEPS/bindy/sample_keyfile.sqlite examples/test_C/testapp_C/keyfile.sqlite
 }
 
 build_deb_package()

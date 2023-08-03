@@ -210,14 +210,6 @@ int main (int argc, char* argv[])
 	{
 		strcpy( device_name, argv[1] );
 	}
-//  Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-//  wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-//  relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-	result = set_bindy_key("keyfile.sqlite");
-	if (result != result_ok)
-		wprintf(L"error set_bindy_key\n");
-	else
-		wprintf(L"set_bindy_key OK\n");
 
 	devenum = enumerate_devices( probe_flags, enumerate_hints );
 	if (!devenum)
@@ -338,7 +330,7 @@ int main (int argc, char* argv[])
 	}
 	print_state( &state );
 
-	char* ch1 = "table.txt";
+	char* ch1 = "Corr_table_example.tbl";
 
 	// The device_t device parameter in this function is a C pointer, unlike most library functions that use this parameter
 	if ((result = set_correction_table(device, ch1)) != result_ok)
