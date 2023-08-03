@@ -134,7 +134,7 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
 		if (get_device_information_impl_unsynced( device, pinfo ) == result_ok)
 		{
 			log_debug( L"enum thread: successfully got GETI" );
-            if (!strcmp(pinfo->Manufacturer, "XIMC") || !strcmp(pinfo->Manufacturer, "EPC MSU"))
+            if (!strcmp(pinfo->Manufacturer, "XIMC") || !strcmp(pinfo->Manufacturer, "EPC "))
 			{
 				is_ximc_device = 1;
 				if (serial)
