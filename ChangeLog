@@ -1,6 +1,14 @@
 libximc (2.15.6-1)
   * Released: Thu, 22 Jun 2023 18:05:15 +0300
   * Version bump
+  * Feature #83712 mDrive enumerate and discovery added
+  * Feature #70712 jupiter libximc improved
+  * Feature #74546 readme added to the pypi libximc example
+  * Feature #75619 hints argument description corrected
+  * Feature #76913 Documentation start pages reviewed
+  * Feature #79128 libximc .sh scripts improved
+  * Feature #77391 Wrong position returned in virtual controllers fixed
+  * Feature #77391 Wrong position returned in virtual controllers fixed
   * Feature #78659 xibridge 1.1.4 used
 
 libximc (2.15.5-1)

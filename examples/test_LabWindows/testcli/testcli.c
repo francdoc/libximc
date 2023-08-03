@@ -37,7 +37,6 @@ int main (int argc, char *argv[])
 	const int probe_flags = ENUMERATE_PROBE | ENUMERATE_NETWORK;
 	device_enumeration_t devenum;
 	const char* enumerate_hints = "addr=";
-		
 	devenum = enumerate_devices( probe_flags, enumerate_hints );
 	
 	strcpy( device_name, get_device_name( devenum, 0 ) );

@@ -434,7 +434,7 @@ bool is_device_name_ok (char* directory, char* name, int flags)
 				like_com_device_by_prefix( "ttyUSB", name ) ||
 				like_com_device_by_prefix( "ttyACM", name )))
 		||
-		(!strcmp( directory, "/dev/ximc" ) &&
+        ((!strcmp(directory, "/dev/ximc") || !strcmp(directory, "/dev/mdrive")) &&
 		 		is_hex( name ));
 }
 #endif
@@ -615,7 +615,7 @@ result_t enumerate_specific_directory (char* directory, enumerate_devices_direct
 result_t enumerate_devices_directory (enumerate_devices_directory_callback_t callback, void* arg, int flags)
 {
 	result_t result;
-
+    
 	#ifdef __APPLE__
 	if (!(flags & ENUMERATE_ALL_COM))
 	{
@@ -624,8 +624,9 @@ result_t enumerate_devices_directory (enumerate_devices_directory_callback_t cal
 	}
 	#endif
 
-	/* enumerate /dev/ximc/ first */
-	if ((result = enumerate_specific_directory( "/dev/ximc", callback, arg, flags )) != result_ok)
+	/* enumerate /dev/ximc/ or /dev/mdrive first */
+	if ((result = enumerate_specific_directory( "/dev/ximc", callback, arg, flags )) != result_ok && 
+        (enumerate_specific_directory("/dev/mdrive", callback, arg, flags)) != result_ok)
 		return result;
 
  	/* enumerate all other devices in /dev/ because there are symlinks to them */

@@ -131,7 +131,7 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
         if (get_device_information_impl_unsynced( device, pinfo ) == result_ok)
         {
             log_debug( L"enum thread: successfully got GETI" );
-            if (!strcmp( pinfo->Manufacturer, "XIMC" ))
+            if (!strcmp(pinfo->Manufacturer, "XIMC") || !strcmp(pinfo->Manufacturer, "EPC "))
             {
                 is_ximc_device = 1;
                 if (serial)
@@ -162,7 +162,7 @@ int check_device_by_ximc_information (const char* name, device_information_t* in
     return is_ximc_device;
 }
 
-/* Concrete thread function to slowly check a device for beeing XIMC */
+/* Concrete thread function to slowly check a device for beeing XIMC or mDrive */
 void check_device_thread (void* arg)
 {
     enum_thread_state_t* ts = (enum_thread_state_t*)arg;
@@ -609,7 +609,7 @@ result_t discover_ssdp_add_as_tcp(
     {
         for (device = devlist; device; device = device->pNext)
         {
-            if (strstr(device->server, "8SMC5-USB") != NULL)
+            if (strstr(device->server, "8SMC5-USB") != NULL || strstr (device->server, "mDrive") != NULL)
             {
                 ip_start = strstr(device->descURL, "://");
                 if (ip_start == NULL) continue;

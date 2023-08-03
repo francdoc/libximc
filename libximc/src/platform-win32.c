@@ -363,12 +363,12 @@ bool is_device_name_COM(const char* name)
 bool is_device_name_ok (char* name, char* description, int flags)
 {
 	const char* ximcDeviceSignature = "XIMC Motor Controller";
-
+    const char*mdriveDeviceSignature = "mDrive Motor Controller";
 	if (is_device_name_COM( name ))
 	{
 		return (flags & ENUMERATE_ALL_COM)
 			? true
-			: (strstr( description, ximcDeviceSignature ) != NULL);
+            : (strstr(description, ximcDeviceSignature) != NULL || strstr(description, mdriveDeviceSignature) != NULL);
 	}
 	else
 		return false;

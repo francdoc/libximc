@@ -1,4 +1,3 @@
-@if 'x%MERCURIAL%'=='x' set MERCURIAL=hg
 @if 'x%GIT%'=='x' set GIT=git
 :: reset errorrevel
 @cmd /C exit 0
@@ -6,6 +5,10 @@
 @set BASEDIR=%CD%
 @set DISTDIR=ximc
 @set DEPSDIR=deps
+
+@set CYGWIN_PATH=c:\cygwin\bin
+@set MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
+@set MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 
 :: set by CI
 :: @set GIT="%ProgramFiles%\Git\bin\git.exe"
@@ -25,10 +28,10 @@
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
 if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
 echo Found xibridge ver %XIBRIDGEVER%
-
-#set MINIUPNPCVER=miniupnpd_2_3_0
 set MINIUPNPCVER=8ddbb71
 echo Set miniupnpc ver %MINIUPNPCVER%
+set XIGENVER=v1.0.0
+echo Set xigen ver %XIGENVER%
 
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
@@ -77,6 +80,10 @@ call :DEPS_XIBRIDGE win64 x64
 @if not %errorlevel% == 0 goto FAIL
 call :DEPS_XIBRIDGE win32 Win32
 @if not %errorlevel% == 0 goto FAIL
+call :DEPS_XIGEN win64 x64
+@if not %errorlevel% == 0 goto FAIL
+call :DEPS_XIGEN win32 Win32
+@if not %errorlevel% == 0 goto FAIL
 call :DEPS_MINIUPNPC win64 x64
 @if not %errorlevel% == 0 goto FAIL
 call :DEPS_MINIUPNPC win32 Win32
@@ -111,6 +118,7 @@ goto :eof
 
 rmdir /S /Q %DISTARCH%\xibridge
 mkdir %DISTARCH%\xibridge
+
 
 @if "x%URL_XIBRIDGE%" == "x" set URL_XIBRIDGE="https://github.com/EPC-MSU/xibridge.git"
 ::@set URL_XIBRIDGE=%USERPROFILE%\Documents\xibridge
@@ -187,6 +195,38 @@ cd %BASEDIR%
 
 
 :: --------------------------------------
+:: ------------ deps xigen -------------
+:DEPS_XIGEN
+@set DISTARCH=%DEPSDIR%\%1
+@set ARCH=%2
+@echo Building xigen for %ARCH%...
+
+@if exist %DISTARCH%\xigen rmdir /S /Q %DISTARCH%\xigen
+mkdir %DISTARCH%\xigen
+
+::@set URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+::%CYGWIN_PATH%\curl -k -o %DISTARCH%\xigen\xigen_src.tar.gz %URL%
+::%CYGWIN_PATH%\gzip -d %DISTARCH%\xigen\xigen_src.tar.gz
+::%CYGWIN_PATH%\tar xf %DISTARCH%\xigen\xigen_src.tar -C %DISTARCH%\xigen
+
+@set URL="https://github.com/EPC-MSU/xigen.git"
+
+"%GIT%" clone --recursive %URL% %DISTARCH%\xigen -b %XIGENVER%
+@if not %errorlevel% == 0 goto FAIL
+cd %DISTARCH%\xigen
+@if not %errorlevel% == 0 goto FAIL
+@set GENERATOR=Visual Studio 12 2013
+if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
+%CMAKE% -G "%GENERATOR%"
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% xigen.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+@if not %errorlevel% == 0 goto FAIL
+if not exist %CONFIGURATION%\xigen.exe goto FAIL
+@if not %errorlevel% == 0 goto FAIL
+cd %BASEDIR%
+@echo Building xigen for %ARCH% completed
+@goto :eof
+:: --------------------------------------
 :: -------------- libximc ---------------
 :LIBXIMC
 @set DISTARCH=%DISTDIR%\%1
@@ -199,7 +239,7 @@ cd %BASEDIR%
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
-%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen;libximc
+%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:libximc
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\libximc.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
@@ -233,8 +273,6 @@ waitfor XimcBuildLock /t 30
 @if not exist %DISTARCH% mkdir %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 
-%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
-@if not %errorlevel% == 0 goto FAIL
 %MSBUILD% wrappers\csharp\ximcnet.sln /p:Configuration=%CONFIGURATION% /p:Platform=%2
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\ximcnet.dll %DISTARCH%
@@ -257,9 +295,7 @@ waitfor XimcBuildLock /t 30
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
-%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32 /t:xigen
-@if not %errorlevel% == 0 goto FAIL
-%CONFIGURATION%-Win32\xigen.exe --gen-pascal -x version -i libximc\src\protocol.xi -o wrappers\delphi\ximc.pas -t wrappers\delphi\ximc-template.pas
+%DEPSDIR%\win32\xigen\%CONFIGURATION%\xigen.exe --gen-pascal -x version -i libximc\src\protocol.xi -o wrappers\delphi\ximc.pas -t wrappers\delphi\ximc-template.pas
 @if not %errorlevel% == 0 goto FAIL
 
 copy wrappers\delphi\ximc.pas %DISTARCH%
@@ -277,16 +313,14 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 @echo Generating java wrapper for %ARCH% and %JPATH%
 @set GENDIR=wrappers\java\gen
 @set BINDIR=%CONFIGURATION%-%ARCH%\
+@set PLATFORM=%1
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 
 @if not exist %GENDIR% mkdir %GENDIR%
 
-%MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:xigen
-@if not %errorlevel% == 0 goto FAIL
-
-%CONFIGURATION%-%ARCH%\xigen.exe --gen-java -x version -i libximc\src\protocol.xi -o wrappers\java\src\java\ru\ximc\libximc\JXimc.java -t wrappers\java\src\java\\ru\ximc\libximc\JXimc-template.java
+%DEPSDIR%\%PLATFORM%\xigen\%CONFIGURATION%\xigen.exe --gen-java -x version -i libximc\src\protocol.xi -o wrappers\java\src\java\ru\ximc\libximc\JXimc.java -t wrappers\java\src\java\ru\ximc\libximc\JXimc-template.java
 @if not %errorlevel% == 0 goto FAIL
 
 %JPATH%\bin\javac -Xlint -d wrappers\java wrappers\java\src\java\ru\ximc\libximc\JXimc.java wrappers\java\src\java\ru\ximc\libximc\XimcError.java wrappers\java\src\java\ru\ximc\libximc\XimcNoDevice.java wrappers\java\src\java\ru\ximc\libximc\XimcNotImplemented.java wrappers\java\src\java\ru\ximc\libximc\XimcValueError.java
@@ -298,7 +332,7 @@ copy wrappers\delphi\ximc.pas %DISTARCH%
 %JPATH%\bin\javah -classpath wrappers\java\libjximc.jar -jni -d %GENDIR% ru.ximc.libximc.JXimc
 @if not %errorlevel% == 0 goto FAIL
 
-%CONFIGURATION%-%ARCH%\xigen.exe --gen-jni -x version -i libximc\src\protocol.xi -o wrappers\java\src\c\ru_ximc_libximc_JXimc-gen.c -t wrappers\java\src\c\ru_ximc_libximc_JXimc-template.c
+%DEPSDIR%\%PLATFORM%\xigen\%CONFIGURATION%\xigen.exe --gen-jni -x version -i libximc\src\protocol.xi -o wrappers\java\src\c\ru_ximc_libximc_JXimc-gen.c -t wrappers\java\src\c\ru_ximc_libximc_JXimc-template.c
 @if not %errorlevel% == 0 goto FAIL
 
 %MSBUILD% libximc.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH% /t:libjximc
@@ -380,10 +414,8 @@ copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win64\%NAME%-compil
 :SKIP_PDB_COPY_TESTAPP
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
-@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
-@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
-@SET PATH_BASE=%PATH%;
+@SET PATH_BASE=%PATH%
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
 "%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
@@ -427,10 +459,8 @@ copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win
 @if not %errorlevel% == 0 goto FAIL
 :: ----- in CodeBlocks
 @echo Building example CodeBlocks %NAME%...
-@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
-@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
-@SET PATH_BASE=%PATH%;
+@SET PATH_BASE=%PATH%
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
 "%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 

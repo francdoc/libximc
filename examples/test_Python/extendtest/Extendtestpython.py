@@ -13,7 +13,6 @@ Warning:
     getch for linux and macos, if the package keyboard is blocked due to lack of root user rights.
     pyximc.py for correct usage of the library libximc you need to add the file  wrapper with the structures of the library to python path.
 
-  -To search for network devices, you must have a file keyfile.sqlite
 
   -Required libraries for Windows:
     libximc.dll
@@ -891,7 +890,6 @@ def test_extio(lib, device_id):
 def device_selection_dialog():
     """ 
     Device selection Manager.
-   
     Follow the on-screen instructions to change the settings.
     """
     
@@ -923,6 +921,7 @@ def device_selection_dialog():
         head_port = "xi-net://"
         port_name = input_new()
     elif ord(key_press) == 52: #Press "4" search for all available devices
+
         print("Wait for the search to complete...")
                 # This is device search and enumeration with probing. It gives more information about devices.
         probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK # + EnumerateFlags.ENUMERATE_ALL_COM

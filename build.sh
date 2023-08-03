@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-[ -n "$MERCURIAL" ] || MERCURIAL=hg
 [ -n "$GIT" ] || GIT=git
 BASEROOT=`pwd`
 LOCAL=`pwd`/dist/local
@@ -22,7 +21,10 @@ XIBRIDGEVER=`sed '3q;d' "$VERSION_FILE"`
 if [ -z "$XIBRIDGEVER" ] ; then
 	XIBRIDGEVER=default
 fi
+
+XIGENVER=v1.0.0
 MINIUPNPCVER=8ddbb71
+
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -55,6 +57,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
+
 	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc"
 	case "`uname -s`" in
 		Darwin)
@@ -359,16 +362,20 @@ build_to_local()
 	clean
 	rm -rf $LOCAL
 	mkdir -p $LOCAL $DL $DISTLATEST
-
+	
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
+
 		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
+		--with-xigen=$DEPS/xigen/bin/xigen $*
+
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
 		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
-	
+		--with-xigen=$DEPS/xigen/bin/xigen $*
+
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
 		rm -rf $VNAME
@@ -419,6 +426,24 @@ build_dep_xibridge()
 	$MAKE -C $DEPS/xibridge
 }
 
+build_dep_xigen()
+{
+	echo "--- Building xigen ---"
+	#URL=https://artifacts.ci.ximc.ru/xigen_src.tar.gz
+	#if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+	#	rm -rf $DEPS/xigen
+	#	(cd $DEPS && mkdir xigen) || false
+	#	(curl -o $DEPS/xigen/xigen_src.tar.gz $URL && tar -xvzf $DEPS/xigen/xigen_src.tar.gz -C $DEPS/xigen) || false
+	#fi
+	URL=https://github.com/EPC-MSU/xigen.git
+	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+		rm -rf $DEPS/xigen
+		(cd $DEPS && git clone $URL xigen -b $XIGENVER)
+	fi
+	(cd $DEPS/xigen && cmake $DEPS_CMAKE_OPT $* .)
+	$MAKE -C $DEPS/xigen
+}
+
 build_dep_miniupnpc()
 {
 	if [ -z "$URL_MINIUPNPC" ] ; then
@@ -446,6 +471,7 @@ build_depends()
 	echo Building depends with flags $*
 	mkdir -p $DEPS
 	build_dep_xibridge $*
+	build_dep_xigen $*
 	build_dep_miniupnpc $*
 }
 
@@ -598,19 +624,19 @@ libfreebsd)
 	;;
 
 genfwheader)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./xigen/src/fwprotocol-template.h
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-header -x version -o fwprotocol.h  -t ./$DEPS/xigen/src/fwprotocol-template.h
 	;;
 
 genfwlib)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./xigen/src/fwprotocol-template.c
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-fw-lib -x version -o fwprotocol.c -t ./$DEPS/xigen/src/fwprotocol-template.c
 	;;
 
 genwikiru)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language russian -o protocol_ru.wiki
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language russian -o protocol_ru.wiki
 	;;
 
 genwikien)
-	./xigen/src/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language english -o protocol_en.wiki
+	./$DEPS/xigen -i libximc/src/protocol.xi --gen-wiki -x version --language english -o protocol_en.wiki
 	;;
 
 abicc-dump)
