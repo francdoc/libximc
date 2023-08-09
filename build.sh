@@ -366,14 +366,13 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc \
 		--with-xigen=$DEPS/xigen/bin/xigen $*
 
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc \
 		--with-xigen=$DEPS/xigen/bin/xigen $*
 
 	if [ -d "$VNAME" ] ; then
