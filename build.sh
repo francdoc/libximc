@@ -58,7 +58,7 @@ configure_dist()
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
 
-	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc"
+	PACKAGE_EXTRA_CONFIGURE="--with-xibridge=$DEPS/xibridge --with-miniupnpc=$DEPS/miniupnpc --with-xigen=$DEPS/xigen/bin/xigen"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
