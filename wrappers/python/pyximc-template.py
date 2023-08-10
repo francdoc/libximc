@@ -26,15 +26,15 @@ def _load_lib():
         else:
             method = WinDLL
         if 8 * struct.calcsize("P") == 32:
-            libs = "bindy.dll", "xiwrapper.dll", "libximc.dll"
+            libs = "xibridge.dll", "libximc.dll"
             dirs = _near_script_path("win32"), _near_script_path(""), ""
         else:
-            libs = "bindy.dll", "xiwrapper.dll", "libximc.dll"
+            libs = "xibridge.dll", "libximc.dll"
             dirs = _near_script_path("win64"), _near_script_path(""), ""
     elif os_kind == "linux":
         method = CDLL
         cpu_kind = platform.machine().lower()
-        libs = "libbindy.so", "libxiwrapper.so", "libximc.so"
+        libs = "libxibridge.so", "libximc.so"
         if cpu_kind == "arm":
             cpu_path = "debian-armhf"
         elif cpu_kind == "i386":
