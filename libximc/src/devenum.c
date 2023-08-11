@@ -712,7 +712,7 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
     token = hints_net;
     while (*token != 0)
     {
-        if (*token++ == ',') items++;
+        if (*token++ == ',' && *token != ',' && *token != 0) items++;
     }
     // prepare net_enum data
     net_enum.server_count = items;
@@ -736,10 +736,13 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
         i = 0;
         while (i < items)
         {
-            net_enum.addrs[i] = token;
-            net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
-            *(net_enum.pbufs[i]) = NULL;
-            net_enum.device_count[i] = 0;
+			if (strlen(token) > 0)
+			{
+                net_enum.addrs[i] = token;
+                net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
+                *(net_enum.pbufs[i]) = NULL;
+                net_enum.device_count[i] = 0;
+			}	
             i++;
             token = strtok(NULL, ",");
         }
