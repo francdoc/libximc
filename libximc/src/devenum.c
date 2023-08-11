@@ -695,7 +695,7 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
     uint32_t count;
     char *hints_net, *adapter,  *token, *pdev, *pxis;
     net_enum_t net_enum;
-    int items, i, server;
+    int items, i, server, nitems;
     size_t hint_length;
 
     get_addresses_from_hints_by_type(hints, "", &hints_net);
@@ -708,30 +708,36 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
     adapter = (char *)malloc(hint_length + 1);
     memset(adapter, 0, hint_length + 1);
     find_key(hints, "adapter_addr", adapter, hint_length);
-    items = 1; // anyway one item presents 
+    items = 0; // may be only ,
     token = hints_net;
+    if (*token != 0 && *token != ',')
+    {
+        items++; // = 1, anyway one item presents
+    }
     while (*token != 0)
     {
         if (*token++ == ',' && *token != ',' && *token != 0) items++;
     }
+
+    nitems = items == 0 ? 1 : items;   // anyway brodcast enumerate
+    
     // prepare net_enum data
-    net_enum.server_count = items;
-    net_enum.device_count = (int*)malloc(sizeof (int)* items);
-    net_enum.addrs = (char**)malloc(sizeof (char*)* items);
-    net_enum.pbufs = (uint8_t***)malloc(sizeof(uint8_t**)* items);
+    net_enum.server_count = nitems;
+    net_enum.device_count = (int*)malloc(sizeof (int)* nitems);
+    net_enum.addrs = (char**)malloc(sizeof (char*)* nitems);
+    net_enum.pbufs = (uint8_t***)malloc(sizeof(uint8_t**)* nitems);
     net_enum.adapter_addr = adapter;
-   
-    if (strlen(hints_net) == 0)
+    
+    if (items == 0) // only one item for broadcast enumerate
     {
         // some broadcast enumerate
-        net_enum.addrs[0] = hints_net;
+        net_enum.addrs[0] = "";
         net_enum.pbufs[0] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
         *(net_enum.pbufs[0]) = NULL;
         net_enum.device_count[0] = 0;
     }
     else
     {
-        i = 0;
         token = strtok(hints_net, ",");
         i = 0;
         while (i < items)
@@ -742,8 +748,9 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
                 net_enum.pbufs[i] = (uint8_t**)malloc(sizeof(uint8_t*));  // allocation for pointer to buffer, not the buffer itself
                 *(net_enum.pbufs[i]) = NULL;
                 net_enum.device_count[i] = 0;
+                i++;
 			}	
-            i++;
+           
             token = strtok(NULL, ",");
         }
     }
