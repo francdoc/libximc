@@ -457,61 +457,74 @@ bool is_osx_elcapitan_or_later()
 	return false;
 }
 
-/* directory must not end with slash */
-result_t enumerate_iokit (enumerate_devices_directory_callback_t callback, void* arg, int flags)
+/ result_t enumerate_iokit_vid_pid(enumerate_devices_directory_callback_t callback, void* arg, int flags, long usbVendor, long usbProduct)
 {
-	const long usbVendor = 0x1CBE;
-	const long usbProduct = 0x0007;
-	CFMutableDictionaryRef matchingDict;
-	CFNumberRef numberRef;
-	kern_return_t kr;
-	io_iterator_t ioIterator;
-	io_service_t usbDevice;
-	CFStringRef refPath;
-	char cpath[PATH_MAX];
-	const char *usbServiceStr = is_osx_elcapitan_or_later() ? "IOUSBHostDevice" : kIOUSBDeviceClassName;
+    CFMutableDictionaryRef matchingDict;
+    CFNumberRef numberRef;
+    kern_return_t kr;
+    io_iterator_t ioIterator;
+    io_service_t usbDevice;
+    CFStringRef refPath;
+    char cpath[PATH_MAX];
+    const char *usbServiceStr = is_osx_elcapitan_or_later() ? "IOUSBHostDevice" : kIOUSBDeviceClassName;
 
-	XIMC_UNUSED(flags);
+    XIMC_UNUSED(flags);
 
-	// IOUSBDevice and its subclasses
-	log_debug( L"Searching IOKit with service %s", usbServiceStr);
-	matchingDict = IOServiceMatching(usbServiceStr);
-	if (matchingDict == NULL)
-	{
-		log_debug( L"IOKit: Failed IOServiceMatching call" );
-		return result_error;
-	}
+    // IOUSBDevice and its subclasses
+    log_debug(L"Searching IOKit with service %s", usbServiceStr);
+    matchingDict = IOServiceMatching(usbServiceStr);
+    if (matchingDict == NULL)
+    {
+        log_debug(L"IOKit: Failed IOServiceMatching call");
+        return result_error;
+    }
 
-	// Create a CFNumber for the idVendor, idProduct and set the value in the dictionary
-	numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbVendor);
-	CFDictionarySetValue(matchingDict, CFSTR(kUSBVendorID), numberRef);
-	CFRelease(numberRef);
+    // Create a CFNumber for the idVendor, idProduct and set the value in the dictionary
+    numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbVendor);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBVendorID), numberRef);
+    CFRelease(numberRef);
 
-	numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbProduct);
-	CFDictionarySetValue(matchingDict, CFSTR(kUSBProductID), numberRef);
-	CFRelease(numberRef);
+    numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbProduct);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBProductID), numberRef);
+    CFRelease(numberRef);
 
-	if ((kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &ioIterator)) == KERN_SUCCESS)
-	{
-		log_debug( L"IOKit: IOServiceGetMatchingServices succeeded" );
-		while ((usbDevice = IOIteratorNext(ioIterator)) != 0)
-		{
-			log_debug( L"IOKit: iterator succeeded" );
-			if ((refPath = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane,
-					CFSTR("IODialinDevice"), kCFAllocatorDefault, kIORegistryIterateRecursively)) != NULL)
-			{
-				CFStringGetCString(refPath, cpath, sizeof(cpath), kCFStringEncodingASCII);
-				cpath[sizeof(cpath)-1] = 0;
-				log_debug( L"Look to device %hs", cpath );
-				/* device name is okay by default */
-				callback( cpath, arg );
-				CFRelease(refPath);
-			}
-			IOObjectRelease(usbDevice);
-		}
-	}
-	return result_ok;
+    if ((kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &ioIterator)) == KERN_SUCCESS)
+    {
+        log_debug(L"IOKit: IOServiceGetMatchingServices succeeded");
+        while ((usbDevice = IOIteratorNext(ioIterator)) != 0)
+        {
+            log_debug(L"IOKit: iterator succeeded");
+            if ((refPath = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane,
+                CFSTR("IODialinDevice"), kCFAllocatorDefault, kIORegistryIterateRecursively)) != NULL)
+            {
+                CFStringGetCString(refPath, cpath, sizeof(cpath), kCFStringEncodingASCII);
+                cpath[sizeof(cpath)-1] = 0;
+                log_debug(L"Look to device %hs", cpath);
+                /* device name is okay by default */
+                callback(cpath, arg);
+                CFRelease(refPath);
+            }
+            IOObjectRelease(usbDevice);
+        }
+    }
+    return result_ok;
 }
+
+/* directory must not end with slash */
+result_t enumerate_iokit(enumerate_devices_directory_callback_t callback, void* arg, int flags)
+{
+    const long usbVendor = 0x1CBE;
+    const long usbProduct = 0x0007;
+
+    if (enumerate_iokit_vid_pid(callback, arg, flags, usbVendor, usbProduct) == result_ok)
+        return result_ok;
+
+    const long usbVendor_mdrive = 0x1CBC;
+    const long usbProduct_mdrive = 0x0031;
+
+    return enumerate_iokit_vid_pid(callback, arg, flags, usbVendor_mdrive, usbProduct_mdrive);
+}
+
 
 #endif
 
