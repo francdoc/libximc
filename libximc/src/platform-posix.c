@@ -516,8 +516,9 @@ result_t enumerate_iokit(enumerate_devices_directory_callback_t callback, void* 
     const long usbVendor = 0x1CBE;
     const long usbProduct = 0x0007;
 
-    if (enumerate_iokit_vid_pid(callback, arg, flags, usbVendor, usbProduct) == result_ok)
-        return result_ok;
+    result_t result;
+    if ((result = enumerate_iokit_vid_pid(callback, arg, flags, usbVendor, usbProduct)) != result_ok)
+        return result;
 
     const long usbVendor_mdrive = 0x1CBC;
     const long usbProduct_mdrive = 0x0031;
