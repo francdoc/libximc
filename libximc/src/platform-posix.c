@@ -457,7 +457,7 @@ bool is_osx_elcapitan_or_later()
 	return false;
 }
 
-/ result_t enumerate_iokit_vid_pid(enumerate_devices_directory_callback_t callback, void* arg, int flags, long usbVendor, long usbProduct)
+result_t enumerate_iokit_vid_pid(enumerate_devices_directory_callback_t callback, void* arg, int flags, long usbVendor, long usbProduct)
 {
     CFMutableDictionaryRef matchingDict;
     CFNumberRef numberRef;
