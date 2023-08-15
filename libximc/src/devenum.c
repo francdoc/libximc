@@ -712,14 +712,14 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
     token = hints_net;
     if (*token != 0 && *token != ',')
     {
-        items++; // = 1, anyway one item presents
+        items++; // = 1, at least one item presents
     }
     while (*token != 0)
     {
         if (*token++ == ',' && *token != ',' && *token != 0) items++;
     }
 
-    nitems = items == 0 ? 1 : items;   // anyway brodcast enumerate
+    nitems = items == 0 ? 1 : items;   // either brodcast enumerate or enumerate servers
     
     // prepare net_enum data
     net_enum.server_count = nitems;
@@ -736,7 +736,7 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
         *(net_enum.pbufs[0]) = NULL;
         net_enum.device_count[0] = 0;
     }
-    else
+    else // 
     {
         token = strtok(hints_net, ",");
         i = 0;
