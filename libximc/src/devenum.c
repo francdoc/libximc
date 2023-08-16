@@ -736,7 +736,7 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
         *(net_enum.pbufs[0]) = NULL;
         net_enum.device_count[0] = 0;
     }
-    else // 
+    else 
     {
         token = strtok(hints_net, ",");
         i = 0;
