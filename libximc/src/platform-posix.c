@@ -639,8 +639,12 @@ result_t enumerate_devices_directory (enumerate_devices_directory_callback_t cal
 	#endif
 
 	/* enumerate /dev/ximc/ or /dev/mdrive first */
-	if ((result = enumerate_specific_directory( "/dev/ximc", callback, arg, flags )) != result_ok && 
-        (enumerate_specific_directory("/dev/mdrive", callback, arg, flags)) != result_ok)
+    /* if directory does not exist it is no error */
+
+    if ((result = enumerate_specific_directory("/dev/ximc", callback, arg, flags)) != result_ok)
+        return result;
+
+    if ((result = enumerate_specific_directory("/dev/mdrive", callback, arg, flags)) != result_ok)
 		return result;
 
  	/* enumerate all other devices in /dev/ because there are symlinks to them */
