@@ -1,3 +1,10 @@
+libximc7 (2.14.16-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #83712 mDrive enumerate enumerate and discovery errors fixed 
+
+ -- XIMC <info@ximc.ru>  Mon, 21 Aug 2023 14:16:00 +0300
+
 libximc7 (2.14.15-1) unstable; urgency=low
 
   * Version bump

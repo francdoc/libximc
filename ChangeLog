@@ -1,3 +1,8 @@
+libximc (2.14.16-1)
+  * Released: Mon, 21 Aug 2023 14:16:00 +0300
+  * Version bump
+  * Feature #83712 mDrive enumerate enumerate and discovery errors fixed 
+
 libximc (2.14.15-1)
   * Released: Tue, 25 Jul 2023 19:34:58 +0300
   * Version bump
