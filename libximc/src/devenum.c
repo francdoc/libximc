@@ -693,7 +693,7 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
     )
 {
     uint32_t count;
-    char *hints_net, *adapter,  *token, *pdev, *pxis;
+    char *hints_net, *adapter,  *token, *pdev;
     net_enum_t net_enum;
     int items, i, server, nitems;
     size_t hint_length;
@@ -761,12 +761,12 @@ result_t enumerate_xinet_devices_enumerate_ssdp(
         );
     for (server = 0; server < net_enum.server_count; server++)
     {
-        pdev = pxis = (char *)*net_enum.pbufs[server];
+        pdev = (char *)*net_enum.pbufs[server];
         count = net_enum.device_count[server];
         while (count--)
         {
             callback(pdev, devenum);
-            pdev = strchr(pxis, 0) + 1;
+            pdev = strchr(pdev, 0) + 1;
         }
         xibridge_free_enumerate_devices((char *)*net_enum.pbufs[server]); // free the buffer allocations from xibridge_enumerate
     }
