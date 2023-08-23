@@ -1,3 +1,8 @@
+libximc (2.14.17-1)
+  * Released: Wed, 23 Aug 2023 14:34:36 +0300
+  * Version bump
+  * Bug #84285 Incorrect virtual controllers
+
 libximc (2.14.16-1)
   * Released: Mon, 21 Aug 2023 14:16:00 +0300
   * Version bump
