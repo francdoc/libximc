@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.15.6
+Version: 2.15.7
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -73,8 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 
-* Thu Jun 22 2023 XIMC <info@ximc.ru> - 2.15.6
+* Thu Aug 24 2023 XIMC <info@ximc.ru> - 2.15.7
 - version bump
+- Bug #84831 Enumeration multiple devices error fixed
 - Feature #83712 mDrive enumerate and discovery added
 - Feature #70712 jupiter libximc improved
 - Feature #74546 readme added to the pypi libximc example
@@ -82,7 +83,10 @@ rm -rf $RPM_BUILD_ROOT
 - Feature #76913 Documentation start pages reviewed
 - Feature #79128 libximc .sh scripts improved
 - Feature #77391 Wrong position returned in virtual controllers fixed
-- Feature #74036 additionally: set_bindy_key calls removed from examples
+
+
+* Thu Jun 22 2023 XIMC <info@ximc.ru> - 2.15.6
+- version bump
 - Feature #78659 xibridge 1.1.4 used
 
 * Fri Apr 14 2023 XIMC <info@ximc.ru> - 2.15.5

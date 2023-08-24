@@ -1,6 +1,7 @@
-libximc7 (2.15.6-1) unstable; urgency=low
+libximc7 (2.15.7-1) unstable; urgency=low
 
   * Version bump
+  * Bug #84831 Enumeration multiple devices error fixed
   * Feature #83712 mDrive enumerate and discovery added
   * Feature #70712 jupiter libximc improved
   * Feature #74546 readme added to the pypi libximc example
@@ -8,7 +9,12 @@ libximc7 (2.15.6-1) unstable; urgency=low
   * Feature #76913 Documentation start pages reviewed
   * Feature #79128 libximc .sh scripts improved
   * Feature #77391 Wrong position returned in virtual controllers fixed
-  * Feature #74036 additionally: set_bindy_key calls removed from examples
+
+ -- XIMC <info@ximc.ru>  Thu, 24 Aug 2023 19:21:44 +0300
+
+libximc7 (2.15.6-1) unstable; urgency=low
+
+  * Version bump
   * Feature #78659 xibridge 1.1.4 used
 
  -- XIMC <info@ximc.ru>  Thu, 22 Jun 2023 18:05:15 +0300
