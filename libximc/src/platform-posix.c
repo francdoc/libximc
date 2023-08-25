@@ -764,21 +764,22 @@ void get_wallclock(time_t* sec, int* msec)
 void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 {
     char _apath[PATH_MAX];
-    realpath(uri_path, _apath); // really absolute path
-    if (strlen(_apath) > len) // len is usually less then PATH_MAX
+    char *ok;
+    ok = realpath(uri_path, _apath); // really absolute path
+    *abs_path = 0;
+    if (ok == null) // another atempt
     {
-        // old code works in case path is too big
-        *abs_path = 0;
-
+        // old code works in case realpath failed
         if (uri_path[0] != '/')
             strncat(abs_path, "/", len);
         strncat(abs_path, uri_path, len);
 
         abs_path[len - 1] = 0;
+        ok = realpath(abs_path, _apath); // really absolute path
     }
-    else
+    if (ok != null)
     {
-        strcpy(abs_path, _apath);
+        strncpy(abs_path, _apath, len);
     }
 }
 
