@@ -761,7 +761,7 @@ void get_wallclock(time_t* sec, int* msec)
 	}
 }
 
-void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
+void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t /*len*/)
 {
     /*
     *abs_path = 0;
@@ -772,7 +772,7 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 
     abs_path[len-1] = 0;
     */
-    realpath(uri_path, abs_path)
+    realpath(uri_path, abs_path);
 }
 
 /* Returns non-zero on success */
