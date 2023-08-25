@@ -767,7 +767,7 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
     char *ok;
     ok = realpath(uri_path, _apath); // really absolute path
     *abs_path = 0;
-    if (ok == null) // another atempt
+    if (ok == NULL) // another atempt
     {
         // old code works in case realpath failed
         if (uri_path[0] != '/')
@@ -777,7 +777,7 @@ void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
         abs_path[len - 1] = 0;
         ok = realpath(abs_path, _apath); // really absolute path
     }
-    if (ok != null)
+    if (ok != NULL)
     {
         strncpy(abs_path, _apath, len);
     }
