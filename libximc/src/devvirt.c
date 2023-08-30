@@ -227,8 +227,6 @@ static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
 	
 	gets_value.CurPosition = (uint32_t)(long long)new_pos;		
 	gets_value.uCurPosition = (int16_t)((new_pos - (long long)new_pos)*micromult);
-	
-	//last_tick = this_tick;
 
 	return gets_value;
 }
