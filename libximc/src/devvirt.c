@@ -215,10 +215,9 @@ static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
 		new_pos -= diff;
 	} else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVE ||
 			   (gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVR) {
-		if (new_pos != tgt_pos)
-			new_pos -= ximc_dmin(fabs(diff), fabs(new_pos-tgt_pos)) *
-					   sgn(new_pos-tgt_pos);
-		else {
+		new_pos += ximc_dmin(diff, fabs(new_pos - tgt_pos)) * sgn(tgt_pos - new_pos);
+		if (new_pos == tgt_pos)
+		{
 			gets_value.MvCmdSts &= ~MVCMD_RUNNING;
 			gets_value.CurSpeed = 0;
 			gets_value.uCurSpeed = 0;
