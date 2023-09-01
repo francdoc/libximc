@@ -49,6 +49,8 @@ typedef struct /* BCDFlashParamsStr. This structure is for parameters that are s
 	snmf_cmd_str SNMF;
 	snvm_cmd_str SNVM;
 	semf_cmd_str SEMF;
+	seas_cmd_str SEAS;
+	sest_cmd_str SEST;
 	uint32_t crc; 
 
 } BCDFlashParamsStr;
@@ -213,10 +215,9 @@ static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
 		new_pos -= diff;
 	} else if ((gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVE ||
 			   (gets_value.MvCmdSts & MVCMD_NAME_BITS) == MVCMD_MOVR) {
-		if (new_pos != tgt_pos)
-			new_pos -= ximc_dmin(fabs(diff), fabs(new_pos-tgt_pos)) *
-					   sgn(new_pos-tgt_pos);
-		else {
+		new_pos += ximc_dmin(diff, fabs(new_pos - tgt_pos)) * sgn(tgt_pos - new_pos);
+		if (new_pos == tgt_pos)
+		{
 			gets_value.MvCmdSts &= ~MVCMD_RUNNING;
 			gets_value.CurSpeed = 0;
 			gets_value.uCurSpeed = 0;
@@ -225,7 +226,7 @@ static gets_cmd_str CalculateNewPosition(smov_cmd_str smov,
 	
 	gets_value.CurPosition = (uint32_t)(long long)new_pos;		
 	gets_value.uCurPosition = (int16_t)((new_pos - (long long)new_pos)*micromult);
-	
+
 	return gets_value;
 }
 
@@ -314,6 +315,15 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 	memcpy(out_buf, in_buf, COMMAND_LENGTH);
 	StartPos += COMMAND_LENGTH;
 
+	/* Update position */
+	all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
+												  all->BCDFlashParams.SENG,
+												  all->BCDRamParams.GETS,
+												  all->BCDRamParams.MOVE,
+												  all->last_tick);
+	get_wallclock_us(&all->last_tick);  // TODO: think about adding this function to CalculateNewPosition(...)
+
+
 	/* data_size does not include command or crc length */
 	if (data_size != 0) /* If there is data */
 	{
@@ -380,6 +390,8 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 			S(EDS, Flash);
 			S(PID, Flash);
 			S(EMF, Flash);
+			S(EAS, Flash);
+			S(EST, Flash);
 			S(HOM, Flash);
 			S(MOV, Flash);
 			S(ENG, Flash);
@@ -444,14 +456,6 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		   all->BCDRamParams.GETS.Uusb = rand_range(480, 520);
 		   all->BCDRamParams.GETS.Iusb = rand_range(180, 210);
 		   all->BCDRamParams.GETS.CurT = 366;
-           
-		   all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
-										   all->BCDFlashParams.SENG,
-										   all->BCDRamParams.GETS,
-										   all->BCDRamParams.MOVE,
-										   all->last_tick);
-		   get_wallclock_us(&all->last_tick);
-
 		   WRITE_STRUCTURE(all->BCDRamParams.GETS);
 		   break;
 	   	}
@@ -494,15 +498,8 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 		case EERD_CMD: break;
 		case GPOS_CMD: 
 		{
-			all->BCDRamParams.GETS = CalculateNewPosition(all->BCDFlashParams.SMOV,
-										   all->BCDFlashParams.SENG,
-										   all->BCDRamParams.GETS,
-										   all->BCDRamParams.MOVE,
-										   all->last_tick);
-			
 			all->BCDRamParams.GPOS.Position    = all->BCDRamParams.GETS.CurPosition;
 			all->BCDRamParams.GPOS.uPosition   = all->BCDRamParams.GETS.uCurPosition;
-			
 			WRITE_STRUCTURE(all->BCDRamParams.GPOS);
 			break;
 		}
@@ -519,6 +516,8 @@ static uint16_t GetData(const uint8_t *in_buf, size_t data_size, uint8_t *out_bu
 
 		G(PID, Flash);
 		G(EMF, Flash);
+		G(EAS, Flash);
+		G(EST, Flash);
 		G(EDS, Flash);
 		G(ENG, Flash);
 		G(MOV, Flash);
@@ -681,6 +680,12 @@ void create_empty_state (AllParamsStr* blob, const char* serial)
 	bcd->SEMF.Km = (FLT32) 0.0025;
 	bcd->SEMF.L = (FLT32) 0.0054;
 	bcd->SEMF.R = (FLT32) 7.4;
+	/* SEAS settings */
+	bcd->SEAS.stepcloseloop_Kw = 0;
+	bcd->SEAS.stepcloseloop_Kp_low = 0;
+	bcd->SEAS.stepcloseloop_Kp_high = 0;
+	/* SEST settings */
+	bcd->SEST.Param1 = 0;
 	/* SSNI settings */
 	bcd->SSNI.SyncInFlags = 0;
 	bcd->SSNI.ClutterTime = 2000;
@@ -759,8 +764,8 @@ int check_state_version (AllParamsStr* blob)
 	char actual_version[sizeof(blob->version)+1] = { 0 };
 	char *tmp;
 
-	strncpy( file_version, blob->version, sizeof(blob->version) );
-	strncpy( actual_version, PROTOCOL_VERSION_Q, sizeof(blob->version) );
+	memcpy( file_version, blob->version, sizeof(blob->version) );
+	memcpy( actual_version, PROTOCOL_VERSION_Q, sizeof(PROTOCOL_VERSION_Q) );
 
 	/* cut major version */
 	if ((tmp = strstr( file_version, "." )) != NULL)

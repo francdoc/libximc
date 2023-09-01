@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT([libximc7], [2.14.3])
+AC_INIT([libximc7], [2.14.17])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
@@ -213,6 +213,20 @@ AM_CONDITIONAL([HAVE_XIWRAPPER], [test "x$with_xiwrapper" != "xno"])
 
 AC_CHECK_HEADERS([wrapper.h])
 
+# miniupnpc support
+AC_MSG_CHECKING([for miniupnpc support])
+AC_ARG_WITH([miniupnpc],
+						[AS_HELP_STRING([--with-miniupnpc], [use miniupnpc at path])],
+						[with_miniupnpc=$withval],
+						[with_miniupnpc=no])
+AC_MSG_RESULT([$with_miniupnpc])
+
+if test "x$with_miniupnpc" != "xno" ; then
+	CPPFLAGS="$CPPFLAGS -I$with_miniupnpc/include"
+	LDFLAGS="$LDFLAGS -L$with_miniupnpc/lib"
+fi
+
+
 # Checks for typedefs, structures, and compiler characteristics.
 
 AC_OUTPUT
@@ -231,6 +245,7 @@ echo "
   Java support........: ${with_java:-NO}
   XCode build.........: ${with_xcode_build:-NO} ${with_xcode_compiler}
   Xiwrapper support...: ${with_xiwrapper}
+  Miniupnpc support...: ${with_miniupnpc}
   Unit testing........: ${with_unittests}"
 if test "x$with_java" = "xyes" ; then
 JAVAC_VERSION=`javac -version 2>&1`

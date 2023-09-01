@@ -13,7 +13,7 @@ For run:
  java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
 
 5. For other platforms, use the compiled folder. You will need to copy the dependencies into it:
- xiwrapper.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll, keyfile.sqlite, bindy.lib и bindy.dll
+ xiwrapper.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll, bindy.lib и bindy.dll
 
 For modify:
 1. Unpack jar:
@@ -41,7 +41,7 @@ Rus.
  java -classpath libjximc.jar -classpath test_Java.jar ru.ximc.TestJava
 
 5. Для других платформ используйте папку compiled. В нее понадобится скопировать зависимости: 
- xiwrapper.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll, keyfile.sqlite, bindy.lib и bindy.dll 
+ xiwrapper.dll, libximc.lib, libximc.dll, libximc.def, libjximc.jar, libjximc.dll, bindy.lib и bindy.dll 
  
 Для модификации примера:
 1. Распакуйте jar командой:

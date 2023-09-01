@@ -1,4 +1,3 @@
-@if 'x%MERCURIAL%'=='x' set MERCURIAL=hg
 @if 'x%GIT%'=='x' set GIT=git
 :: reset errorrevel
 @cmd /C exit 0
@@ -12,7 +11,7 @@
 @set CMAKE="%ProgramFiles(x86)%\CMake\bin\cmake.exe" 
 
 :: avoid node reuse, flag is not enough to stop msbuildtaskhost so set env too
-@set MSBUILD=msbuild -nr:false
+@set MSBUILD=msbuild /nr:false
 @set MSBUILDDISABLENODEREUSE=1
 
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
@@ -28,10 +27,13 @@ for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDI
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '4q;d' `cygpath '%BASEDIR%\version'`" ') do set XIWRAPPERVER=%%i
 if "%BINDYVER%" == "" set BINDYVER=dev-1.0-libximc
 if "%XIWRAPPERVER%" == "" set XIWRAPPERVER=default
+set MINIUPNPCVER=8ddbb71
 echo Found bindy ver %BINDYVER%
 echo Found xiwrapper ver %XIWRAPPERVER%
+echo Set miniupnpc ver %MINIUPNPCVER%
 
 :: debug flag
+::set DEBUG=true
 @set CONFIGURATION=Debug
 @if "x%DEBUG%"=="xtrue" goto :CONF_DEBUG
 @set CONFIGURATION=Release
@@ -83,6 +85,10 @@ call :DEPS_BINDY win32 Win32
 @if not %errorlevel% == 0 goto FAIL
 call :DEPS_XIWRAPPER win32 Win32
 @if not %errorlevel% == 0 goto FAIL
+call :DEPS_MINIUPNPC win64 x64
+@if not %errorlevel% == 0 goto FAIL
+call :DEPS_MINIUPNPC win32 Win32
+@if not %errorlevel% == 0 goto FAIL
 
 :SKIP_DEPS
 call :LIBXIMC win32 Win32
@@ -113,10 +119,9 @@ goto :eof
 rmdir /S /Q %DISTARCH%\bindy
 mkdir %DISTARCH%\bindy
 
-@set URL="https://github.com/EPC-MSU/Bindy.git"
-::@set URL=%USERPROFILE%\Documents\bindy
+@if "x%URL_BINDY%" == "x" set URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 
-"%GIT%" clone --recursive %URL% %DISTARCH%\bindy
+"%GIT%" clone --recursive %URL_BINDY% %DISTARCH%\bindy
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\bindy
 "%GIT%" checkout %BINDYVER%
@@ -142,8 +147,6 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.dll %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
 copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.lib %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
-copy %DISTARCH%\bindy\sample_keyfile.sqlite %DISTDIR%\%1\keyfile.sqlite
-@if not %errorlevel% == 0 goto FAIL
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_BINDY
 copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
@@ -163,14 +166,14 @@ copy %DISTARCH%\bindy\%CONFIGURATION%\bindy.pdb %DISTDIR%\%1
 rmdir /S /Q %DISTARCH%\xiwrapper
 mkdir %DISTARCH%\xiwrapper
 
-@set URL="https://anonymous:anonymous@hg.ximc.ru/libxiwrapper"
-::@set URL=%USERPROFILE%\Documents\xiwrapper
-%MERCURIAL% clone %URL% %DISTARCH%\xiwrapper
+@if "x%URL_XIWRAPPER%" == "x" set URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
+
+"%GIT%" clone %URL_XIWRAPPER% %DISTARCH%\xiwrapper
 @if not %errorlevel% == 0 goto FAIL
 cd %DISTARCH%\xiwrapper
-%MERCURIAL% checkout %XIWRAPPERVER%
+%GIT% checkout %XIWRAPPERVER%
 @if not %errorlevel% == 0 goto FAIL
-%MERCURIAL% log -r %XIWRAPPERVER%
+"%GIT%" --no-pager show --stat %XIWRAPPERVER%
 @if not %errorlevel% == 0 goto FAIL
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
@@ -194,6 +197,41 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @echo Building xiwrapper for %ARCH% completed
 @goto :eof
 
+:: --------------------------------------
+:: ------------ deps miniupnpc ----------
+:DEPS_MINIUPNPC
+@set DISTARCH=%DEPSDIR%\%1
+@set ARCH=%2
+@echo Building miniupnpc for %ARCH%...
+
+rmdir /S /Q %DISTARCH%\miniupnpc-dist
+rmdir /S /Q %DISTARCH%\miniupnpc
+mkdir %DISTARCH%\miniupnpc
+
+@if "x%URL_MINIUPNPC%" == "x" set URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc.git"
+
+"%GIT%" clone --recursive %URL_MINIUPNPC% %DISTARCH%\miniupnpc-dist
+@if not %errorlevel% == 0 goto FAIL
+cd %DISTARCH%\miniupnpc-dist
+"%GIT%" checkout %MINIUPNPCVER%
+@if not %errorlevel% == 0 goto FAIL
+
+@set GENERATOR=Visual Studio 12 2013
+if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
+%CMAKE% -G "%GENERATOR%" -DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF -DCMAKE_INSTALL_PREFIX=%BASEDIR%\%DISTARCH%\miniupnpc .
+@set LASTERR=%errorlevel%
+cd %BASEDIR%
+@if not %LASTERR% == 0 goto FAIL
+
+%MSBUILD% %DISTARCH%\miniupnpc-dist\ALL_BUILD.vcxproj
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% %DISTARCH%\miniupnpc-dist\INSTALL.vcxproj
+@if not %errorlevel% == 0 goto FAIL
+
+
+@echo Building miniupnpc for %ARCH% completed
+@goto :eof
+
 
 :: --------------------------------------
 :: -------------- libximc ---------------
@@ -212,16 +250,16 @@ copy %DISTARCH%\xiwrapper\%CONFIGURATION%\xiwrapper.pdb %DISTDIR%\%1
 @if not %errorlevel% == 0 goto FAIL
 copy %BINDIR%\libximc.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
-@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_LIBXIMC
-copy %BINDIR%\*.pdb %DISTARCH%
-@if not %errorlevel% == 0 goto FAIL
-:SKIP_PDB_COPY_LIBXIMC
 copy %BINDIR%\libximc.lib %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 copy libximc\src\libximc.def %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 copy libximc\include\ximc.h %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
+@if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_LIBXIMC
+copy %BINDIR%\*.pdb %DISTARCH%
+@if not %errorlevel% == 0 goto FAIL
+:SKIP_PDB_COPY_LIBXIMC
 
 @echo Building for %ARCH% completed
 @goto :eof
@@ -232,6 +270,10 @@ copy libximc\include\ximc.h %DISTARCH%
 @echo Building csharp wrapper
 @set DISTARCH=%DISTDIR%\%1
 @set BINDIR=wrappers\csharp\bin\%CONFIGURATION%-%2
+
+:: allow msbuild processes to finish, sometimes they lock build dir
+waitfor XimcBuildLock /t 30
+@cmd /C exit 0
 
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
@@ -246,6 +288,9 @@ copy %BINDIR%\ximcnet.dll %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
 copy wrappers\csharp\src\ximcnet.cs %DISTARCH%
 @if not %errorlevel% == 0 goto FAIL
+
+waitfor XimcBuildLock /t 30
+@cmd /C exit 0
 
 @echo Building sharp wrapper completed
 @goto :eof
@@ -352,85 +397,131 @@ copy wrappers\matlab\ximcm.h %BINDIR%
 :: ------------------------------
 :: ---------- examples ---------- 
 :EXAMPLES
+:: allow msbuild processes to finish, sometimes they lock build dir
+waitfor XimcBuildLock /t 30
+@cmd /C exit 0
+
 "%GIT%" clean -xdf --exclude %DEPSDIR% --exclude %DISTDIR%
 @if not %errorlevel% == 0 goto FAIL
 :: -----
 @set NAME=testapp_C
 @echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win32\%NAME%-compiled-win32\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
 @if not %errorlevel% == 0 goto FAIL
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win64\%NAME%-compiled-win64\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 
 @if not "x%DEBUG%" == "xtrue" goto SKIP_PDB_COPY_TESTAPP
 :: TODO: Bug will be here
-copy examples\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32
-@if not %errorlevel% == 0 goto FAIL
-copy examples\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64
-@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-Win32\%NAME%.pdb %DISTDIR%\win32\test_C
+::@if not %errorlevel% == 0 goto FAIL
+::copy examples\test_C\%NAME%\%CONFIGURATION%-x64\%NAME%.pdb %DISTDIR%\win64\test_C
+::@if not %errorlevel% == 0 goto FAIL
 :SKIP_PDB_COPY_TESTAPP
-
-:: -----
-@set NAME=testappeasy_C
-@echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
-@if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
-@if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
-@if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
-@if not %errorlevel% == 0 goto FAIL
-:: -----
-@set NAME=testprofile_C
-@echo Building example %NAME%...
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
-@if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
-@if not %errorlevel% == 0 goto FAIL
-%MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
-@if not %errorlevel% == 0 goto FAIL
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
-@if not %errorlevel% == 0 goto FAIL
-:: -----
-@set NAME=test_CodeBlocks
-@echo Building example %NAME%...
+:: ----- in CodeBlocks
+@echo Building example CodeBlocks %NAME%...
 @SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
 @SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
 @SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
 @SET PATH_BASE=%PATH%;
 :: Win32
 @SET PATH=%PATH_BASE%;%MINGW32%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win32" 
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\obj /Q
-mkdir %DISTDIR%\win32\%NAME%-compiled-win32
-copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
+copy examples\test_C\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win32\%NAME%-cb_compiled-win32\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
 :: Win64
 @SET PATH=%PATH_BASE%;%MINGW64%
-"%CBP%" -in examples\%NAME%\%NAME%.cbp -out examples\%NAME%\makefile -windows -targets "win64"
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win64"
 @if not %errorlevel% == 0 goto FAIL
-mingw32-make --directory examples\%NAME%
+mingw32-make --directory examples\test_C\%NAME%
 @if not %errorlevel% == 0 goto FAIL
-del examples\%NAME%\obj /Q
-mkdir %DISTDIR%\win64\%NAME%-compiled-win64
-copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
+copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+copy examples\test_C\%NAME%\Corr_table_example.tbl %DISTDIR%\win64\%NAME%-cb_compiled-win64\Corr_table_example.tbl
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testapp_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testapp_C.pdb
 ::   clear env
 @SET PATH=%PATH_BASE%
+
+:: -----
+@set NAME=testappeasy_C
+@echo Building example %NAME%...
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+@if not %errorlevel% == 0 goto FAIL
+mkdir %DISTDIR%\win32\%NAME%-compiled-win32
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+@if not %errorlevel% == 0 goto FAIL
+mkdir %DISTDIR%\win64\%NAME%-compiled-win64
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+@if not %errorlevel% == 0 goto FAIL
+:: ----- in CodeBlocks
+@echo Building example CodeBlocks %NAME%...
+@SET MINGW32=C:\Program Files (x86)\mingw-w64\i686-7.3.0-posix-dwarf-rt_v5-rev0\mingw32\bin
+@SET MINGW64=C:\Program Files\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin
+@SET CBP=C:\Program Files (x86)\CodeBlocks\cbp2make.exe
+@SET PATH_BASE=%PATH%;
+:: Win32
+@SET PATH=%PATH_BASE%;%MINGW32%
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win32" 
+@if not %errorlevel% == 0 goto FAIL
+mingw32-make --directory examples\test_C\%NAME%
+@if not %errorlevel% == 0 goto FAIL
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win32\%NAME%-cb_compiled-win32
+copy examples\test_C\%NAME%\cb_compiled-win32\* %DISTDIR%\win32\%NAME%-cb_compiled-win32\*
+@if not %errorlevel% == 0 goto FAIL
+:: Win64
+@SET PATH=%PATH_BASE%;%MINGW64%
+"%CBP%" -in examples\test_C\%NAME%\%NAME%.cbp -out examples\test_C\%NAME%\makefile -windows -targets "win64"
+@if not %errorlevel% == 0 goto FAIL
+mingw32-make --directory examples\test_C\%NAME%
+@if not %errorlevel% == 0 goto FAIL
+del examples\test_C\%NAME%\cb_obj /Q
+mkdir %DISTDIR%\win64\%NAME%-cb_compiled-win64
+copy examples\test_C\%NAME%\cb_compiled-win64\* %DISTDIR%\win64\%NAME%-cb_compiled-win64\*
+@if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testappeasy_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testappeasy_C.pdb
+::   clear env
+@SET PATH=%PATH_BASE%
+
+:: -----
+@set NAME=testprofile_C
+@echo Building example %NAME%...
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=Win32
+@if not %errorlevel% == 0 goto FAIL
+mkdir %DISTDIR%\win32\%NAME%-compiled-win32
+copy examples\test_C\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
+@if not %errorlevel% == 0 goto FAIL
+%MSBUILD% examples\test_C\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
+@if not %errorlevel% == 0 goto FAIL
+mkdir %DISTDIR%\win64\%NAME%-compiled-win64
+copy examples\test_C\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
+@if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\testprofile_C.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\testprofile_C.pdb
+
 :: -----
 @set NAME=test_CSharp
 @echo Building example %NAME%...
@@ -448,6 +539,11 @@ copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_CSharp.exe.config
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_CSharp.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_CSharp.exe.config
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_CSharp.pdb
 :: -----
 @set NAME=test_VBNET
 @echo Building example %NAME%...
@@ -458,6 +554,9 @@ copy %DISTDIR%\win32\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win32\%NAME%-compiled-win32
 copy examples\%NAME%\compiled-win32\* %DISTDIR%\win32\%NAME%-compiled-win32\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_VBNET.pdb
+del %DISTDIR%\win32\%NAME%-compiled-win32\test_VBNET.xml
 :: x64
 copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 %MSBUILD% examples\%NAME%\%NAME%.sln /p:Configuration=%CONFIGURATION% /p:Platform=x64
@@ -465,6 +564,9 @@ copy %DISTDIR%\win64\ximcnet.dll examples\%NAME%
 mkdir %DISTDIR%\win64\%NAME%-compiled-win64
 copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
+
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_VBNET.pdb
+del %DISTDIR%\win64\%NAME%-compiled-win64\test_VBNET.xml
 :: -----
 @set NAME=test_Delphi
 @echo Building example %NAME%...
@@ -472,6 +574,7 @@ copy examples\%NAME%\compiled-win64\* %DISTDIR%\win64\%NAME%-compiled-win64\*
 @if not %errorlevel% == 0 goto FAIL
 copy examples\%NAME%\%NAME%.exe %DISTDIR%\win32
 @if not %errorlevel% == 0 goto FAIL
+
 :: -----
 @set NAME=test_Java
 @echo Building example %NAME% 64-bit...

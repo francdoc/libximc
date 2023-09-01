@@ -115,7 +115,7 @@ sed -ibak "s/^\[assembly: AssemblyVersion(\"[^\"]*\")\]/\[assembly: AssemblyVers
 sed -ibak "s/^\[assembly: AssemblyFileVersion(\"[^\"]*\")\]/\[assembly: AssemblyFileVersion(\"$ASSEMBLYVER\")\]/" wrappers/csharp/Properties/AssemblyInfo.cs
 
 echo Java example files
-sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/testapp_C/Makefile
+sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/test_C/testapp_C/Makefile
 sed -ibak "s/^SOVER =.*$/SOVER = $SOVERCURRENT/" examples/test_Java/Makefile
 
 echo RPM files

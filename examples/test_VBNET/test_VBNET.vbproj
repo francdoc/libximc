@@ -174,12 +174,10 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\keyfile.sqlite $(TargetDir)
-if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\bindy.dll $(TargetDir)
+    <PostBuildEvent>if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\bindy.dll $(TargetDir)
 if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\libximc.dll $(TargetDir)
 if $(PlatformName) == x64 copy $(ProjectDir)..\..\ximc\win64\xiwrapper.dll $(TargetDir)
 
-if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\keyfile.sqlite $(TargetDir)
 if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\bindy.dll $(TargetDir)
 if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\libximc.dll $(TargetDir)
 if $(PlatformName) == x86 copy $(ProjectDir)..\..\ximc\win32\xiwrapper.dll $(TargetDir)</PostBuildEvent>

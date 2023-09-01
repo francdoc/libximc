@@ -1,6 +1,6 @@
 Summary: Library for controlling DC brush motor
 Name: libximc7
-Version: 2.14.3
+Version: 2.14.17
 Release: 1
 Source0: %{name}-%{version}.tar.gz
 License: BSD
@@ -58,7 +58,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libbindy.so
 %{_libdir}/libxiwrapper.so
 %{_javadir}/libjximc.jar
-%{_resourcedir}/keyfile.sqlite
 %{_udevrulesdir}/50-%{name}.rules
 %doc COPYING AUTHORS README NEWS
 %{_datadir}/doc/%{name}/doc-ru/%{name}-ru.pdf
@@ -74,6 +73,76 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libximc.so
 
 %changelog
+
+* Wed Aug 23 2023 XIMC <info@ximc.ru> - 2.14.17
+- version bump
+- Bug #84285 Incorrect virtual controllers
+
+* Mon Aug 21 2023 XIMC <info@ximc.ru> - 2.14.16
+- version bump
+- Feature #83712 mDrive enumerate enumerate and discovery errors fixed 
+
+* Tue Jul 25 2023 XIMC <info@ximc.ru> - 2.14.15
+- version bump
+- Feature #83712 mDrive enumerate and discovery added
+
+* Thu Jun 22 2023 XIMC <info@ximc.ru> - 2.14.14
+- version bump
+- Feature #70712 jupiter libximc improved
+- Feature #74546 readme added to the pypi libximc example
+- Feature #75619 hints argument description corrected
+- Feature #76913 Documentation start pages reviewed
+- Feature #79128 libximc .sh scripts improved
+
+* Thu May 11 2023 XIMC <info@ximc.ru> - 2.14.13
+- version bump
+- Feature #77391 Wrong position returned in virtual controllers fixed
+
+* Tue Mar 07 2023 XIMC <info@ximc.ru> - 2.14.11
+- version bump
+- Feature #74036 additionally: set_bindy_key calls removed from examples
+
+* Fri Feb 17 2023 XIMC <info@ximc.ru> - 2.14.10
+- version bump
+- Feature #74028 Updated wiring diagrams
+- Feature #74036 keyfile.sqlite removed
+- Feature #74552 Nagle algorithm off in xi-tcp
+- Feature #74671 Unused files removed from example projects
+- Feature #74594 Jupiter_demo added
+- Feature #70732 Virtual controller updated
+- Feature #74575 emumerate_device function made multithreaded
+- Feature #74580 Miniupnpc using improved
+
+* Fri Jan 20 2023 XIMC <info@ximc.ru> - 2.14.9
+- version bump
+- Feature #72852 XIMC-device net discovering added (miniupnpc used)
+
+* Wed Dec 28 2022 XIMC <info@ximc.ru> - 2.14.8
+- version bump
+- Feature #53770 calibration_t struct description changed
+- Feature #72516 C example moved to test_C directory
+- Feature #71035 python jupiter example improved
+- Feature #72241 libximc virtual controller updated
+- Feature #65676 The same separator applied for all correction tables
+
+* Wed Nov 09 2022 XIMC <info@ximc.ru> - 2.14.7
+- version bump
+- Feature #69053 extendtest example bug fixed
+- Feature #67205 jupiter example added
+- Feature #69542 extendspython example: netifaces module changed for ifaddr
+
+* Wed Sep 07 2022 XIMC <info@ximc.ru> - 2.14.6
+- version bump
+- Feature #67711 Network settings control via USB added
+- Feature #67712 Network settings control via web added
+
+* Thu Sep 01 2022 XIMC <info@ximc.ru> - 2.14.5
+- version bump
+- Feature #64745 Code blocks examples refactoring made
+
+* Thu Aug 18 2022 XIMC <info@ximc.ru> - 2.14.4
+- version bump
+- Feature #67844 Fix warnings issued on GCC 11.2
 
 * Fri Jun 24 2022 XIMC <info@ximc.ru> - 2.14.3
 - version bump

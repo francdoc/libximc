@@ -14,7 +14,8 @@ How to work with examples.
 4. If you need to build a 32-bit version of the application, select one of the 32-bit builds in the Build->Configuration menu.
 Remove the 64-bit version of the libximc.lib library from the project and connect the 32-bit one.
 5. The libximc library with dependencies is located in the ximc/win32 and ximc/win64 folders.
-6. To run the compiled example, you need to copy all the files in their folder with the corresponding ximc/win** bit depth to the folder with the executable file.
+6. To run the compiled example, you need to copy bindy.dll, libximc.dll and xiwrapper.dll from the folder of the corresponding ximc/win** bit depth to the folder with the executable file.
+
 
 Rus.
 
@@ -32,4 +33,4 @@ testgui - пример представляет собой приложение 
 4. Если необходимо собрать 32-битную версию приложения в меню Build->Configuration выбрать одну из 32-битных сборок. 
 Удалить из проекта 64-битную версию библиотеки libximc.lib и подключить 32-битную.
 5. Библиотека libximc с зависимостями расположена в папках ximc/win32 и ximc/win64.
-6. Для запуска скомпилированного примера необходимо все файлы их папки соответствующей разрядности ximc/win**  скопировать в папку с выполняемым файлом.
+6. Для запуска скомпилированного примера необходимо скопировать bindy.dll, libximc.dll и xiwrapper.dll из папки соответствующей разрядности ximc/win** в папку с выполняемым файлом.

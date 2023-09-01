@@ -10,11 +10,17 @@
 	* \endrussian
 	*/
 
-/**
-	* \def XIMC_API
-	* \brief Library import macro
-	* Macros allows to automatically import function from shared library.
-	* It automatically expands to dllimport on msvc when including header file
+/** @def XIMC_API
+	* \english
+	* 		@brief Library import macro.
+	* 		Macros allows to automatically import function from shared library.
+	* 		It automatically expands to dllimport on msvc when including header file.
+	* \endenglish
+	* \russian
+	*		@brief Макрос импорта библиотеки.
+	*		Макросы позволяют автоматически импортировать функцию из общей библиотеки.
+	*		Он автоматически расширяется до dllimport на msvc при включении файла заголовка.
+	* \endrussian
 	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 	#define XIMC_API __stdcall
@@ -26,9 +32,13 @@
 	#endif
 #endif
 
-/**
-	* \def XIMC_CALLCONV
-	* \brief Library calling convention macros.
+/** @def XIMC_CALLCONV
+	* \english
+	*		@brief Library calling convention macros.
+	* \endenglish
+	* \russian
+	*		@brief Библиотека вызывающая условные макросы.
+	* \endrussian
 	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 	#define XIMC_CALLCONV __stdcall
@@ -36,10 +46,14 @@
 	#define XIMC_CALLCONV
 #endif
 
-/**
-* \def XIMC_RETTYPE
-* \brief Thread return type.
-*/
+/** @def XIMC_RETTYPE
+	* \english
+	* 		@brief Thread return type.
+	* \endenglish
+	* \russian
+	*		@brief Возвращаеемый тип потока.
+	* \endrussian
+	*/
 #if defined(_WIN32) || defined(LABVIEW64_IMPORT) || defined(LABVIEW32_IMPORT) || defined(MATLAB_IMPORT)
 #define XIMC_RETTYPE unsigned int
 #else
@@ -238,15 +252,15 @@ extern "C"
 
 	/**
 		\english
-		* Calibration companion structure
+		* Calibration structure
 		\endenglish
 		\russian
 		* Структура калибровок
 		\endrussian	 */
 	typedef struct calibration_t
 	{
-		double A;					/**< Mulitiplier */
-		unsigned int MicrostepMode;	/**< Microstep mode */
+		double A; 		/**< \english is a conversion factor which is equal number of millimeters (or other units) per one step  \endenglish \russian коэффициент преобразования, равный количеству миллиметров (или других единиц) на один шаг \endrussian */
+		unsigned int MicrostepMode;			/**< \english is a controller setting which is determine a step division mode \endenglish \russian это настройка контроллера, определяющая режим пошагового деления \endrussian */
 	} calibration_t;
 
 	/**
@@ -258,12 +272,13 @@ extern "C"
 		\endrussian	 */
 	typedef struct device_network_information_t
 	{
-		uint32_t ipv4; 				/**< IPv4 address, passed in network byte order (big-endian byte order) */
-		char nodename[16];			/**< Name of the Bindy node which hosts the device */
-		uint32_t axis_state;		/**< Flags representing device state */
-		char locker_username[16];	/**< Name of the user who locked the device (if any) */
-		char locker_nodename[16];	/**< Bindy node name, which was used to lock the device (if any) */
-		time_t locked_time;			/**< Time the lock was acquired at (UTC, microseconds since the epoch) */
+		uint32_t ipv4; 		/**< \english IPv4 address, passed in network byte order (big-endian byte order) \endenglish \russian IPv4-адрес, передаваемый в сетевом байтовом порядке (big-endian byte order) \endrussian */
+		char nodename[16]; 		/**< \english name of the Bindy node which hosts the device \endenglish \russian имя узла Bindy, на котором размещено устройство \endrussian */
+		
+		uint32_t axis_state; 		/**< \english flags representing device state \endenglish \russian флаги, представляющие состояние устройства \endrussian */
+		char locker_username[16]; 		/**< \english name of the user who locked the device (if any) \endenglish \russian имя пользователя, заблокировавшего устройство (если таковое имеется) \endrussian */
+		char locker_nodename[16]; 		/**< \english Bindy node name, which was used to lock the device (if any) \endenglish \russian имя узла Bindy, которое использовалось для блокировки устройства (если таковое имеется) \endrussian */
+		time_t locked_time; 		/**< \english time the lock was acquired at (UTC, microseconds since the epoch) \endenglish \russian время, в которое была получена блокировка (UTC, микросекунды с момента начала эпохи) \endrussian */
 	} device_network_information_t;
 
 
@@ -565,25 +580,26 @@ extern "C"
 		* Enumerate all devices that looks like valid.
 		* @param[in] enumerate_flags enumerate devices flags
 		* @param[in] hints extended information
-		* hints is a string of form "key=value \n key2=value2". Unrecognized key-value pairs are ignored.
+		* \par
+		* hints is a string of form "key=value \n key2=value2". <em>Unrecognized key-value pairs are ignored</em>.
 		* Key list: addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a remote host name or a comma-separated list of host names which contain the devices to be found, absent value means broadcast discovery.
 		* adapter_addr - used together with ENUMERATE_NETWORK flag.
 		* Non-null value is a IP address of network adapter. Remote ximc device must be on the same local network as the adapter.
-		* When using the adapter_addr key, you must install the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
-		* To enumerate network devices you must call {@link set_bindy_key} first.
+		* When using the adapter_addr key, you <b>must set</b> the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
 		* \endenglish
 		* \russian
 		* Перечисляет все XIMC-совместимые устройства.
 		* @param[in] enumerate_flags флаги поиска устройств
 		* @param[in] hints дополнительная информация для поиска
-		* hints это строка вида "ключ1=значение1 \n ключ2=значение2". Неизвестные пары ключ-значение игнорируются.
+		* \par
+		* hints это строка вида "ключ=значение \n ключ2=значение2". <em>Неизвестные пары ключ-значение игнорируются</em>.
 		* Список ключей: addr - используется вместе с флагом ENUMERATE_NETWORK.
-		* Ненулевое значение это адрес или список адресов с перечислением через запятую удаленных хостов на которых происходит поиск устройств, отсутствующее значение это подключение посредством широковещательного запроса.
+		* Ненулевое значение это адрес или список адресов с перечислением через запятую удаленных хостов на которых происходит поиск устройств. 
+		* Отсутствующее значение это подключение посредством широковещательного запроса.
 		* adapter_addr - используется вместе с флагом ENUMERATE_NETWORK.
 		* Ненулевое значение это IP адрес сетевого адаптера. Сетевое устройство ximc должно быть в локальной сети, к которой подключён этот адаптер.
-		* При использование ключа adapter_addr обязательно установить ключ addr. Пример: "addr= \n adapter_addr=192.168.0.100".
-		* Для перечисления сетевых устройств обязательно нужно сначала вызвать функцию установки сетевого ключа {@link set_bindy_key}.
+		* При использование ключа adapter_addr <b>обязательно</b> установить ключ addr. Пример: "addr= \n adapter_addr=192.168.0.100".
 		* \endrussian
 	 */
 	device_enumeration_t XIMC_API enumerate_devices(int enumerate_flags, const char *hints);

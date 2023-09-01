@@ -12,9 +12,9 @@
 
 #define 8MT173_20DCE2_BUILDER_VERSION_MAJOR  0
 #define 8MT173_20DCE2_BUILDER_VERSION_MINOR  9
-#define 8MT173_20DCE2_BUILDER_VERSION_BUGFIX 10
+#define 8MT173_20DCE2_BUILDER_VERSION_BUGFIX 16
 #define 8MT173_20DCE2_BUILDER_VERSION_SUFFIX ""
-#define 8MT173_20DCE2_BUILDER_VERSION        "0.9.10"
+#define 8MT173_20DCE2_BUILDER_VERSION        "0.9.16"
 
 
 #if defined(_MSC_VER)
@@ -338,7 +338,7 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
 
   controller_name_t controller_name;
   memset((void*)&controller_name, 0, sizeof(controller_name_t));
-  const int8_t controller_name_ControllerName_temp[16] = {0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0};
+  const int8_t controller_name_ControllerName_temp[16] = {0, 113, -18, 119, 36, 0, 72, 0, 3, 0, 0, 0, -112, 108, 79, 0};
   memcpy(controller_name.ControllerName, controller_name_ControllerName_temp, sizeof(int8_t) * 16);
   controller_name.CtrlFlags = 0;
   result = set_controller_name(id, &controller_name);
@@ -413,7 +413,7 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
   memset((void*)&stage_information, 0, sizeof(stage_information_t));
   const int8_t stage_information_Manufacturer_temp[16] = {0, 116, 97, 110, 100, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(stage_information.Manufacturer, stage_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t stage_information_PartNumber_temp[24] = {56, 77, 84, 49, 55, 51, 45, 50, 48, 68, 67, 69, 50, 0, 0, 0, 69, 51, 0, 0, 0, 0, 0, 0};
+  const int8_t stage_information_PartNumber_temp[24] = {56, 77, 84, 49, 55, 51, 45, 50, 48, 68, 67, 69, 50, 0, 0, 0, 69, 51, 0, 0, 0, 69, 65, 83};
   memcpy(stage_information.PartNumber, stage_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_stage_information(id, &stage_information);
 
@@ -451,7 +451,7 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
   memset((void*)&motor_information, 0, sizeof(motor_information_t));
   const int8_t motor_information_Manufacturer_temp[16] = {0, 111, 116, 105, 111, 110, 32, 67, 111, 110, 116, 114, 111, 108, 32, 80};
   memcpy(motor_information.Manufacturer, motor_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t motor_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t motor_information_PartNumber_temp[24] = {0, 67, 45, 105, 45, 52, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(motor_information.PartNumber, motor_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_motor_information(id, &motor_information);
 
@@ -500,9 +500,9 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
 
   encoder_information_t encoder_information;
   memset((void*)&encoder_information, 0, sizeof(encoder_information_t));
-  const int8_t encoder_information_Manufacturer_temp[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_Manufacturer_temp[16] = {0, 97, 120, 111, 110, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.Manufacturer, encoder_information_Manufacturer_temp, sizeof(int8_t) * 16);
-  const int8_t encoder_information_PartNumber_temp[24] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  const int8_t encoder_information_PartNumber_temp[24] = {0, 54, 45, 69, 65, 83, 89, 45, 49, 48, 50, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   memcpy(encoder_information.PartNumber, encoder_information_PartNumber_temp, sizeof(int8_t) * 24);
   result = set_encoder_information(id, &encoder_information);
 
@@ -516,11 +516,11 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
 
   encoder_settings_t encoder_settings;
   memset((void*)&encoder_settings, 0, sizeof(encoder_settings_t));
-  encoder_settings.MaxOperatingFrequency = 8;
+  encoder_settings.MaxOperatingFrequency = 0;
   encoder_settings.SupplyVoltageMin = 0;
   encoder_settings.SupplyVoltageMax = 0;
   encoder_settings.MaxCurrentConsumption = 0;
-  encoder_settings.PPR = 16;
+  encoder_settings.PPR = 0;
   encoder_settings.EncoderSettings = 0;
   result = set_encoder_settings(id, &encoder_settings);
 
@@ -583,10 +583,10 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
 
   gear_settings_t gear_settings;
   memset((void*)&gear_settings, 0, sizeof(gear_settings_t));
-  gear_settings.ReductionIn = 185193;
-  gear_settings.ReductionOut = 2744;
+  gear_settings.ReductionIn = 0;
+  gear_settings.ReductionOut = 0;
   gear_settings.RatedInputTorque = 0;
-  gear_settings.RatedInputSpeed = 8000;
+  gear_settings.RatedInputSpeed = 0;
   gear_settings.MaxOutputBacklash = 0;
   gear_settings.InputInertia = 0;
   gear_settings.Efficiency = 0;
@@ -613,7 +613,7 @@ static inline result_t set_profile_8MT173_20DCE2(device_t id)
   accessories_settings.TSMin = 0;
   accessories_settings.TSMax = 0;
   accessories_settings.TSGrad = 0;
-  accessories_settings.TSSettings = TS_TYPE_THERMOCOUPLE | TS_TYPE_UNKNOWN;
+  accessories_settings.TSSettings = TS_TYPE_UNKNOWN;
   accessories_settings.LimitSwitchesSettings = 0;
   result = set_accessories_settings(id, &accessories_settings);
 

@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-[ -n "$MERCURIAL" ] || MERCURIAL=hg
 [ -n "$GIT" ] || GIT=git
 BASEROOT=`pwd`
 LOCAL=`pwd`/dist/local
@@ -22,6 +21,7 @@ XIWRAPPERVER=`sed '4q;d' "$VERSION_FILE"`
 if [ -z "$XIWRAPPERVER" ] ; then
 	XIWRAPPERVER=default
 fi
+MINIUPNPCVER=8ddbb71
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
 if [ -z "$SOVERMAJOR" ] ; then
 	echo Version error
@@ -54,7 +54,7 @@ configure_dist()
 		echo Using default external CXXFLAGS
 	fi
 	DISTCHECK_CONFIGURE_FLAGS_EXTRA=
-	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper"
+	PACKAGE_EXTRA_CONFIGURE="--with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc"
 	case "`uname -s`" in
 		Darwin)
 			DISTNAME=macosx
@@ -171,7 +171,6 @@ makedist()
 		
 			cp -R $DL/deb/$arch/usr/lib/*.* $DISTLIB/debian-$arch/
 			cp -R $DL/deb/dev-$arch/usr/lib/*.* $DISTLIB/debian-$arch/
-			cp -R $DL/deb/$arch/usr/share/libximc/keyfile.sqlite $DISTLIB/debian-$arch/
 			
 			rm -rf $DL/deb/$arch
 			rm -rf $DL/deb/dev-$arch
@@ -195,7 +194,6 @@ makedist()
 		cp -R $DL/$arch/bindy.dll $DISTLIB/$arch/
 		cp -R $DL/$arch/bindy.lib $DISTLIB/$arch/
 		cp -R $DL/$arch/xiwrapper.dll $DISTLIB/$arch/
-		cp -R $DL/$arch/keyfile.sqlite $DISTLIB/$arch/
 		if [ -f $DL/$arch/libjximc.dll ] ; then
 			cp -R $DL/$arch/libjximc.* $DISTLIB/$arch/
 		fi
@@ -227,26 +225,37 @@ makedist()
 	cp COPYING $DISTLIB/LICENSE.txt
 
 	mkdir $DISTEXAM
-	for example in testapp_C testappeasy_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python testprofile_C test_CodeBlocks test_LabWindows; do
+	for example in test_C test_CSharp test_VBNET test_Delphi test_MATLAB test_Python test_LabWindows; do
 		echo Copying example $example
 		cp -R examples/$example $DISTEXAM/
 	done
 
 	for example in testapp_C testappeasy_C testprofile_C; do
 		echo Cleaning example $example
-		rm -f $DISTEXAM/$example/Makefile.am
+		rm -f $DISTEXAM/test_C/$example/Makefile.am
 		echo Copying compiled example $example
 		for arch in macosx win32 win64 ; do
-			mkdir $DISTEXAM/$example/compiled-$arch
+			mkdir $DISTEXAM/test_C/$example/compiled-$arch
 		done
 		
-		cp -R $DL/macosx/$example.app $DISTEXAM/$example/compiled-macosx/
-		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/$example/compiled-win32/
-		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/$example/compiled-win64/
+		cp -R $DL/macosx/$example.app $DISTEXAM/test_C/$example/compiled-macosx/
+		cp -R $DL/win32/$example-compiled-win32/* $DISTEXAM/test_C/$example/compiled-win32/
+		cp -R $DL/win64/$example-compiled-win64/* $DISTEXAM/test_C/$example/compiled-win64/
+	done
+	
+	for example in testapp_C testappeasy_C; do
+		echo Copying compiled example for codeblocks $example
+		for arch in macosx win32 win64 ; do
+			mkdir $DISTEXAM/test_C/$example/cb_compiled-$arch
+		done
+		
+		cp -R $DL/macosx/$example.app $DISTEXAM/test_C/$example/cb_compiled-macosx/
+		cp -R $DL/win32/$example-cb_compiled-win32/* $DISTEXAM/test_C/$example/cb_compiled-win32/
+		cp -R $DL/win64/$example-cb_compiled-win64/* $DISTEXAM/test_C/$example/cb_compiled-win64/
 	done
 	rm -f $DISTEXAM/test_Python/Makefile
 		
-	for example in test_CSharp test_VBNET test_CodeBlocks; do
+	for example in test_CSharp test_VBNET; do
 		echo Copying compiled example $example
 		for arch in win32 win64 ; do
 			mkdir -p $DISTEXAM/$example/compiled-$arch
@@ -262,7 +271,6 @@ makedist()
 		cp -R $DL/win32/bindy.dll $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/bindy.lib $DISTEXAM/$example/compiled-win32
 		cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/compiled-win32
-		cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/compiled-win32
 	done
 	
 	for example in test_LabWindows ; do
@@ -272,7 +280,6 @@ makedist()
 			cp -R $DL/win32/bindy.dll $DISTEXAM/$example/$namexample
 			cp -R $DL/win32/bindy.lib $DISTEXAM/$example/$namexample
 			cp -R $DL/win32/xiwrapper.dll $DISTEXAM/$example/$namexample
-			cp -R $DL/win32/keyfile.sqlite $DISTEXAM/$example/$namexample
 		done
 	done
 
@@ -291,7 +298,6 @@ makedist()
 			cp -R $DL/$arch/bindy.dll $DISTEXAM/$example/compiled-$arch
 			cp -R $DL/$arch/bindy.lib $DISTEXAM/$example/compiled-$arch
 			cp -R $DL/$arch/xiwrapper.dll $DISTEXAM/$example/compiled-$arch
-			cp -R $DL/$arch/keyfile.sqlite $DISTEXAM/$example/compiled-$arch
 			if [ -f $DL/$arch/libjximc.dll ] ; then
 				cp -R $DL/$arch/libjximc.* $DISTEXAM/$example/compiled-$arch
 			fi
@@ -338,7 +344,6 @@ build_to_local()
 	#USE_CPPFLAGS="-I$DEPS/xiwrapper"
 	USE_CFLAGS="$USE_CFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch"
 	USE_CXXFLAGS="$USE_CXXFLAGS -Wall -Werror -Wextra -Wshadow -Wno-switch -Wno-unused-parameter -Wno-parentheses"
-	#USE_LDFLAGS="-L$DEPS/xiwrapper"
 
 	echo Using env $SPECIAL_ENV
 
@@ -354,11 +359,11 @@ build_to_local()
 	./autogen.sh
 	echo Invoke ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 
 	env $SPECIAL_ENV ./configure CFLAGS="$USE_CFLAGS" CXXFLAGS="$USE_CXXFLAGS" \
 		CPPFLAGS="$USE_CPPFLAGS" LDFLAGS="$USE_LDFLAGS" \
-		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper $*
+		$CONFIGURE_FLAGS --prefix=$LOCAL --with-xiwrapper=$DEPS/xiwrapper --with-miniupnpc=$DEPS/miniupnpc $*
 	
 	if [ -d "$VNAME" ] ; then
 		chmod -R 777 "$VNAME"
@@ -390,22 +395,17 @@ copydist()
 	if [ -d "$LOCAL/share/java" ] ; then
 		cp -a $LOCAL/share/java/*.jar $DISTLATEST
 	fi
-	if [ -d "$LOCAL/share/libximc" ] ; then
-		cp -a $LOCAL/share/libximc/keyfile.sqlite $DISTLATEST
-	fi
 }
 
 build_dep_bindy()
 {
-	if [ -n "$URL_BINDY" ] ; then
-		URL=$URL_BINDY
-	else
-		URL="https://github.com/EPC-MSU/Bindy.git"
+	if [ -z "$URL_BINDY" ] ; then
+	  URL_BINDY="https://github.com/EPC-MSU/Bindy.git"
 	fi
 	echo "--- Building bindy ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/bindy
-		(cd $DEPS && git clone --recursive $URL bindy)
+		(cd $DEPS && git clone --recursive $URL_BINDY bindy)
 		(cd $DEPS/bindy && git checkout $BINDYVER)
 		(cd $DEPS/bindy && git submodule update --init --recursive)
 		(cd $DEPS/bindy && git submodule update --recursive)
@@ -417,22 +417,42 @@ build_dep_bindy()
 
 build_dep_xiwrapper()
 {
-	if [ -n "$URL_XIWRAPPER" ] ; then
-		URL=$URL_XIWRAPPER
-	else
-		URL=https://anonymous:anonymous@hg.ximc.ru/libxiwrapper
+	if [ -z "$URL_XIWRAPPER" ] ; then
+	  URL_XIWRAPPER="https://gitlab.ximc.ru/ximc-public/libxiwrapper.git"
 	fi
 	echo "--- Building xiwrapper ---"
 	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
 		rm -rf $DEPS/xiwrapper
-		(cd $DEPS && $MERCURIAL clone $URL xiwrapper) || false
-		(cd $DEPS/xiwrapper && $MERCURIAL checkout $XIWRAPPERVER) || false
+		(cd $DEPS && git clone $URL_XIWRAPPER xiwrapper) || false
+		(cd $DEPS/xiwrapper && git checkout $XIWRAPPERVER) || false
 	fi
-	(cd $DEPS/xiwrapper && $MERCURIAL log -r $XIWRAPPERVER) || false
+	(cd $DEPS/xiwrapper && git --no-pager show --stat $XIWRAPPERVER) || false
 	(cd $DEPS/xiwrapper && cmake -DBINDY_PATH=$DEPS/bindy $DEPS_CMAKE_OPT $* .) || false
 	$MAKE -C $DEPS/xiwrapper
 	cp -a $DEPS/bindy/libbindy.* $DEPS/xiwrapper/
 }
+
+build_dep_miniupnpc()
+{
+	if [ -z "$URL_MINIUPNPC" ] ; then
+	  URL_MINIUPNPC="https://github.com/EPC-MSU/miniupnpc"
+	fi
+
+	echo "--- Building miniupnpc ---"
+	if [ "x$SKIP_DEPS_CHECKOUT" != "xyes" ] ; then
+		rm -rf $DEPS/miniupnpc-dist $DEPS/miniupnpc
+		(cd $DEPS && git clone $URL_MINIUPNPC miniupnpc-dist)
+		(cd $DEPS/miniupnpc-dist && git checkout $MINIUPNPCVER)
+	fi
+	# cmake 3.5 is needed
+	(cd $DEPS/miniupnpc-dist && cmake $DEPS_CMAKE_OPT \
+		-DUPNPC_BUILD_TESTS=OFF -DUPNPC_BUILD_SAMPLE=OFF -DUPNPC_BUILD_SHARED=OFF \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_PREFIX=$DEPS/miniupnpc $* .)
+	(cd $DEPS/miniupnpc-dist && cmake --build .)
+	(cd $DEPS/miniupnpc-dist && cmake --build . --target install)
+}
+
 
 build_depends()
 {
@@ -440,9 +460,7 @@ build_depends()
 	mkdir -p $DEPS
 	build_dep_bindy $*
 	build_dep_xiwrapper $*
-	echo Seed keyfile to libximc, seems like a hack
-	cp $DEPS/bindy/sample_keyfile.sqlite libximc/src/keyfile.sqlite
-	cp $DEPS/bindy/sample_keyfile.sqlite examples/testapp_C/keyfile.sqlite
+	build_dep_miniupnpc $*
 }
 
 build_deb_package()
@@ -498,8 +516,8 @@ build_osx_impl()
 	rm -f $DL/$DISTNAME/libjximc*dylib $DL/$DISTNAME/libjximc*a
 	cp $LOCAL/lib/libjximc.dylib $DL/$DISTNAME/
 	for exam in testapp_C testappeasy_C testprofile_C; do
-		(cd examples/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
-		cp -a examples/$exam/build/Release/$exam.app $DL/$DISTNAME/
+		(cd examples/test_C/$exam && xcodebuild LIBXIMC_LIB_PATH=../../$DL/$DISTNAME) || false
+		cp -a examples/test_C/$exam/build/Release/$exam.app $DL/$DISTNAME/
 	done
 	(cd examples/test_Java && $MAKE) || false
 	cp -a examples/test_Java/test_Java.jar $DL/$DISTNAME/

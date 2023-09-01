@@ -13,7 +13,6 @@ Warning:
     getch for linux and macos, if the package keyboard is blocked due to lack of root user rights.
     pyximc.py for correct usage of the library libximc you need to add the file  wrapper with the structures of the library to python path.
 
-  -To search for network devices, you must have a file keyfile.sqlite
 
   -Required libraries for Windows:
     bindy.dll
@@ -30,7 +29,8 @@ from ctypes import *
 import os
 import sys
 import platform
-import netifaces
+# import netifaces
+import ifaddr
 import getpass
 
 if sys.version_info >= (3,0):
@@ -893,10 +893,6 @@ def device_selection_dialog():
     """ 
     Device selection Manager.
     
-    Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-    wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-    relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-    In Python make sure to pass byte-array object to this function (b"string literal").
     Follow the on-screen instructions to change the settings.
     """
     
@@ -925,45 +921,42 @@ def device_selection_dialog():
     elif ord(key_press) == 51: #""" Press "3" network controller """
         print("Enter the device's network address:")
         print("Example:192.168.0.1/89ABCDEF")
-        lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
         head_port = "xi-net://"
         port_name = input_new()
     elif ord(key_press) == 52: #Press "4" search for all available devices
-        # Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-        # wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-        # relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-        # In Python make sure to pass byte-array object to this function (b"string literal").
-        print("Wait for the search to complete...")
-        res = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-        if res<0:
-            res = lib.set_bindy_key("keyfile.sqlite".encode("utf-8"))
-            if res<0:
-                print("The keyfile.sqlite file was not found. It is located in the ximc\win32 folder. Copy it to the current folder.")
-                exit(1)
         # This is device search and enumeration with probing. It gives more information about devices.
         probe_flags = EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK # + EnumerateFlags.ENUMERATE_ALL_COM
         print("Search on network interfaces")
-        interfaces = netifaces.interfaces()
+        interfaces = ifaddr.get_adapters()
         device_set = set()
-        for interface in interfaces:
-            addrs = netifaces.ifaddresses(interface).get(netifaces.AF_INET)
-            if addrs is None:
-                continue
-            enum_hints = "addr=\nadapter_addr=" + addrs[0]["addr"]
+        fd = sys.stdout.fileno()
+        for adapter in interfaces:
+            for addrs in adapter.ips:                
+                if addrs is None:
+                    continue
+                if type(addrs.ip) is str:    
+                    # IP4 addres
+                    enum_hints = "addr=\nadapter_addr=" + addrs.ip
+                #else:
+                    # IP6 addres no work
+                    #enum_hints = "addr=\nadapter_addr=" + addrs.ip[0]
+                    # Output of adapter addresses
+                    print(addrs.ip)
+                    # Ellipsis output when searching
+                    #os.write(fd, b'.')
             
-            print(addrs[0]["addr"])
-            
-            if type(enum_hints) is str:
-                enum_hints = enum_hints.encode()
+                    if type(enum_hints) is str:
+                        enum_hints = enum_hints.encode()
                 
-            devenum = lib.enumerate_devices(probe_flags, enum_hints)
+                    devenum = lib.enumerate_devices(probe_flags, enum_hints)
 
-            dev_count = lib.get_device_count(devenum)
-            controller_name = controller_name_t()
-            for dev_ind in range(0, dev_count):
-                enum_name = lib.get_device_name(devenum, dev_ind)
-                device_set.add(enum_name)
-                
+                    dev_count = lib.get_device_count(devenum)
+                    controller_name = controller_name_t()
+                    for dev_ind in range(0, dev_count):
+                        enum_name = lib.get_device_name(devenum, dev_ind)
+                        device_set.add(enum_name)
+        
+        print()
         device_list = list(device_set)
         for i in range(0, len(device_list)):
             print("Enumerated device #{} name (port name){}: ".format(i, device_list[i]))

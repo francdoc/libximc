@@ -350,6 +350,53 @@ void fork_join_with_timeout(fork_join_thread_function_t function, int count, voi
 	free(carry);
 }
 
+void fork_join_2_threads(fork_join_thread_function_t function1, void* args1, int condition1, fork_join_thread_function_t function2, void* args2, int condition2)
+{
+    
+    pthread_t tids[2];
+    pthread_attr_t thread_attr;
+    int i, count_launched;
+    fork_join_carry_t* carry;
+
+    pthread_attr_init(&thread_attr);
+    pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_JOINABLE);
+    count_launched = 0;
+    carry = (fork_join_carry_t*)malloc(2*sizeof(fork_join_carry_t));
+    if (condition1)
+    {
+        carry[0].function = function1;
+        carry[0].arg = (byte*)args1;
+        if (pthread_create(&tids[0], &thread_attr, &check_thread_wrapper_posix, &carry[0]))
+        {
+            log_system_error(L"Failed to create a pthread due to: ");
+        }
+        else
+            count_launched++;
+    }
+    if (condition2)
+    {
+        carry[count_launched].function = function2;
+        carry[count_launched].arg = (byte*)args2;
+        if (pthread_create(&tids[count_launched], &thread_attr, &check_thread_wrapper_posix, &carry[count_launched]))
+        {
+            log_system_error(L"Failed to create a pthread due to: ");
+        }
+        else
+            count_launched++;
+
+    }
+
+    for (i = 0; i < count_launched; ++i)
+    {
+        if (pthread_join(tids[i], NULL))
+        {
+            log_system_error(L"Failed to join a pthread due to: ");
+        }
+    }
+    free(carry);
+}
+
+
 unsigned long long get_thread_id()
 {
 	return (unsigned long long)(uintptr_t)pthread_self();
@@ -387,7 +434,7 @@ bool is_device_name_ok (char* directory, char* name, int flags)
 				like_com_device_by_prefix( "ttyUSB", name ) ||
 				like_com_device_by_prefix( "ttyACM", name )))
 		||
-		(!strcmp( directory, "/dev/ximc" ) &&
+        ((!strcmp(directory, "/dev/ximc") || !strcmp(directory, "/dev/mdrive")) &&
 		 		is_hex( name ));
 }
 #endif
@@ -410,61 +457,75 @@ bool is_osx_elcapitan_or_later()
 	return false;
 }
 
-/* directory must not end with slash */
-result_t enumerate_iokit (enumerate_devices_directory_callback_t callback, void* arg, int flags)
+result_t enumerate_iokit_vid_pid(enumerate_devices_directory_callback_t callback, void* arg, int flags, long usbVendor, long usbProduct)
 {
-	const long usbVendor = 0x1CBE;
-	const long usbProduct = 0x0007;
-	CFMutableDictionaryRef matchingDict;
-	CFNumberRef numberRef;
-	kern_return_t kr;
-	io_iterator_t ioIterator;
-	io_service_t usbDevice;
-	CFStringRef refPath;
-	char cpath[PATH_MAX];
-	const char *usbServiceStr = is_osx_elcapitan_or_later() ? "IOUSBHostDevice" : kIOUSBDeviceClassName;
+    CFMutableDictionaryRef matchingDict;
+    CFNumberRef numberRef;
+    kern_return_t kr;
+    io_iterator_t ioIterator;
+    io_service_t usbDevice;
+    CFStringRef refPath;
+    char cpath[PATH_MAX];
+    const char *usbServiceStr = is_osx_elcapitan_or_later() ? "IOUSBHostDevice" : kIOUSBDeviceClassName;
 
-	XIMC_UNUSED(flags);
+    XIMC_UNUSED(flags);
 
-	// IOUSBDevice and its subclasses
-	log_debug( L"Searching IOKit with service %s", usbServiceStr);
-	matchingDict = IOServiceMatching(usbServiceStr);
-	if (matchingDict == NULL)
-	{
-		log_debug( L"IOKit: Failed IOServiceMatching call" );
-		return result_error;
-	}
+    // IOUSBDevice and its subclasses
+    log_debug(L"Searching IOKit with service %s", usbServiceStr);
+    matchingDict = IOServiceMatching(usbServiceStr);
+    if (matchingDict == NULL)
+    {
+        log_debug(L"IOKit: Failed IOServiceMatching call");
+        return result_error;
+    }
 
-	// Create a CFNumber for the idVendor, idProduct and set the value in the dictionary
-	numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbVendor);
-	CFDictionarySetValue(matchingDict, CFSTR(kUSBVendorID), numberRef);
-	CFRelease(numberRef);
+    // Create a CFNumber for the idVendor, idProduct and set the value in the dictionary
+    numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbVendor);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBVendorID), numberRef);
+    CFRelease(numberRef);
 
-	numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbProduct);
-	CFDictionarySetValue(matchingDict, CFSTR(kUSBProductID), numberRef);
-	CFRelease(numberRef);
+    numberRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &usbProduct);
+    CFDictionarySetValue(matchingDict, CFSTR(kUSBProductID), numberRef);
+    CFRelease(numberRef);
 
-	if ((kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &ioIterator)) == KERN_SUCCESS)
-	{
-		log_debug( L"IOKit: IOServiceGetMatchingServices succeeded" );
-		while ((usbDevice = IOIteratorNext(ioIterator)) != 0)
-		{
-			log_debug( L"IOKit: iterator succeeded" );
-			if ((refPath = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane,
-					CFSTR("IODialinDevice"), kCFAllocatorDefault, kIORegistryIterateRecursively)) != NULL)
-			{
-				CFStringGetCString(refPath, cpath, sizeof(cpath), kCFStringEncodingASCII);
-				cpath[sizeof(cpath)-1] = 0;
-				log_debug( L"Look to device %hs", cpath );
-				/* device name is okay by default */
-				callback( cpath, arg );
-				CFRelease(refPath);
-			}
-			IOObjectRelease(usbDevice);
-		}
-	}
-	return result_ok;
+    if ((kr = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &ioIterator)) == KERN_SUCCESS)
+    {
+        log_debug(L"IOKit: IOServiceGetMatchingServices succeeded");
+        while ((usbDevice = IOIteratorNext(ioIterator)) != 0)
+        {
+            log_debug(L"IOKit: iterator succeeded");
+            if ((refPath = IORegistryEntrySearchCFProperty(usbDevice, kIOServicePlane,
+                CFSTR("IODialinDevice"), kCFAllocatorDefault, kIORegistryIterateRecursively)) != NULL)
+            {
+                CFStringGetCString(refPath, cpath, sizeof(cpath), kCFStringEncodingASCII);
+                cpath[sizeof(cpath)-1] = 0;
+                log_debug(L"Look to device %hs", cpath);
+                /* device name is okay by default */
+                callback(cpath, arg);
+                CFRelease(refPath);
+            }
+            IOObjectRelease(usbDevice);
+        }
+    }
+    return result_ok;
 }
+
+/* directory must not end with slash */
+result_t enumerate_iokit(enumerate_devices_directory_callback_t callback, void* arg, int flags)
+{
+    const long usbVendor = 0x1CBE;
+    const long usbProduct = 0x0007;
+
+    result_t result;
+    if ((result = enumerate_iokit_vid_pid(callback, arg, flags, usbVendor, usbProduct)) != result_ok)
+        return result;
+
+    const long usbVendor_mdrive = 0x1CBC;
+    const long usbProduct_mdrive = 0x0031;
+
+    return enumerate_iokit_vid_pid(callback, arg, flags, usbVendor_mdrive, usbProduct_mdrive);
+}
+
 
 #endif
 
@@ -568,7 +629,7 @@ result_t enumerate_specific_directory (char* directory, enumerate_devices_direct
 result_t enumerate_devices_directory (enumerate_devices_directory_callback_t callback, void* arg, int flags)
 {
 	result_t result;
-
+    
 	#ifdef __APPLE__
 	if (!(flags & ENUMERATE_ALL_COM))
 	{
@@ -577,8 +638,13 @@ result_t enumerate_devices_directory (enumerate_devices_directory_callback_t cal
 	}
 	#endif
 
-	/* enumerate /dev/ximc/ first */
-	if ((result = enumerate_specific_directory( "/dev/ximc", callback, arg, flags )) != result_ok)
+	/* enumerate /dev/ximc/ or /dev/mdrive first */
+    /* if directory does not exist it is no error */
+
+    if ((result = enumerate_specific_directory("/dev/ximc", callback, arg, flags)) != result_ok)
+        return result;
+
+    if ((result = enumerate_specific_directory("/dev/mdrive", callback, arg, flags)) != result_ok)
 		return result;
 
  	/* enumerate all other devices in /dev/ because there are symlinks to them */

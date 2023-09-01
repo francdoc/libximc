@@ -17,7 +17,7 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
         FEEDBACK_ENC_TYPE_SINGLE_ENDED = 64
         FEEDBACK_ENC_REVERSE = 1
         FEEDBACK_ENC_TYPE_AUTO = 0
-    feedback_settings.FeedbackFlags = FeedbackFlags_.FEEDBACK_ENC_TYPE_DIFFERENTIAL | FeedbackFlags_.FEEDBACK_ENC_REVERSE | FeedbackFlags_.FEEDBACK_ENC_TYPE_AUTO
+    feedback_settings.FeedbackFlags = FeedbackFlags_.FEEDBACK_ENC_TYPE_DIFFERENTIAL | FeedbackFlags_.FEEDBACK_ENC_TYPE_AUTO
     feedback_settings.CountsPerTurn = 1440000
     result = lib.set_feedback_settings(id, byref(feedback_settings))
 
@@ -27,7 +27,7 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
 
     home_settings = home_settings_t()
 
-    home_settings.FastHome = 100
+    home_settings.FastHome = 10
     home_settings.uFastHome = 0
     home_settings.SlowHome = 50
     home_settings.uSlowHome = 0
@@ -47,7 +47,7 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
         HOME_MV_SEC_EN = 4
         HOME_DIR_SECOND = 2
         HOME_DIR_FIRST = 1
-    home_settings.HomeFlags = HomeFlags_.HOME_USE_FAST | HomeFlags_.HOME_STOP_SECOND_REV | HomeFlags_.HOME_STOP_FIRST_REV | HomeFlags_.HOME_DIR_SECOND
+    home_settings.HomeFlags = HomeFlags_.HOME_STOP_SECOND_REV | HomeFlags_.HOME_STOP_FIRST_REV | HomeFlags_.HOME_DIR_SECOND
     result = lib.set_home_settings(id, byref(home_settings))
 
     if result != Result.Ok:
@@ -56,11 +56,11 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
 
     move_settings = move_settings_t()
 
-    move_settings.Speed = 250
+    move_settings.Speed = 20
     move_settings.uSpeed = 0
-    move_settings.Accel = 9
-    move_settings.Decel = 9
-    move_settings.AntiplaySpeed = 250
+    move_settings.Accel = 250
+    move_settings.Decel = 250
+    move_settings.AntiplaySpeed = 120
     move_settings.uAntiplaySpeed = 0
     class MoveFlags_:
         RPM_DIV_1000 = 1
@@ -75,7 +75,7 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
 
     engine_settings.NomVoltage = 1200
     engine_settings.NomCurrent = 3000
-    engine_settings.NomSpeed = 500
+    engine_settings.NomSpeed = 240
     engine_settings.uNomSpeed = 0
     class EngineFlags_:
         ENGINE_LIMIT_RPM = 128
@@ -86,8 +86,8 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
         ENGINE_MAX_SPEED = 4
         ENGINE_CURRENT_AS_RMS = 2
         ENGINE_REVERSE = 1
-    engine_settings.EngineFlags = EngineFlags_.ENGINE_LIMIT_RPM | EngineFlags_.ENGINE_LIMIT_CURR | EngineFlags_.ENGINE_ACCEL_ON
-    engine_settings.Antiplay = 28976
+    engine_settings.EngineFlags = EngineFlags_.ENGINE_LIMIT_RPM | EngineFlags_.ENGINE_ACCEL_ON
+    engine_settings.Antiplay = 28928
     class MicrostepMode_:
         MICROSTEP_MODE_FRAC_256 = 9
         MICROSTEP_MODE_FRAC_128 = 8
@@ -197,9 +197,9 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
     pid_settings.KpU = 0
     pid_settings.KiU = 0
     pid_settings.KdU = 0
-    pid_settings.Kpf = 25
-    pid_settings.Kif = 0.014999999664723873
-    pid_settings.Kdf = 0.25
+    pid_settings.Kpf = 300
+    pid_settings.Kif = 0.07999999821186066
+    pid_settings.Kdf = 0.800000011920929
     result = lib.set_pid_settings(id, byref(pid_settings))
 
     if result != Result.Ok:
@@ -290,8 +290,8 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
 
     control_settings = control_settings_t()
 
-    control_settings.MaxSpeed[0] = 25
-    control_settings.MaxSpeed[1] = 250
+    control_settings.MaxSpeed[0] = 2
+    control_settings.MaxSpeed[1] = 20
     control_settings.MaxSpeed[2] = 0
     control_settings.MaxSpeed[3] = 0
     control_settings.MaxSpeed[4] = 0
@@ -388,7 +388,7 @@ def set_profile_8MRL80_6_LEn2_100(lib, id):
 
     controller_name = controller_name_t()
 
-    controller_name.ControllerName = bytes([0, 113, 15, 119, 34, 0, 82, 0, 3, 0, 0, 0, 120, 108, 70, 0])
+    controller_name.ControllerName = bytes([0, 113, 238, 119, 36, 0, 72, 0, 3, 0, 0, 0, 144, 108, 79, 0])
     class CtrlFlags_:
         EEPROM_PRECEDENCE = 1
 

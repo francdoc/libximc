@@ -21,6 +21,7 @@ pipeline {
   options {
     disableConcurrentBuilds()
     parallelsAlwaysFailFast()
+    timeout(time: 2, unit: 'HOURS')
   }
 
   environment {
@@ -146,6 +147,13 @@ pipeline {
   post {
     failure {
       echo "Failure, sending emails..."
+      emailext body: '$DEFAULT_CONTENT',
+               to: '$DEFAULT_RECIPIENTS',
+               recipientProviders: [[$class: 'DevelopersRecipientProvider'],[$class: 'CulpritsRecipientProvider']],
+               subject: '$DEFAULT_SUBJECT'
+    }
+    aborted {
+      echo "Aborted, sending emails..."
       emailext body: '$DEFAULT_CONTENT',
                to: '$DEFAULT_RECIPIENTS',
                recipientProviders: [[$class: 'DevelopersRecipientProvider'],[$class: 'CulpritsRecipientProvider']],

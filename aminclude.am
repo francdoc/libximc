@@ -134,14 +134,14 @@ doxygen-pdf: @DX_DOCDIR@/@PACKAGE@-${AM_DOCSUFFIX}.pdf
 @DX_DOCDIR@/@PACKAGE@-${AM_DOCSUFFIX}.pdf: @DX_DOCDIR@/@PACKAGE@.tag
 	cd @DX_DOCDIR@/latex; \
 	rm -f *.aux *.toc *.idx *.ind *.ilg *.log *.out; \
-	$(DX_PDFLATEX) refman.tex; \
+	$(DX_PDFLATEX) --halt-on-error refman.tex >> pdflatex-out.log; \
 	$(DX_MAKEINDEX) refman.idx; \
-	$(DX_PDFLATEX) refman.tex; \
+	$(DX_PDFLATEX) --halt-on-error refman.tex >> pdflatex-out.log ; \
 	countdown=5; \
 	while $(DX_EGREP) 'Rerun (LaTeX|to get cross-references right)' \
 	                  refman.log > /dev/null 2>&1 \
 	   && test $$countdown -gt 0; do \
-	    $(DX_PDFLATEX) refman.tex; \
+	    $(DX_PDFLATEX) --halt-on-error refman.tex >> pdflatex-out.log ; \
 	    countdown=`expr $$countdown - 1`; \
 	done; \
 	mv refman.pdf ../@PACKAGE@-${AM_DOCSUFFIX}.pdf

@@ -76,14 +76,6 @@ sbuf = create_string_buffer(64)
 lib.ximc_version(sbuf)
 print("Library version: " + sbuf.raw.decode().rstrip("\0"))
 
-# Set bindy (network) keyfile. Must be called before any call to "enumerate_devices" or "open_device" if you
-# wish to use network-attached controllers. Accepts both absolute and relative paths, relative paths are resolved
-# relative to the process working directory. If you do not need network devices then "set_bindy_key" is optional.
-# In Python make sure to pass byte-array object to this function (b"string literal").
-result = lib.set_bindy_key(os.path.join(ximc_dir, "win32", "keyfile.sqlite").encode("utf-8"))
-if result != Result.Ok:
-    lib.set_bindy_key("keyfile.sqlite".encode("utf-8")) # Search for the key file in the current directory.
-
 # This is device search and enumeration with probing. It gives more information about devices.
 probe_flags = EnumerateFlags.ENUMERATE_NETWORK#EnumerateFlags.ENUMERATE_PROBE + EnumerateFlags.ENUMERATE_NETWORK
 enum_hints = b"addr="
