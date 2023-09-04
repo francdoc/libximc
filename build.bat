@@ -30,7 +30,7 @@ if "%XIBRIDGEVER%VER%" == "" set XIBRIDGEVER=
 echo Found xibridge ver %XIBRIDGEVER%
 set MINIUPNPCVER=8ddbb71
 echo Set miniupnpc ver %MINIUPNPCVER%
-set XIGENVER=dev-1.0
+set XIGENVER=v1.1.0
 echo Set xigen ver %XIGENVER%
 
 @set CONFIGURATION=Debug
