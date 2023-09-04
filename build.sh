@@ -439,8 +439,8 @@ build_dep_xigen()
 		rm -rf $DEPS/xigen
 		(cd $DEPS && git clone $URL xigen -b $XIGENVER)
 	fi
-	(cd $DEPS/xigen && cmake $DEPS_CMAKE_OPT $* .)
-	$MAKE -C $DEPS/xigen
+	(cd $DEPS/xigen && cmake $DEPS_CMAKE_OPT -DCMAKE_INSTALL_PREFIX=$DEPS/xigen $* .)
+	$MAKE -C $DEPS/xigen all test install
 }
 
 build_dep_miniupnpc()
