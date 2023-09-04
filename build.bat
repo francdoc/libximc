@@ -217,13 +217,13 @@ cd %DISTARCH%\xigen
 @if not %errorlevel% == 0 goto FAIL
 @set GENERATOR=Visual Studio 12 2013
 if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
-%CMAKE% -G "%GENERATOR%" -DBUILD_TESTING=OFF
+%CMAKE% -G "%GENERATOR%" -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=%BASEDIR%\%DISTARCH%\xigen
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% xigen.sln /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
+%MSBUILD% ALL_BUILD.vcxproj /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
 if not exist %CONFIGURATION%\xigen.exe goto FAIL
 @if not %errorlevel% == 0 goto FAIL
-%MSBUILD% INSTALL.vcxproj
+%MSBUILD% INSTALL.vcxproj /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
 cd %BASEDIR%
 @echo Building xigen for %ARCH% completed
