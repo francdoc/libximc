@@ -22,7 +22,7 @@ if [ -z "$XIBRIDGEVER" ] ; then
 	XIBRIDGEVER=default
 fi
 
-XIGENVER=v1.0.0
+XIGENVER=dev-1.0
 MINIUPNPCVER=8ddbb71
 
 SOVERMAJOR=`echo $SOVER | sed 's/\..*//'`
