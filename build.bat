@@ -221,10 +221,13 @@ if %ARCH% == x64 @set GENERATOR=%GENERATOR% Win64
 @if not %errorlevel% == 0 goto FAIL
 %MSBUILD% ALL_BUILD.vcxproj /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
-if not exist %CONFIGURATION%\xigen.exe goto FAIL
-@if not %errorlevel% == 0 goto FAIL
 %MSBUILD% INSTALL.vcxproj /p:Configuration=%CONFIGURATION% /p:Platform=%ARCH%
 @if not %errorlevel% == 0 goto FAIL
+:: Move binary from bin/ to Release/ for backward compatibility
+mkdir %CONFIGURATION%
+copy bin\xigen.exe %CONFIGURATION%\
+@if not %errorlevel% == 0 goto FAIL
+if not exist %CONFIGURATION%\xigen.exe goto FAIL
 cd %BASEDIR%
 @echo Building xigen for %ARCH% completed
 @goto :eof
