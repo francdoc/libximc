@@ -764,6 +764,7 @@ void get_wallclock(time_t* sec, int* msec)
 void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 {
 	*abs_path = 0;
+	// Add leading '/' to POSIX path if not presented. #85091#note-29
 	if (uri_path[0] != '/')
 		strncat(abs_path, "/", len);
 	strncat(abs_path, uri_path, len);

@@ -257,6 +257,16 @@ int parse_uri_after_path(
 {
 	const char *p = ppath, *pn;
 
+	/*
+	 * Add platform-dependent path validation. We demand absolute path! For windows it must start with partitition letter followed
+	 * by ":\\" or ":/". Yes, let it be POSIX-slash-style compatible. #85091#note-28
+	 * Purpose of the following is to block allowed in fopen relative paths. User must be restricted!
+	 */
+	#ifdef _WIN32
+	if (!isalpha(p[0]) || p[1] != ':' || (p[2] != '\\' || p[3] != '\\') && p[2] != '/') // In case of wrong absolute path
+		return 1;
+	#endif
+
 	// check is there a param
 	pn = strstr(p, "?");
 
