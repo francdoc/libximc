@@ -763,16 +763,11 @@ void get_wallclock(time_t* sec, int* msec)
 
 void uri_path_to_absolute(const char *uri_path, char *abs_path, size_t len)
 {
-    /*
-    *abs_path = 0;
-
-    if (uri_path[0] != '/')
-    strncat(abs_path, "/", len);
-    strncat(abs_path, uri_path, len);
-
-    abs_path[len-1] = 0;
-    */
-    realpath(uri_path, abs_path)
+	*abs_path = 0;
+	if (uri_path[0] != '/')
+		strncat(abs_path, "/", len);
+	strncat(abs_path, uri_path, len);
+	abs_path[len-1] = 0;
 }
 
 /* Returns non-zero on success */
