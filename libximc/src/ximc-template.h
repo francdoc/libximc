@@ -395,7 +395,7 @@ extern "C"
 		* \english
 		* Open a device with OS uri \a uri and return identifier of the device which can be used in calls.
 		* @param[in] uri - a device uri.
-		* Device uri has form "xi-com:port" or "xi-net://host/serial" or "xi-emu:///file".
+		* Device uri has form "xi-com:port" or "xi-net://host/serial" or "xi-emu:///abs_path_to_file".
 		* In case of USB-COM port the "port" is the OS device uri.
 		* For example "xi-com:\\\.\COM3" in Windows or "xi-com:/dev/tty.s123" in Linux/Mac.
 		* In case of network device the "host" is an IPv4 address or fully qualified domain uri (FQDN), "serial" is the device serial number in hexadecimal system.
@@ -409,7 +409,7 @@ extern "C"
 		* \russian
 		* Открывает устройство по имени \a uri и возвращает идентификатор, который будет использоваться для обращения к устройству.
 		* @param[in] uri - уникальный идентификатор устройства.
-		* Uri устройства имеет вид "xi-com:port" или "xi-net://host/serial" или "xi-emu:///file".
+		* Uri устройства имеет вид "xi-com:port" или "xi-net://host/serial" или "xi-emu:///abs_path_to_file".
 		* Для USB-COM устройства "port" это uri устройства в ОС.
 		* Например "xi-com:\\\.\COM3" в Windows или "xi-com:/dev/tty.s123" в Linux/Mac.
 		* Для сетевого устройства "host" это IPv4 адрес или полностью определённое имя домена, "serial" это серийный номер устройства в шестнадцатеричной системе.
