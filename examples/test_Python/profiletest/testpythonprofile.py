@@ -104,7 +104,7 @@ elif dev_count > 0:
     open_name = lib.get_device_name(devenum, 0)
 elif sys.version_info >= (3,0):
     # use URI for virtual device when there is new urllib python3 API
-    tempdir = tempfile.gettempdir() + "/testdevice.bin"
+    tempdir = os.path.expanduser('~') + "/testdevice.bin"
     if os.altsep:
         tempdir = tempdir.replace(os.sep, os.altsep)
     # urlparse build wrong path if scheme is not file

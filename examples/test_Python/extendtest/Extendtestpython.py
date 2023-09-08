@@ -32,6 +32,7 @@ import platform
 # import netifaces
 import ifaddr
 import getpass
+import tempfile
 
 if sys.version_info >= (3,0):
     import urllib.parse
@@ -915,9 +916,8 @@ def device_selection_dialog():
             head_port = "xi-com:/dev/tty.s"
         port_name = input_new()
     elif ord(key_press) == 50: #""" Press "2" virtual controller """
-        print("Enter the name of the virtual device:")
-        head_port = "xi-emu:///"
-        port_name = input_new()
+        head_port = "xi-emu:"
+        port_name = os.path.expanduser('~') + os.sep + "virtual_controller.bin"
     elif ord(key_press) == 51: #""" Press "3" network controller """
         print("Enter the device's network address:")
         print("Example:192.168.0.1/89ABCDEF")
