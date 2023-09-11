@@ -263,7 +263,7 @@ int parse_uri_after_path(
 	 * Purpose of the following is to block allowed in fopen relative paths. User must be restricted!
 	 */
 	#ifdef _WIN32
-	if (!isalpha(p[0]) || p[1] != ':' || (p[2] != '\\' || p[3] != '\\') && p[2] != '/') // In case of wrong absolute path
+	if (!isalpha(p[0]) || p[1] != ':' || p[2] != '\\' && p[2] != '/') // In case of wrong absolute path
 		return 1;
 	#endif
 
