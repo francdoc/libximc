@@ -1087,7 +1087,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 	}
 	else if (!portable_strcasecmp(uri_scheme, "xi-emu"))
 	{
-		if (strlen(uri_host) != 0 || strlen(abs_path) == 0)
+		if (strlen(uri_host) != 0 || strlen(uri_path) == 0)
 		{
 			log_error( L"Unknown device URI, only path should be specified" );
 			return result_error;
@@ -1095,7 +1095,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 		serial = NULL;
 		if (!strcmp(uri_paramname, "serial") && strlen(uri_paramvalue) > 0)
 			serial = uri_paramvalue;
-		return open_port_virtual( metadata, abs_path, serial );
+		return open_port_virtual(metadata, abs_path, serial);
 	}
 
 	else if (!portable_strcasecmp(uri_scheme, "xi-udp"))

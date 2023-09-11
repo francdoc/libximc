@@ -233,8 +233,22 @@ int main (int argc, char* argv[])
 	{
 		if (names_count == 0)
 		{
-			wprintf( L"The real controller is not found or busy with another app.\nThe virtual controller is opened to check the operation of the library.\n" );
-			strcpy(device_name, "xi-emu:///temp.bin");
+			// 255 is probably enough. The only problem may occure in Windows in case %USERNAME% is several hundred characters
+			char path_to_virt_controller[255];
+			wprintf( L"The real controller is not found or busy with another app.\nThe virtual controller is opening to check the operation of the library.\n" );
+		#if defined(_WIN32) || defined(_WIN64)
+			strcpy(path_to_virt_controller, getenv("USERPROFILE"));
+			strcat(path_to_virt_controller, "\\virt_controller.bin");
+			strcpy(device_name, "xi-emu:///");
+			strcat(device_name, path_to_virt_controller);
+			wprintf(L"Path to controller file to open: %ls\\virt_controller.bin\n", _wgetenv(L"USERPROFILE"));
+		#else
+			strcpy(path_to_virt_controller, getenv("HOME"));
+			strcat(path_to_virt_controller, "/virt_controller.bin");
+			strcpy(device_name, "xi-emu:///");
+			strcat(device_name, path_to_virt_controller);
+			wprintf(L"Path to controller file to open: ~/virt_controller.bin\n");
+		#endif
 		}
 		else
 			strcpy( device_name, get_device_name( devenum, 0 ) );
