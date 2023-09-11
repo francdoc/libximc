@@ -243,9 +243,11 @@ int main (int argc, char* argv[])
 			strcat(device_name, path_to_virt_controller);
 			wprintf(L"Path to controller file to open: %ls\\virt_controller.bin\n", _wgetenv(L"USERPROFILE"));
 		#else
-			strcpy(path_to_virt_controller, "~/temp.bin");
-			strcpy(device_name, "xi-emu:///~/temp.bin");
-			wprintf(L"Path to controller file: xi-emu:///~/temp.bin\n");
+			strcpy(path_to_virt_controller, getenv("HOME"));
+			strcat(path_to_virt_controller, "/virt_controller.bin");
+			strcpy(device_name, "xi-emu:///");
+			strcat(device_name, path_to_virt_controller);
+			wprintf(L"Path to controller file to open: ~/virt_controller.bin\n");
 		#endif
 		}
 		else

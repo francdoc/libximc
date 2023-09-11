@@ -1095,7 +1095,7 @@ result_t open_port (device_metadata_t *metadata, const char* name)
 		serial = NULL;
 		if (!strcmp(uri_paramname, "serial") && strlen(uri_paramvalue) > 0)
 			serial = uri_paramvalue;
-		return open_port_virtual(metadata, uri_path, serial);
+		return open_port_virtual(metadata, abs_path, serial);
 	}
 
 	else if (!portable_strcasecmp(uri_scheme, "xi-udp"))
