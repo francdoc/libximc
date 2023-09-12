@@ -1,3 +1,11 @@
+libximc7 (2.14.18-1) unstable; urgency=low
+
+  * Version bump
+  * Feature #85091 Taking position calculation out to the place before all command execution (before switch statement)
+  * Feature #84179 Now use only absolute paths for virtual controllers
+
+ -- XIMC <info@ximc.ru>  Tue, 12 Sep 2023 11:24:00 +0300
+
 libximc7 (2.14.17-1) unstable; urgency=low
 
   * Version bump
