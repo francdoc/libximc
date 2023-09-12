@@ -76,7 +76,8 @@ rm -rf $RPM_BUILD_ROOT
 
 * Tue Sep 12 2023 XIMC <info@ximc.ru> - 2.14.18
 - version bump
-- Feature #85091 Taking position calculation out to the place before all command execution (before switch statement)
+- Feature #85091 Taking position calculation out to the place before
+- all command execution (before switch statement)
 - Feature #84179 Now use only absolute paths for virtual controllers
 
 * Wed Aug 23 2023 XIMC <info@ximc.ru> - 2.14.17
