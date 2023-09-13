@@ -21,10 +21,12 @@ import time
 from ctypes import c_int, byref
 import libximc as ximc
 
-# Virtual device will be used by default.
-# In case you have real hardware set correct device URI here
+# Virtual devices
+# Only absolute paths accepted
+device_abs_path = pathlib.Path(pathlib.Path.home(), "virtual_motor_controller.bin")
+device_uri = "xi-emu://{}".format(device_abs_path)
 
-device_uri = "xi-emu:///virtual_motor_controller.bin"  # Virtual device
+# Real devices
 # device_uri = "xi-com:\\\\.\\COM111"                  # Serial port
 # device_uri = "xi-tcp://172.16.130.155:1820"          # Raw TCP connection
 # device_uri = "xi-net://192.168.1.120/abcd"           # XiNet connection
