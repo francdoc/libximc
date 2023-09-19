@@ -140,7 +140,7 @@ class device_network_information_t(LittleEndianStructure):
 lib.enumerate_devices.restype = POINTER(device_enumeration_t)
 lib.get_device_name.restype = c_char_p
 
-# ------------- API v1 -------------
+# ------------------ API v1 ------------------
 # @@GENERATED_CODE@@
 
 
@@ -195,6 +195,15 @@ def open_device(uri: str) -> DeviceT:
     device_id = DeviceT(lib.open_device(uri.encode()))
     _check_device_id(device_id)
     return device_id
+
+
+def close_device(device_id: DeviceT) -> None:
+    """
+    Close specified device.
+
+    :param device_id: an identifier of device
+    """
+    _check_result(lib.close_device(byref(cast(device_id, POINTER(c_int)))))
 
 
 def get_position(device_id: DeviceT) -> Tuple[int, int, int]:
@@ -293,7 +302,7 @@ def command_power_off(device_id: DeviceT):
 
     :param DeviceT device_id: an identifier of device
     """
-    _check_result(lib.command_power_off)
+    _check_result(lib.command_power_off(device_id))
 
 
 # vim: set ft=python
