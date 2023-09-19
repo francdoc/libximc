@@ -209,14 +209,14 @@ def get_position(device_id: DeviceT) -> Tuple[int, int, int]:
 
 
 def set_engine_settings(device_id: DeviceT,
-                        nom_voltage: int,
-                        nom_current: int,
-                        nom_speed: int,
-                        unom_speed: int,
-                        engine_flags: int,
-                        antiplay: int,
-                        microstep_mode: int,
-                        steps_per_rev: int) -> None:
+                        nom_voltage: int = 1200,
+                        nom_current: int = 500,
+                        nom_speed: int = 5000,
+                        unom_speed: int = 64,
+                        engine_flags: int = EngineFlags.ENGINE_ACCEL_ON + EngineFlags.ENGINE_LIMIT_RPM,
+                        antiplay: int = 50,
+                        microstep_mode: int = MicrostepMode.MICROSTEP_MODE_FRAC_256,
+                        steps_per_rev: int = 200) -> None:
     """
     Set engine settings.
 
@@ -235,12 +235,13 @@ def set_engine_settings(device_id: DeviceT,
     engine_settings = engine_settings_t(nom_voltage, nom_current, nom_speed, unom_speed, engine_flags, antiplay, microstep_mode, steps_per_rev)
     _check_result(lib.set_engine_settings(device_id, byref(engine_settings)))
 
+
 def set_move_settings(device_id: DeviceT,
-                      speed: int = 0,
+                      speed: int = 1000,
                       uspeed: int = 0,
-                      accel: int = 0,
-                      decel: int = 0,
-                      antiplay_speed: int = 0,
+                      accel: int = 1000,
+                      decel: int = 1000,
+                      antiplay_speed: int = 50,
                       uantiplay_speed: int = 0,
                       move_flags: int = 0) -> None:
     """
