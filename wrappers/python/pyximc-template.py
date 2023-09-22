@@ -1185,10 +1185,12 @@ def _check_device_id(device_id: DeviceT) -> None:
     try:
         id_int = int(device_id)
     except ValueError:
-        raise ValueError("device_id should be integer, got device_id={} of type {}".format(device_id, type(device_id)))
+        raise ValueError("device_id should be integer, got device_id="
+                         "{} of type {}".format(device_id, type(device_id)))
 
     if id_int < 0:
-        raise ValueError("Got negative device_id ({}). It seems the device was not opened correctly".format(device_id))
+        raise ValueError("Got negative device_id ({}). It seems the device was"
+                         " not opened correctly".format(device_id))
 
 
 def _check_result(result: int) -> None:
@@ -1200,13 +1202,18 @@ def _check_result(result: int) -> None:
     if result == Result.NotImplemented:
         raise NotImplementedError(
             "This function is not implemented in the device."
-            "Firmware update may be required: https://doc.xisupport.com/en/8smc5-usb/8SMCn-USB/XILab_application_Users_guide/Controller_Settings/About_controller.html"
+            "Firmware update may be required: "
+            "https://doc.xisupport.com/en/8smc5-usb/8SMCn-USB/"
+            "XILab_application_Users_guide/Controller_Settings/"
+            "About_controller.html"
         )
 
     if result == Result.ValueError:
         raise ValueError(
-            "The input was rejected by device. Some parameters may have incorrect values."
-            "Check documentation: https://libximc.xisupport.com/doc-en/ximc_8h.html"
+            "The input was rejected by device. Some parameters may have "
+            "incorrect values."
+            "Check documentation: "
+            "https://libximc.xisupport.com/doc-en/ximc_8h.html"
         )
 
     if result == Result.NoDevice:
@@ -1227,9 +1234,9 @@ def set_feedback_settings(device_id: DeviceT,
     :type settings: FeedbackSettings
     """
     feedback_settings = feedback_settings_t(settings.IPS,
-                                         settings.FeedbackType,
-                                         settings.FeedbackFlags,
-                                         settings.CountsPerTurn)
+                                            settings.FeedbackType,
+                                            settings.FeedbackFlags,
+                                            settings.CountsPerTurn)
     _check_result(lib.set_feedback_settings(device_id, byref(feedback_settings)))
 
 
@@ -1296,7 +1303,8 @@ def set_home_settings_calb(device_id: DeviceT,
                            calibration: Calibration) -> None:
     """Set home settings which use user units.
 
-    This function send structure with calibrating position settings to controller's memory.
+    This function send structure with calibrating position settings to
+    controller's memory.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -1310,7 +1318,9 @@ def set_home_settings_calb(device_id: DeviceT,
                                          settings.HomeDelta,
                                          settings.HomeFlags)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_home_settings_calb(device_id, byref(home_settings), byref(calib)))
+    _check_result(lib.set_home_settings_calb(device_id,
+                                             byref(home_settings),
+                                             byref(calib)))
 
 
 def get_home_settings_calb(device_id: DeviceT,
@@ -1328,7 +1338,9 @@ def get_home_settings_calb(device_id: DeviceT,
     """
     home_settings = home_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_home_settings_calb(device_id, byref(home_settings), byref(calib)))
+    _check_result(lib.set_home_settings_calb(device_id,
+                                             byref(home_settings),
+                                             byref(calib)))
     return HomeSettingsCalb(home_settings.FastHome,
                             home_settings.SlowHome,
                             home_settings.HomeDelta,
@@ -1351,7 +1363,8 @@ def set_move_settings(device_id: DeviceT,
 def set_move_settings_calb(device_id: DeviceT,
                            settings: MoveSettingsCalb,
                            calibration: Calibration) -> None:
-    """Set command setup movement which use user units (speed, acceleration, threshold and etc).
+    """Set command setup movement which use user units (speed, acceleration,
+    threshold and etc).
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -1391,7 +1404,8 @@ def get_move_settings(device_id: DeviceT) -> MoveSettings:
 
 def get_move_settings_calb(device_id: DeviceT,
                            calibration: Calibration) -> MoveSettingsCalb:
-    """Read command setup movement which use user units (speed, acceleration, threshold and etc).
+    """Read command setup movement which use user units (speed, acceleration,
+    threshold and etc).
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -1402,7 +1416,9 @@ def get_move_settings_calb(device_id: DeviceT,
     """
     move_settings = move_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_move_settings_calb(device_id, byref(move_settings), byref(calib)))
+    _check_result(lib.set_move_settings_calb(device_id,
+                                             byref(move_settings),
+                                             byref(calib)))
     return MoveSettingsCalb(move_settings.Speed,
                             move_settings.Accel,
                             move_settings.Decel,
@@ -1463,8 +1479,10 @@ def set_engine_settings_calb(device_id: DeviceT,
                                               settings.MicrostepMode,
                                               settings.StepsPerRev)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_engine_settings_calb(device_id, byref(engine_settings), byref(calib)))
-    
+    _check_result(lib.set_engine_settings_calb(device_id,
+                                               byref(engine_settings),
+                                               byref(calib)))
+
 
 def get_engine_settings(device_id: DeviceT) -> EngineSettings:
     """Read engine settings.
@@ -1504,7 +1522,9 @@ def get_engine_settings_calb(device_id: DeviceT) -> EngineSettingsCalb:
     """
     engine_settings = engine_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_engine_settings_calb(device_id, byref(engine_settings), byref(calib)))
+    _check_result(lib.get_engine_settings_calb(device_id,
+                                               byref(engine_settings),
+                                               byref(calib)))
     return EngineSettingsCalb(engine_settings.NomVoltage,
                               engine_settings.NomCurrent,
                               engine_settings.NomSpeed,
@@ -1649,11 +1669,13 @@ def set_edges_settings_calb(device_id: DeviceT,
     :type settings: EdgesSettings
     """
     edges_settings = edges_settings_calb_t(settings.BorderFlags,
-                                      settings.EnderFlags,
-                                      settings.LeftBorder,
-                                      settings.RightBorder)
+                                           settings.EnderFlags,
+                                           settings.LeftBorder,
+                                           settings.RightBorder)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_edges_settings_calb(device_id, byref(edges_settings), byref(calib)))
+    _check_result(lib.set_edges_settings_calb(device_id,
+                                              byref(edges_settings),
+                                              byref(calib)))
 
 
 def get_edges_settings(device_id: DeviceT) -> EdgesSettings:
@@ -1685,7 +1707,9 @@ def get_edges_settings_calb(device_id: DeviceT,
     """
     edges_settings = edges_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_edges_settings_calb(device_id, byref(edges_settings), byref(calib)))
+    _check_result(lib.get_edges_settings_calb(device_id,
+                                              byref(edges_settings),
+                                              byref(calib)))
     return EdgesSettingsCalb(edges_settings.BorderFlags,
                              edges_settings.EnderFlags,
                              edges_settings.LeftBorder,
@@ -1784,7 +1808,9 @@ def set_sync_in_settings_calb(device_id: DeviceT,
                                                settings.Position,
                                                settings.Speed)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_sync_in_settings_calb(device_id, byref(sync_in_settings), byref(calib)))
+    _check_result(lib.set_sync_in_settings_calb(device_id,
+                                                byref(sync_in_settings),
+                                                byref(calib)))
 
 
 def get_sync_in_settings(device_id: DeviceT) -> SyncInSettings:
@@ -1826,7 +1852,9 @@ def get_sync_in_settings_calb(device_id: DeviceT,
     """
     sync_in_settings = sync_in_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_sinc_in_settings_calb(device_id, byref(sync_in_settings), byref(calib)))
+    _check_result(lib.get_sinc_in_settings_calb(device_id,
+                                                byref(sync_in_settings),
+                                                byref(calib)))
     return SyncInSettingsCalb(sync_in_settings.SyncInFlags,
                               sync_in_settings.ClutterTime,
                               sync_in_settings.Position,
@@ -1847,10 +1875,10 @@ def set_sync_out_settings(device_id: DeviceT,
     :type settings: SyncOutSettings
     """
     sync_out_settings = sync_out_settings_t(settings.SyncOutFlags,
-                                          settings.SyncOutPulseSteps,
-                                          settings.SyncOutPeriod,
-                                          settings.Accuracy,
-                                          settings.uAccuracy)
+                                            settings.SyncOutPulseSteps,
+                                            settings.SyncOutPeriod,
+                                            settings.Accuracy,
+                                            settings.uAccuracy)
     _check_result(lib.set_sync_out_settings(device_id, byref(sync_out_settings)))
 
 
@@ -1875,7 +1903,9 @@ def set_sync_out_settings_calb(device_id: DeviceT,
                                                  settings.SyncOutPeriod,
                                                  settings.Accuracy)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_sync_out_settings_calb(device_id, byref(sync_out_settings), byref(calib)))
+    _check_result(lib.set_sync_out_settings_calb(device_id,
+                                                 byref(sync_out_settings),
+                                                 byref(calib)))
 
 
 def get_sync_out_settings(device_id: DeviceT) -> SyncOutSettings:
@@ -1892,7 +1922,8 @@ def get_sync_out_settings(device_id: DeviceT) -> SyncOutSettings:
     :rtype: SyncOutSettings
     """
     sync_out_settings = sync_out_settings_t()
-    _check_result(lib.get_sinc_out_settings(device_id, byref(sync_out_settings)))
+    _check_result(lib.get_sinc_out_settings(device_id,
+                                            byref(sync_out_settings)))
     return SyncOutSettings(sync_out_settings.SyncOutFlags,
                            sync_out_settings.SyncOutPulseSteps,
                            sync_out_settings.SyncOutPeriod,
@@ -1918,19 +1949,22 @@ def get_sync_out_settings_calb(device_id: DeviceT,
     """
     sync_out_settings = sync_out_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_sinc_out_settings_calb(device_id, byref(sync_out_settings), byref(calib)))
-    return SyncOutSettingsCalb(sync_in_settings.SyncOutFlags,
-                               sync_in_settings.SyncOutPulseSteps,
-                               sync_in_settings.SyncOutPeriod,
-                               sync_in_settings.Accuracy)
-
+    _check_result(lib.get_sinc_out_settings_calb(device_id,
+                                                 byref(sync_out_settings),
+                                                 byref(calib)))
+    return SyncOutSettingsCalb(sync_out_settings.SyncOutFlags,
+                               sync_out_settings.SyncOutPulseSteps,
+                               sync_out_settings.SyncOutPeriod,
+                               sync_out_settings.Accuracy)
 
 
 def set_extio_settings(device_id: DeviceT,
                        settings: ExtioSettings) -> None:
     """Set EXTIO settings.
 
-    This function writes a structure with a set of EXTIO settings to controller's memory. By default input event are signalled through rising front and output states are signalled by high logic state.
+    This function writes a structure with a set of EXTIO settings to
+    controller's memory. By default input event are signalled through rising
+    front and output states are signalled by high logic state.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -1939,14 +1973,15 @@ def set_extio_settings(device_id: DeviceT,
     """
     _check_device_id(device_id)
     extio_settings = extio_settings_t(settings.EXTIOSetupFlags,
-                                   settings.EXTIOModeFlags)
+                                      settings.EXTIOModeFlags)
     _check_result(lib.set_extio_settings(device_id, byref(extio_settings)))
 
 
 def get_extio_settings(device_id: DeviceT) -> ExtioSettings:
     """Read EXTIO settings.
 
-    This function reads a structure with a set of EXTIO settings from controller's memory.
+    This function reads a structure with a set of EXTIO settings from
+    controller's memory.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -1957,7 +1992,7 @@ def get_extio_settings(device_id: DeviceT) -> ExtioSettings:
     extio_settings = extio_settings_t()
     _check_result(lib.get_extio_settings(device_id, byref(extio_settings)))
     return ExtioSettings(extio_settings.EXTIOSetupFlags,
-                      extio_settings.EXTIOModeFlags)
+                         extio_settings.EXTIOModeFlags)
 
 
 def set_brake_settings(device_id: DeviceT,
@@ -1971,10 +2006,10 @@ def set_brake_settings(device_id: DeviceT,
     """
     _check_device_id(device_id)
     brake_settings = brake_settings_t(settings.t1,
-                                settings.t2,
-                                settings.t3,
-                                settings.t4,
-                                settings.BrakeFlags)
+                                      settings.t2,
+                                      settings.t3,
+                                      settings.t4,
+                                      settings.BrakeFlags)
     _check_result(lib.set_brake_settings(device_id, byref(brake_settings)))
 
 
@@ -1990,17 +2025,24 @@ def get_brake_settings(device_id: DeviceT) -> BrakeSettings:
     brake_settings = brake_settings_t()
     _check_result(lib.get_brake_settings(device_id, byref(brake_settings)))
     return BrakeSettings(brake_settings.t1,
-                      brake_settings.t2,
-                      brake_settings.t3,
-                      brake_settings.t4,
-                      brake_settings.BrakeFlags)
+                         brake_settings.t2,
+                         brake_settings.t3,
+                         brake_settings.t4,
+                         brake_settings.BrakeFlags)
 
 
 def set_control_settings(device_id: DeviceT,
                          settings: ControlSettings) -> None:
     """Set settings of motor control.
 
-    When choosing CTL_MODE = 1 switches motor control with the joystick. In this mode, the joystick to the maximum engine tends Move at MaxSpeed [i], where i = 0 if the previous use This mode is not selected another i. Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor control using the Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0], at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+    When choosing CTL_MODE = 1 switches motor control with the joystick. In
+    this mode, the joystick to the maximum engine tends Move at MaxSpeed [i],
+    where i = 0 if the previous use This mode is not selected another i.
+    Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor
+    control using the Left / right. When you click on the button motor starts
+    to move in the appropriate direction at a speed MaxSpeed [0], at the end
+    of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition
+    from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2009,12 +2051,12 @@ def set_control_settings(device_id: DeviceT,
     """
     _check_device_id(device_id)
     control_settings = control_settings_t(settings.MaxSpeed,
-                                       settings.uMaxSpeed,
-                                       settings.Timeout,
-                                       settings.MaxClickTime,
-                                       settings.Flags,
-                                       settings.DeltaPosition,
-                                       settings.uDeltaPosition)
+                                          settings.uMaxSpeed,
+                                          settings.Timeout,
+                                          settings.MaxClickTime,
+                                          settings.Flags,
+                                          settings.DeltaPosition,
+                                          settings.uDeltaPosition)
     _check_result(lib.set_control_settings(device_id, byref(control_settings)))
 
 
@@ -2023,7 +2065,14 @@ def set_control_settings_calb(device_id: DeviceT,
                               calibration: Calibration) -> None:
     """Set settings of motor control which use user units.
 
-    When choosing CTL_MODE = 1 switches motor control with the joystick. In this mode, the joystick to the maximum engine tends Move at MaxSpeed [i], where i = 0 if the previous use This mode is not selected another i. Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor control using the Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0], at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+    When choosing CTL_MODE = 1 switches motor control with the joystick. In
+    this mode, the joystick to the maximum engine tends Move at MaxSpeed [i],
+    where i = 0 if the previous use This mode is not selected another i.
+    Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor
+    control using the Left / right. When you click on the button motor starts
+    to move in the appropriate direction at a speed MaxSpeed [0], at the end
+    of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition
+    from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2034,10 +2083,10 @@ def set_control_settings_calb(device_id: DeviceT,
     """
     _check_device_id(device_id)
     control_settings = control_settings_calb_t(settings.MaxSpeed,
-                                            settings.Timeout,
-                                            settings.MaxClickTime,
-                                            settings.Flags,
-                                            settings.DeltaPosition)
+                                               settings.Timeout,
+                                               settings.MaxClickTime,
+                                               settings.Flags,
+                                               settings.DeltaPosition)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_control_settings_calb(device_id, byref(control_settings), byref(calib)))
 
@@ -2045,7 +2094,14 @@ def set_control_settings_calb(device_id: DeviceT,
 def get_control_settings(device_id: DeviceT) -> ControlSettings:
     """Read settings of motor control.
 
-    When choosing CTL_MODE = 1 switches motor control with the joystick. In this mode, the joystick to the maximum engine tends Move at MaxSpeed [i], where i = 0 if the previous use This mode is not selected another i. Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor control using the Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0], at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+    When choosing CTL_MODE = 1 switches motor control with the joystick. In
+    this mode, the joystick to the maximum engine tends Move at MaxSpeed [i],
+    where i = 0 if the previous use This mode is not selected another i.
+    Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor
+    control using the Left / right. When you click on the button motor starts
+    to move in the appropriate direction at a speed MaxSpeed [0], at the end
+    of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition
+    from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2056,19 +2112,26 @@ def get_control_settings(device_id: DeviceT) -> ControlSettings:
     control_settings = control_settings_t()
     _check_result(lib.get_control_settings(device_id, byref(control_settings)))
     return ControlSettings(control_settings.MaxSpeed,
-                        control_settings.uMaxSpeed,
-                        control_settings.Timeout,
-                        control_settings.MaxClickTime,
-                        control_settings.Flags,
-                        control_settings.DeltaPosition,
-                        control_settings.uDeltaPosition)
+                           control_settings.uMaxSpeed,
+                           control_settings.Timeout,
+                           control_settings.MaxClickTime,
+                           control_settings.Flags,
+                           control_settings.DeltaPosition,
+                           control_settings.uDeltaPosition)
 
 
 def get_control_settings_calb(device_id: DeviceT,
                               calibration: Calibration) -> ControlSettingsCalb:
     """Read settings of motor control which use user units.
 
-    When choosing CTL_MODE = 1 switches motor control with the joystick. In this mode, the joystick to the maximum engine tends Move at MaxSpeed [i], where i = 0 if the previous use This mode is not selected another i. Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor control using the Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0], at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+    When choosing CTL_MODE = 1 switches motor control with the joystick. In
+    this mode, the joystick to the maximum engine tends Move at MaxSpeed [i],
+    where i = 0 if the previous use This mode is not selected another i.
+    Buttons switch the room rate i. When CTL_MODE = 2 is switched on motor
+    control using the Left / right. When you click on the button motor starts
+    to move in the appropriate direction at a speed MaxSpeed [0], at the end
+    of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at Transition
+    from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2092,7 +2155,20 @@ def set_joystick_settings(device_id: DeviceT,
                           settings: JoystickSettings) -> None:
     """Set settings of joystick.
 
-    If joystick position is outside DeadZone limits from the central position a movement with speed, defined by the joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits correspond to zero speed (soft stop of motion) and positions beyond Low and High limits correspond MaxSpeed [i] or -MaxSpeed [i] (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL). If next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list shouldn't be zero. The DeadZone ranges are illustrated on the following picture. !/attachments/download/5563/range25p.png! The relationship between the deviation and the rate is exponential, allowing no switching speed combine high mobility and accuracy. The following picture illustrates this: !/attachments/download/3092/ExpJoystick.png! The nonlinearity parameter is adjustable. Setting it to zero makes deviation/speed relation linear.
+    If joystick position is outside DeadZone limits from the central position
+    a movement with speed, defined by the joystick DeadZone edge to 100%
+    deviation, begins. Joystick positions inside DeadZone limits correspond to
+    zero speed (soft stop of motion) and positions beyond Low and High limits
+    correspond MaxSpeed [i] or -MaxSpeed [i] (see command SCTL), where i = 0
+    by default and can be changed with left/right buttons (see command SCTL).
+    If next speed in list is zero (both integer and microstep parts), the
+    button press is ignored. First speed in list shouldn't be zero. The
+    DeadZone ranges are illustrated on the following picture.
+    !/attachments/download/5563/range25p.png! The relationship between the
+    deviation and the rate is exponential, allowing no switching speed combine
+    high mobility and accuracy. The following picture illustrates this:
+    !/attachments/download/3092/ExpJoystick.png! The nonlinearity parameter is
+    adjustable. Setting it to zero makes deviation/speed relation linear.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2112,7 +2188,20 @@ def set_joystick_settings(device_id: DeviceT,
 def get_joystick_settings(device_id: DeviceT) -> JoystickSettings:
     """Read settings of joystick.
 
-    If joystick position is outside DeadZone limits from the central position a movement with speed, defined by the joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits correspond to zero speed (soft stop of motion) and positions beyond Low and High limits correspond MaxSpeed [i] or -MaxSpeed [i] (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL). If next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list shouldn't be zero. The DeadZone ranges are illustrated on the following picture. !/attachments/download/5563/range25p.png! The relationship between the deviation and the rate is exponential, allowing no switching speed combine high mobility and accuracy. The following picture illustrates this: !/attachments/download/3092/ExpJoystick.png! The nonlinearity parameter is adjustable. Setting it to zero makes deviation/speed relation linear.
+    If joystick position is outside DeadZone limits from the central position
+    a movement with speed, defined by the joystick DeadZone edge to 100%
+    deviation, begins. Joystick positions inside DeadZone limits correspond to
+    zero speed (soft stop of motion) and positions beyond Low and High limits
+    correspond MaxSpeed [i] or -MaxSpeed [i] (see command SCTL), where i = 0
+    by default and can be changed with left/right buttons (see command SCTL).
+    If next speed in list is zero (both integer and microstep parts), the
+    button press is ignored. First speed in list shouldn't be zero. The
+    DeadZone ranges are illustrated on the following picture.
+    !/attachments/download/5563/range25p.png! The relationship between the
+    deviation and the rate is exponential, allowing no switching speed combine
+    high mobility and accuracy. The following picture illustrates this:
+    !/attachments/download/3092/ExpJoystick.png! The nonlinearity parameter is
+    adjustable. Setting it to zero makes deviation/speed relation linear.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2134,7 +2223,17 @@ def set_ctp_settings(device_id: DeviceT,
                      settings: CtpSettings) -> None:
     """Set settings of control position(is only used with stepper motor).
 
-    When controlling the step motor with encoder (CTP_BASE 0) it is possible to detect the loss of steps. The controller knows the number of steps per revolution (GENG :: StepsPerRev) and the encoder resolution (GFBS :: IPT). When the control (flag CTP_ENABLED), the controller stores the current position in the footsteps of SM and the current position of the encoder. Further, at each step of the position encoder is converted into steps and if the difference is greater CTPMinError, a flag STATE_CTP_ERROR. When controlling the step motor with speed sensor (CTP_BASE 1), the position is controlled by him. The active edge of input clock controller stores the current value of steps. Further, at each turn checks how many steps shifted. When a mismatch CTPMinError a flag STATE_CTP_ERROR.
+    When controlling the step motor with encoder (CTP_BASE 0) it is possible
+    to detect the loss of steps. The controller knows the number of steps per
+    revolution (GENG :: StepsPerRev) and the encoder resolution (GFBS :: IPT).
+    When the control (flag CTP_ENABLED), the controller stores the current
+    position in the footsteps of SM and the current position of the encoder.
+    Further, at each step of the position encoder is converted into steps and
+    if the difference is greater CTPMinError, a flag STATE_CTP_ERROR. When
+    controlling the step motor with speed sensor (CTP_BASE 1), the position is
+    controlled by him. The active edge of input clock controller stores the
+    current value of steps. Further, at each turn checks how many steps
+    shifted. When a mismatch CTPMinError a flag STATE_CTP_ERROR.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2150,7 +2249,17 @@ def set_ctp_settings(device_id: DeviceT,
 def get_ctp_settings(device_id: DeviceT) -> CtpSettings:
     """Read settings of control position(is only used with stepper motor).
 
-    When controlling the step motor with encoder (CTP_BASE 0) it is possible to detect the loss of steps. The controller knows the number of steps per revolution (GENG :: StepsPerRev) and the encoder resolution (GFBS :: IPT). When the control (flag CTP_ENABLED), the controller stores the current position in the footsteps of SM and the current position of the encoder. Further, at each step of the position encoder is converted into steps and if the difference is greater CTPMinError, a flag STATE_CTP_ERROR. When controlling the step motor with speed sensor (CTP_BASE 1), the position is controlled by him. The active edge of input clock controller stores the current value of steps. Further, at each turn checks how many steps shifted. When a mismatch CTPMinError a flag STATE_CTP_ERROR.
+    When controlling the step motor with encoder (CTP_BASE 0) it is possible
+    to detect the loss of steps. The controller knows the number of steps per
+    revolution (GENG :: StepsPerRev) and the encoder resolution (GFBS :: IPT).
+    When the control (flag CTP_ENABLED), the controller stores the current
+    position in the footsteps of SM and the current position of the encoder.
+    Further, at each step of the position encoder is converted into steps and
+    if the difference is greater CTPMinError, a flag STATE_CTP_ERROR. When
+    controlling the step motor with speed sensor (CTP_BASE 1), the position is
+    controlled by him. The active edge of input clock controller stores the
+    current value of steps. Further, at each turn checks how many steps
+    shifted. When a mismatch CTPMinError a flag STATE_CTP_ERROR.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2272,7 +2381,8 @@ def set_calibration_settings(device_id: DeviceT,
                              settings: CalibrationSettings) -> None:
     """Set calibration settings.
 
-    This function send structure with calibration settings to controller's memory.
+    This function send structure with calibration settings to controller's
+    memory.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2314,7 +2424,8 @@ def set_emf_settings(device_id: DeviceT,
                      settings: EmfSettings) -> None:
     """Set electromechanical coefficients.
 
-    The settings are different for different stepper motors. Please download the new settings when you change the motor.
+    The settings are different for different stepper motors. Please download
+    the new settings when you change the motor.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2669,6 +2780,7 @@ def get_accessories_settings(device_id: DeviceT) -> AccessoriesSettings:
                                accessories_settings.TSSettings,
                                accessories_settings.LimitSwitchesSettings)
 
+
 def set_controller_name(device_id: DeviceT,
                         name: ControllerName) -> None:
     """Write user controller name and flags of setting from FRAM.
@@ -2697,7 +2809,8 @@ def get_controller_name(device_id: DeviceT) -> ControllerName:
     _check_result(lib.get_controller_name(device_id, byref(controller_name)))
     return ControllerName(controller_name.ControllerName,
                           controller_name.CtrlFlags)
-    
+
+
 def set_nonvolatile_memory(device_id: DeviceT,
                            memory: NonvolatileMemory) -> None:
     """Write userdata into FRAM.
@@ -2763,7 +2876,9 @@ def command_move_calb(device_id: DeviceT,
                       calibration: Calibration) -> None:
     """Move to position which use user units.
 
-    Upon receiving the command "move" the engine starts to move with pre-set parameters (speed, acceleration, retention), to the point specified to the Position.
+    Upon receiving the command "move" the engine starts to move with pre-set
+    parameters (speed, acceleration, retention), to the point specified to the
+    Position.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2771,7 +2886,7 @@ def command_move_calb(device_id: DeviceT,
     :type position: float
     :param calibration: calibration
     :type calibration: Calibration
-    """                      
+    """
     _check_device_id(device_id)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.command_move_calb(device_t, position, byref(calib)))
@@ -2782,13 +2897,19 @@ def command_movr(device_id: DeviceT,
                  udelta_position: int) -> None:
     """Move to offset.
 
-    Upon receiving the command "movr" engine starts to move with pre-set parameters (speed, acceleration, hold), left or right (depending on the sign of DeltaPosition) by the number of pulses specified in the fields DeltaPosition, uDeltaPosition. For stepper motor uDeltaPosition sets the microstep, for DC motor this field is not used.
+    Upon receiving the command "movr" engine starts to move with pre-set
+    parameters (speed, acceleration, hold), left or right (depending on the
+    sign of DeltaPosition) by the number of pulses specified in the fields
+    DeltaPosition, uDeltaPosition. For stepper motor uDeltaPosition sets the
+    microstep, for DC motor this field is not used.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
     :param delta_position: shift from initial position.
     :type delta_position: int
-    :param udelta_position: part of the offset shift, microsteps. Microstep size and the range of valid values for this field depend on selected step division mode (see MicrostepMode field in engine_settings).
+    :param udelta_position: part of the offset shift, microsteps. Microstep
+    size and the range of valid values for this field depend on selected step
+    division mode (see MicrostepMode field in engine_settings).
     :type udelta_position: int
     """
     _check_device_id(device_id)
@@ -2800,7 +2921,9 @@ def command_movr_calb(device_id: DeviceT,
                       calibration: Calibration) -> None:
     """Move to offset using user units.
 
-    Upon receiving the command "movr" engine starts to move with pre-set parameters (speed, acceleration, hold), left or right (depending on the sign of DeltaPosition) the distance specified in the field DeltaPosition.
+    Upon receiving the command "movr" engine starts to move with pre-set
+    parameters (speed, acceleration, hold), left or right (depending on the
+    sign of DeltaPosition) the distance specified in the field DeltaPosition.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2817,7 +2940,21 @@ def command_movr_calb(device_id: DeviceT,
 def command_home(device_id: DeviceT) -> None:
     """The positive direction is to the right.
 
-    A value of zero reverses the direction of the direction of the flag, the set speed. Restriction imposed by the trailer, act the same, except that the limit switch contact does not stop. Limit the maximum speed, acceleration and deceleration function. 1) moves the motor according to the speed FastHome, uFastHome and flag HOME_DIR_FAST until limit switch, if the flag is set HOME_STOP_ENDS, until the signal from the input synchronization if the flag HOME_STOP_SYNC (as accurately as possible is important to catch the moment of operation limit switch) or until the signal is received from the speed sensor, if the flag HOME_STOP_REV_SN 2) then moves according to the speed SlowHome, uSlowHome and flag HOME_DIR_SLOW until signal from the clock input, if the flag HOME_MV_SEC. If the flag HOME_MV_SEC reset skip this paragraph. 3) then move the motor according to the speed FastHome, uFastHome and flag HOME_DIR_SLOW a distance HomeDelta, uHomeDelta. description of flags and variable see in description for commands GHOM/SHOM
+    A value of zero reverses the direction of the direction of the flag, the
+    set speed. Restriction imposed by the trailer, act the same, except that
+    the limit switch contact does not stop. Limit the maximum speed,
+    acceleration and deceleration function. 1) moves the motor according to
+    the speed FastHome, uFastHome and flag HOME_DIR_FAST until limit switch,
+    if the flag is set HOME_STOP_ENDS, until the signal from the input
+    synchronization if the flag HOME_STOP_SYNC (as accurately as possible is
+    important to catch the moment of operation limit switch) or until the
+    signal is received from the speed sensor, if the flag HOME_STOP_REV_SN 2)
+    then moves according to the speed SlowHome, uSlowHome and flag
+    HOME_DIR_SLOW until signal from the clock input, if the flag HOME_MV_SEC.
+    If the flag HOME_MV_SEC reset skip this paragraph. 3) then move the motor
+    according to the speed FastHome, uFastHome and flag HOME_DIR_SLOW a
+    distance HomeDelta, uHomeDelta. description of flags and variable see in
+    description for commands GHOM/SHOM
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2847,7 +2984,8 @@ def command_right(device_id: DeviceT) -> None:
 
 
 def command_loft(device_id: DeviceT) -> None:
-    """Upon receiving the command "loft" the engine is shifted from the current point to a distance GENG :: Antiplay, then move to the same point.
+    """Upon receiving the command "loft" the engine is shifted from the
+    current point to a distance GENG :: Antiplay, then move to the same point.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2870,11 +3008,13 @@ def command_sstp(device_id: DeviceT) -> None:
 
 def get_position_calb(device_id: DeviceT,
                       calibration: Calibration) -> None:
-    """Reads position value in user units for stepper motor and encoder steps all engines.
+    """Reads position value in user units for stepper motor and encoder steps
+    all engines.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param position: structure contains move settings: speed, acceleration, deceleration etc.
+    :param position: structure contains move settings: speed, acceleration,
+    deceleration etc.
     :type position: GetPositionCalb
     :param calibration: 	user unit settings
     :type calibration: Calibration
@@ -2889,13 +3029,15 @@ def get_position_calb(device_id: DeviceT,
 
 def set_position(device_id: DeviceT,
                  position: SetPosition) -> None:
-    """Sets any position value in steps and micro for stepper motor and encoder steps of all engines.
+    """Sets any position value in steps and micro for stepper motor and
+    encoder steps of all engines.
 
     It means, that changing main indicator of position.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param position: structure contains move settings: speed, acceleration, deceleration etc.
+    :param position: structure contains move settings: speed, acceleration,
+    deceleration etc.
     :type position: SetPosition
     """
     _check_device_id(device_id)
@@ -2909,13 +3051,15 @@ def set_position(device_id: DeviceT,
 def set_position_calb(device_id: DeviceT,
                       position: SetPositionCalb,
                       calibration: Calibration) -> None:
-    """Sets any position value and encoder value of all engines which use user units.
+    """Sets any position value and encoder value of all engines which use user
+    units.
 
     It means, that changing main indicator of position.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param position: structure contains move settings: speed, acceleration, deceleration etc.
+    :param position: structure contains move settings: speed, acceleration,
+    deceleration etc.
     :type position: SetPosition
     :param calibration: user unit settings
     :type calibration: Calibration
@@ -2929,9 +3073,17 @@ def set_position_calb(device_id: DeviceT,
 
 
 def command_zero(device_id: DeviceT) -> None:
-    """Sets the current position and the position in which the traffic moves by the move command and movr zero for all cases, except for movement to the target position.
+    """Sets the current position and the position in which the traffic moves
+    by the move command and movr zero for all cases, except for movement to
+    the target position.
 
-    In the latter case, set the zero current position and the target position counted so that the absolute position of the destination is the same. That is, if we were at 400 and moved to 500, then the command Zero makes the current position of 0, and the position of the destination - 100. Does not change the mode of movement that is if the motion is carried, it continues, and if the engine is in the "hold", the type of retention remains.
+    In the latter case, set the zero current position and the target position
+    counted so that the absolute position of the destination is the same. That
+    is, if we were at 400 and moved to 500, then the command Zero makes the
+    current position of 0, and the position of the destination - 100. Does not
+    change the mode of movement that is if the motion is carried, it
+    continues, and if the engine is in the "hold", the type of retention
+    remains.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2941,7 +3093,8 @@ def command_zero(device_id: DeviceT) -> None:
 
 
 def command_save_settings(device_id: DeviceT) -> None:
-    """Save all settings from controller's RAM to controller's flash memory, replacing previous data in controller's flash memory.
+    """Save all settings from controller's RAM to controller's flash memory,
+    replacing previous data in controller's flash memory.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2951,7 +3104,8 @@ def command_save_settings(device_id: DeviceT) -> None:
 
 
 def command_read_settings(device_id: DeviceT) -> None:
-    """Read all settings from controller's flash memory to controller's RAM, replacing previous data in controller's RAM.
+    """Read all settings from controller's flash memory to controller's RAM,
+    replacing previous data in controller's RAM.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2961,7 +3115,9 @@ def command_read_settings(device_id: DeviceT) -> None:
 
 
 def command_save_robust_settings(device_id: DeviceT) -> None:
-    """Save important settings (calibration coefficients and etc.) from controller's RAM to controller's flash memory, replacing previous data in controller's flash memory.
+    """Save important settings (calibration coefficients and etc.) from
+    controller's RAM to controller's flash memory, replacing previous data in
+    controller's flash memory.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2971,7 +3127,9 @@ def command_save_robust_settings(device_id: DeviceT) -> None:
 
 
 def command_read_robust_settings(device_id: DeviceT) -> None:
-    """Read important settings (calibration coefficients and etc.) from controller's flash memory to controller's RAM, replacing previous data in controller's RAM.
+    """Read important settings (calibration coefficients and etc.) from
+    controller's flash memory to controller's RAM, replacing previous data in
+    controller's RAM.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2981,7 +3139,9 @@ def command_read_robust_settings(device_id: DeviceT) -> None:
 
 
 def command_eesave_settings(device_id: DeviceT) -> None:
-    """Save settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn`t change without it mechanical reconstruction.
+    """Save settings from controller's RAM to stage's EEPROM memory, which
+    spontaneity connected to stage and it isn`t change without it mechanical
+    reconstruction.
 
     Can be used by manufacturer onl
 
@@ -2993,7 +3153,9 @@ def command_eesave_settings(device_id: DeviceT) -> None:
 
 
 def command_eeread_settings(device_id: DeviceT) -> None:
-    """Read settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn`t change without it mechanical reconstruction.
+    """Read settings from controller's RAM to stage's EEPROM memory, which
+    spontaneity connected to stage and it isn`t change without it mechanical
+    reconstruction.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3013,9 +3175,14 @@ def command_start_measurements(device_id: DeviceT) -> None:
 
 
 def get_measurements(device_id: DeviceT) -> Measurements:
-    """A command to read the data buffer to build a speed graph and a sequence error.
+    """A command to read the data buffer to build a speed graph and a sequence
+    error.
 
-    Filling the buffer starts with the command "start_measurements". The buffer holds 25 points, the points are taken with a period of 1 ms. To create a robust system, read data every 20 ms, if the buffer is completely full, then it is recommended to repeat the readings every 5 ms until the buffer again becomes filled with 20 points.
+    Filling the buffer starts with the command "start_measurements". The
+    buffer holds 25 points, the points are taken with a period of 1 ms. To
+    create a robust system, read data every 20 ms, if the buffer is completely
+    full, then it is recommended to repeat the readings every 5 ms until the
+    buffer again becomes filled with 20 points.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3034,7 +3201,8 @@ def get_measurements(device_id: DeviceT) -> Measurements:
 def get_chart_data(device_id: DeviceT) -> ChartData:
     """Return device electrical parameters, useful for charts.
 
-    Useful function that fill structure with snapshot of controller voltages and currents.
+    Useful function that fill structure with snapshot of controller voltages
+    and currents.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3092,7 +3260,8 @@ def get_firmware_version(device_id: DeviceT) -> 'tuple[int]':
 def service_command_updf(device_id: DeviceT) -> None:
     """Command puts the controller to update the firmware.
 
-    After receiving this command, the firmware board sets a flag (for loader), sends echo reply and restarts the controller.
+    After receiving this command, the firmware board sets a flag (for loader),
+    sends echo reply and restarts the controller.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3103,9 +3272,12 @@ def service_command_updf(device_id: DeviceT) -> None:
 
 def set_serial_number(device_id: DeviceT,
                       serial: SerialNumber) -> None:
-    """Write device serial number and hardware version to controller's flash memory.
+    """Write device serial number and hardware version to controller's flash
+    memory.
 
-    Along with the new serial number and hardware version a "Key" is transmitted. The SN and hardware version are changed and saved when keys match. Can be used by manufacturer only.
+    Along with the new serial number and hardware version a "Key" is
+    transmitted. The SN and hardware version are changed and saved when keys
+    match. Can be used by manufacturer only.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3122,9 +3294,11 @@ def set_serial_number(device_id: DeviceT,
 
 
 def get_analog_data(device_id: DeviceT) -> AnalogData:
-    """Read analog data structure that contains raw analog data from ADC embedded on board.
+    """Read analog data structure that contains raw analog data from ADC
+    embedded on board.
 
-    This function used for device testing and deep recalibraton by manufacturer only.
+    This function used for device testing and deep recalibraton by
+    manufacturer only.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3414,11 +3588,13 @@ def get_init_random(device_id: DeviceT) -> InitRandom:
 def get_globally_unique_identifier(device_id: DeviceT) -> GloballyUniqueIdentifier:
     """This value is unique to each individual die but is not a random value.
 
-    This unique device identifier can be used to initiate secure boot processes or as a serial number for USB or other end applications.
+    This unique device identifier can be used to initiate secure boot
+    processes or as a serial number for USB or other end applications.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :return: the result of fields 0-3 concatenated defines the unique 128-bit device identifier.
+    :return: the result of fields 0-3 concatenated defines the unique 128-bit
+    device identifier.
     :rtype: GloballyUniqueIdentifier
     """
     _check_device_id(device_id)
@@ -3435,7 +3611,10 @@ def goto_firmware(device_id: DeviceT) -> int:
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :return: RESULT_OK, if reboot to firmware is possible. Reboot is done after reply to this command. RESULT_NO_FIRMWARE, if firmware is not found. RESULT_ALREADY_IN_FIRMWARE, if this command was sent when controller is already in firmware.
+    :return: RESULT_OK, if reboot to firmware is possible. Reboot is done
+    after reply to this command. RESULT_NO_FIRMWARE, if firmware is not found.
+    RESULT_ALREADY_IN_FIRMWARE, if this command was sent when controller is
+    already in firmware.
     :rtype: c_uint8
     """
     _check_device_id(device_id)
@@ -3456,7 +3635,7 @@ def has_firmware(uri: str) -> int:
     _check_result(lib.has_firmware(uri, byref(ret)))
     return int(ret)
 
-    
+
 def command_update_firmware(uri: str,
                             data: str,
                             size: int) -> None:
@@ -3491,13 +3670,22 @@ def write_key(uri: str,
 
 def load_correction_table(device_id: DeviceT,
                           namefile: str) -> None:
-    """Command of loading a correction table from a text file (this function is deprecated).
+    """Command of loading a correction table from a text file (this function
+    is deprecated).
 
-    Use the function set_correction_table(device_t id, const char* namefile). The correction table is used for position correction in case of mechanical inaccuracies. It works for some parameters in _calb commands.
+    Use the function set_correction_table(device_t id, const char* namefile).
+    The correction table is used for position correction in case of mechanical
+    inaccuracies. It works for some parameters in _calb commands.
 
     :param device_id: an identifier the device
     :type device_id: DeviceT
-    :param namefile: the file name must be fully qualified. If the short name is used, the file must be located in the application directory. If the file name is set to NULL, the correction table will be cleared. File format: two tab-separated columns. Column headers are string. Data is real, the point is a determiter. The first column is a coordinate. The second one is the deviation caused by a mechanical error. The maximum length of a table is 100 rows.
+    :param namefile: the file name must be fully qualified. If the short name
+    is used, the file must be located in the application directory. If the
+    file name is set to NULL, the correction table will be cleared. File
+    format: two tab-separated columns. Column headers are string. Data is real,
+    the point is a determiter. The first column is a coordinate. The second
+    one is the deviation caused by a mechanical error. The maximum length of a
+    table is 100 rows.
     :type namefile: str
     """
     _check_device_id(device_id)
@@ -3528,7 +3716,15 @@ def enumerate_devices(enumerate_flags: int,
     :return: device enumeration structure.
     :rtype: DeviceInformation
 
-    hints is a string of form "key=value \n key2=value2". Unrecognized key-value pairs are ignored. Key list: addr - used together with ENUMERATE_NETWORK flag. Non-null value is a remote host name or a comma-separated list of host names which contain the devices to be found, absent value means broadcast discovery. adapter_addr - used together with ENUMERATE_NETWORK flag. Non-null value is a IP address of network adapter. Remote ximc device must be on the same local network as the adapter. When using the adapter_addr key, you must set the addr key. Example: "addr= \n adapter_addr=192.168.0.100".
+    hints is a string of form "key=value \n key2=value2". Unrecognized
+    key-value pairs are ignored. Key list: addr - used together with
+    ENUMERATE_NETWORK flag. Non-null value is a remote host name or a
+    comma-separated list of host names which contain the devices to be found,
+    absent value means broadcast discovery. adapter_addr - used together with
+    ENUMERATE_NETWORK flag. Non-null value is a IP address of network adapter.
+    Remote ximc device must be on the same local network as the adapter. When
+    using the adapter_addr key, you must set the addr key. Example: "addr= \n
+    adapter_addr=192.168.0.100".
     """
     device_enumeration = lib.enumerate_devices(enumerate_flags, hints)
     return DeviceInformation(device_enumeration.Manufacturer,
@@ -3552,11 +3748,18 @@ def set_correction_table(device_id: DeviceT,
                          namefile: str) -> None:
     """Command of loading a correction table from a text file.
 
-    The correction table is used for position correction in case of mechanical inaccuracies. It works for some parameters in _calb commands.
+    The correction table is used for position correction in case of mechanical
+    inaccuracies. It works for some parameters in _calb commands.
 
     :param device_id: an identifier the device
     :type device_id: DeviceT
-    :param namefile: the file name must be fully qualified. If the short name is used, the file must be located in the application directory. If the file name is set to NULL, the correction table will be cleared. File format: two tab-separated columns. Column headers are string. Data is real, the point is a determiter. The first column is a coordinate. The second one is the deviation caused by a mechanical error. The maximum length of a table is 100 rows.
+    :param namefile: the file name must be fully qualified. If the short name
+    is used, the file must be located in the application directory. If the
+    file name is set to NULL, the correction table will be cleared. File
+    format: two tab-separated columns. Column headers are string. Data is real,
+    the point is a determiter. The first column is a coordinate. The second
+    one is the deviation caused by a mechanical error. The maximum length of a
+    table is 100 rows.
     :type namefile: str
     """
     _check_device_id(device_id)
@@ -3566,7 +3769,9 @@ def set_correction_table(device_id: DeviceT,
 def reset_locks() -> None:
     """Resets the error of incorrect data transmission.
 
-    This function returns only 0 (OK). For example, sending the libximc command ends with an incorrect data transfer (error), any subsequent command always returns -1 (relevant for Windows).
+    This function returns only 0 (OK). For example, sending the libximc
+    command ends with an incorrect data transfer (error), any subsequent
+    command always returns -1 (relevant for Windows).
     """
     lib.reset_locks()
 
@@ -3575,7 +3780,9 @@ def get_status(device_id: DeviceT) -> Status:
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :return: tructure with snapshot of controller status Device state. Useful structure that contains current controller status, including speed, position and boolean flags.
+    :return: tructure with snapshot of controller status Device state. Useful
+    structure that contains current controller status, including speed,
+    position and boolean flags.
     :rtype: Status
     """
     _check_device_id(device_id)
@@ -3603,7 +3810,8 @@ def get_status(device_id: DeviceT) -> Status:
 def get_device_information(device_id: DeviceT) -> DeviceInformation:
     """Return device information.
 
-    All fields must point to allocated string buffers with at least 10 bytes. Works with both raw or initialized device
+    All fields must point to allocated string buffers with at least 10 bytes.
+    Works with both raw or initialized device
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3652,14 +3860,19 @@ def ximc_version() -> str:
 def ximc_fix_usbser_sys(device_uri: str) -> None:
     """Fixing a USB driver error in Windows.
 
-    The USB-COM subsystem in the Windows OS does not always work correctly. During operation, the following malfunctions are possible: All attempts to open the device fail. The device can be opened and data can be sent to it, but the response data is not received. These problems are fixed by reconnecting the device or reinitializing it in the Device Manager. The ximc_fix_usbser_sys() function automates the deletion detection process.
+    The USB-COM subsystem in the Windows OS does not always work correctly.
+    During operation, the following malfunctions are possible: All attempts to
+    open the device fail. The device can be opened and data can be sent to it,
+    but the response data is not received. These problems are fixed by
+    reconnecting the device or reinitializing it in the Device Manager. The
+    ximc_fix_usbser_sys() function automates the deletion detection process.
 
     :param device_uri: device uri
     :type device_uri: str
     """
     lib.ximc_fix_usbser_sys(device_uri)
 
-    
+
 def get_enumerate_device_serial(device_enumeration: device_enumeration_t,
                                 device_index: int) -> int:
     """Get device serial number from the device enumeration.
@@ -3691,7 +3904,6 @@ def get_enumerate_device_information(device_enumeration: device_enumeration_t,
     :return: device information data
     :rtype: DeviceInformation
     """
-    _check_device_id(device_id)
     device_information = device_information_t()
     _check_result(lib.get_enumerate_device_information(device_enumeration, device_index, byref(device_information)))
     return DeviceInformation(device_information.Manufacturer,
@@ -3708,7 +3920,9 @@ def get_status_calb(device_id: DeviceT,
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param calibration: user unit settings Calibrated device state. Useful structure that contains current controller status, including speed, position and boolean flags
+    :param calibration: user unit settings Calibrated device state. Useful
+    structure that contains current controller status, including speed,
+    position and boolean flags
     :type calibration: Calibration
     :return: structure with snapshot of controller status
     :rtype: StatusCalb
@@ -3748,7 +3962,8 @@ def get_enumerate_device_controller_name(device_enumeration: device_enumeration_
     :rtype: str
     """
     name = c_char_p(r'\0'*128)
-    _check_result(lib.get_enumerate_device_controller_name(device_enumeration, device_index, name))
+    _check_result(lib.get_enumerate_device_controller_name(device_enumeration,
+                                                           device_index, name))
     return str(name)
 
 
@@ -3766,10 +3981,10 @@ def get_enumerate_device_stage_name(device_enumeration: device_enumeration_t,
     :rtype: str
     """
     name = c_char_p(r'\0'*128)
-    _check_result(lib.get_enumerate_device_stage_name(device_enumeration, device_index, name))
+    _check_result(lib.get_enumerate_device_stage_name(device_enumeration,
+                                                      device_index, name))
     return str(name)
 
-                                    
 
 def get_enumerate_device_network_information(device_enumeration: device_enumeration_t,
                                              device_index: int) -> device_network_information_t:
@@ -3785,7 +4000,10 @@ def get_enumerate_device_network_information(device_enumeration: device_enumerat
     :rtype: device_network_information_t
     """
     device_network_information = device_network_information_t()
-    _check_result(lib.get_enumerate_device_network_information(device_enumeration, device_index, byref(device_network_information)))
+    _check_result(
+        lib.get_enumerate_device_network_information(device_enumeration,
+                                                     device_index,
+                                                     byref(device_network_information)))
     return device_network_information
 
 
@@ -3795,7 +4013,12 @@ def command_wait_for_stop(device_id: DeviceT,
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param refresh_interval_ms: Status refresh interval. The function waits this number of milliseconds between get_status requests to the controller. Recommended value of this parameter is 10 ms. Use values of less than 3 ms only when necessary - small refresh interval values do not significantly increase response time of the function, but they create substantially more traffic in controller-computer data channel.
+    :param refresh_interval_ms: Status refresh interval. The function waits
+    this number of milliseconds between get_status requests to the controller.
+    Recommended value of this parameter is 10 ms. Use values of less than 3 ms
+    only when necessary - small refresh interval values do not significantly
+    increase response time of the function, but they create substantially more
+    traffic in controller-computer data channel.
     :type refresh_interval_ms: int
     """
     _check_device_id(device_id)
@@ -3817,7 +4040,9 @@ def command_homezero(device_id: DeviceT) -> None:
 def set_bindy_key(keyfilepath: str) -> None:
     """Set network encryption layer (bindy) key.
 
-    :param keyfilepath: full path to the bindy keyfile When using network-attached devices this function must be called before enumerate_devices and open_device functions.
+    :param keyfilepath: full path to the bindy keyfile When using
+    network-attached devices this function must be called before
+    enumerate_devices and open_device functions.
     :type keyfilepath: str
     """
     _check_result(lib.set_bindy_key(keyfilepath))
@@ -3867,7 +4092,8 @@ def close_device(device_id: DeviceT) -> None:
 
 
 def get_position(device_id: DeviceT) -> GetPosition:
-    """Reads the value position in steps and micro for stepper motor and encoder steps all engines.
+    """Reads the value position in steps and micro for stepper motor and
+    encoder steps all engines.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -3889,12 +4115,15 @@ def command_move(device_id: DeviceT,
 
 
 def command_stop(device_id: DeviceT) -> None:
-    """Immediately stop the engine, the transition to the STOP, mode key BREAK (winding short-circuited), the regime "retention" is deactivated for DC motors, keeping current in the windings for stepper motors (with Power management settings).
+    """Immediately stop the engine, the transition to the STOP, mode key BREAK
+    (winding short-circuited), the regime "retention" is deactivated for DC
+    motors, keeping current in the windings for stepper motors (with Power
+    management settings).
 
     When this command is called, the ALARM flag is reset.
 
     :param device_id: an identifier of device
-    :type device_id: DeviceT   
+    :type device_id: DeviceT
     """
     _check_device_id(device_id)
     _check_result(lib.command_stop(device_id))
@@ -3903,7 +4132,10 @@ def command_stop(device_id: DeviceT) -> None:
 def command_power_off(device_id: DeviceT):
     """Immediately power off motor regardless its state.
 
-    Shouldn't be used during motion as the motor could be power on again automatically to continue movement. The command is designed for manual motor power off. When automatic power off after stop is required, use power management system.
+    Shouldn't be used during motion as the motor could be power on again
+    automatically to continue movement. The command is designed for manual
+    motor power off. When automatic power off after stop is required, use
+    power management system.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
