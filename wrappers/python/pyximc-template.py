@@ -933,20 +933,6 @@ class AnalogData:
         self.L = L
 
 
-class DebugRead:
-
-    def __init__(self, DebugData):
-
-        self.DebugData = DebugData
-
-
-class DebugWrite:
-
-    def __init__(self, DebugData):
-
-        self.DebugData = DebugData
-
-
 class StageName:
 
     def __init__(self, PositionerName):
@@ -1521,7 +1507,8 @@ def get_engine_settings(device_id: DeviceT) -> EngineSettings:
                           engine_settings.StepPerRev)
 
 
-def get_engine_settings_calb(device_id: DeviceT) -> EngineSettingsCalb:
+def get_engine_settings_calb(device_id: DeviceT,
+                             calibration: Calibration) -> EngineSettingsCalb:
     """Read engine settings which use user units.
 
     This function fill structure with set of useful motor settings stored in
@@ -1558,7 +1545,7 @@ def set_entype_settings(device_id: DeviceT,
     :type settings: EntypeSettings
     """
     _check_device_id(device_id)
-    entype_settings = entype_Settings_t(settings.EngineType,
+    entype_settings = entype_settings_t(settings.EngineType,
                                         settings.DriverType)
     _check_result(lib.set_entype_settings(device_id,
                                           byref(entype_settings)))
@@ -3397,36 +3384,6 @@ def get_analog_data(device_id: DeviceT) -> AnalogData:
                       analog_data.deprecated,
                       analog_data.R,
                       analog_data.L)
-
-
-def get_debug_read(device_id: DeviceT) -> DebugRead:
-    """Read data from firmware for debug purpose.
-
-    Its use depends on context, firmware version and previous history.
-
-    :param device_id: an identifier of device
-    :type device_id: DeviceT
-    :return: Debug data.
-    :rtype: DebugRead
-    """
-    _check_device_id(device_id)
-    debug_read = debug_read_t()
-    _check_result(lib.get_debug_read(device_id, byref(debug_read)))
-    return DebugRead(debug_read.DebugData)
-
-
-def set_debug_write(device_id: DeviceT,
-                    debug_data: DebugWrite) -> None:
-    """Write data to firmware for debug purpose.
-
-    :param device_id: an identifier of device
-    :type device_id: DeviceT
-    :param debug_data: Debug data.
-    :type debug_data: DebugWrite
-    """
-    _check_device_id(device_id)
-    debug_write = debug_write_t()
-    _check_result(lib.set_debug_write(device_id, byref(debug_write)))
 
 
 def set_stage_name(device_id: DeviceT,
