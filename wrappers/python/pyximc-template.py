@@ -1237,7 +1237,8 @@ def set_feedback_settings(device_id: DeviceT,
                                             settings.FeedbackType,
                                             settings.FeedbackFlags,
                                             settings.CountsPerTurn)
-    _check_result(lib.set_feedback_settings(device_id, byref(feedback_settings)))
+    _check_result(lib.set_feedback_settings(device_id,
+                                            byref(feedback_settings)))
 
 
 def get_feedback_settings(device_id: DeviceT) -> FeedbackSettings:
@@ -1248,8 +1249,10 @@ def get_feedback_settings(device_id: DeviceT) -> FeedbackSettings:
     :return: feedback settings
     :rtype: FeedbackSettings
     """
+    _check_device_id(device_id)
     feedback_settings = feedback_settings_t()
-    _check_result(lib.get_feedback_settings(device_id, byref(feedback_settings)))
+    _check_result(lib.get_feedback_settings(device_id,
+                                            byref(feedback_settings)))
     return FeedbackSettings(feedback_settings.IPS,
                             feedback_settings.FeedbackType,
                             feedback_settings.FeedbackFlags,
@@ -1268,6 +1271,7 @@ def set_home_settings(device_id: DeviceT,
     :param settings: home settings
     :type settings: HomeSettings
     """
+    _check_device_id(device_id)
     home_settings = home_settings_t(settings.FastHome,
                                     settings.uFastHome,
                                     settings.SlowHome,
@@ -1287,6 +1291,7 @@ def get_home_settings(device_id: DeviceT) -> HomeSettings:
     :return: home settings
     :rtype: HomeSettings
     """
+    _check_device_id(device_id)
     home_settings = home_settings_t()
     _check_result(lib.get_home_settings(device_id, byref(home_settings)))
     return HomeSettings(home_settings.FastHome,
@@ -1313,6 +1318,7 @@ def set_home_settings_calb(device_id: DeviceT,
     :param calibration: calibration
     :type calibration: Calibration
     """
+    _check_device_id(device_id)
     home_settings = home_settings_calb_t(settings.FastHome,
                                          settings.SlowHome,
                                          settings.HomeDelta,
@@ -1336,6 +1342,7 @@ def get_home_settings_calb(device_id: DeviceT,
     :return: calibration home settings
     :rtype: HomeSettingsCalb
     """
+    _check_device_id(device_id)
     home_settings = home_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_home_settings_calb(device_id,
@@ -1373,13 +1380,16 @@ def set_move_settings_calb(device_id: DeviceT,
     :param calibration: calibration
     :type calibration: Calibration
     """
+    _check_device_id(device_id)
     move_settings = move_settings_calb_t(settings.Speed,
                                          settings.Accel,
                                          settings.Decel,
                                          settings.AntiplaySpeed,
                                          settings.MoveFlags)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_move_settings_calb(device_id, byref(move_settings), byref(calib)))
+    _check_result(lib.set_move_settings_calb(device_id,
+                                             byref(move_settings),
+                                             byref(calib)))
 
 
 def get_move_settings(device_id: DeviceT) -> MoveSettings:
@@ -1414,6 +1424,7 @@ def get_move_settings_calb(device_id: DeviceT,
     :retunr: calibration move settings
     :rtype: MoveSettingsCalb
     """
+    _check_device_id(device_id)
     move_settings = move_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_move_settings_calb(device_id,
@@ -1471,6 +1482,7 @@ def set_engine_settings_calb(device_id: DeviceT,
     :param calibration: calibration
     :type calibration: Calibration
     """
+    _check_device_id(device_id)
     engine_settings = engine_settings__calb_t(settings.NomVoltage,
                                               settings.NomCurrent,
                                               settings.NomSpeed,
@@ -1496,6 +1508,7 @@ def get_engine_settings(device_id: DeviceT) -> EngineSettings:
     :return: engine settings
     :rtype: EngineSettings
     """
+    _check_device_id(device_id)
     engine_settings = engine_settings_t()
     _check_result(lib.get_engine_settings(device_id, byref(engine_settings)))
     return EngineSettings(engine_settings.NomVoltage,
@@ -1520,6 +1533,7 @@ def get_engine_settings_calb(device_id: DeviceT) -> EngineSettingsCalb:
     :return: calibration engine settings
     :rtype: EngineSettingsCalb
     """
+    _check_device_id(device_id)
     engine_settings = engine_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_engine_settings_calb(device_id,
@@ -1543,9 +1557,11 @@ def set_entype_settings(device_id: DeviceT,
     :param settings: entype settings
     :type settings: EntypeSettings
     """
+    _check_device_id(device_id)
     entype_settings = entype_Settings_t(settings.EngineType,
                                         settings.DriverType)
-    _check_result(lib.set_entype_settings(device_id, byref(entype_settings)))
+    _check_result(lib.set_entype_settings(device_id,
+                                          byref(entype_settings)))
 
 
 def get_entype_settings(device_id: DeviceT) -> EntypeSettings:
@@ -1556,8 +1572,10 @@ def get_entype_settings(device_id: DeviceT) -> EntypeSettings:
     :return: entype settings
     :rtype: EntypeSettings
     """
+    _check_device_id(device_id)
     entype_settings = entype_settings_t()
-    _check_result(lib.get_entype_settings(device_id, byref(entype_settings)))
+    _check_result(lib.get_entype_settings(device_id,
+                                          byref(entype_settings)))
     return EntypeSettings(entype_settings.EngineType,
                           entype_settings.DriverType)
 
@@ -1573,6 +1591,7 @@ def set_power_settings(device_id: DeviceT,
     :param settings: power settings
     :type settings: PowerSettings
     """
+    _check_device_id(device_id)
     power_settings = power_settings_t(settings.HoldCurrent,
                                       settings.CurrReductDelay,
                                       settings.PowerOffDelay,
@@ -1591,6 +1610,7 @@ def get_power_settings(device_id: DeviceT) -> PowerSettings:
     :return: power settings
     :rtype: PowerSettings
     """
+    _check_device_id(device_id)
     power_settings = power_settings_t()
     _check_result(lib.get_power_settings(device_id, byref(power_settings)))
     return PowerSettings(power_settings.HoldCurrent,
@@ -1609,6 +1629,7 @@ def set_secure_settings(device_id: DeviceT,
     :param settings: secure settings
     :type settings: SecureSettings
     """
+    _check_device_id(device_id)
     secure_settings = secure_settings_t(settings.LowUpwrOff,
                                         settings.CriticalIpwr,
                                         settings.CriticalUpwr,
@@ -1628,6 +1649,7 @@ def get_secure_settings(device_id: DeviceT) -> SecureSettings:
     :return: secure settings
     :rtype: SecureSettings
     """
+    _check_device_id(device_id)
     secure_settings = secure_settings_t()
     _check_result(lib.get_secure_settings(device_id, byref(secure_settings)))
     return SecureSettings(secure_settings.LowUpwrOff,
@@ -1649,6 +1671,7 @@ def set_edges_settings(device_id: DeviceT,
     :param settings: edges settings
     :type settings: EdgesSettings
     """
+    _check_device_id(device_id)
     edges_settings = edges_settings_t(settings.BorderFlags,
                                       settings.EnderFlags,
                                       settings.LeftBorder,
@@ -1668,6 +1691,7 @@ def set_edges_settings_calb(device_id: DeviceT,
     :param settings: calibration edges settings
     :type settings: EdgesSettings
     """
+    _check_device_id(device_id)
     edges_settings = edges_settings_calb_t(settings.BorderFlags,
                                            settings.EnderFlags,
                                            settings.LeftBorder,
@@ -1686,6 +1710,7 @@ def get_edges_settings(device_id: DeviceT) -> EdgesSettings:
     :return: edges settings
     :rtype: EdgesSettings
     """
+    _check_device_id(device_id)
     edges_settings = edges_settings_t()
     _check_result(lib.get_edges_settings(device_id, byref(edges_settings)))
     return EdgesSettings(edges_settings.BorderFlags,
@@ -1705,6 +1730,7 @@ def get_edges_settings_calb(device_id: DeviceT,
     :return: calibration edges settings
     :rtype: EdgesSettingsCalb
     """
+    _check_device_id(device_id)
     edges_settings = edges_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_edges_settings_calb(device_id,
@@ -1732,6 +1758,7 @@ def set_pid_settings(device_id: DeviceT,
     :param settings: PID settings
     :type settings: PidSettings
     """
+    _check_device_id(device_id)
     pid_settings = pid_settings_t(settings.KpU,
                                   settings.KiU,
                                   settings.KdU,
@@ -1755,6 +1782,7 @@ def get_pid_settings(device_id: DeviceT) -> PidSettings:
     :return: PID settings
     :rtype: PidSettings
     """
+    _check_device_id(device_id)
     pid_settings = pid_settings_t()
     _check_result(lib.get_pid_settings(device_id, byref(pid_settings)))
     return PidSettings(pid_settings.KpU,
@@ -1778,6 +1806,7 @@ def set_sync_in_settings(device_id: DeviceT,
     :param settings: sync in settings
     :type settings: SyncInSettings
     """
+    _check_device_id(device_id)
     sync_in_settings = sync_in_settings_t(settings.SyncInFlags,
                                           settings.ClutterTime,
                                           settings.Position,
@@ -1803,6 +1832,7 @@ def set_sync_in_settings_calb(device_id: DeviceT,
     :param calibration: calibration
     :type calibration: Calibration
     """
+    _check_device_id(device_id)
     sync_in_settings = sync_in_settings_calb_t(settings.SyncInFlags,
                                                settings.ClutterTime,
                                                settings.Position,
@@ -1825,6 +1855,7 @@ def get_sync_in_settings(device_id: DeviceT) -> SyncInSettings:
     :return: sync in settings
     :rtype: SyncInSettings
     """
+    _check_device_id(device_id)
     sync_in_settings = sync_in_settings_t()
     _check_result(lib.get_sinc_in_settings(device_id, byref(sync_in_settings)))
     return SyncInSettings(sync_in_settings.SyncInFlags,
@@ -1850,6 +1881,7 @@ def get_sync_in_settings_calb(device_id: DeviceT,
     :return: calibration sync in settings
     :rtype: SyncInSettingsCalb
     """
+    _check_device_id(device_id)
     sync_in_settings = sync_in_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_sinc_in_settings_calb(device_id,
@@ -1874,12 +1906,14 @@ def set_sync_out_settings(device_id: DeviceT,
     :param settings: sync out settings
     :type settings: SyncOutSettings
     """
+    _check_device_id(device_id)
     sync_out_settings = sync_out_settings_t(settings.SyncOutFlags,
                                             settings.SyncOutPulseSteps,
                                             settings.SyncOutPeriod,
                                             settings.Accuracy,
                                             settings.uAccuracy)
-    _check_result(lib.set_sync_out_settings(device_id, byref(sync_out_settings)))
+    _check_result(lib.set_sync_out_settings(device_id,
+                                            byref(sync_out_settings)))
 
 
 def set_sync_out_settings_calb(device_id: DeviceT,
@@ -1898,6 +1932,7 @@ def set_sync_out_settings_calb(device_id: DeviceT,
     :param calibration: calibration
     :type calibration: Calibration
     """
+    _check_device_id(device_id)
     sync_out_settings = sync_out_settings_calb_t(settings.SyncOutFlags,
                                                  settings.SyncOutPulseSteps,
                                                  settings.SyncOutPeriod,
@@ -1921,6 +1956,7 @@ def get_sync_out_settings(device_id: DeviceT) -> SyncOutSettings:
     :return: sync out settings
     :rtype: SyncOutSettings
     """
+    _check_device_id(device_id)
     sync_out_settings = sync_out_settings_t()
     _check_result(lib.get_sinc_out_settings(device_id,
                                             byref(sync_out_settings)))
@@ -1947,6 +1983,7 @@ def get_sync_out_settings_calb(device_id: DeviceT,
     :return: calibration sync out settings
     :rtype: SyncOutSettingsCalb
     """
+    _check_device_id(device_id)
     sync_out_settings = sync_out_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_sinc_out_settings_calb(device_id,
@@ -2088,7 +2125,9 @@ def set_control_settings_calb(device_id: DeviceT,
                                                settings.Flags,
                                                settings.DeltaPosition)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.set_control_settings_calb(device_id, byref(control_settings), byref(calib)))
+    _check_result(lib.set_control_settings_calb(device_id,
+                                                byref(control_settings),
+                                                byref(calib)))
 
 
 def get_control_settings(device_id: DeviceT) -> ControlSettings:
@@ -2143,7 +2182,9 @@ def get_control_settings_calb(device_id: DeviceT,
     _check_device_id(device_id)
     control_settings = control_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_control_settings_calb(device_id, byref(control_settings), byref(calib)))
+    _check_result(lib.get_control_settings_calb(device_id,
+                                                byref(control_settings),
+                                                byref(calib)))
     return ControlSettingsCalb(control_settings.MaxSpeed,
                                control_settings.Timeout,
                                control_settings.MaxClickTime,
@@ -2358,7 +2399,8 @@ def set_password_settings(device_id: DeviceT,
     """
     _check_device_id(device_id)
     password_settings = password_settings_t(settings.UserPassword)
-    _check_result(lib.set_password_settings(device_id, byref(password_settings)))
+    _check_result(lib.set_password_settings(device_id,
+                                            byref(password_settings)))
 
 
 def get_password_settings(device_id: DeviceT) -> PasswordSettings:
@@ -2373,7 +2415,8 @@ def get_password_settings(device_id: DeviceT) -> PasswordSettings:
     """
     _check_device_id(device_id)
     password_settings = password_settings_t()
-    _check_result(lib.get_password_settings(device_id, byref(password_settings)))
+    _check_result(lib.get_password_settings(device_id,
+                                            byref(password_settings)))
     return PasswordSettings(password_settings.UserPassword)
 
 
@@ -2396,7 +2439,8 @@ def set_calibration_settings(device_id: DeviceT,
                                                   settings.CSS2_B,
                                                   settings.FullCurrent_A,
                                                   settings.FullCurrent_B)
-    _check_result(lib.set_calibration_settings(device_id, byref(calibration_settings)))
+    _check_result(lib.set_calibration_settings(device_id,
+                                               byref(calibration_settings)))
 
 
 def get_calibration_settings(device_id: DeviceT) -> CalibrationSettings:
@@ -2411,7 +2455,8 @@ def get_calibration_settings(device_id: DeviceT) -> CalibrationSettings:
     """
     _check_device_id(device_id)
     calibration_settings = calibration_settings_t()
-    _check_result(lib.get_calibration_settings(device_id, byref(calibration_settings)))
+    _check_result(lib.get_calibration_settings(device_id,
+                                               byref(calibration_settings)))
     return CalibrationSettings(calibration_settings.CSS1_A,
                                calibration_settings.CSS1_B,
                                calibration_settings.CSS2_A,
@@ -2472,7 +2517,8 @@ def set_extended_settings(device_id: DeviceT,
     """
     _check_device_id(device_id)
     extended_settings = extended_settings_t(settings.Param1)
-    _check_result(lib.set_extended_settings(device_id, byref(extended_settings)))
+    _check_result(lib.set_extended_settings(device_id,
+                                            byref(extended_settings)))
 
 
 def get_extended_settings(device_id: DeviceT) -> ExtendedSettings:
@@ -2487,7 +2533,8 @@ def get_extended_settings(device_id: DeviceT) -> ExtendedSettings:
     """
     _check_device_id(device_id)
     extended_settings = extended_settings_t()
-    _check_result(lib.get_extended_settings(device_id, byref(extended_settings)))
+    _check_result(lib.get_extended_settings(device_id,
+                                            byref(extended_settings)))
     return ExtendedSettings(extended_settings.Param1)
 
 
@@ -2668,7 +2715,8 @@ def set_hallsensor_settings(device_id: DeviceT,
                                                 settings.SupplyVoltageMax,
                                                 settings.MaxCurrentConsumption,
                                                 settings.PPR)
-    _check_result(lib.set_hallsensor_settings(device_id, byref(hallsensor_settings)))
+    _check_result(lib.set_hallsensor_settings(device_id,
+                                              byref(hallsensor_settings)))
 
 
 def get_hallsensor_settings(device_id: DeviceT) -> HallsensorSettings:
@@ -2681,7 +2729,8 @@ def get_hallsensor_settings(device_id: DeviceT) -> HallsensorSettings:
     """
     _check_device_id(device_id)
     hallsensor_settings = hallsensor_settings_t()
-    _check_result(lib.get_hallsensor_settings(device_id, byref(hallsensor_settings)))
+    _check_result(lib.get_hallsensor_settings(device_id,
+                                              byref(hallsensor_settings)))
     return HallsensorSettings(hallsensor_settings.MaxOperatingFrequency,
                               hallsensor_settings.SupplyVoltageMin,
                               hallsensor_settings.SupplyVoltageMax,
@@ -2767,7 +2816,8 @@ def get_accessories_settings(device_id: DeviceT) -> AccessoriesSettings:
     """
     _check_device_id(device_id)
     accessories_settings = accessories_settings_t()
-    _check_result(lib.get_accessories_settings(device_id, byref(accessories_settings)))
+    _check_result(lib.get_accessories_settings(device_id,
+                                               byref(accessories_settings)))
     return AccessoriesSettings(accessories_settings.MagneticBrakeInfo,
                                accessories_settings.MBRatedVoltage,
                                accessories_settings.MBRatedCurrent,
@@ -2835,7 +2885,8 @@ def get_nonvolatile_memory(device_id: DeviceT) -> NonvolatileMemory:
     """
     _check_device_id(device_id)
     nonvolatile_memory = nonvolatile_memory_t()
-    _check_result(lib.get_nonvolatile_memory(device_id, byref(nonvolatile_memory)))
+    _check_result(lib.get_nonvolatile_memory(device_id,
+                                             byref(nonvolatile_memory)))
     return NonvolatileMemory(nonvolatile_memory.UserData)
 
 
@@ -2852,7 +2903,8 @@ def set_engine_advansed_setup(device_id: DeviceT,
     engine_advanced_setup = engine_advanced_setup_t(setup.stepcloseloop_Kw,
                                                     setup.stepcloseloop_Kp_low,
                                                     setup.stepcloseloop_Kp_high)
-    _check_result(lib.set_engine_advansed_setup(device_id, byref(engine_advanced_setup)))
+    _check_result(lib.set_engine_advansed_setup(device_id,
+                                                byref(engine_advanced_setup)))
 
 
 def get_engine_advansed_setup(device_id: DeviceT) -> EngineAdvansedSetup:
@@ -2865,7 +2917,8 @@ def get_engine_advansed_setup(device_id: DeviceT) -> EngineAdvansedSetup:
     """
     _check_device_id(device_id)
     engine_advanced_setup = engine_advanced_setup_t()
-    _check_result(lib.get_engine_advansed_setup(device_id, byref(engine_advanced_setup)))
+    _check_result(lib.get_engine_advansed_setup(device_id,
+                                                byref(engine_advanced_setup)))
     return EngineAdvansedSetup(engine_advanced_setup.stepcloseloop_Kw,
                                engine_advanced_setup.stepcloseloop_Kp_low,
                                engine_advanced_setup.stepcloseloop_Kp_high)
@@ -2934,7 +2987,9 @@ def command_movr_calb(device_id: DeviceT,
     """
     _check_device_id(device_id)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.command_movr_calb(device_id, delta_position, byref(calib)))
+    _check_result(lib.command_movr_calb(device_id,
+                                        delta_position,
+                                        byref(calib)))
 
 
 def command_home(device_id: DeviceT) -> None:
@@ -3022,7 +3077,9 @@ def get_position_calb(device_id: DeviceT,
     _check_device_id(device_id)
     position = position_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.get_position_calb(device_id, byref(position), byref(calib)))
+    _check_result(lib.get_position_calb(device_id,
+                                        byref(position),
+                                        byref(calib)))
     return GetPositionCalb(position.Position,
                            position.EncPosition)
 
@@ -3253,7 +3310,10 @@ def get_firmware_version(device_id: DeviceT) -> 'tuple[int]':
     minor_version = c_uint32()
     major_version = c_uint32()
     release_version = c_uint32()
-    _check_result(lib.get_firmware_version(device_id, byref(minor_version), byref(major_version), byref(release_version)))
+    _check_result(lib.get_firmware_version(device_id,
+                                           byref(minor_version),
+                                           byref(major_version),
+                                           byref(release_version)))
     return (minor_version, major_version, release_version)
 
 
@@ -3411,7 +3471,8 @@ def set_stage_information(device_id: DeviceT,
     _check_device_id(device_id)
     stage_information = stage_information_t(information.Manufacturer,
                                             information.PartNumber)
-    _check_result(lib.set_stage_information(device_id, byref(stage_information)))
+    _check_result(lib.set_stage_information(device_id,
+                                            byref(stage_information)))
 
 
 def get_stage_information(device_id: DeviceT) -> StageInformation:
@@ -3424,7 +3485,8 @@ def get_stage_information(device_id: DeviceT) -> StageInformation:
     """
     _check_device_id(device_id)
     stage_information = stage_information_t()
-    _check_result(lib.get_stage_information(device_id, byref(stage_information)))
+    _check_result(lib.get_stage_information(device_id,
+                                            byref(stage_information)))
     return StageInformation(stage_information.Manufacturer,
                             stage_information.PartNumber)
 
@@ -3443,7 +3505,8 @@ def set_motor_information(device_id: DeviceT,
     _check_device_id(device_id)
     motor_information = motor_information_t(information.Manufacturer,
                                             information.PartNumber)
-    _check_result(lib.set_motor_information(device_id, byref(motor_information)))
+    _check_result(lib.set_motor_information(device_id,
+                                            byref(motor_information)))
 
 
 def get_motor_information(device_id: DeviceT) -> MotorInformation:
@@ -3456,7 +3519,8 @@ def get_motor_information(device_id: DeviceT) -> MotorInformation:
     """
     _check_device_id(device_id)
     motor_information = motor_information_t()
-    _check_result(lib.get_motor_information(device_id, byref(motor_information)))
+    _check_result(lib.get_motor_information(device_id,
+                                            byref(motor_information)))
 
 
 def set_encoder_information(device_id: DeviceT,
@@ -3473,7 +3537,8 @@ def set_encoder_information(device_id: DeviceT,
     _check_device_id(device_id)
     encoder_information = encoder_information_t(information.Manufacturer,
                                                 information.PartNumber)
-    _check_result(lib.set_encoder_information(device_id, byref(encoder_information)))
+    _check_result(lib.set_encoder_information(device_id,
+                                              byref(encoder_information)))
 
 
 def get_encoder_information(device_id: DeviceT) -> EncoderInformation:
@@ -3486,7 +3551,8 @@ def get_encoder_information(device_id: DeviceT) -> EncoderInformation:
     """
     _check_device_id(device_id)
     encoder_information = encoder_information_t()
-    _check_result(lib.get_encoder_information(device_id, byref(encoder_information)))
+    _check_result(lib.get_encoder_information(device_id,
+                                              byref(encoder_information)))
     return EncoderInformation(encoder_information.Manufacturer,
                               encoder_information.PartNumber)
 
@@ -3505,7 +3571,8 @@ def set_hallsensor_information(device_id: DeviceT,
     _check_device_id(device_id)
     hallsensor_information = hallsensor_information_t(information.Manufacturer,
                                                       information.PartNumber)
-    _check_result(lib.set_hallsensor_information(device_id, byref(hallsensor_information)))
+    _check_result(lib.set_hallsensor_information(device_id,
+                                                 byref(hallsensor_information)))
 
 
 def get_hallsensor_information(device_id: DeviceT) -> HallsensorInformation:
@@ -3518,7 +3585,9 @@ def get_hallsensor_information(device_id: DeviceT) -> HallsensorInformation:
     """
     _check_device_id(device_id)
     hallsensor_information = hallsensor_information_t()
-    _check_result(lib.get_hallsensor_information(device_id, byref(hallsensor_information)))
+    _check_result(
+        lib.get_hallsensor_information(device_id,
+                                       byref(hallsensor_information)))
     return HallsensorInformation(hallsensor_information.Manufacturer,
                                  hallsensor_information.PartNumber)
 
@@ -3567,7 +3636,10 @@ def get_bootloader_version(device_id: DeviceT) -> 'tuple[int]':
     minor_version = c_uint32()
     major_version = c_uint32()
     release_version = c_uint32()
-    _check_result(lib.get_bootloader_version(device_id, byref(minor_version), byref(major_version), byref(release_version)))
+    _check_result(lib.get_bootloader_version(device_id,
+                                             byref(minor_version),
+                                             byref(major_version),
+                                             byref(release_version)))
     return (minor_version, major_version, release_version)
 
 
@@ -3599,7 +3671,9 @@ def get_globally_unique_identifier(device_id: DeviceT) -> GloballyUniqueIdentifi
     """
     _check_device_id(device_id)
     globally_unique_identifier = globally_unique_identifier_t()
-    _check_result(lib.get_globally_unique_identifier(device_id, byref(globally_unique_identifier)))
+    _check_result(
+        lib.get_globally_unique_identifier(device_id,
+                                           byref(globally_unique_identifier)))
     return GloballyUniqueIdentifier(globally_unique_identifier.UniqueID0,
                                     globally_unique_identifier.UniqueID1,
                                     globally_unique_identifier.UniqueID2,
@@ -3775,6 +3849,7 @@ def reset_locks() -> None:
     """
     lib.reset_locks()
 
+
 def get_status(device_id: DeviceT) -> Status:
     """Return device state.
 
@@ -3807,6 +3882,7 @@ def get_status(device_id: DeviceT) -> Status:
                   status.GPIOFlags,
                   status.CmdBufFreeSpace)
 
+
 def get_device_information(device_id: DeviceT) -> DeviceInformation:
     """Return device information.
 
@@ -3820,7 +3896,8 @@ def get_device_information(device_id: DeviceT) -> DeviceInformation:
     """
     _check_device_id(device_id)
     device_information = device_information_t()
-    _check_result(lib.get_device_information(device_id, byref(device_information)))
+    _check_result(lib.get_device_information(device_id,
+                                             byref(device_information)))
     return DeviceInformation(device_information.Manufacturer,
                              device_information.ManufacturerId,
                              device_information.ProductDescription,
@@ -3887,7 +3964,9 @@ def get_enumerate_device_serial(device_enumeration: device_enumeration_t,
     :rtype: int
     """
     serial = c_uint32()
-    _check_result(lib.get_enumerate_device_serial(device_enumeration, device_index, byref(serial)))
+    _check_result(lib.get_enumerate_device_serial(device_enumeration,
+                                                  device_index,
+                                                  byref(serial)))
     return int(serial)
 
 
@@ -3905,7 +3984,10 @@ def get_enumerate_device_information(device_enumeration: device_enumeration_t,
     :rtype: DeviceInformation
     """
     device_information = device_information_t()
-    _check_result(lib.get_enumerate_device_information(device_enumeration, device_index, byref(device_information)))
+    _check_result(
+        lib.get_enumerate_device_information(device_enumeration,
+                                             device_index,
+                                             byref(device_information)))
     return DeviceInformation(device_information.Manufacturer,
                              device_information.ManufacturerId,
                              device_information.ProductDescription,
@@ -4022,7 +4104,8 @@ def command_wait_for_stop(device_id: DeviceT,
     :type refresh_interval_ms: int
     """
     _check_device_id(device_id)
-    _check_result(lib.command_wait_for_stop(device_id, c_uint32(refresh_interval_ms)))
+    _check_result(lib.command_wait_for_stop(device_id,
+                                            c_uint32(refresh_interval_ms)))
 
 
 def command_homezero(device_id: DeviceT) -> None:
