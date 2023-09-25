@@ -1388,7 +1388,7 @@ def get_move_settings(device_id: DeviceT) -> MoveSettings:
     """
     _check_device_id(device_id)
     move_settings = move_settings_t()
-    _check_result(lib.set_move_settings(device_id, move_settings))
+    _check_result(lib.get_move_settings(device_id, byref(move_settings)))
     return MoveSettings(move_settings.Speed,
                         move_settings.uSpeed,
                         move_settings.Accel,
@@ -1469,7 +1469,7 @@ def set_engine_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
-    engine_settings = engine_settings__calb_t(settings.NomVoltage,
+    engine_settings = engine_settings_calb_t(settings.NomVoltage,
                                               settings.NomCurrent,
                                               settings.NomSpeed,
                                               settings.EngineFlags,
@@ -1504,7 +1504,7 @@ def get_engine_settings(device_id: DeviceT) -> EngineSettings:
                           engine_settings.EngineFlags,
                           engine_settings.Antiplay,
                           engine_settings.MicrostepMode,
-                          engine_settings.StepPerRev)
+                          engine_settings.StepsPerRev)
 
 
 def get_engine_settings_calb(device_id: DeviceT,
@@ -2887,7 +2887,7 @@ def set_engine_advansed_setup(device_id: DeviceT,
     :type setup: EngineAdvansedSetup
     """
     _check_device_id(device_id)
-    engine_advanced_setup = engine_advanced_setup_t(setup.stepcloseloop_Kw,
+    engine_advanced_setup = engine_advansed_setup_t(setup.stepcloseloop_Kw,
                                                     setup.stepcloseloop_Kp_low,
                                                     setup.stepcloseloop_Kp_high)
     _check_result(lib.set_engine_advansed_setup(device_id,
@@ -2903,7 +2903,7 @@ def get_engine_advansed_setup(device_id: DeviceT) -> EngineAdvansedSetup:
     :rtype: EngineAdvansedSetup
     """
     _check_device_id(device_id)
-    engine_advanced_setup = engine_advanced_setup_t()
+    engine_advanced_setup = engine_advansed_setup_t()
     _check_result(lib.get_engine_advansed_setup(device_id,
                                                 byref(engine_advanced_setup)))
     return EngineAdvansedSetup(engine_advanced_setup.stepcloseloop_Kw,
@@ -2929,7 +2929,7 @@ def command_move_calb(device_id: DeviceT,
     """
     _check_device_id(device_id)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.command_move_calb(device_t, position, byref(calib)))
+    _check_result(lib.command_move_calb(device_id, c_float(position), byref(calib)))
 
 
 def command_movr(device_id: DeviceT,
@@ -2975,7 +2975,7 @@ def command_movr_calb(device_id: DeviceT,
     _check_device_id(device_id)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.command_movr_calb(device_id,
-                                        delta_position,
+                                        c_float(delta_position),
                                         byref(calib)))
 
 
@@ -3049,20 +3049,20 @@ def command_sstp(device_id: DeviceT) -> None:
 
 
 def get_position_calb(device_id: DeviceT,
-                      calibration: Calibration) -> None:
+                      calibration: Calibration) -> GetPositionCalb:
     """Reads position value in user units for stepper motor and encoder steps
     all engines.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param position: structure contains move settings: speed, acceleration,
-    deceleration etc.
-    :type position: GetPositionCalb
     :param calibration: 	user unit settings
     :type calibration: Calibration
+    :return: structure contains move settings: speed, acceleration,
+    deceleration etc.
+    :rtype: GetPositionCalb
     """
     _check_device_id(device_id)
-    position = position_calb_t()
+    position = get_position_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_position_calb(device_id,
                                         byref(position),
@@ -3085,10 +3085,10 @@ def set_position(device_id: DeviceT,
     :type position: SetPosition
     """
     _check_device_id(device_id)
-    _position = position_t(position.Position,
-                           position.uPosition,
-                           position.EncPosition,
-                           position.PosFlags)
+    _position = set_position_t(position.Position,
+                               position.uPosition,
+                               position.EncPosition,
+                               position.PosFlags)
     _check_result(lib.set_position(device_id, byref(_position)))
 
 
@@ -3109,9 +3109,9 @@ def set_position_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
-    _position = position_t(position.Position,
-                           position.EncPosition,
-                           position.PosFlags)
+    _position = set_position_calb_t(position.Position,
+                                    position.EncPosition,
+                                    position.PosFlags)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_position(device_id, byref(_position), byref(calib)))
 
@@ -3737,15 +3737,15 @@ def probe_device(uri: str) -> int:
 
 
 def enumerate_devices(enumerate_flags: int,
-                      hints: str) -> DeviceInformation:
+                      hints: str) -> POINTER(device_enumeration_t):
     """Enumerate all devices that looks like valid.
 
     :param enumerate_flags: enumerate devices flags
     :type enumerate_flags: int
     :param hints: extended information
     :type hints: str
-    :return: device enumeration structure.
-    :rtype: DeviceInformation
+    :return: value describing device enumeration structure.
+    :rtype: POINTER(device_enumeration_t)
 
     hints is a string of form "key=value \n key2=value2". Unrecognized
     key-value pairs are ignored. Key list: addr - used together with
@@ -3758,19 +3758,14 @@ def enumerate_devices(enumerate_flags: int,
     adapter_addr=192.168.0.100".
     """
     device_enumeration = lib.enumerate_devices(enumerate_flags, hints)
-    return DeviceInformation(device_enumeration.Manufacturer,
-                             device_enumeration.ManufacturerId,
-                             device_enumeration.ProductDescription,
-                             device_enumeration.Major,
-                             device_enumeration.Minor,
-                             device_enumeration.Release)
+    return device_enumeration
 
 
-def free_enumerate_devices(device_enumeration: device_enumeration_t) -> None:
+def free_enumerate_devices(device_enumeration: POINTER(device_enumeration_t)) -> None:
     """Free memory returned by enumerate_devices.
 
     :param device_id: opaque pointer to an enumeration device data
-    :type device_id: device_enumeration_t
+    :type device_id: POINTER(device_enumeration_t)
     """
     _check_result(lib.free_enumerate_devices(device_enumeration))
 
@@ -3863,11 +3858,11 @@ def get_device_information(device_id: DeviceT) -> DeviceInformation:
                              device_information.Release)
 
 
-def get_device_count(device_enumeration: device_enumeration_t) -> int:
+def get_device_count(device_enumeration: POINTER(device_enumeration_t)) -> int:
     """Get device count.
 
     :param device_enumeration: opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :return: device count
     :rtype: int
     """
@@ -3875,8 +3870,19 @@ def get_device_count(device_enumeration: device_enumeration_t) -> int:
     return res
 
 
-def get_device_name(device_enumeration: device_enumeration_t,
+def get_device_name(device_enumeration: POINTER(device_enumeration_t),
                     device_index: int) -> str:
+    """Get device name from the device enumeration.
+
+    Returns device_index device name.
+
+    :param device_enumeration: opaque pointer to an enumeration device data
+    :type device_enumeration: POINTER(device_enumeration_t)
+    :param device_index: device index
+    :type device_index: int
+    :return: device name
+    :rtype: str
+    """
     res = lib.get_device_name(device_enumeration, device_index)
     return str(res)
 
@@ -3907,14 +3913,14 @@ def ximc_fix_usbser_sys(device_uri: str) -> None:
     lib.ximc_fix_usbser_sys(device_uri)
 
 
-def get_enumerate_device_serial(device_enumeration: device_enumeration_t,
+def get_enumerate_device_serial(device_enumeration: POINTER(device_enumeration_t),
                                 device_index: int) -> int:
     """Get device serial number from the device enumeration.
 
     Returns device_index device serial number.
 
     :param device_enumeration: opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :param device_index: device index
     :type device_index: int
     :return: device serial number
@@ -3927,14 +3933,14 @@ def get_enumerate_device_serial(device_enumeration: device_enumeration_t,
     return int(serial)
 
 
-def get_enumerate_device_information(device_enumeration: device_enumeration_t,
+def get_enumerate_device_information(device_enumeration: POINTER(device_enumeration_t),
                                      device_index: int) -> DeviceInformation:
     """Get device information from the device enumeration.
 
     Returns device_index device information.
 
     :param device_enumeration: opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :param device_index: device index
     :type device_index: int
     :return: device information data
@@ -3987,14 +3993,14 @@ def get_status_calb(device_id: DeviceT,
                       status.GPIOFlags,
                       status.CmdBufFreeSpace)
 
-def get_enumerate_device_controller_name(device_enumeration: device_enumeration_t,
+def get_enumerate_device_controller_name(device_enumeration: POINTER(device_enumeration_t),
                                          device_index: int) -> str:
     """Get controller name from the device enumeration.
 
     Returns device_index device controller name
 
     :param device_enumeration: opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :param device_index: device index
     :type device_index: int
     :return: controller name
@@ -4006,14 +4012,14 @@ def get_enumerate_device_controller_name(device_enumeration: device_enumeration_
     return str(name)
 
 
-def get_enumerate_device_stage_name(device_enumeration: device_enumeration_t,
+def get_enumerate_device_stage_name(device_enumeration: POINTER(device_enumeration_t),
                                     device_index: int) -> str:
     """Get stage name from the device enumeration.
 
     Returns device_index device stage name.
 
     :param device_enumeration: opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :param device_index: device index
     :type device_index: int
     :return: stage name
@@ -4025,14 +4031,14 @@ def get_enumerate_device_stage_name(device_enumeration: device_enumeration_t,
     return str(name)
 
 
-def get_enumerate_device_network_information(device_enumeration: device_enumeration_t,
+def get_enumerate_device_network_information(device_enumeration: POINTER(device_enumeration_t),
                                              device_index: int) -> device_network_information_t:
     """Get device network information from the device enumeration.
 
     Returns device_index device network information.
 
     :param device_enumeration: 	opaque pointer to an enumeration device data
-    :type device_enumeration: device_enumeration_t
+    :type device_enumeration: POINTER(device_enumeration_t)
     :param device_index: device index
     :type device_index: int
     :return: device network information data
@@ -4149,7 +4155,7 @@ def get_position(device_id: DeviceT) -> GetPosition:
 
 def command_move(device_id: DeviceT,
                  position: int,
-                 uposition: int = 0) -> None:
+                 uposition: int) -> None:
     _check_device_id(device_id)
     _check_result(lib.command_move(device_id, position, uposition))
 
