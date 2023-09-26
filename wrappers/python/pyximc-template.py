@@ -1,7 +1,8 @@
 #!/usr/bin/python
 from ctypes import WinDLL, CDLL, RTLD_GLOBAL, POINTER, byref, cast
 from ctypes import (c_double, c_int, c_uint, c_uint8, c_uint32,
-                    c_ulonglong, c_float, c_char, c_char_p)
+                    c_ulonglong, c_float, c_char, c_char_p, c_long,
+                    c_longlong)
 from ctypes import Structure, LittleEndianStructure
 import os
 import platform
@@ -67,7 +68,7 @@ def _load_for_linux():
                 )
 
 
-def _load_darwin():
+def _load_for_darwin():
     try:
         CDLL("macosx/libjximc.dylib")
         libximc = CDLL("libximc.framework/libximc")
@@ -94,7 +95,7 @@ def load_libximc():
     elif os_kind == "linux":
         libximc = _load_for_linux()
     elif os_kind == "darwin":
-        libximc = _load_darwin()
+        libximc = _load_for_darwin()
     else:
         raise RuntimeError("Unexpected OS: {}".format(os_kind))
     return libximc
@@ -120,12 +121,6 @@ class calibration_t(LittleEndianStructure):
     ]
 
 
-class Calibration:
-    def __init__(self, A, MicrostepMode):
-        self.A = A
-        self.MicrostepMode = MicrostepMode
-
-
 class device_enumeration_t(LittleEndianStructure):
     pass
 
@@ -142,23 +137,6 @@ class device_network_information_t(LittleEndianStructure):
     ]
 
 
-class DeviceEnumerationInformation:
-    def __init__(
-            self,
-            ipv4,
-            nodename,
-            axis_state,
-            locker_username,
-            locker_nodename,
-            locked_time):
-        self.ipv4 = ipv4
-        self.nodename = nodename
-        self.axis_state = axis_state
-        self.locker_username = locker_username
-        self.locker_nodename = locker_nodename
-        self.locked_time = locked_time
-
-
 # Clarify function types
 lib.enumerate_devices.restype = POINTER(device_enumeration_t)
 lib.get_device_name.restype = c_char_p
@@ -170,8 +148,181 @@ lib.get_device_name.restype = c_char_p
 # ------------------ API v2 ------------------
 # --- Public API v2 data types starts here ---
 DeviceT = int
+
+# -------- Internal utility functions --------
+
+def _check_device_id(device_id: DeviceT) -> None:
+    try:
+        id_int = int(device_id)
+    except ValueError:
+        raise ValueError("device_id should be integer, got device_id="
+                         "{} of type {}".format(device_id, type(device_id)))
+
+    if id_int < 0:
+        raise ValueError("Got negative device_id ({}). It seems the device was"
+                         " not opened correctly".format(device_id))
+
+
+def _check_result(result: int) -> None:
+    if result == Result.Ok:
+        return
+    if result == Result.Error:
+        raise RuntimeError("General Error")
+
+    if result == Result.NotImplemented:
+        raise NotImplementedError(
+            "This function is not implemented in the device."
+            "Firmware update may be required: "
+            "https://doc.xisupport.com/en/8smc5-usb/8SMCn-USB/"
+            "XILab_application_Users_guide/Controller_Settings/"
+            "About_controller.html"
+        )
+
+    if result == Result.ValueError:
+        raise ValueError(
+            "The input was rejected by device. Some parameters may have "
+            "incorrect values."
+            "Check documentation: "
+            "https://libximc.xisupport.com/doc-en/ximc_8h.html"
+        )
+
+    if result == Result.NoDevice:
+        raise ConnectionError(
+            "Cannot send command to the device. Check connection and power. "
+            "The device_id is invalid. To resume operation you should reopen"
+            " the device."
+        )
+
+
+def _check_castability(val, cast_type, varname):
+    try:
+        cast_type(val)
+    except Exception as exc:
+        raise TypeError("Unable to cast {} to {}".format(varname, cast_type))
 # -------- Public API v2 data classes --------
 # -*- coding: utf-8 -*-
+
+
+class Calibration:
+
+    def __init__(
+            self,
+            A,
+            MicrostepMode):
+
+        self.A = A
+        self.MicrostepMode = MicrostepMode
+
+    # getters
+    @property
+    def A(self):
+        return self._A
+
+    @property
+    def MicrostepMode(self):
+        return self._MicrostepMode
+
+    # setters
+    @A.setter
+    def A(self, val):
+        _check_castability(val,
+            c_double,
+            varname="A")
+        self._A = val
+
+    @MicrostepMode.setter
+    def MicrostepMode(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MicrostepMode")
+        self._MicrostepMode = val
+
+
+class DeviceNetworkInformation:
+
+    def __init__(
+            self,
+            ipv4,
+            nodename,
+            axis_state,
+            locker_username,
+            locker_nodename,
+            locked_time):
+
+        self.ipv4 = ipv4
+        self.nodename = nodename
+        self.axis_state = axis_state
+        self.locker_username = locker_username
+        self.locker_nodename = locker_nodename
+        self.locked_time = locked_time
+
+    # getters
+    @property
+    def ipv4(self):
+        return self._ipv4
+
+    @property
+    def nodename(self):
+        return self._nodename
+
+    @property
+    def axis_state(self):
+        return self._axis_state
+
+    @property
+    def locker_username(self):
+        return self._locker_username
+
+    @property
+    def locker_nodename(self):
+        return self._locker_nodename
+
+    @property
+    def locked_time(self):
+        return self._locked_time
+
+    # setters
+    @ipv4.setter
+    def ipv4(self, val):
+        _check_castability(val,
+            c_uint32,
+            varname="ipv4")
+        self._ipv4 = val
+
+    @nodename.setter
+    def nodename(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="nodename")
+        self._nodename = val
+
+    @axis_state.setter
+    def axis_state(self, val):
+        _check_castability(val,
+            c_uint32,
+            varname="axis_state")
+        self._axis_state = val
+
+    @locker_username.setter
+    def locker_username(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="locker_username")
+        self._locker_username = val
+
+    @locker_nodename.setter
+    def locker_nodename(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="locker_nodename")
+        self._locker_nodename = val
+
+    @locked_time.setter
+    def locked_time(self, val):
+        _check_castability(val,
+            c_int,
+            varname="locked_time")
+        self._locked_time = val
 
 
 class FeedbackSettings:
@@ -187,6 +338,52 @@ class FeedbackSettings:
         self.FeedbackType = FeedbackType
         self.FeedbackFlags = FeedbackFlags
         self.CountsPerTurn = CountsPerTurn
+
+    # getters
+    @property
+    def IPS(self):
+        return self._IPS
+
+    @property
+    def FeedbackType(self):
+        return self._FeedbackType
+
+    @property
+    def FeedbackFlags(self):
+        return self._FeedbackFlags
+
+    @property
+    def CountsPerTurn(self):
+        return self._CountsPerTurn
+
+    # setters
+    @IPS.setter
+    def IPS(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="IPS")
+        self._IPS = val
+
+    @FeedbackType.setter
+    def FeedbackType(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="FeedbackType")
+        self._FeedbackType = val
+
+    @FeedbackFlags.setter
+    def FeedbackFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="FeedbackFlags")
+        self._FeedbackFlags = val
+
+    @CountsPerTurn.setter
+    def CountsPerTurn(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CountsPerTurn")
+        self._CountsPerTurn = val
 
 
 class HomeSettings:
@@ -209,6 +406,85 @@ class HomeSettings:
         self.uHomeDelta = uHomeDelta
         self.HomeFlags = HomeFlags
 
+    # getters
+    @property
+    def FastHome(self):
+        return self._FastHome
+
+    @property
+    def uFastHome(self):
+        return self._uFastHome
+
+    @property
+    def SlowHome(self):
+        return self._SlowHome
+
+    @property
+    def uSlowHome(self):
+        return self._uSlowHome
+
+    @property
+    def HomeDelta(self):
+        return self._HomeDelta
+
+    @property
+    def uHomeDelta(self):
+        return self._uHomeDelta
+
+    @property
+    def HomeFlags(self):
+        return self._HomeFlags
+
+    # setters
+    @FastHome.setter
+    def FastHome(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="FastHome")
+        self._FastHome = val
+
+    @uFastHome.setter
+    def uFastHome(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uFastHome")
+        self._uFastHome = val
+
+    @SlowHome.setter
+    def SlowHome(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SlowHome")
+        self._SlowHome = val
+
+    @uSlowHome.setter
+    def uSlowHome(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uSlowHome")
+        self._uSlowHome = val
+
+    @HomeDelta.setter
+    def HomeDelta(self, val):
+        _check_castability(val,
+            c_int,
+            varname="HomeDelta")
+        self._HomeDelta = val
+
+    @uHomeDelta.setter
+    def uHomeDelta(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uHomeDelta")
+        self._uHomeDelta = val
+
+    @HomeFlags.setter
+    def HomeFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="HomeFlags")
+        self._HomeFlags = val
+
 
 class HomeSettingsCalb:
 
@@ -223,6 +499,52 @@ class HomeSettingsCalb:
         self.SlowHome = SlowHome
         self.HomeDelta = HomeDelta
         self.HomeFlags = HomeFlags
+
+    # getters
+    @property
+    def FastHome(self):
+        return self._FastHome
+
+    @property
+    def SlowHome(self):
+        return self._SlowHome
+
+    @property
+    def HomeDelta(self):
+        return self._HomeDelta
+
+    @property
+    def HomeFlags(self):
+        return self._HomeFlags
+
+    # setters
+    @FastHome.setter
+    def FastHome(self, val):
+        _check_castability(val,
+            c_float,
+            varname="FastHome")
+        self._FastHome = val
+
+    @SlowHome.setter
+    def SlowHome(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SlowHome")
+        self._SlowHome = val
+
+    @HomeDelta.setter
+    def HomeDelta(self, val):
+        _check_castability(val,
+            c_float,
+            varname="HomeDelta")
+        self._HomeDelta = val
+
+    @HomeFlags.setter
+    def HomeFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="HomeFlags")
+        self._HomeFlags = val
 
 
 class MoveSettings:
@@ -245,6 +567,85 @@ class MoveSettings:
         self.uAntiplaySpeed = uAntiplaySpeed
         self.MoveFlags = MoveFlags
 
+    # getters
+    @property
+    def Speed(self):
+        return self._Speed
+
+    @property
+    def uSpeed(self):
+        return self._uSpeed
+
+    @property
+    def Accel(self):
+        return self._Accel
+
+    @property
+    def Decel(self):
+        return self._Decel
+
+    @property
+    def AntiplaySpeed(self):
+        return self._AntiplaySpeed
+
+    @property
+    def uAntiplaySpeed(self):
+        return self._uAntiplaySpeed
+
+    @property
+    def MoveFlags(self):
+        return self._MoveFlags
+
+    # setters
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Speed")
+        self._Speed = val
+
+    @uSpeed.setter
+    def uSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uSpeed")
+        self._uSpeed = val
+
+    @Accel.setter
+    def Accel(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Accel")
+        self._Accel = val
+
+    @Decel.setter
+    def Decel(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Decel")
+        self._Decel = val
+
+    @AntiplaySpeed.setter
+    def AntiplaySpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="AntiplaySpeed")
+        self._AntiplaySpeed = val
+
+    @uAntiplaySpeed.setter
+    def uAntiplaySpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uAntiplaySpeed")
+        self._uAntiplaySpeed = val
+
+    @MoveFlags.setter
+    def MoveFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MoveFlags")
+        self._MoveFlags = val
+
 
 class MoveSettingsCalb:
 
@@ -261,6 +662,63 @@ class MoveSettingsCalb:
         self.Decel = Decel
         self.AntiplaySpeed = AntiplaySpeed
         self.MoveFlags = MoveFlags
+
+    # getters
+    @property
+    def Speed(self):
+        return self._Speed
+
+    @property
+    def Accel(self):
+        return self._Accel
+
+    @property
+    def Decel(self):
+        return self._Decel
+
+    @property
+    def AntiplaySpeed(self):
+        return self._AntiplaySpeed
+
+    @property
+    def MoveFlags(self):
+        return self._MoveFlags
+
+    # setters
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Speed")
+        self._Speed = val
+
+    @Accel.setter
+    def Accel(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Accel")
+        self._Accel = val
+
+    @Decel.setter
+    def Decel(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Decel")
+        self._Decel = val
+
+    @AntiplaySpeed.setter
+    def AntiplaySpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="AntiplaySpeed")
+        self._AntiplaySpeed = val
+
+    @MoveFlags.setter
+    def MoveFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MoveFlags")
+        self._MoveFlags = val
 
 
 class EngineSettings:
@@ -285,6 +743,96 @@ class EngineSettings:
         self.MicrostepMode = MicrostepMode
         self.StepsPerRev = StepsPerRev
 
+    # getters
+    @property
+    def NomVoltage(self):
+        return self._NomVoltage
+
+    @property
+    def NomCurrent(self):
+        return self._NomCurrent
+
+    @property
+    def NomSpeed(self):
+        return self._NomSpeed
+
+    @property
+    def uNomSpeed(self):
+        return self._uNomSpeed
+
+    @property
+    def EngineFlags(self):
+        return self._EngineFlags
+
+    @property
+    def Antiplay(self):
+        return self._Antiplay
+
+    @property
+    def MicrostepMode(self):
+        return self._MicrostepMode
+
+    @property
+    def StepsPerRev(self):
+        return self._StepsPerRev
+
+    # setters
+    @NomVoltage.setter
+    def NomVoltage(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="NomVoltage")
+        self._NomVoltage = val
+
+    @NomCurrent.setter
+    def NomCurrent(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="NomCurrent")
+        self._NomCurrent = val
+
+    @NomSpeed.setter
+    def NomSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="NomSpeed")
+        self._NomSpeed = val
+
+    @uNomSpeed.setter
+    def uNomSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uNomSpeed")
+        self._uNomSpeed = val
+
+    @EngineFlags.setter
+    def EngineFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EngineFlags")
+        self._EngineFlags = val
+
+    @Antiplay.setter
+    def Antiplay(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Antiplay")
+        self._Antiplay = val
+
+    @MicrostepMode.setter
+    def MicrostepMode(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MicrostepMode")
+        self._MicrostepMode = val
+
+    @StepsPerRev.setter
+    def StepsPerRev(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="StepsPerRev")
+        self._StepsPerRev = val
+
 
 class EngineSettingsCalb:
 
@@ -306,13 +854,119 @@ class EngineSettingsCalb:
         self.MicrostepMode = MicrostepMode
         self.StepsPerRev = StepsPerRev
 
+    # getters
+    @property
+    def NomVoltage(self):
+        return self._NomVoltage
+
+    @property
+    def NomCurrent(self):
+        return self._NomCurrent
+
+    @property
+    def NomSpeed(self):
+        return self._NomSpeed
+
+    @property
+    def EngineFlags(self):
+        return self._EngineFlags
+
+    @property
+    def Antiplay(self):
+        return self._Antiplay
+
+    @property
+    def MicrostepMode(self):
+        return self._MicrostepMode
+
+    @property
+    def StepsPerRev(self):
+        return self._StepsPerRev
+
+    # setters
+    @NomVoltage.setter
+    def NomVoltage(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="NomVoltage")
+        self._NomVoltage = val
+
+    @NomCurrent.setter
+    def NomCurrent(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="NomCurrent")
+        self._NomCurrent = val
+
+    @NomSpeed.setter
+    def NomSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NomSpeed")
+        self._NomSpeed = val
+
+    @EngineFlags.setter
+    def EngineFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EngineFlags")
+        self._EngineFlags = val
+
+    @Antiplay.setter
+    def Antiplay(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Antiplay")
+        self._Antiplay = val
+
+    @MicrostepMode.setter
+    def MicrostepMode(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MicrostepMode")
+        self._MicrostepMode = val
+
+    @StepsPerRev.setter
+    def StepsPerRev(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="StepsPerRev")
+        self._StepsPerRev = val
+
 
 class EntypeSettings:
 
-    def __init__(self, EngineType, DriverType):
+    def __init__(
+            self,
+            EngineType,
+            DriverType):
 
         self.EngineType = EngineType
         self.DriverType = DriverType
+
+    # getters
+    @property
+    def EngineType(self):
+        return self._EngineType
+
+    @property
+    def DriverType(self):
+        return self._DriverType
+
+    # setters
+    @EngineType.setter
+    def EngineType(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EngineType")
+        self._EngineType = val
+
+    @DriverType.setter
+    def DriverType(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="DriverType")
+        self._DriverType = val
 
 
 class PowerSettings:
@@ -330,6 +984,63 @@ class PowerSettings:
         self.PowerOffDelay = PowerOffDelay
         self.CurrentSetTime = CurrentSetTime
         self.PowerFlags = PowerFlags
+
+    # getters
+    @property
+    def HoldCurrent(self):
+        return self._HoldCurrent
+
+    @property
+    def CurrReductDelay(self):
+        return self._CurrReductDelay
+
+    @property
+    def PowerOffDelay(self):
+        return self._PowerOffDelay
+
+    @property
+    def CurrentSetTime(self):
+        return self._CurrentSetTime
+
+    @property
+    def PowerFlags(self):
+        return self._PowerFlags
+
+    # setters
+    @HoldCurrent.setter
+    def HoldCurrent(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="HoldCurrent")
+        self._HoldCurrent = val
+
+    @CurrReductDelay.setter
+    def CurrReductDelay(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CurrReductDelay")
+        self._CurrReductDelay = val
+
+    @PowerOffDelay.setter
+    def PowerOffDelay(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PowerOffDelay")
+        self._PowerOffDelay = val
+
+    @CurrentSetTime.setter
+    def CurrentSetTime(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CurrentSetTime")
+        self._CurrentSetTime = val
+
+    @PowerFlags.setter
+    def PowerFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PowerFlags")
+        self._PowerFlags = val
 
 
 class SecureSettings:
@@ -354,6 +1065,96 @@ class SecureSettings:
         self.MinimumUusb = MinimumUusb
         self.Flags = Flags
 
+    # getters
+    @property
+    def LowUpwrOff(self):
+        return self._LowUpwrOff
+
+    @property
+    def CriticalIpwr(self):
+        return self._CriticalIpwr
+
+    @property
+    def CriticalUpwr(self):
+        return self._CriticalUpwr
+
+    @property
+    def CriticalT(self):
+        return self._CriticalT
+
+    @property
+    def CriticalIusb(self):
+        return self._CriticalIusb
+
+    @property
+    def CriticalUusb(self):
+        return self._CriticalUusb
+
+    @property
+    def MinimumUusb(self):
+        return self._MinimumUusb
+
+    @property
+    def Flags(self):
+        return self._Flags
+
+    # setters
+    @LowUpwrOff.setter
+    def LowUpwrOff(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="LowUpwrOff")
+        self._LowUpwrOff = val
+
+    @CriticalIpwr.setter
+    def CriticalIpwr(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CriticalIpwr")
+        self._CriticalIpwr = val
+
+    @CriticalUpwr.setter
+    def CriticalUpwr(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CriticalUpwr")
+        self._CriticalUpwr = val
+
+    @CriticalT.setter
+    def CriticalT(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CriticalT")
+        self._CriticalT = val
+
+    @CriticalIusb.setter
+    def CriticalIusb(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CriticalIusb")
+        self._CriticalIusb = val
+
+    @CriticalUusb.setter
+    def CriticalUusb(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CriticalUusb")
+        self._CriticalUusb = val
+
+    @MinimumUusb.setter
+    def MinimumUusb(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MinimumUusb")
+        self._MinimumUusb = val
+
+    @Flags.setter
+    def Flags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Flags")
+        self._Flags = val
+
 
 class EdgesSettings:
 
@@ -373,6 +1174,74 @@ class EdgesSettings:
         self.RightBorder = RightBorder
         self.uRightBorder = uRightBorder
 
+    # getters
+    @property
+    def BorderFlags(self):
+        return self._BorderFlags
+
+    @property
+    def EnderFlags(self):
+        return self._EnderFlags
+
+    @property
+    def LeftBorder(self):
+        return self._LeftBorder
+
+    @property
+    def uLeftBorder(self):
+        return self._uLeftBorder
+
+    @property
+    def RightBorder(self):
+        return self._RightBorder
+
+    @property
+    def uRightBorder(self):
+        return self._uRightBorder
+
+    # setters
+    @BorderFlags.setter
+    def BorderFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="BorderFlags")
+        self._BorderFlags = val
+
+    @EnderFlags.setter
+    def EnderFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EnderFlags")
+        self._EnderFlags = val
+
+    @LeftBorder.setter
+    def LeftBorder(self, val):
+        _check_castability(val,
+            c_int,
+            varname="LeftBorder")
+        self._LeftBorder = val
+
+    @uLeftBorder.setter
+    def uLeftBorder(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uLeftBorder")
+        self._uLeftBorder = val
+
+    @RightBorder.setter
+    def RightBorder(self, val):
+        _check_castability(val,
+            c_int,
+            varname="RightBorder")
+        self._RightBorder = val
+
+    @uRightBorder.setter
+    def uRightBorder(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uRightBorder")
+        self._uRightBorder = val
+
 
 class EdgesSettingsCalb:
 
@@ -387,6 +1256,52 @@ class EdgesSettingsCalb:
         self.EnderFlags = EnderFlags
         self.LeftBorder = LeftBorder
         self.RightBorder = RightBorder
+
+    # getters
+    @property
+    def BorderFlags(self):
+        return self._BorderFlags
+
+    @property
+    def EnderFlags(self):
+        return self._EnderFlags
+
+    @property
+    def LeftBorder(self):
+        return self._LeftBorder
+
+    @property
+    def RightBorder(self):
+        return self._RightBorder
+
+    # setters
+    @BorderFlags.setter
+    def BorderFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="BorderFlags")
+        self._BorderFlags = val
+
+    @EnderFlags.setter
+    def EnderFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EnderFlags")
+        self._EnderFlags = val
+
+    @LeftBorder.setter
+    def LeftBorder(self, val):
+        _check_castability(val,
+            c_float,
+            varname="LeftBorder")
+        self._LeftBorder = val
+
+    @RightBorder.setter
+    def RightBorder(self, val):
+        _check_castability(val,
+            c_float,
+            varname="RightBorder")
+        self._RightBorder = val
 
 
 class PidSettings:
@@ -407,6 +1322,74 @@ class PidSettings:
         self.Kif = Kif
         self.Kdf = Kdf
 
+    # getters
+    @property
+    def KpU(self):
+        return self._KpU
+
+    @property
+    def KiU(self):
+        return self._KiU
+
+    @property
+    def KdU(self):
+        return self._KdU
+
+    @property
+    def Kpf(self):
+        return self._Kpf
+
+    @property
+    def Kif(self):
+        return self._Kif
+
+    @property
+    def Kdf(self):
+        return self._Kdf
+
+    # setters
+    @KpU.setter
+    def KpU(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="KpU")
+        self._KpU = val
+
+    @KiU.setter
+    def KiU(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="KiU")
+        self._KiU = val
+
+    @KdU.setter
+    def KdU(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="KdU")
+        self._KdU = val
+
+    @Kpf.setter
+    def Kpf(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Kpf")
+        self._Kpf = val
+
+    @Kif.setter
+    def Kif(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Kif")
+        self._Kif = val
+
+    @Kdf.setter
+    def Kdf(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Kdf")
+        self._Kdf = val
+
 
 class SyncInSettings:
 
@@ -426,6 +1409,74 @@ class SyncInSettings:
         self.Speed = Speed
         self.uSpeed = uSpeed
 
+    # getters
+    @property
+    def SyncInFlags(self):
+        return self._SyncInFlags
+
+    @property
+    def ClutterTime(self):
+        return self._ClutterTime
+
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def uPosition(self):
+        return self._uPosition
+
+    @property
+    def Speed(self):
+        return self._Speed
+
+    @property
+    def uSpeed(self):
+        return self._uSpeed
+
+    # setters
+    @SyncInFlags.setter
+    def SyncInFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncInFlags")
+        self._SyncInFlags = val
+
+    @ClutterTime.setter
+    def ClutterTime(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="ClutterTime")
+        self._ClutterTime = val
+
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Position")
+        self._Position = val
+
+    @uPosition.setter
+    def uPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uPosition")
+        self._uPosition = val
+
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Speed")
+        self._Speed = val
+
+    @uSpeed.setter
+    def uSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uSpeed")
+        self._uSpeed = val
+
 
 class SyncInSettingsCalb:
 
@@ -440,6 +1491,52 @@ class SyncInSettingsCalb:
         self.ClutterTime = ClutterTime
         self.Position = Position
         self.Speed = Speed
+
+    # getters
+    @property
+    def SyncInFlags(self):
+        return self._SyncInFlags
+
+    @property
+    def ClutterTime(self):
+        return self._ClutterTime
+
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def Speed(self):
+        return self._Speed
+
+    # setters
+    @SyncInFlags.setter
+    def SyncInFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncInFlags")
+        self._SyncInFlags = val
+
+    @ClutterTime.setter
+    def ClutterTime(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="ClutterTime")
+        self._ClutterTime = val
+
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Position")
+        self._Position = val
+
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Speed")
+        self._Speed = val
 
 
 class SyncOutSettings:
@@ -458,6 +1555,63 @@ class SyncOutSettings:
         self.Accuracy = Accuracy
         self.uAccuracy = uAccuracy
 
+    # getters
+    @property
+    def SyncOutFlags(self):
+        return self._SyncOutFlags
+
+    @property
+    def SyncOutPulseSteps(self):
+        return self._SyncOutPulseSteps
+
+    @property
+    def SyncOutPeriod(self):
+        return self._SyncOutPeriod
+
+    @property
+    def Accuracy(self):
+        return self._Accuracy
+
+    @property
+    def uAccuracy(self):
+        return self._uAccuracy
+
+    # setters
+    @SyncOutFlags.setter
+    def SyncOutFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutFlags")
+        self._SyncOutFlags = val
+
+    @SyncOutPulseSteps.setter
+    def SyncOutPulseSteps(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutPulseSteps")
+        self._SyncOutPulseSteps = val
+
+    @SyncOutPeriod.setter
+    def SyncOutPeriod(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutPeriod")
+        self._SyncOutPeriod = val
+
+    @Accuracy.setter
+    def Accuracy(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Accuracy")
+        self._Accuracy = val
+
+    @uAccuracy.setter
+    def uAccuracy(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uAccuracy")
+        self._uAccuracy = val
+
 
 class SyncOutSettingsCalb:
 
@@ -473,13 +1627,86 @@ class SyncOutSettingsCalb:
         self.SyncOutPeriod = SyncOutPeriod
         self.Accuracy = Accuracy
 
+    # getters
+    @property
+    def SyncOutFlags(self):
+        return self._SyncOutFlags
+
+    @property
+    def SyncOutPulseSteps(self):
+        return self._SyncOutPulseSteps
+
+    @property
+    def SyncOutPeriod(self):
+        return self._SyncOutPeriod
+
+    @property
+    def Accuracy(self):
+        return self._Accuracy
+
+    # setters
+    @SyncOutFlags.setter
+    def SyncOutFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutFlags")
+        self._SyncOutFlags = val
+
+    @SyncOutPulseSteps.setter
+    def SyncOutPulseSteps(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutPulseSteps")
+        self._SyncOutPulseSteps = val
+
+    @SyncOutPeriod.setter
+    def SyncOutPeriod(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SyncOutPeriod")
+        self._SyncOutPeriod = val
+
+    @Accuracy.setter
+    def Accuracy(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Accuracy")
+        self._Accuracy = val
+
 
 class ExtioSettings:
 
-    def __init__(self, EXTIOSetupFlags, EXTIOModeFlags):
+    def __init__(
+            self,
+            EXTIOSetupFlags,
+            EXTIOModeFlags):
 
         self.EXTIOSetupFlags = EXTIOSetupFlags
         self.EXTIOModeFlags = EXTIOModeFlags
+
+    # getters
+    @property
+    def EXTIOSetupFlags(self):
+        return self._EXTIOSetupFlags
+
+    @property
+    def EXTIOModeFlags(self):
+        return self._EXTIOModeFlags
+
+    # setters
+    @EXTIOSetupFlags.setter
+    def EXTIOSetupFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EXTIOSetupFlags")
+        self._EXTIOSetupFlags = val
+
+    @EXTIOModeFlags.setter
+    def EXTIOModeFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EXTIOModeFlags")
+        self._EXTIOModeFlags = val
 
 
 class BrakeSettings:
@@ -497,6 +1724,63 @@ class BrakeSettings:
         self.t3 = t3
         self.t4 = t4
         self.BrakeFlags = BrakeFlags
+
+    # getters
+    @property
+    def t1(self):
+        return self._t1
+
+    @property
+    def t2(self):
+        return self._t2
+
+    @property
+    def t3(self):
+        return self._t3
+
+    @property
+    def t4(self):
+        return self._t4
+
+    @property
+    def BrakeFlags(self):
+        return self._BrakeFlags
+
+    # setters
+    @t1.setter
+    def t1(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="t1")
+        self._t1 = val
+
+    @t2.setter
+    def t2(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="t2")
+        self._t2 = val
+
+    @t3.setter
+    def t3(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="t3")
+        self._t3 = val
+
+    @t4.setter
+    def t4(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="t4")
+        self._t4 = val
+
+    @BrakeFlags.setter
+    def BrakeFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="BrakeFlags")
+        self._BrakeFlags = val
 
 
 class ControlSettings:
@@ -519,6 +1803,85 @@ class ControlSettings:
         self.DeltaPosition = DeltaPosition
         self.uDeltaPosition = uDeltaPosition
 
+    # getters
+    @property
+    def MaxSpeed(self):
+        return self._MaxSpeed
+
+    @property
+    def uMaxSpeed(self):
+        return self._uMaxSpeed
+
+    @property
+    def Timeout(self):
+        return self._Timeout
+
+    @property
+    def MaxClickTime(self):
+        return self._MaxClickTime
+
+    @property
+    def Flags(self):
+        return self._Flags
+
+    @property
+    def DeltaPosition(self):
+        return self._DeltaPosition
+
+    @property
+    def uDeltaPosition(self):
+        return self._uDeltaPosition
+
+    # setters
+    @MaxSpeed.setter
+    def MaxSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MaxSpeed")
+        self._MaxSpeed = val
+
+    @uMaxSpeed.setter
+    def uMaxSpeed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="uMaxSpeed")
+        self._uMaxSpeed = val
+
+    @Timeout.setter
+    def Timeout(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Timeout")
+        self._Timeout = val
+
+    @MaxClickTime.setter
+    def MaxClickTime(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MaxClickTime")
+        self._MaxClickTime = val
+
+    @Flags.setter
+    def Flags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Flags")
+        self._Flags = val
+
+    @DeltaPosition.setter
+    def DeltaPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="DeltaPosition")
+        self._DeltaPosition = val
+
+    @uDeltaPosition.setter
+    def uDeltaPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uDeltaPosition")
+        self._uDeltaPosition = val
+
 
 class ControlSettingsCalb:
 
@@ -535,6 +1898,63 @@ class ControlSettingsCalb:
         self.MaxClickTime = MaxClickTime
         self.Flags = Flags
         self.DeltaPosition = DeltaPosition
+
+    # getters
+    @property
+    def MaxSpeed(self):
+        return self._MaxSpeed
+
+    @property
+    def Timeout(self):
+        return self._Timeout
+
+    @property
+    def MaxClickTime(self):
+        return self._MaxClickTime
+
+    @property
+    def Flags(self):
+        return self._Flags
+
+    @property
+    def DeltaPosition(self):
+        return self._DeltaPosition
+
+    # setters
+    @MaxSpeed.setter
+    def MaxSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxSpeed")
+        self._MaxSpeed = val
+
+    @Timeout.setter
+    def Timeout(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Timeout")
+        self._Timeout = val
+
+    @MaxClickTime.setter
+    def MaxClickTime(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MaxClickTime")
+        self._MaxClickTime = val
+
+    @Flags.setter
+    def Flags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Flags")
+        self._Flags = val
+
+    @DeltaPosition.setter
+    def DeltaPosition(self, val):
+        _check_castability(val,
+            c_float,
+            varname="DeltaPosition")
+        self._DeltaPosition = val
 
 
 class JoystickSettings:
@@ -555,21 +1975,143 @@ class JoystickSettings:
         self.DeadZone = DeadZone
         self.JoyFlags = JoyFlags
 
+    # getters
+    @property
+    def JoyLowEnd(self):
+        return self._JoyLowEnd
+
+    @property
+    def JoyCenter(self):
+        return self._JoyCenter
+
+    @property
+    def JoyHighEnd(self):
+        return self._JoyHighEnd
+
+    @property
+    def ExpFactor(self):
+        return self._ExpFactor
+
+    @property
+    def DeadZone(self):
+        return self._DeadZone
+
+    @property
+    def JoyFlags(self):
+        return self._JoyFlags
+
+    # setters
+    @JoyLowEnd.setter
+    def JoyLowEnd(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="JoyLowEnd")
+        self._JoyLowEnd = val
+
+    @JoyCenter.setter
+    def JoyCenter(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="JoyCenter")
+        self._JoyCenter = val
+
+    @JoyHighEnd.setter
+    def JoyHighEnd(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="JoyHighEnd")
+        self._JoyHighEnd = val
+
+    @ExpFactor.setter
+    def ExpFactor(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="ExpFactor")
+        self._ExpFactor = val
+
+    @DeadZone.setter
+    def DeadZone(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="DeadZone")
+        self._DeadZone = val
+
+    @JoyFlags.setter
+    def JoyFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="JoyFlags")
+        self._JoyFlags = val
+
 
 class CtpSettings:
 
-    def __init__(self, CTPMinError, CTPFlags):
+    def __init__(
+            self,
+            CTPMinError,
+            CTPFlags):
 
         self.CTPMinError = CTPMinError
         self.CTPFlags = CTPFlags
 
+    # getters
+    @property
+    def CTPMinError(self):
+        return self._CTPMinError
+
+    @property
+    def CTPFlags(self):
+        return self._CTPFlags
+
+    # setters
+    @CTPMinError.setter
+    def CTPMinError(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CTPMinError")
+        self._CTPMinError = val
+
+    @CTPFlags.setter
+    def CTPFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CTPFlags")
+        self._CTPFlags = val
+
 
 class UartSettings:
 
-    def __init__(self, Speed, UARTSetupFlags):
+    def __init__(
+            self,
+            Speed,
+            UARTSetupFlags):
 
         self.Speed = Speed
         self.UARTSetupFlags = UARTSetupFlags
+
+    # getters
+    @property
+    def Speed(self):
+        return self._Speed
+
+    @property
+    def UARTSetupFlags(self):
+        return self._UARTSetupFlags
+
+    # setters
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Speed")
+        self._Speed = val
+
+    @UARTSetupFlags.setter
+    def UARTSetupFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UARTSetupFlags")
+        self._UARTSetupFlags = val
 
 
 class NetworkSettings:
@@ -586,12 +2128,73 @@ class NetworkSettings:
         self.SubnetMask = SubnetMask
         self.DefaultGateway = DefaultGateway
 
+    # getters
+    @property
+    def DHCPEnabled(self):
+        return self._DHCPEnabled
+
+    @property
+    def IPv4Address(self):
+        return self._IPv4Address
+
+    @property
+    def SubnetMask(self):
+        return self._SubnetMask
+
+    @property
+    def DefaultGateway(self):
+        return self._DefaultGateway
+
+    # setters
+    @DHCPEnabled.setter
+    def DHCPEnabled(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="DHCPEnabled")
+        self._DHCPEnabled = val
+
+    @IPv4Address.setter
+    def IPv4Address(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="IPv4Address")
+        self._IPv4Address = val
+
+    @SubnetMask.setter
+    def SubnetMask(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SubnetMask")
+        self._SubnetMask = val
+
+    @DefaultGateway.setter
+    def DefaultGateway(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="DefaultGateway")
+        self._DefaultGateway = val
+
 
 class PasswordSettings:
 
-    def __init__(self, UserPassword):
+    def __init__(
+            self,
+            UserPassword):
 
         self.UserPassword = UserPassword
+
+    # getters
+    @property
+    def UserPassword(self):
+        return self._UserPassword
+
+    # setters
+    @UserPassword.setter
+    def UserPassword(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UserPassword")
+        self._UserPassword = val
 
 
 class CalibrationSettings:
@@ -612,20 +2215,130 @@ class CalibrationSettings:
         self.FullCurrent_A = FullCurrent_A
         self.FullCurrent_B = FullCurrent_B
 
+    # getters
+    @property
+    def CSS1_A(self):
+        return self._CSS1_A
+
+    @property
+    def CSS1_B(self):
+        return self._CSS1_B
+
+    @property
+    def CSS2_A(self):
+        return self._CSS2_A
+
+    @property
+    def CSS2_B(self):
+        return self._CSS2_B
+
+    @property
+    def FullCurrent_A(self):
+        return self._FullCurrent_A
+
+    @property
+    def FullCurrent_B(self):
+        return self._FullCurrent_B
+
+    # setters
+    @CSS1_A.setter
+    def CSS1_A(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CSS1_A")
+        self._CSS1_A = val
+
+    @CSS1_B.setter
+    def CSS1_B(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CSS1_B")
+        self._CSS1_B = val
+
+    @CSS2_A.setter
+    def CSS2_A(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CSS2_A")
+        self._CSS2_A = val
+
+    @CSS2_B.setter
+    def CSS2_B(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CSS2_B")
+        self._CSS2_B = val
+
+    @FullCurrent_A.setter
+    def FullCurrent_A(self, val):
+        _check_castability(val,
+            c_float,
+            varname="FullCurrent_A")
+        self._FullCurrent_A = val
+
+    @FullCurrent_B.setter
+    def FullCurrent_B(self, val):
+        _check_castability(val,
+            c_float,
+            varname="FullCurrent_B")
+        self._FullCurrent_B = val
+
 
 class ControllerName:
 
-    def __init__(self, ControllerName, CtrlFlags):
+    def __init__(
+            self,
+            ControllerName,
+            CtrlFlags):
 
         self.ControllerName = ControllerName
         self.CtrlFlags = CtrlFlags
 
+    # getters
+    @property
+    def ControllerName(self):
+        return self._ControllerName
+
+    @property
+    def CtrlFlags(self):
+        return self._CtrlFlags
+
+    # setters
+    @ControllerName.setter
+    def ControllerName(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="ControllerName")
+        self._ControllerName = val
+
+    @CtrlFlags.setter
+    def CtrlFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CtrlFlags")
+        self._CtrlFlags = val
+
 
 class NonvolatileMemory:
 
-    def __init__(self, UserData):
+    def __init__(
+            self,
+            UserData):
 
         self.UserData = UserData
+
+    # getters
+    @property
+    def UserData(self):
+        return self._UserData
+
+    # setters
+    @UserData.setter
+    def UserData(self, val):
+        _check_castability(val,
+            c_uint * 7,
+            varname="UserData")
+        self._UserData = val
 
 
 class EmfSettings:
@@ -642,6 +2355,52 @@ class EmfSettings:
         self.Km = Km
         self.BackEMFFlags = BackEMFFlags
 
+    # getters
+    @property
+    def L(self):
+        return self._L
+
+    @property
+    def R(self):
+        return self._R
+
+    @property
+    def Km(self):
+        return self._Km
+
+    @property
+    def BackEMFFlags(self):
+        return self._BackEMFFlags
+
+    # setters
+    @L.setter
+    def L(self, val):
+        _check_castability(val,
+            c_float,
+            varname="L")
+        self._L = val
+
+    @R.setter
+    def R(self, val):
+        _check_castability(val,
+            c_float,
+            varname="R")
+        self._R = val
+
+    @Km.setter
+    def Km(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Km")
+        self._Km = val
+
+    @BackEMFFlags.setter
+    def BackEMFFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="BackEMFFlags")
+        self._BackEMFFlags = val
+
 
 class EngineAdvansedSetup:
 
@@ -655,12 +2414,62 @@ class EngineAdvansedSetup:
         self.stepcloseloop_Kp_low = stepcloseloop_Kp_low
         self.stepcloseloop_Kp_high = stepcloseloop_Kp_high
 
+    # getters
+    @property
+    def stepcloseloop_Kw(self):
+        return self._stepcloseloop_Kw
+
+    @property
+    def stepcloseloop_Kp_low(self):
+        return self._stepcloseloop_Kp_low
+
+    @property
+    def stepcloseloop_Kp_high(self):
+        return self._stepcloseloop_Kp_high
+
+    # setters
+    @stepcloseloop_Kw.setter
+    def stepcloseloop_Kw(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="stepcloseloop_Kw")
+        self._stepcloseloop_Kw = val
+
+    @stepcloseloop_Kp_low.setter
+    def stepcloseloop_Kp_low(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="stepcloseloop_Kp_low")
+        self._stepcloseloop_Kp_low = val
+
+    @stepcloseloop_Kp_high.setter
+    def stepcloseloop_Kp_high(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="stepcloseloop_Kp_high")
+        self._stepcloseloop_Kp_high = val
+
 
 class ExtendedSettings:
 
-    def __init__(self, Param1):
+    def __init__(
+            self,
+            Param1):
 
         self.Param1 = Param1
+
+    # getters
+    @property
+    def Param1(self):
+        return self._Param1
+
+    # setters
+    @Param1.setter
+    def Param1(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Param1")
+        self._Param1 = val
 
 
 class GetPosition:
@@ -675,13 +2484,75 @@ class GetPosition:
         self.uPosition = uPosition
         self.EncPosition = EncPosition
 
+    # getters
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def uPosition(self):
+        return self._uPosition
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    # setters
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Position")
+        self._Position = val
+
+    @uPosition.setter
+    def uPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uPosition")
+        self._uPosition = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_long,
+            varname="EncPosition")
+        self._EncPosition = val
+
 
 class GetPositionCalb:
 
-    def __init__(self, Position, EncPosition):
+    def __init__(
+            self,
+            Position,
+            EncPosition):
 
         self.Position = Position
         self.EncPosition = EncPosition
+
+    # getters
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    # setters
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Position")
+        self._Position = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_longlong,
+            varname="EncPosition")
+        self._EncPosition = val
 
 
 class SetPosition:
@@ -698,6 +2569,52 @@ class SetPosition:
         self.EncPosition = EncPosition
         self.PosFlags = PosFlags
 
+    # getters
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def uPosition(self):
+        return self._uPosition
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    @property
+    def PosFlags(self):
+        return self._PosFlags
+
+    # setters
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Position")
+        self._Position = val
+
+    @uPosition.setter
+    def uPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uPosition")
+        self._uPosition = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_longlong,
+            varname="EncPosition")
+        self._EncPosition = val
+
+    @PosFlags.setter
+    def PosFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PosFlags")
+        self._PosFlags = val
+
 
 class SetPositionCalb:
 
@@ -710,6 +2627,41 @@ class SetPositionCalb:
         self.Position = Position
         self.EncPosition = EncPosition
         self.PosFlags = PosFlags
+
+    # getters
+    @property
+    def Position(self):
+        return self._Position
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    @property
+    def PosFlags(self):
+        return self._PosFlags
+
+    # setters
+    @Position.setter
+    def Position(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Position")
+        self._Position = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_longlong,
+            varname="EncPosition")
+        self._EncPosition = val
+
+    @PosFlags.setter
+    def PosFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PosFlags")
+        self._PosFlags = val
 
 
 class Status:
@@ -754,6 +2706,206 @@ class Status:
         self.GPIOFlags = GPIOFlags
         self.CmdBufFreeSpace = CmdBufFreeSpace
 
+    # getters
+    @property
+    def MoveSts(self):
+        return self._MoveSts
+
+    @property
+    def MvCmdSts(self):
+        return self._MvCmdSts
+
+    @property
+    def PWRSts(self):
+        return self._PWRSts
+
+    @property
+    def EncSts(self):
+        return self._EncSts
+
+    @property
+    def WindSts(self):
+        return self._WindSts
+
+    @property
+    def CurPosition(self):
+        return self._CurPosition
+
+    @property
+    def uCurPosition(self):
+        return self._uCurPosition
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    @property
+    def CurSpeed(self):
+        return self._CurSpeed
+
+    @property
+    def uCurSpeed(self):
+        return self._uCurSpeed
+
+    @property
+    def Ipwr(self):
+        return self._Ipwr
+
+    @property
+    def Upwr(self):
+        return self._Upwr
+
+    @property
+    def Iusb(self):
+        return self._Iusb
+
+    @property
+    def Uusb(self):
+        return self._Uusb
+
+    @property
+    def CurT(self):
+        return self._CurT
+
+    @property
+    def Flags(self):
+        return self._Flags
+
+    @property
+    def GPIOFlags(self):
+        return self._GPIOFlags
+
+    @property
+    def CmdBufFreeSpace(self):
+        return self._CmdBufFreeSpace
+
+    # setters
+    @MoveSts.setter
+    def MoveSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MoveSts")
+        self._MoveSts = val
+
+    @MvCmdSts.setter
+    def MvCmdSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MvCmdSts")
+        self._MvCmdSts = val
+
+    @PWRSts.setter
+    def PWRSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PWRSts")
+        self._PWRSts = val
+
+    @EncSts.setter
+    def EncSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EncSts")
+        self._EncSts = val
+
+    @WindSts.setter
+    def WindSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="WindSts")
+        self._WindSts = val
+
+    @CurPosition.setter
+    def CurPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="CurPosition")
+        self._CurPosition = val
+
+    @uCurPosition.setter
+    def uCurPosition(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uCurPosition")
+        self._uCurPosition = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_longlong,
+            varname="EncPosition")
+        self._EncPosition = val
+
+    @CurSpeed.setter
+    def CurSpeed(self, val):
+        _check_castability(val,
+            c_int,
+            varname="CurSpeed")
+        self._CurSpeed = val
+
+    @uCurSpeed.setter
+    def uCurSpeed(self, val):
+        _check_castability(val,
+            c_int,
+            varname="uCurSpeed")
+        self._uCurSpeed = val
+
+    @Ipwr.setter
+    def Ipwr(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Ipwr")
+        self._Ipwr = val
+
+    @Upwr.setter
+    def Upwr(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Upwr")
+        self._Upwr = val
+
+    @Iusb.setter
+    def Iusb(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Iusb")
+        self._Iusb = val
+
+    @Uusb.setter
+    def Uusb(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Uusb")
+        self._Uusb = val
+
+    @CurT.setter
+    def CurT(self, val):
+        _check_castability(val,
+            c_int,
+            varname="CurT")
+        self._CurT = val
+
+    @Flags.setter
+    def Flags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Flags")
+        self._Flags = val
+
+    @GPIOFlags.setter
+    def GPIOFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="GPIOFlags")
+        self._GPIOFlags = val
+
+    @CmdBufFreeSpace.setter
+    def CmdBufFreeSpace(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CmdBufFreeSpace")
+        self._CmdBufFreeSpace = val
+
 
 class StatusCalb:
 
@@ -793,6 +2945,184 @@ class StatusCalb:
         self.GPIOFlags = GPIOFlags
         self.CmdBufFreeSpace = CmdBufFreeSpace
 
+    # getters
+    @property
+    def MoveSts(self):
+        return self._MoveSts
+
+    @property
+    def MvCmdSts(self):
+        return self._MvCmdSts
+
+    @property
+    def PWRSts(self):
+        return self._PWRSts
+
+    @property
+    def EncSts(self):
+        return self._EncSts
+
+    @property
+    def WindSts(self):
+        return self._WindSts
+
+    @property
+    def CurPosition(self):
+        return self._CurPosition
+
+    @property
+    def EncPosition(self):
+        return self._EncPosition
+
+    @property
+    def CurSpeed(self):
+        return self._CurSpeed
+
+    @property
+    def Ipwr(self):
+        return self._Ipwr
+
+    @property
+    def Upwr(self):
+        return self._Upwr
+
+    @property
+    def Iusb(self):
+        return self._Iusb
+
+    @property
+    def Uusb(self):
+        return self._Uusb
+
+    @property
+    def CurT(self):
+        return self._CurT
+
+    @property
+    def Flags(self):
+        return self._Flags
+
+    @property
+    def GPIOFlags(self):
+        return self._GPIOFlags
+
+    @property
+    def CmdBufFreeSpace(self):
+        return self._CmdBufFreeSpace
+
+    # setters
+    @MoveSts.setter
+    def MoveSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MoveSts")
+        self._MoveSts = val
+
+    @MvCmdSts.setter
+    def MvCmdSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MvCmdSts")
+        self._MvCmdSts = val
+
+    @PWRSts.setter
+    def PWRSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PWRSts")
+        self._PWRSts = val
+
+    @EncSts.setter
+    def EncSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EncSts")
+        self._EncSts = val
+
+    @WindSts.setter
+    def WindSts(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="WindSts")
+        self._WindSts = val
+
+    @CurPosition.setter
+    def CurPosition(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CurPosition")
+        self._CurPosition = val
+
+    @EncPosition.setter
+    def EncPosition(self, val):
+        _check_castability(val,
+            c_longlong,
+            varname="EncPosition")
+        self._EncPosition = val
+
+    @CurSpeed.setter
+    def CurSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="CurSpeed")
+        self._CurSpeed = val
+
+    @Ipwr.setter
+    def Ipwr(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Ipwr")
+        self._Ipwr = val
+
+    @Upwr.setter
+    def Upwr(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Upwr")
+        self._Upwr = val
+
+    @Iusb.setter
+    def Iusb(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Iusb")
+        self._Iusb = val
+
+    @Uusb.setter
+    def Uusb(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Uusb")
+        self._Uusb = val
+
+    @CurT.setter
+    def CurT(self, val):
+        _check_castability(val,
+            c_int,
+            varname="CurT")
+        self._CurT = val
+
+    @Flags.setter
+    def Flags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Flags")
+        self._Flags = val
+
+    @GPIOFlags.setter
+    def GPIOFlags(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="GPIOFlags")
+        self._GPIOFlags = val
+
+    @CmdBufFreeSpace.setter
+    def CmdBufFreeSpace(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="CmdBufFreeSpace")
+        self._CmdBufFreeSpace = val
+
 
 class Measurements:
 
@@ -805,6 +3135,41 @@ class Measurements:
         self.Speed = Speed
         self.Error = Error
         self.Length = Length
+
+    # getters
+    @property
+    def Speed(self):
+        return self._Speed
+
+    @property
+    def Error(self):
+        return self._Error
+
+    @property
+    def Length(self):
+        return self._Length
+
+    # setters
+    @Speed.setter
+    def Speed(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Speed")
+        self._Speed = val
+
+    @Error.setter
+    def Error(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Error")
+        self._Error = val
+
+    @Length.setter
+    def Length(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Length")
+        self._Length = val
 
 
 class ChartData:
@@ -831,6 +3196,107 @@ class ChartData:
         self.Joy = Joy
         self.DutyCycle = DutyCycle
 
+    # getters
+    @property
+    def WindingVoltageA(self):
+        return self._WindingVoltageA
+
+    @property
+    def WindingVoltageB(self):
+        return self._WindingVoltageB
+
+    @property
+    def WindingVoltageC(self):
+        return self._WindingVoltageC
+
+    @property
+    def WindingCurrentA(self):
+        return self._WindingCurrentA
+
+    @property
+    def WindingCurrentB(self):
+        return self._WindingCurrentB
+
+    @property
+    def WindingCurrentC(self):
+        return self._WindingCurrentC
+
+    @property
+    def Pot(self):
+        return self._Pot
+
+    @property
+    def Joy(self):
+        return self._Joy
+
+    @property
+    def DutyCycle(self):
+        return self._DutyCycle
+
+    # setters
+    @WindingVoltageA.setter
+    def WindingVoltageA(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingVoltageA")
+        self._WindingVoltageA = val
+
+    @WindingVoltageB.setter
+    def WindingVoltageB(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingVoltageB")
+        self._WindingVoltageB = val
+
+    @WindingVoltageC.setter
+    def WindingVoltageC(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingVoltageC")
+        self._WindingVoltageC = val
+
+    @WindingCurrentA.setter
+    def WindingCurrentA(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingCurrentA")
+        self._WindingCurrentA = val
+
+    @WindingCurrentB.setter
+    def WindingCurrentB(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingCurrentB")
+        self._WindingCurrentB = val
+
+    @WindingCurrentC.setter
+    def WindingCurrentC(self, val):
+        _check_castability(val,
+            c_int,
+            varname="WindingCurrentC")
+        self._WindingCurrentC = val
+
+    @Pot.setter
+    def Pot(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Pot")
+        self._Pot = val
+
+    @Joy.setter
+    def Joy(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Joy")
+        self._Joy = val
+
+    @DutyCycle.setter
+    def DutyCycle(self, val):
+        _check_castability(val,
+            c_int,
+            varname="DutyCycle")
+        self._DutyCycle = val
+
 
 class DeviceInformation:
 
@@ -850,6 +3316,74 @@ class DeviceInformation:
         self.Minor = Minor
         self.Release = Release
 
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def ManufacturerId(self):
+        return self._ManufacturerId
+
+    @property
+    def ProductDescription(self):
+        return self._ProductDescription
+
+    @property
+    def Major(self):
+        return self._Major
+
+    @property
+    def Minor(self):
+        return self._Minor
+
+    @property
+    def Release(self):
+        return self._Release
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @ManufacturerId.setter
+    def ManufacturerId(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="ManufacturerId")
+        self._ManufacturerId = val
+
+    @ProductDescription.setter
+    def ProductDescription(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="ProductDescription")
+        self._ProductDescription = val
+
+    @Major.setter
+    def Major(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Major")
+        self._Major = val
+
+    @Minor.setter
+    def Minor(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Minor")
+        self._Minor = val
+
+    @Release.setter
+    def Release(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Release")
+        self._Release = val
+
 
 class SerialNumber:
 
@@ -866,6 +3400,63 @@ class SerialNumber:
         self.Major = Major
         self.Minor = Minor
         self.Release = Release
+
+    # getters
+    @property
+    def SN(self):
+        return self._SN
+
+    @property
+    def Key(self):
+        return self._Key
+
+    @property
+    def Major(self):
+        return self._Major
+
+    @property
+    def Minor(self):
+        return self._Minor
+
+    @property
+    def Release(self):
+        return self._Release
+
+    # setters
+    @SN.setter
+    def SN(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SN")
+        self._SN = val
+
+    @Key.setter
+    def Key(self, val):
+        _check_castability(val,
+            c_uint8 * 32,
+            varname="Key")
+        self._Key = val
+
+    @Major.setter
+    def Major(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Major")
+        self._Major = val
+
+    @Minor.setter
+    def Minor(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Minor")
+        self._Minor = val
+
+    @Release.setter
+    def Release(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Release")
+        self._Release = val
 
 
 class AnalogData:
@@ -932,20 +3523,383 @@ class AnalogData:
         self.R = R
         self.L = L
 
+    # getters
+    @property
+    def A1Voltage_ADC(self):
+        return self._A1Voltage_ADC
+
+    @property
+    def A2Voltage_ADC(self):
+        return self._A2Voltage_ADC
+
+    @property
+    def B1Voltage_ADC(self):
+        return self._B1Voltage_ADC
+
+    @property
+    def B2Voltage_ADC(self):
+        return self._B2Voltage_ADC
+
+    @property
+    def SupVoltage_ADC(self):
+        return self._SupVoltage_ADC
+
+    @property
+    def ACurrent_ADC(self):
+        return self._ACurrent_ADC
+
+    @property
+    def BCurrent_ADC(self):
+        return self._BCurrent_ADC
+
+    @property
+    def FullCurrent_ADC(self):
+        return self._FullCurrent_ADC
+
+    @property
+    def Temp_ADC(self):
+        return self._Temp_ADC
+
+    @property
+    def Joy_ADC(self):
+        return self._Joy_ADC
+
+    @property
+    def Pot_ADC(self):
+        return self._Pot_ADC
+
+    @property
+    def L5_ADC(self):
+        return self._L5_ADC
+
+    @property
+    def H5_ADC(self):
+        return self._H5_ADC
+
+    @property
+    def A1Voltage(self):
+        return self._A1Voltage
+
+    @property
+    def A2Voltage(self):
+        return self._A2Voltage
+
+    @property
+    def B1Voltage(self):
+        return self._B1Voltage
+
+    @property
+    def B2Voltage(self):
+        return self._B2Voltage
+
+    @property
+    def SupVoltage(self):
+        return self._SupVoltage
+
+    @property
+    def ACurrent(self):
+        return self._ACurrent
+
+    @property
+    def BCurrent(self):
+        return self._BCurrent
+
+    @property
+    def FullCurrent(self):
+        return self._FullCurrent
+
+    @property
+    def Temp(self):
+        return self._Temp
+
+    @property
+    def Joy(self):
+        return self._Joy
+
+    @property
+    def Pot(self):
+        return self._Pot
+
+    @property
+    def L5(self):
+        return self._L5
+
+    @property
+    def H5(self):
+        return self._H5
+
+    @property
+    def deprecated(self):
+        return self._deprecated
+
+    @property
+    def R(self):
+        return self._R
+
+    @property
+    def L(self):
+        return self._L
+
+    # setters
+    @A1Voltage_ADC.setter
+    def A1Voltage_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="A1Voltage_ADC")
+        self._A1Voltage_ADC = val
+
+    @A2Voltage_ADC.setter
+    def A2Voltage_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="A2Voltage_ADC")
+        self._A2Voltage_ADC = val
+
+    @B1Voltage_ADC.setter
+    def B1Voltage_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="B1Voltage_ADC")
+        self._B1Voltage_ADC = val
+
+    @B2Voltage_ADC.setter
+    def B2Voltage_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="B2Voltage_ADC")
+        self._B2Voltage_ADC = val
+
+    @SupVoltage_ADC.setter
+    def SupVoltage_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="SupVoltage_ADC")
+        self._SupVoltage_ADC = val
+
+    @ACurrent_ADC.setter
+    def ACurrent_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="ACurrent_ADC")
+        self._ACurrent_ADC = val
+
+    @BCurrent_ADC.setter
+    def BCurrent_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="BCurrent_ADC")
+        self._BCurrent_ADC = val
+
+    @FullCurrent_ADC.setter
+    def FullCurrent_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="FullCurrent_ADC")
+        self._FullCurrent_ADC = val
+
+    @Temp_ADC.setter
+    def Temp_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Temp_ADC")
+        self._Temp_ADC = val
+
+    @Joy_ADC.setter
+    def Joy_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Joy_ADC")
+        self._Joy_ADC = val
+
+    @Pot_ADC.setter
+    def Pot_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Pot_ADC")
+        self._Pot_ADC = val
+
+    @L5_ADC.setter
+    def L5_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="L5_ADC")
+        self._L5_ADC = val
+
+    @H5_ADC.setter
+    def H5_ADC(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="H5_ADC")
+        self._H5_ADC = val
+
+    @A1Voltage.setter
+    def A1Voltage(self, val):
+        _check_castability(val,
+            c_int,
+            varname="A1Voltage")
+        self._A1Voltage = val
+
+    @A2Voltage.setter
+    def A2Voltage(self, val):
+        _check_castability(val,
+            c_int,
+            varname="A2Voltage")
+        self._A2Voltage = val
+
+    @B1Voltage.setter
+    def B1Voltage(self, val):
+        _check_castability(val,
+            c_int,
+            varname="B1Voltage")
+        self._B1Voltage = val
+
+    @B2Voltage.setter
+    def B2Voltage(self, val):
+        _check_castability(val,
+            c_int,
+            varname="B2Voltage")
+        self._B2Voltage = val
+
+    @SupVoltage.setter
+    def SupVoltage(self, val):
+        _check_castability(val,
+            c_int,
+            varname="SupVoltage")
+        self._SupVoltage = val
+
+    @ACurrent.setter
+    def ACurrent(self, val):
+        _check_castability(val,
+            c_int,
+            varname="ACurrent")
+        self._ACurrent = val
+
+    @BCurrent.setter
+    def BCurrent(self, val):
+        _check_castability(val,
+            c_int,
+            varname="BCurrent")
+        self._BCurrent = val
+
+    @FullCurrent.setter
+    def FullCurrent(self, val):
+        _check_castability(val,
+            c_int,
+            varname="FullCurrent")
+        self._FullCurrent = val
+
+    @Temp.setter
+    def Temp(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Temp")
+        self._Temp = val
+
+    @Joy.setter
+    def Joy(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Joy")
+        self._Joy = val
+
+    @Pot.setter
+    def Pot(self, val):
+        _check_castability(val,
+            c_int,
+            varname="Pot")
+        self._Pot = val
+
+    @L5.setter
+    def L5(self, val):
+        _check_castability(val,
+            c_int,
+            varname="L5")
+        self._L5 = val
+
+    @H5.setter
+    def H5(self, val):
+        _check_castability(val,
+            c_int,
+            varname="H5")
+        self._H5 = val
+
+    @deprecated.setter
+    def deprecated(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="deprecated")
+        self._deprecated = val
+
+    @R.setter
+    def R(self, val):
+        _check_castability(val,
+            c_int,
+            varname="R")
+        self._R = val
+
+    @L.setter
+    def L(self, val):
+        _check_castability(val,
+            c_int,
+            varname="L")
+        self._L = val
+
 
 class StageName:
 
-    def __init__(self, PositionerName):
+    def __init__(
+            self,
+            PositionerName):
 
         self.PositionerName = PositionerName
+
+    # getters
+    @property
+    def PositionerName(self):
+        return self._PositionerName
+
+    # setters
+    @PositionerName.setter
+    def PositionerName(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PositionerName")
+        self._PositionerName = val
 
 
 class StageInformation:
 
-    def __init__(self, Manufacturer, PartNumber):
+    def __init__(
+            self,
+            Manufacturer,
+            PartNumber):
 
         self.Manufacturer = Manufacturer
         self.PartNumber = PartNumber
+
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def PartNumber(self):
+        return self._PartNumber
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @PartNumber.setter
+    def PartNumber(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PartNumber")
+        self._PartNumber = val
 
 
 class StageSettings:
@@ -972,13 +3926,141 @@ class StageSettings:
         self.HorizontalLoadCapacity = HorizontalLoadCapacity
         self.VerticalLoadCapacity = VerticalLoadCapacity
 
+    # getters
+    @property
+    def LeadScrewPitch(self):
+        return self._LeadScrewPitch
+
+    @property
+    def Units(self):
+        return self._Units
+
+    @property
+    def MaxSpeed(self):
+        return self._MaxSpeed
+
+    @property
+    def TravelRange(self):
+        return self._TravelRange
+
+    @property
+    def SupplyVoltageMin(self):
+        return self._SupplyVoltageMin
+
+    @property
+    def SupplyVoltageMax(self):
+        return self._SupplyVoltageMax
+
+    @property
+    def MaxCurrentConsumption(self):
+        return self._MaxCurrentConsumption
+
+    @property
+    def HorizontalLoadCapacity(self):
+        return self._HorizontalLoadCapacity
+
+    @property
+    def VerticalLoadCapacity(self):
+        return self._VerticalLoadCapacity
+
+    # setters
+    @LeadScrewPitch.setter
+    def LeadScrewPitch(self, val):
+        _check_castability(val,
+            c_float,
+            varname="LeadScrewPitch")
+        self._LeadScrewPitch = val
+
+    @Units.setter
+    def Units(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Units")
+        self._Units = val
+
+    @MaxSpeed.setter
+    def MaxSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxSpeed")
+        self._MaxSpeed = val
+
+    @TravelRange.setter
+    def TravelRange(self, val):
+        _check_castability(val,
+            c_float,
+            varname="TravelRange")
+        self._TravelRange = val
+
+    @SupplyVoltageMin.setter
+    def SupplyVoltageMin(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMin")
+        self._SupplyVoltageMin = val
+
+    @SupplyVoltageMax.setter
+    def SupplyVoltageMax(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMax")
+        self._SupplyVoltageMax = val
+
+    @MaxCurrentConsumption.setter
+    def MaxCurrentConsumption(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxCurrentConsumption")
+        self._MaxCurrentConsumption = val
+
+    @HorizontalLoadCapacity.setter
+    def HorizontalLoadCapacity(self, val):
+        _check_castability(val,
+            c_float,
+            varname="HorizontalLoadCapacity")
+        self._HorizontalLoadCapacity = val
+
+    @VerticalLoadCapacity.setter
+    def VerticalLoadCapacity(self, val):
+        _check_castability(val,
+            c_float,
+            varname="VerticalLoadCapacity")
+        self._VerticalLoadCapacity = val
+
 
 class MotorInformation:
 
-    def __init__(self, Manufacturer, PartNumber):
+    def __init__(
+            self,
+            Manufacturer,
+            PartNumber):
 
         self.Manufacturer = Manufacturer
         self.PartNumber = PartNumber
+
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def PartNumber(self):
+        return self._PartNumber
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @PartNumber.setter
+    def PartNumber(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PartNumber")
+        self._PartNumber = val
 
 
 class MotorSettings:
@@ -1033,13 +4115,295 @@ class MotorSettings:
         self.NoLoadCurrent = NoLoadCurrent
         self.NoLoadSpeed = NoLoadSpeed
 
+    # getters
+    @property
+    def MotorType(self):
+        return self._MotorType
+
+    @property
+    def ReservedField(self):
+        return self._ReservedField
+
+    @property
+    def Poles(self):
+        return self._Poles
+
+    @property
+    def Phases(self):
+        return self._Phases
+
+    @property
+    def NominalVoltage(self):
+        return self._NominalVoltage
+
+    @property
+    def NominalCurrent(self):
+        return self._NominalCurrent
+
+    @property
+    def NominalSpeed(self):
+        return self._NominalSpeed
+
+    @property
+    def NominalTorque(self):
+        return self._NominalTorque
+
+    @property
+    def NominalPower(self):
+        return self._NominalPower
+
+    @property
+    def WindingResistance(self):
+        return self._WindingResistance
+
+    @property
+    def WindingInductance(self):
+        return self._WindingInductance
+
+    @property
+    def RotorInertia(self):
+        return self._RotorInertia
+
+    @property
+    def StallTorque(self):
+        return self._StallTorque
+
+    @property
+    def DetentTorque(self):
+        return self._DetentTorque
+
+    @property
+    def TorqueConstant(self):
+        return self._TorqueConstant
+
+    @property
+    def SpeedConstant(self):
+        return self._SpeedConstant
+
+    @property
+    def SpeedTorqueGradient(self):
+        return self._SpeedTorqueGradient
+
+    @property
+    def MechanicalTimeConstant(self):
+        return self._MechanicalTimeConstant
+
+    @property
+    def MaxSpeed(self):
+        return self._MaxSpeed
+
+    @property
+    def MaxCurrent(self):
+        return self._MaxCurrent
+
+    @property
+    def MaxCurrentTime(self):
+        return self._MaxCurrentTime
+
+    @property
+    def NoLoadCurrent(self):
+        return self._NoLoadCurrent
+
+    @property
+    def NoLoadSpeed(self):
+        return self._NoLoadSpeed
+
+    # setters
+    @MotorType.setter
+    def MotorType(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MotorType")
+        self._MotorType = val
+
+    @ReservedField.setter
+    def ReservedField(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="ReservedField")
+        self._ReservedField = val
+
+    @Poles.setter
+    def Poles(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Poles")
+        self._Poles = val
+
+    @Phases.setter
+    def Phases(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="Phases")
+        self._Phases = val
+
+    @NominalVoltage.setter
+    def NominalVoltage(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NominalVoltage")
+        self._NominalVoltage = val
+
+    @NominalCurrent.setter
+    def NominalCurrent(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NominalCurrent")
+        self._NominalCurrent = val
+
+    @NominalSpeed.setter
+    def NominalSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NominalSpeed")
+        self._NominalSpeed = val
+
+    @NominalTorque.setter
+    def NominalTorque(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NominalTorque")
+        self._NominalTorque = val
+
+    @NominalPower.setter
+    def NominalPower(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NominalPower")
+        self._NominalPower = val
+
+    @WindingResistance.setter
+    def WindingResistance(self, val):
+        _check_castability(val,
+            c_float,
+            varname="WindingResistance")
+        self._WindingResistance = val
+
+    @WindingInductance.setter
+    def WindingInductance(self, val):
+        _check_castability(val,
+            c_float,
+            varname="WindingInductance")
+        self._WindingInductance = val
+
+    @RotorInertia.setter
+    def RotorInertia(self, val):
+        _check_castability(val,
+            c_float,
+            varname="RotorInertia")
+        self._RotorInertia = val
+
+    @StallTorque.setter
+    def StallTorque(self, val):
+        _check_castability(val,
+            c_float,
+            varname="StallTorque")
+        self._StallTorque = val
+
+    @DetentTorque.setter
+    def DetentTorque(self, val):
+        _check_castability(val,
+            c_float,
+            varname="DetentTorque")
+        self._DetentTorque = val
+
+    @TorqueConstant.setter
+    def TorqueConstant(self, val):
+        _check_castability(val,
+            c_float,
+            varname="TorqueConstant")
+        self._TorqueConstant = val
+
+    @SpeedConstant.setter
+    def SpeedConstant(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SpeedConstant")
+        self._SpeedConstant = val
+
+    @SpeedTorqueGradient.setter
+    def SpeedTorqueGradient(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SpeedTorqueGradient")
+        self._SpeedTorqueGradient = val
+
+    @MechanicalTimeConstant.setter
+    def MechanicalTimeConstant(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MechanicalTimeConstant")
+        self._MechanicalTimeConstant = val
+
+    @MaxSpeed.setter
+    def MaxSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxSpeed")
+        self._MaxSpeed = val
+
+    @MaxCurrent.setter
+    def MaxCurrent(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxCurrent")
+        self._MaxCurrent = val
+
+    @MaxCurrentTime.setter
+    def MaxCurrentTime(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxCurrentTime")
+        self._MaxCurrentTime = val
+
+    @NoLoadCurrent.setter
+    def NoLoadCurrent(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NoLoadCurrent")
+        self._NoLoadCurrent = val
+
+    @NoLoadSpeed.setter
+    def NoLoadSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="NoLoadSpeed")
+        self._NoLoadSpeed = val
+
 
 class EncoderInformation:
 
-    def __init__(self, Manufacturer, PartNumber):
+    def __init__(
+            self,
+            Manufacturer,
+            PartNumber):
 
         self.Manufacturer = Manufacturer
         self.PartNumber = PartNumber
+
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def PartNumber(self):
+        return self._PartNumber
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @PartNumber.setter
+    def PartNumber(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PartNumber")
+        self._PartNumber = val
 
 
 class EncoderSettings:
@@ -1060,13 +4424,108 @@ class EncoderSettings:
         self.PPR = PPR
         self.EncoderSettings = EncoderSettings
 
+    # getters
+    @property
+    def MaxOperatingFrequency(self):
+        return self._MaxOperatingFrequency
+
+    @property
+    def SupplyVoltageMin(self):
+        return self._SupplyVoltageMin
+
+    @property
+    def SupplyVoltageMax(self):
+        return self._SupplyVoltageMax
+
+    @property
+    def MaxCurrentConsumption(self):
+        return self._MaxCurrentConsumption
+
+    @property
+    def PPR(self):
+        return self._PPR
+
+    @property
+    def EncoderSettings(self):
+        return self._EncoderSettings
+
+    # setters
+    @MaxOperatingFrequency.setter
+    def MaxOperatingFrequency(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxOperatingFrequency")
+        self._MaxOperatingFrequency = val
+
+    @SupplyVoltageMin.setter
+    def SupplyVoltageMin(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMin")
+        self._SupplyVoltageMin = val
+
+    @SupplyVoltageMax.setter
+    def SupplyVoltageMax(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMax")
+        self._SupplyVoltageMax = val
+
+    @MaxCurrentConsumption.setter
+    def MaxCurrentConsumption(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxCurrentConsumption")
+        self._MaxCurrentConsumption = val
+
+    @PPR.setter
+    def PPR(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PPR")
+        self._PPR = val
+
+    @EncoderSettings.setter
+    def EncoderSettings(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="EncoderSettings")
+        self._EncoderSettings = val
+
 
 class HallsensorInformation:
 
-    def __init__(self, Manufacturer, PartNumber):
+    def __init__(
+            self,
+            Manufacturer,
+            PartNumber):
 
         self.Manufacturer = Manufacturer
         self.PartNumber = PartNumber
+
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def PartNumber(self):
+        return self._PartNumber
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @PartNumber.setter
+    def PartNumber(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PartNumber")
+        self._PartNumber = val
 
 
 class HallsensorSettings:
@@ -1085,13 +4544,97 @@ class HallsensorSettings:
         self.MaxCurrentConsumption = MaxCurrentConsumption
         self.PPR = PPR
 
+    # getters
+    @property
+    def MaxOperatingFrequency(self):
+        return self._MaxOperatingFrequency
+
+    @property
+    def SupplyVoltageMin(self):
+        return self._SupplyVoltageMin
+
+    @property
+    def SupplyVoltageMax(self):
+        return self._SupplyVoltageMax
+
+    @property
+    def MaxCurrentConsumption(self):
+        return self._MaxCurrentConsumption
+
+    @property
+    def PPR(self):
+        return self._PPR
+
+    # setters
+    @MaxOperatingFrequency.setter
+    def MaxOperatingFrequency(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxOperatingFrequency")
+        self._MaxOperatingFrequency = val
+
+    @SupplyVoltageMin.setter
+    def SupplyVoltageMin(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMin")
+        self._SupplyVoltageMin = val
+
+    @SupplyVoltageMax.setter
+    def SupplyVoltageMax(self, val):
+        _check_castability(val,
+            c_float,
+            varname="SupplyVoltageMax")
+        self._SupplyVoltageMax = val
+
+    @MaxCurrentConsumption.setter
+    def MaxCurrentConsumption(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxCurrentConsumption")
+        self._MaxCurrentConsumption = val
+
+    @PPR.setter
+    def PPR(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="PPR")
+        self._PPR = val
+
 
 class GearInformation:
 
-    def __init__(self, Manufacturer, PartNumber):
+    def __init__(
+            self,
+            Manufacturer,
+            PartNumber):
 
         self.Manufacturer = Manufacturer
         self.PartNumber = PartNumber
+
+    # getters
+    @property
+    def Manufacturer(self):
+        return self._Manufacturer
+
+    @property
+    def PartNumber(self):
+        return self._PartNumber
+
+    # setters
+    @Manufacturer.setter
+    def Manufacturer(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="Manufacturer")
+        self._Manufacturer = val
+
+    @PartNumber.setter
+    def PartNumber(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="PartNumber")
+        self._PartNumber = val
 
 
 class GearSettings:
@@ -1113,6 +4656,85 @@ class GearSettings:
         self.MaxOutputBacklash = MaxOutputBacklash
         self.InputInertia = InputInertia
         self.Efficiency = Efficiency
+
+    # getters
+    @property
+    def ReductionIn(self):
+        return self._ReductionIn
+
+    @property
+    def ReductionOut(self):
+        return self._ReductionOut
+
+    @property
+    def RatedInputTorque(self):
+        return self._RatedInputTorque
+
+    @property
+    def RatedInputSpeed(self):
+        return self._RatedInputSpeed
+
+    @property
+    def MaxOutputBacklash(self):
+        return self._MaxOutputBacklash
+
+    @property
+    def InputInertia(self):
+        return self._InputInertia
+
+    @property
+    def Efficiency(self):
+        return self._Efficiency
+
+    # setters
+    @ReductionIn.setter
+    def ReductionIn(self, val):
+        _check_castability(val,
+            c_float,
+            varname="ReductionIn")
+        self._ReductionIn = val
+
+    @ReductionOut.setter
+    def ReductionOut(self, val):
+        _check_castability(val,
+            c_float,
+            varname="ReductionOut")
+        self._ReductionOut = val
+
+    @RatedInputTorque.setter
+    def RatedInputTorque(self, val):
+        _check_castability(val,
+            c_float,
+            varname="RatedInputTorque")
+        self._RatedInputTorque = val
+
+    @RatedInputSpeed.setter
+    def RatedInputSpeed(self, val):
+        _check_castability(val,
+            c_float,
+            varname="RatedInputSpeed")
+        self._RatedInputSpeed = val
+
+    @MaxOutputBacklash.setter
+    def MaxOutputBacklash(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MaxOutputBacklash")
+        self._MaxOutputBacklash = val
+
+    @InputInertia.setter
+    def InputInertia(self, val):
+        _check_castability(val,
+            c_float,
+            varname="InputInertia")
+        self._InputInertia = val
+
+    @Efficiency.setter
+    def Efficiency(self, val):
+        _check_castability(val,
+            c_float,
+            varname="Efficiency")
+        self._Efficiency = val
 
 
 class AccessoriesSettings:
@@ -1143,12 +4765,150 @@ class AccessoriesSettings:
         self.TSSettings = TSSettings
         self.LimitSwitchesSettings = LimitSwitchesSettings
 
+    # getters
+    @property
+    def MagneticBrakeInfo(self):
+        return self._MagneticBrakeInfo
+
+    @property
+    def MBRatedVoltage(self):
+        return self._MBRatedVoltage
+
+    @property
+    def MBRatedCurrent(self):
+        return self._MBRatedCurrent
+
+    @property
+    def MBTorque(self):
+        return self._MBTorque
+
+    @property
+    def MBSettings(self):
+        return self._MBSettings
+
+    @property
+    def TemperatureSensorInfo(self):
+        return self._TemperatureSensorInfo
+
+    @property
+    def TSMin(self):
+        return self._TSMin
+
+    @property
+    def TSMax(self):
+        return self._TSMax
+
+    @property
+    def TSGrad(self):
+        return self._TSGrad
+
+    @property
+    def TSSettings(self):
+        return self._TSSettings
+
+    @property
+    def LimitSwitchesSettings(self):
+        return self._LimitSwitchesSettings
+
+    # setters
+    @MagneticBrakeInfo.setter
+    def MagneticBrakeInfo(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="MagneticBrakeInfo")
+        self._MagneticBrakeInfo = val
+
+    @MBRatedVoltage.setter
+    def MBRatedVoltage(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MBRatedVoltage")
+        self._MBRatedVoltage = val
+
+    @MBRatedCurrent.setter
+    def MBRatedCurrent(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MBRatedCurrent")
+        self._MBRatedCurrent = val
+
+    @MBTorque.setter
+    def MBTorque(self, val):
+        _check_castability(val,
+            c_float,
+            varname="MBTorque")
+        self._MBTorque = val
+
+    @MBSettings.setter
+    def MBSettings(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="MBSettings")
+        self._MBSettings = val
+
+    @TemperatureSensorInfo.setter
+    def TemperatureSensorInfo(self, val):
+        _check_castability(val,
+            c_char_p,
+            varname="TemperatureSensorInfo")
+        self._TemperatureSensorInfo = val
+
+    @TSMin.setter
+    def TSMin(self, val):
+        _check_castability(val,
+            c_float,
+            varname="TSMin")
+        self._TSMin = val
+
+    @TSMax.setter
+    def TSMax(self, val):
+        _check_castability(val,
+            c_float,
+            varname="TSMax")
+        self._TSMax = val
+
+    @TSGrad.setter
+    def TSGrad(self, val):
+        _check_castability(val,
+            c_float,
+            varname="TSGrad")
+        self._TSGrad = val
+
+    @TSSettings.setter
+    def TSSettings(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="TSSettings")
+        self._TSSettings = val
+
+    @LimitSwitchesSettings.setter
+    def LimitSwitchesSettings(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="LimitSwitchesSettings")
+        self._LimitSwitchesSettings = val
+
 
 class InitRandom:
 
-    def __init__(self, key):
+    def __init__(
+            self,
+            key):
 
         self.key = key
+
+    # getters
+    @property
+    def key(self):
+        return self._key
+
+    # setters
+    @key.setter
+    def key(self, val):
+        _check_castability(val,
+            c_uint8 * 16,
+            varname="key")
+        self._key = val
 
 
 class GloballyUniqueIdentifier:
@@ -1159,55 +4919,57 @@ class GloballyUniqueIdentifier:
             UniqueID1,
             UniqueID2,
             UniqueID3):
+
         self.UniqueID0 = UniqueID0
         self.UniqueID1 = UniqueID1
         self.UniqueID2 = UniqueID2
         self.UniqueID3 = UniqueID3
 
-# -------- Internal utility functions --------
+    # getters
+    @property
+    def UniqueID0(self):
+        return self._UniqueID0
 
+    @property
+    def UniqueID1(self):
+        return self._UniqueID1
 
-def _check_device_id(device_id: DeviceT) -> None:
-    try:
-        id_int = int(device_id)
-    except ValueError:
-        raise ValueError("device_id should be integer, got device_id="
-                         "{} of type {}".format(device_id, type(device_id)))
+    @property
+    def UniqueID2(self):
+        return self._UniqueID2
 
-    if id_int < 0:
-        raise ValueError("Got negative device_id ({}). It seems the device was"
-                         " not opened correctly".format(device_id))
+    @property
+    def UniqueID3(self):
+        return self._UniqueID3
 
+    # setters
+    @UniqueID0.setter
+    def UniqueID0(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UniqueID0")
+        self._UniqueID0 = val
 
-def _check_result(result: int) -> None:
-    if result == Result.Ok:
-        return
-    if result == Result.Error:
-        raise RuntimeError("General Error")
+    @UniqueID1.setter
+    def UniqueID1(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UniqueID1")
+        self._UniqueID1 = val
 
-    if result == Result.NotImplemented:
-        raise NotImplementedError(
-            "This function is not implemented in the device."
-            "Firmware update may be required: "
-            "https://doc.xisupport.com/en/8smc5-usb/8SMCn-USB/"
-            "XILab_application_Users_guide/Controller_Settings/"
-            "About_controller.html"
-        )
+    @UniqueID2.setter
+    def UniqueID2(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UniqueID2")
+        self._UniqueID2 = val
 
-    if result == Result.ValueError:
-        raise ValueError(
-            "The input was rejected by device. Some parameters may have "
-            "incorrect values."
-            "Check documentation: "
-            "https://libximc.xisupport.com/doc-en/ximc_8h.html"
-        )
-
-    if result == Result.NoDevice:
-        raise ConnectionError(
-            "Cannot send command to the device. Check connection and power. "
-            "The device_id is invalid. To resume operation you should reopen"
-            " the device."
-        )
+    @UniqueID3.setter
+    def UniqueID3(self, val):
+        _check_castability(val,
+            c_uint,
+            varname="UniqueID3")
+        self._UniqueID3 = val
 
 
 # --- Public API v2 functions ---
