@@ -1,105 +1,108 @@
-from ctypes import *
+#!/usr/bin/python
+from ctypes import WinDLL, CDLL, RTLD_GLOBAL, POINTER, byref, cast
+from ctypes import (c_double, c_int, c_uint, c_uint8, c_uint32,
+                    c_ulonglong, c_float, c_char, c_char_p)
+from ctypes import Structure, LittleEndianStructure
 import os
 import platform
 import struct
 import sys
 
 
-# Load library
-def _load_specific_lib(path, load_method):
+def _load_for_win():
+    if 8 * struct.calcsize("P") == 32:
+        lib_dir = "." + os.sep + "win32"
+    else:
+        lib_dir = "." + os.sep + "win64"
+
+    error_messages = []
+    for path_to_search in (lib_dir, os.path.abspath("")):
+        try:
+            if sys.version_info[0] == 3 and sys.version_info[1] >= 8:
+                WinDLL(path_to_search + os.sep + "bindy.dll",
+                       winmode=RTLD_GLOBAL)
+                WinDLL(path_to_search + os.sep + "xiwrapper",
+                       winmode=RTLD_GLOBAL)
+                libximc = WinDLL(path_to_search + os.sep + "libximc.dll",
+                                 winmode=RTLD_GLOBAL)
+            else:
+                WinDLL(path_to_search + os.sep + "bindy.dll")
+                WinDLL(path_to_search + os.sep + "xiwrapper")
+                libximc = WinDLL(path_to_search + os.sep + "libximc.dll")
+        except Exception:
+            error_messages.append("Searched in {}".format(path_to_search))
+        else:
+            return libximc
+    raise RuntimeError(
+                    "Unable to load at least one of libraries:"
+                    "libximc.dll, xiwrapper.dll, bindy.dll.\n{}."
+                    .format("\n".join(error_messages))
+                )
+
+
+def _load_for_linux():
+    cpu_kind = platform.machine().lower()
+    if cpu_kind == "arm":
+        cpu_path = "." + os.sep + "debian-armhf"
+    elif cpu_kind == "i386":
+        cpu_path = "." + os.sep + "debian-i386"
+    else:
+        cpu_path = "." + os.sep + "debian-amd64"
+    print("Type of CPU detected: ", cpu_kind)
+
+    error_messages = []
+    for path_to_search in (cpu_path, os.path.abspath("")):
+        try:
+            CDLL(path_to_search + os.sep + "libbindy.so")
+            CDLL(path_to_search + os.sep + "libxiwrapper.so")
+            libximc = CDLL(path_to_search + os.sep + "libximc.so")
+        except Exception:
+            error_messages.append("Searched in {}".format(path_to_search))
+        else:
+            return libximc
+    raise RuntimeError(
+                    "Unable to load at least one of libraries:"
+                    "libximc.so, libxiwrapper.so, libbindy.so.\n{}."
+                    .format("\n".join(error_messages))
+                )
+
+
+def _load_darwin():
     try:
-        lib = load_method(path)
-        return lib
-    except OSError as err:
-        raise RuntimeError("Error loading file {} - {}".format(path, str(err)))
+        CDLL("macosx/libjximc.dylib")
+        libximc = CDLL("libximc.framework/libximc")
+    except Exception as exc:
+        raise RuntimeError(
+                "Unable to load ./macosx/libjximc.dylib."
+                "\n\nAdditional error messages: {}"
+                .format(str(exc))
+            )
+    return libximc
 
 
-def _near_script_path(libname) -> str:
-    return os.path.join(os.path.abspath(os.path.dirname(__file__)), libname)
+def load_libximc():
+    """Returns an object of libximc library
 
-
-def _load_lib():
+    :raises RuntimeError: In case of inability to load the lib or its
+    dependencies: bindy and xiwrapper.
+    """
     os_kind = platform.system().lower()
+    # Please note! lib sequence is matter! First - bindy, second - wrapper,
+    # third - libximc. Thank you for your attention
     if os_kind == "windows":
-        if sys.version_info[0] == 3 and sys.version_info[0] >= 8:
-            method = lambda path: WinDLL(path, winmode=RTLD_GLOBAL)
-        else:
-            method = WinDLL
-        if 8 * struct.calcsize("P") == 32:
-            libs = "bindy.dll", "xiwrapper.dll", "libximc.dll"
-            dirs = _near_script_path("win32"), _near_script_path(""), ""
-        else:
-            libs = "bindy.dll", "xiwrapper.dll", "libximc.dll"
-            dirs = _near_script_path("win64"), _near_script_path(""), ""
+        libximc = _load_for_win()
     elif os_kind == "linux":
-        method = CDLL
-        cpu_kind = platform.machine().lower()
-        libs = "libbindy.so", "libxiwrapper.so", "libximc.so"
-        if cpu_kind == "arm":
-            cpu_path = "debian-armhf"
-        elif cpu_kind == "i386":
-            cpu_path = "debian-i386"
-        else:
-            cpu_path = "debian-amd64"
-        print(cpu_kind)
-        dirs = _near_script_path(cpu_path), _near_script_path(""), ""
+        libximc = _load_for_linux()
     elif os_kind == "darwin":
-        method = CDLL
-        libs = ("libjximc.dylib",)
-        dirs = _near_script_path("macosx"), _near_script_path(""), ""
+        libximc = _load_darwin()
     else:
         raise RuntimeError("Unexpected OS: {}".format(os_kind))
-
-    def load_from_directory(libs, dirname):
-        paths = [os.path.join(dirname, lib) for lib in libs]
-        for path in paths:
-            lib = _load_specific_lib(path, method)
-        # libximc is loaded last
-        return lib
-
-    errors = []
-    for dirname in dirs:
-        try:
-            lib = load_from_directory(libs, dirname)
-        except Exception as exc:
-            errors.append(str(exc))
-        else:
-            return lib
-
-    if os_kind == "darwin":
-        try:
-            lib = CDLL("libximc.framework/libximc")
-        except Exception as exc:
-            errors.append(str(exc))
-        else:
-            return lib
-
-    error_msg = "Unable to load library. Paths tried:\n" + "\n".join(errors)
-    raise RuntimeError(error_msg)
+    return libximc
 
 
-# use cdecl on unix and stdcall on windows
-def ximc_shared_lib():
-    """
-    if platform.system() == "Linux":
-        return CDLL("libximc.so")
-    elif platform.system() == "FreeBSD":
-        return CDLL("libximc.so")
-    elif platform.system() == "Darwin":
-        return CDLL("libximc.framework/libximc")
-    elif platform.system() == "Windows":
-        if sys.version_info[0] == 3 and sys.version_info[0] >= 8:
-            return WinDLL("libximc.dll", winmode=RTLD_GLOBAL)
-        else:
-            return WinDLL("libximc.dll")
-    else:
-        return None
-    """
+lib = load_libximc()
 
-    return _load_lib()
-
-
-lib = ximc_shared_lib()
+not_to_use = None
 
 
 # Common declarations
@@ -170,7 +173,6 @@ lib.get_device_name.restype = c_char_p
 # --- Public API v2 data types starts here ---
 DeviceT = int
 # -------- Public API v2 data classes --------
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 
@@ -1361,7 +1363,7 @@ def set_move_settings_calb(device_id: DeviceT,
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
-    :param settings: calibration move settings 
+    :param settings: calibration move settings
     :type settings: MoveSettingsCalb
     :param calibration: calibration
     :type calibration: Calibration
@@ -1470,12 +1472,12 @@ def set_engine_settings_calb(device_id: DeviceT,
     """
     _check_device_id(device_id)
     engine_settings = engine_settings_calb_t(settings.NomVoltage,
-                                              settings.NomCurrent,
-                                              settings.NomSpeed,
-                                              settings.EngineFlags,
-                                              settings.Antiplay,
-                                              settings.MicrostepMode,
-                                              settings.StepsPerRev)
+                                             settings.NomCurrent,
+                                             settings.NomSpeed,
+                                             settings.EngineFlags,
+                                             settings.Antiplay,
+                                             settings.MicrostepMode,
+                                             settings.StepsPerRev)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_engine_settings_calb(device_id,
                                                byref(engine_settings),
@@ -1954,8 +1956,8 @@ def get_sync_out_settings(device_id: DeviceT) -> SyncOutSettings:
                            sync_out_settings.uAccuracy)
 
 
-def get_sync_out_settings_calb(device_id: DeviceT,
-                               calibration: Calibration) -> SyncOutSettingsCalb:
+def get_sync_out_settings_calb(
+        device_id: DeviceT, calibration: Calibration) -> SyncOutSettingsCalb:
     """Read output synchronization settings which use user units.
 
     This function fill structure with set of output synchronization settings,
@@ -2210,7 +2212,8 @@ def set_joystick_settings(device_id: DeviceT,
                                             settings.ExpFactor,
                                             settings.DeadZone,
                                             settings.JoyFlags)
-    _check_result(lib.set_joystick_settings(device_id, byref(joystick_settings)))
+    _check_result(lib.set_joystick_settings(device_id,
+                                            byref(joystick_settings)))
 
 
 def get_joystick_settings(device_id: DeviceT) -> JoystickSettings:
@@ -2238,7 +2241,8 @@ def get_joystick_settings(device_id: DeviceT) -> JoystickSettings:
     """
     _check_device_id(device_id)
     joystick_settings = joystick_settings_t()
-    _check_result(lib.get_joystick_settings(device_id, byref(joystick_settings)))
+    _check_result(lib.get_joystick_settings(device_id,
+                                            byref(joystick_settings)))
     return JoystickSettings(joystick_settings.JoyLowEnd,
                             joystick_settings.JoyCenter,
                             joystick_settings.JoyHighEnd,
@@ -2357,7 +2361,7 @@ def set_network_settings(device_id: DeviceT,
 def get_network_settings(device_id: DeviceT) -> NetworkSettings:
     """Read network settings.
 
-    This function returns current network settings. 
+    This function returns current network settings.
 
     :param device_id: an identifier of device
     :type device_id: DeviceT
@@ -2779,18 +2783,20 @@ def set_accessories_settings(device_id: DeviceT,
     :type settings: AccessoriesSettings
     """
     _check_device_id(device_id)
-    accessories_settings = accessories_settings_t(settings.MagneticBrakeInfo,
-                                                  settings.MBRatedVoltage,
-                                                  settings.MBRatedCurrent,
-                                                  settings.MBTorque,
-                                                  settings.MBSettings,
-                                                  settings.TemperatureSensorInfo,
-                                                  settings.TSMin,
-                                                  settings.TSMax,
-                                                  settings.TSGrad,
-                                                  settings.TSSettings,
-                                                  settings.LimitSwitchesSettings)
-    _check_result(lib.set_accessories_settings(device_id, byref(accessories_settings)))
+    accessories_settings = accessories_settings_t(
+                                settings.MagneticBrakeInfo,
+                                settings.MBRatedVoltage,
+                                settings.MBRatedCurrent,
+                                settings.MBTorque,
+                                settings.MBSettings,
+                                settings.TemperatureSensorInfo,
+                                settings.TSMin,
+                                settings.TSMax,
+                                settings.TSGrad,
+                                settings.TSSettings,
+                                settings.LimitSwitchesSettings)
+    _check_result(lib.set_accessories_settings(device_id,
+                                               byref(accessories_settings)))
 
 
 def get_accessories_settings(device_id: DeviceT) -> AccessoriesSettings:
@@ -2887,9 +2893,10 @@ def set_engine_advansed_setup(device_id: DeviceT,
     :type setup: EngineAdvansedSetup
     """
     _check_device_id(device_id)
-    engine_advanced_setup = engine_advansed_setup_t(setup.stepcloseloop_Kw,
-                                                    setup.stepcloseloop_Kp_low,
-                                                    setup.stepcloseloop_Kp_high)
+    engine_advanced_setup = engine_advansed_setup_t(
+                                    setup.stepcloseloop_Kw,
+                                    setup.stepcloseloop_Kp_low,
+                                    setup.stepcloseloop_Kp_high)
     _check_result(lib.set_engine_advansed_setup(device_id,
                                                 byref(engine_advanced_setup)))
 
@@ -2929,7 +2936,9 @@ def command_move_calb(device_id: DeviceT,
     """
     _check_device_id(device_id)
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
-    _check_result(lib.command_move_calb(device_id, c_float(position), byref(calib)))
+    _check_result(lib.command_move_calb(device_id,
+                                        c_float(position),
+                                        byref(calib)))
 
 
 def command_movr(device_id: DeviceT,
@@ -3528,8 +3537,9 @@ def set_hallsensor_information(device_id: DeviceT,
     _check_device_id(device_id)
     hallsensor_information = hallsensor_information_t(information.Manufacturer,
                                                       information.PartNumber)
-    _check_result(lib.set_hallsensor_information(device_id,
-                                                 byref(hallsensor_information)))
+    _check_result(lib.set_hallsensor_information(
+                                    device_id,
+                                    byref(hallsensor_information)))
 
 
 def get_hallsensor_information(device_id: DeviceT) -> HallsensorInformation:
@@ -3614,7 +3624,8 @@ def get_init_random(device_id: DeviceT) -> InitRandom:
     return InitRandom(init_random.key)
 
 
-def get_globally_unique_identifier(device_id: DeviceT) -> GloballyUniqueIdentifier:
+def get_globally_unique_identifier(
+        device_id: DeviceT) -> GloballyUniqueIdentifier:
     """This value is unique to each individual die but is not a random value.
 
     This unique device identifier can be used to initiate secure boot
@@ -3761,7 +3772,8 @@ def enumerate_devices(enumerate_flags: int,
     return device_enumeration
 
 
-def free_enumerate_devices(device_enumeration: POINTER(device_enumeration_t)) -> None:
+def free_enumerate_devices(
+        device_enumeration: POINTER(device_enumeration_t)) -> None:
     """Free memory returned by enumerate_devices.
 
     :param device_id: opaque pointer to an enumeration device data
@@ -3913,8 +3925,9 @@ def ximc_fix_usbser_sys(device_uri: str) -> None:
     lib.ximc_fix_usbser_sys(device_uri)
 
 
-def get_enumerate_device_serial(device_enumeration: POINTER(device_enumeration_t),
-                                device_index: int) -> int:
+def get_enumerate_device_serial(
+        device_enumeration: POINTER(device_enumeration_t),
+        device_index: int) -> int:
     """Get device serial number from the device enumeration.
 
     Returns device_index device serial number.
@@ -3933,8 +3946,9 @@ def get_enumerate_device_serial(device_enumeration: POINTER(device_enumeration_t
     return int(serial)
 
 
-def get_enumerate_device_information(device_enumeration: POINTER(device_enumeration_t),
-                                     device_index: int) -> DeviceInformation:
+def get_enumerate_device_information(
+        device_enumeration: POINTER(device_enumeration_t),
+        device_index: int) -> DeviceInformation:
     """Get device information from the device enumeration.
 
     Returns device_index device information.
@@ -3993,8 +4007,10 @@ def get_status_calb(device_id: DeviceT,
                       status.GPIOFlags,
                       status.CmdBufFreeSpace)
 
-def get_enumerate_device_controller_name(device_enumeration: POINTER(device_enumeration_t),
-                                         device_index: int) -> str:
+
+def get_enumerate_device_controller_name(
+        device_enumeration: POINTER(device_enumeration_t),
+        device_index: int) -> str:
     """Get controller name from the device enumeration.
 
     Returns device_index device controller name
@@ -4012,8 +4028,9 @@ def get_enumerate_device_controller_name(device_enumeration: POINTER(device_enum
     return str(name)
 
 
-def get_enumerate_device_stage_name(device_enumeration: POINTER(device_enumeration_t),
-                                    device_index: int) -> str:
+def get_enumerate_device_stage_name(
+        device_enumeration: POINTER(device_enumeration_t),
+        device_index: int) -> str:
     """Get stage name from the device enumeration.
 
     Returns device_index device stage name.
@@ -4031,8 +4048,9 @@ def get_enumerate_device_stage_name(device_enumeration: POINTER(device_enumerati
     return str(name)
 
 
-def get_enumerate_device_network_information(device_enumeration: POINTER(device_enumeration_t),
-                                             device_index: int) -> device_network_information_t:
+def get_enumerate_device_network_information(
+        device_enumeration: POINTER(device_enumeration_t),
+        device_index: int) -> device_network_information_t:
     """Get device network information from the device enumeration.
 
     Returns device_index device network information.
@@ -4046,9 +4064,10 @@ def get_enumerate_device_network_information(device_enumeration: POINTER(device_
     """
     device_network_information = device_network_information_t()
     _check_result(
-        lib.get_enumerate_device_network_information(device_enumeration,
-                                                     device_index,
-                                                     byref(device_network_information)))
+        lib.get_enumerate_device_network_information(
+                                    device_enumeration,
+                                    device_index,
+                                    byref(device_network_information)))
     return device_network_information
 
 
