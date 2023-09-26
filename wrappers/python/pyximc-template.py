@@ -102,8 +102,6 @@ def load_libximc():
 
 lib = load_libximc()
 
-not_to_use = None
-
 
 # Common declarations
 class Result:
@@ -1221,6 +1219,10 @@ def set_feedback_settings(device_id: DeviceT,
     :param: feedback settings
     :type settings: FeedbackSettings
     """
+    _check_device_id(device_id)
+    if not isinstance(settings, FeedbackSettings):
+        raise TypeError("settings must be of type FeedbackSettings. <{}>"
+                        "was got.".format(type(settings)))
     feedback_settings = feedback_settings_t(settings.IPS,
                                             settings.FeedbackType,
                                             settings.FeedbackFlags,
@@ -1260,6 +1262,9 @@ def set_home_settings(device_id: DeviceT,
     :type settings: HomeSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, HomeSettings):
+        raise TypeError("settings must be of type HomeSettings. <{}>"
+                        " was got.".format(type(settings)))
     home_settings = home_settings_t(settings.FastHome,
                                     settings.uFastHome,
                                     settings.SlowHome,
@@ -1307,6 +1312,12 @@ def set_home_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, HomeSettingsCalb):
+        raise TypeError("settings must be of type HomeSettingsCalb. <{}>"
+                        " was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     home_settings = home_settings_calb_t(settings.FastHome,
                                          settings.SlowHome,
                                          settings.HomeDelta,
@@ -1331,6 +1342,9 @@ def get_home_settings_calb(device_id: DeviceT,
     :rtype: HomeSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     home_settings = home_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_home_settings_calb(device_id,
@@ -1345,6 +1359,9 @@ def get_home_settings_calb(device_id: DeviceT,
 def set_move_settings(device_id: DeviceT,
                       settings: MoveSettings) -> None:
     _check_device_id(device_id)
+    if not isinstance(settings, MoveSettings):
+        raise TypeError("settings must be of type MoveSettings. <{}>"
+                        " was MoveSettings.".format(type(settings)))
     move_settings = move_settings_t(settings.Speed,
                                     settings.uSpeed,
                                     settings.Accel,
@@ -1369,6 +1386,12 @@ def set_move_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, MoveSettingsCalb):
+        raise TypeError("settings must be of type MoveSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     move_settings = move_settings_calb_t(settings.Speed,
                                          settings.Accel,
                                          settings.Decel,
@@ -1413,6 +1436,9 @@ def get_move_settings_calb(device_id: DeviceT,
     :rtype: MoveSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     move_settings = move_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.set_move_settings_calb(device_id,
@@ -1441,6 +1467,9 @@ def set_engine_settings(device_id: DeviceT,
     :type settings: EngineSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EngineSettings):
+        raise TypeError("settings must be of type EngineSettings."
+                        " <{}> was got.".format(type(settings)))
     engine_settings = engine_settings_t(settings.NomVoltage,
                                         settings.NomCurrent,
                                         settings.NomSpeed,
@@ -1471,6 +1500,12 @@ def set_engine_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EngineSettingsCalb):
+        raise TypeError("settings must be of type EngineSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     engine_settings = engine_settings_calb_t(settings.NomVoltage,
                                              settings.NomCurrent,
                                              settings.NomSpeed,
@@ -1523,6 +1558,9 @@ def get_engine_settings_calb(device_id: DeviceT,
     :rtype: EngineSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     engine_settings = engine_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_engine_settings_calb(device_id,
@@ -1547,6 +1585,9 @@ def set_entype_settings(device_id: DeviceT,
     :type settings: EntypeSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EntypeSettings):
+        raise TypeError("settings must be of type EntypeSettings."
+                        " <{}> was got.".format(type(settings)))
     entype_settings = entype_settings_t(settings.EngineType,
                                         settings.DriverType)
     _check_result(lib.set_entype_settings(device_id,
@@ -1581,6 +1622,9 @@ def set_power_settings(device_id: DeviceT,
     :type settings: PowerSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, PowerSettings):
+        raise TypeError("settings must be of type PowerSettings."
+                        " <{}> was got.".format(type(settings)))
     power_settings = power_settings_t(settings.HoldCurrent,
                                       settings.CurrReductDelay,
                                       settings.PowerOffDelay,
@@ -1619,6 +1663,9 @@ def set_secure_settings(device_id: DeviceT,
     :type settings: SecureSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, SecureSettings):
+        raise TypeError("settings must be of type SecureSettings."
+                        " <{}> was got.".format(type(settings)))
     secure_settings = secure_settings_t(settings.LowUpwrOff,
                                         settings.CriticalIpwr,
                                         settings.CriticalUpwr,
@@ -1661,6 +1708,9 @@ def set_edges_settings(device_id: DeviceT,
     :type settings: EdgesSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EdgesSettings):
+        raise TypeError("settings must be of type EdgesSettings."
+                        " <{}> was got.".format(type(settings)))
     edges_settings = edges_settings_t(settings.BorderFlags,
                                       settings.EnderFlags,
                                       settings.LeftBorder,
@@ -1681,6 +1731,12 @@ def set_edges_settings_calb(device_id: DeviceT,
     :type settings: EdgesSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EdgesSettingsCalb):
+        raise TypeError("settings must be of type EdgesSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     edges_settings = edges_settings_calb_t(settings.BorderFlags,
                                            settings.EnderFlags,
                                            settings.LeftBorder,
@@ -1720,6 +1776,9 @@ def get_edges_settings_calb(device_id: DeviceT,
     :rtype: EdgesSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     edges_settings = edges_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_edges_settings_calb(device_id,
@@ -1748,6 +1807,9 @@ def set_pid_settings(device_id: DeviceT,
     :type settings: PidSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, PidSettings):
+        raise TypeError("settings must be of type PidSettings."
+                        " <{}> was got.".format(type(settings)))
     pid_settings = pid_settings_t(settings.KpU,
                                   settings.KiU,
                                   settings.KdU,
@@ -1796,6 +1858,9 @@ def set_sync_in_settings(device_id: DeviceT,
     :type settings: SyncInSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, SyncInSettings):
+        raise TypeError("settings must be of type SyncInSettings."
+                        " <{}> was got.".format(type(settings)))
     sync_in_settings = sync_in_settings_t(settings.SyncInFlags,
                                           settings.ClutterTime,
                                           settings.Position,
@@ -1822,6 +1887,12 @@ def set_sync_in_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, SyncInSettingsCalb):
+        raise TypeError("settings must be of type SyncInSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     sync_in_settings = sync_in_settings_calb_t(settings.SyncInFlags,
                                                settings.ClutterTime,
                                                settings.Position,
@@ -1871,6 +1942,9 @@ def get_sync_in_settings_calb(device_id: DeviceT,
     :rtype: SyncInSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     sync_in_settings = sync_in_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_sinc_in_settings_calb(device_id,
@@ -1896,6 +1970,9 @@ def set_sync_out_settings(device_id: DeviceT,
     :type settings: SyncOutSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, SyncOutSettings):
+        raise TypeError("settings must be of type SyncOutSettings."
+                        " <{}> was got.".format(type(settings)))
     sync_out_settings = sync_out_settings_t(settings.SyncOutFlags,
                                             settings.SyncOutPulseSteps,
                                             settings.SyncOutPeriod,
@@ -1922,6 +1999,12 @@ def set_sync_out_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, SyncOutSettingsCalb):
+        raise TypeError("settings must be of type SyncOutSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     sync_out_settings = sync_out_settings_calb_t(settings.SyncOutFlags,
                                                  settings.SyncOutPulseSteps,
                                                  settings.SyncOutPeriod,
@@ -1973,6 +2056,9 @@ def get_sync_out_settings_calb(
     :rtype: SyncOutSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     sync_out_settings = sync_out_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_sinc_out_settings_calb(device_id,
@@ -1998,6 +2084,9 @@ def set_extio_settings(device_id: DeviceT,
     :type settings: ExtioSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, ExtioSettings):
+        raise TypeError("settings must be of type ExtioSettings."
+                        " <{}> was got.".format(type(settings)))
     extio_settings = extio_settings_t(settings.EXTIOSetupFlags,
                                       settings.EXTIOModeFlags)
     _check_result(lib.set_extio_settings(device_id, byref(extio_settings)))
@@ -2031,6 +2120,9 @@ def set_brake_settings(device_id: DeviceT,
     :type settings: BrakeSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, BrakeSettings):
+        raise TypeError("settings must be of type BrakeSettings."
+                        " <{}> was got.".format(type(settings)))
     brake_settings = brake_settings_t(settings.t1,
                                       settings.t2,
                                       settings.t3,
@@ -2076,6 +2168,9 @@ def set_control_settings(device_id: DeviceT,
     :type settings: ControlSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, ControlSettings):
+        raise TypeError("settings must be of type ControlSettings."
+                        " <{}> was got.".format(type(settings)))
     control_settings = control_settings_t(settings.MaxSpeed,
                                           settings.uMaxSpeed,
                                           settings.Timeout,
@@ -2108,6 +2203,12 @@ def set_control_settings_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(settings, ControlSettingsCalb):
+        raise TypeError("settings must be of type ControlSettingsCalb."
+                        " <{}> was got.".format(type(settings)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     control_settings = control_settings_calb_t(settings.MaxSpeed,
                                                settings.Timeout,
                                                settings.MaxClickTime,
@@ -2169,6 +2270,9 @@ def get_control_settings_calb(device_id: DeviceT,
     :rtype: ControlSettingsCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     control_settings = control_settings_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_control_settings_calb(device_id,
@@ -2206,6 +2310,9 @@ def set_joystick_settings(device_id: DeviceT,
     :type settings: JoystickSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, JoystickSettings):
+        raise TypeError("settings must be of type JoystickSettings."
+                        " <{}> was got.".format(type(settings)))
     joystick_settings = joystick_settings_t(settings.JoyLowEnd,
                                             settings.JoyCenter,
                                             settings.JoyHighEnd,
@@ -2273,6 +2380,9 @@ def set_ctp_settings(device_id: DeviceT,
     :type settings: CtpSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, CtpSettings):
+        raise TypeError("settings must be of type CtpSettings."
+                        " <{}> was got.".format(type(settings)))
     ctp_settings = ctp_settings_t(settings.CTPMinError,
                                   settings.CTPFlags)
     _check_result(lib.set_ctp_settings(device_id, byref(ctp_settings)))
@@ -2317,6 +2427,9 @@ def set_uart_settings(device_id: DeviceT,
     :type settings: UartSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, UartSettings):
+        raise TypeError("settings must be of type UartSettings."
+                        " <{}> was got.".format(type(settings)))
     uart_settings = uart_settings_t(settings.Speed,
                                     settings.UARTSetupFlags)
     _check_result(lib.set_uart_settings(device_id, byref(uart_settings)))
@@ -2351,6 +2464,9 @@ def set_network_settings(device_id: DeviceT,
     :type settings: NetworkSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, NetworkSettings):
+        raise TypeError("settings must be of type NetworkSettings."
+                        " <{}> was got.".format(type(settings)))
     network_settings = network_settings_t(settings.DHCPEnabled,
                                           settings.IPv4Address,
                                           settings.SubnetMask,
@@ -2389,6 +2505,9 @@ def set_password_settings(device_id: DeviceT,
     :type settings: PasswordSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, PasswordSettings):
+        raise TypeError("settings must be of type PasswordSettings."
+                        " <{}> was got.".format(type(settings)))
     password_settings = password_settings_t(settings.UserPassword)
     _check_result(lib.set_password_settings(device_id,
                                             byref(password_settings)))
@@ -2424,6 +2543,9 @@ def set_calibration_settings(device_id: DeviceT,
     :type settings: CalibrationSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, CalibrationSettings):
+        raise TypeError("settings must be of type CalibrationSettings."
+                        " <{}> was got.".format(type(settings)))
     calibration_settings = calibration_settings_t(settings.CSS1_A,
                                                   settings.CSS1_B,
                                                   settings.CSS2_A,
@@ -2469,6 +2591,9 @@ def set_emf_settings(device_id: DeviceT,
     :type settings: EmfSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EmfSettings):
+        raise TypeError("settings must be of type EmfSettings."
+                        " <{}> was got.".format(type(settings)))
     emf_settings = emf_settings_t(settings.L,
                                   settings.R,
                                   settings.Km,
@@ -2507,6 +2632,9 @@ def set_extended_settings(device_id: DeviceT,
     :type settings: ExtendedSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, ExtendedSettings):
+        raise TypeError("settings must be of type ExtendedSettings."
+                        " <{}> was got.".format(type(settings)))
     extended_settings = extended_settings_t(settings.Param1)
     _check_result(lib.set_extended_settings(device_id,
                                             byref(extended_settings)))
@@ -2541,6 +2669,9 @@ def set_stage_settings(device_id: DeviceT,
     :type settings: StageSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, StageSettings):
+        raise TypeError("sss must be of type ggg."
+                        " <{}> was got.".format(type(settings)))
     stage_settings = stage_settings_t(settings.LeadScrewPitch,
                                       settings.Units,
                                       settings.MaxSpeed,
@@ -2587,6 +2718,9 @@ def set_motor_settings(device_id: DeviceT,
     :type settings: MotorSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, MotorSettings):
+        raise TypeError("settings must be of type MotorSettings."
+                        " <{}> was got.".format(type(settings)))
     motor_settings = motor_settings_t(settings.MotorType,
                                       settings.ReservedField,
                                       settings.Poles,
@@ -2661,6 +2795,9 @@ def set_encoder_settings(device_id: DeviceT,
     :type settings: EncoderSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, EncoderSettings):
+        raise TypeError("settings must be of type EncoderSettings."
+                        " <{}> was got.".format(type(settings)))
     encoder_settings = encoder_settings_t(settings.MaxOperatingFrequency,
                                           settings.SupplyVoltageMin,
                                           settings.SupplyVoltageMax,
@@ -2701,6 +2838,9 @@ def set_hallsensor_settings(device_id: DeviceT,
     :type settings: HallsensorSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, HallsensorSettings):
+        raise TypeError("settings must be of type HallsensorSettings."
+                        " <{}> was got.".format(type(settings)))
     hallsensor_settings = hallsensor_settings_t(settings.MaxOperatingFrequency,
                                                 settings.SupplyVoltageMin,
                                                 settings.SupplyVoltageMax,
@@ -2741,6 +2881,9 @@ def set_gear_settings(device_id: DeviceT,
     :type settings: GearSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, GearSettings):
+        raise TypeError("settings must be of type GearSettings."
+                        " <{}> was got.".format(type(settings)))
     gear_settings = gear_settings_t(settings.ReductionIn,
                                     settings.ReductionOut,
                                     settings.RatedInputTorque,
@@ -2783,6 +2926,9 @@ def set_accessories_settings(device_id: DeviceT,
     :type settings: AccessoriesSettings
     """
     _check_device_id(device_id)
+    if not isinstance(settings, AccessoriesSettings):
+        raise TypeError("settings must be of type AccessoriesSettings."
+                        " <{}> was got.".format(type(settings)))
     accessories_settings = accessories_settings_t(
                                 settings.MagneticBrakeInfo,
                                 settings.MBRatedVoltage,
@@ -2834,6 +2980,9 @@ def set_controller_name(device_id: DeviceT,
     :type name: ControllerName
     """
     _check_device_id(device_id)
+    if not isinstance(name, ControllerName):
+        raise TypeError("name must be of type ControllerName."
+                        " <{}> was got.".format(type(name)))
     controller_name = controller_name_t(name.ControllerName,
                                         name.CtrlFlags)
     _check_result(lib.set_controller_name(device_id, byref(controller_name)))
@@ -2864,6 +3013,9 @@ def set_nonvolatile_memory(device_id: DeviceT,
     :type memory: NonvolatileMemory
     """
     _check_device_id(device_id)
+    if not isinstance(memory, NonvolatileMemory):
+        raise TypeError("memory must be of type NonvolatileMemory."
+                        " <{}> was got.".format(type(memory)))
     nonvolatile_memory = nonvolatile_memory_t(memory.UserData)
     _check_result(lib.set_nonvolatile_memory(device_id, nonvolatile_memory))
 
@@ -2893,6 +3045,9 @@ def set_engine_advansed_setup(device_id: DeviceT,
     :type setup: EngineAdvansedSetup
     """
     _check_device_id(device_id)
+    if not isinstance(setup, EngineAdvansedSetup):
+        raise TypeError("setup must be of type EngineAdvansedSetup."
+                        " <{}> was got.".format(type(setup)))
     engine_advanced_setup = engine_advansed_setup_t(
                                     setup.stepcloseloop_Kw,
                                     setup.stepcloseloop_Kp_low,
@@ -2935,6 +3090,12 @@ def command_move_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(position, float):
+        raise TypeError("position must be of type float."
+                        " <{}> was got.".format(type(position)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.command_move_calb(device_id,
                                         c_float(position),
@@ -2962,6 +3123,12 @@ def command_movr(device_id: DeviceT,
     :type udelta_position: int
     """
     _check_device_id(device_id)
+    if not isinstance(delta_position, int):
+        raise TypeError("delta_position must be of type int."
+                        " <{}> was got.".format(type(delta_position)))
+    if not isinstance(udelta_position, int):
+        raise TypeError("udelta_position must be of type int."
+                        " <{}> was got.".format(type(udelta_position)))
     _check_result(lib.command_movr(device_id, delta_position, udelta_position))
 
 
@@ -2982,6 +3149,12 @@ def command_movr_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(delta_position, float):
+        raise TypeError("delta_position must be of type float."
+                        " <{}> was got.".format(type(delta_position)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.command_movr_calb(device_id,
                                         c_float(delta_position),
@@ -3071,6 +3244,9 @@ def get_position_calb(device_id: DeviceT,
     :rtype: GetPositionCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     position = get_position_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_position_calb(device_id,
@@ -3094,6 +3270,9 @@ def set_position(device_id: DeviceT,
     :type position: SetPosition
     """
     _check_device_id(device_id)
+    if not isinstance(position, SetPosition):
+        raise TypeError("position must be of type SetPosition."
+                        " <{}> was got.".format(type(position)))
     _position = set_position_t(position.Position,
                                position.uPosition,
                                position.EncPosition,
@@ -3118,6 +3297,12 @@ def set_position_calb(device_id: DeviceT,
     :type calibration: Calibration
     """
     _check_device_id(device_id)
+    if not isinstance(position, SetPositionCalb):
+        raise TypeError("position must be of type SetPositionCalb."
+                        " <{}> was got.".format(type(position)))
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     _position = set_position_calb_t(position.Position,
                                     position.EncPosition,
                                     position.PosFlags)
@@ -3341,6 +3526,9 @@ def set_serial_number(device_id: DeviceT,
     :type serial: SerialNumber
     """
     _check_device_id(device_id)
+    if not isinstance(serial, SerialNumber):
+        raise TypeError("serial must be of type SerialNumber."
+                        " <{}> was got.".format(type(serial)))
     serial_number = serial_number_t(serial.SN,
                                     serial.Key,
                                     serial.Major,
@@ -3405,6 +3593,9 @@ def set_stage_name(device_id: DeviceT,
     :type name: StageName
     """
     _check_device_id(device_id)
+    if not isinstance(name, StageName):
+        raise TypeError("name must be of type StageName."
+                        " <{}> was got.".format(type(name)))
     stage_name = stage_name_t(name.PositionerName)
     _check_result(lib.set_stage_name(device_id, byref(stage_name)))
 
@@ -3435,6 +3626,9 @@ def set_stage_information(device_id: DeviceT,
     :type information: StageInformation
     """
     _check_device_id(device_id)
+    if not isinstance(information, StageInformation):
+        raise TypeError("information must be of type StageInformation."
+                        " <{}> was got.".format(type(information)))
     stage_information = stage_information_t(information.Manufacturer,
                                             information.PartNumber)
     _check_result(lib.set_stage_information(device_id,
@@ -3469,6 +3663,9 @@ def set_motor_information(device_id: DeviceT,
     :type information: MotorInformation
     """
     _check_device_id(device_id)
+    if not isinstance(information, MotorInformation):
+        raise TypeError("information must be of type MotorInformation."
+                        " <{}> was got.".format(type(information)))
     motor_information = motor_information_t(information.Manufacturer,
                                             information.PartNumber)
     _check_result(lib.set_motor_information(device_id,
@@ -3501,6 +3698,9 @@ def set_encoder_information(device_id: DeviceT,
     :type information: EncoderInformation
     """
     _check_device_id(device_id)
+    if not isinstance(information, EncoderInformation):
+        raise TypeError("information must be of type EncoderInformation."
+                        " <{}> was got.".format(type(information)))
     encoder_information = encoder_information_t(information.Manufacturer,
                                                 information.PartNumber)
     _check_result(lib.set_encoder_information(device_id,
@@ -3535,6 +3735,9 @@ def set_hallsensor_information(device_id: DeviceT,
     :type information: HallsensorInformation
     """
     _check_device_id(device_id)
+    if not isinstance(information, HallsensorInformation):
+        raise TypeError("information must be of type HallsensorInformation."
+                        " <{}> was got.".format(type(information)))
     hallsensor_information = hallsensor_information_t(information.Manufacturer,
                                                       information.PartNumber)
     _check_result(lib.set_hallsensor_information(
@@ -3571,6 +3774,9 @@ def set_gear_information(device_id: DeviceT,
     :type information: GearInformation
     """
     _check_device_id(device_id)
+    if not isinstance(information, GearInformation):
+        raise TypeError("information must be of type GearInformation."
+                        " <{}> was got.".format(type(information)))
     gear_information = gear_information_t(information.Manufacturer,
                                           information.PartNumber)
     _check_result(lib.set_gear_information(device_id, byref(gear_information)))
@@ -3673,6 +3879,9 @@ def has_firmware(uri: str) -> int:
     :return: non-zero if firmware existed
     :rtype: int
     """
+    if not isinstance(uri, str):
+        raise TypeError("uri must be of type str."
+                        " <{}> was got.".format(type(uri)))
     ret = c_uint8()
     _check_result(lib.has_firmware(uri, byref(ret)))
     return int(ret)
@@ -3692,6 +3901,15 @@ def command_update_firmware(uri: str,
     :param size: size of byte stream
     :type size: int
     """
+    if not isinstance(uri, str):
+        raise TypeError("uri must be of type str."
+                        " <{}> was got.".format(type(uri)))
+    if not isinstance(data, str):
+        raise TypeError("data must be of type str."
+                        " <{}> was got.".format(type(data)))
+    if not isinstance(size, int):
+        raise TypeError("size must be of type int."
+                        " <{}> was got.".format(type(size)))
     data_size = c_uint32(size)
     _check_result(lib.command_update_firmware(uri, data, data_size))
 
@@ -3707,6 +3925,12 @@ def write_key(uri: str,
     :param key: protection key. Range: 0..4294967295
     :type key: str
     """
+    if not isinstance(uri, str):
+        raise TypeError("uri must be of type str."
+                        " <{}> was got.".format(type(uri)))
+    if not isinstance(key, str):
+        raise TypeError("key must be of type str."
+                        " <{}> was got.".format(type(key)))
     _check_result(lib.write_key(uri, key))
 
 
@@ -3731,6 +3955,9 @@ def load_correction_table(device_id: DeviceT,
     :type namefile: str
     """
     _check_device_id(device_id)
+    if not isinstance(namefile, str):
+        raise TypeError("namefile must be of type str."
+                        " <{}> was got.".format(type(namefile)))
     _check_result(lib.load_correction_table(device_id, namefile))
 
 
@@ -3744,6 +3971,9 @@ def probe_device(uri: str) -> int:
     :return: result of any operation.
     :rtype: Result
     """
+    if not isinstance(uri, str):
+        raise TypeError("uri must be of type str."
+                        " <{}> was got.".format(type(uri)))
     return lib.probe_device(uri)
 
 
@@ -3768,6 +3998,12 @@ def enumerate_devices(enumerate_flags: int,
     using the adapter_addr key, you must set the addr key. Example: "addr= \n
     adapter_addr=192.168.0.100".
     """
+    if not isinstance(enumerate_flags, int):
+        raise TypeError("enumerate_flags must be of type int."
+                        " <{}> was got.".format(type(enumerate_flags)))
+    if not isinstance(hints, str):
+        raise TypeError("hints must be of type str."
+                        " <{}> was got.".format(type(hints)))
     device_enumeration = lib.enumerate_devices(enumerate_flags, hints)
     return device_enumeration
 
@@ -3779,6 +4015,10 @@ def free_enumerate_devices(
     :param device_id: opaque pointer to an enumeration device data
     :type device_id: POINTER(device_enumeration_t)
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
     _check_result(lib.free_enumerate_devices(device_enumeration))
 
 
@@ -3801,6 +4041,9 @@ def set_correction_table(device_id: DeviceT,
     :type namefile: str
     """
     _check_device_id(device_id)
+    if not isinstance(namefile, str):
+        raise TypeError("namefile must be of type str."
+                        " <{}> was got.".format(type(namefile)))
     _check_result(lib.set_correction_table(device_id, namefile))
 
 
@@ -3878,6 +4121,10 @@ def get_device_count(device_enumeration: POINTER(device_enumeration_t)) -> int:
     :return: device count
     :rtype: int
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
     res = lib.get_device_count(device_enumeration)
     return res
 
@@ -3895,6 +4142,13 @@ def get_device_name(device_enumeration: POINTER(device_enumeration_t),
     :return: device name
     :rtype: str
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     res = lib.get_device_name(device_enumeration, device_index)
     return str(res)
 
@@ -3922,7 +4176,10 @@ def ximc_fix_usbser_sys(device_uri: str) -> None:
     :param device_uri: device uri
     :type device_uri: str
     """
-    lib.ximc_fix_usbser_sys(device_uri)
+    if not isinstance(device_uri, str):
+        raise TypeError("device_uri must be of type str."
+                        " <{}> was got.".format(type(device_uri)))
+    _check_result(lib.ximc_fix_usbser_sys(device_uri))
 
 
 def get_enumerate_device_serial(
@@ -3939,6 +4196,13 @@ def get_enumerate_device_serial(
     :return: device serial number
     :rtype: int
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     serial = c_uint32()
     _check_result(lib.get_enumerate_device_serial(device_enumeration,
                                                   device_index,
@@ -3960,6 +4224,13 @@ def get_enumerate_device_information(
     :return: device information data
     :rtype: DeviceInformation
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     device_information = device_information_t()
     _check_result(
         lib.get_enumerate_device_information(device_enumeration,
@@ -3987,6 +4258,9 @@ def get_status_calb(device_id: DeviceT,
     :rtype: StatusCalb
     """
     _check_device_id(device_id)
+    if not isinstance(calibration, Calibration):
+        raise TypeError("calibration must be of type Calibration. <{}>"
+                        " was got.".format(type(calibration)))
     status = status_calb_t()
     calib = calibration_t(calibration.A, calibration.MicrostepMode)
     _check_result(lib.get_status_calb(device_id, byref(status), byref(calib)))
@@ -4022,6 +4296,13 @@ def get_enumerate_device_controller_name(
     :return: controller name
     :rtype: str
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     name = c_char_p(r'\0'*128)
     _check_result(lib.get_enumerate_device_controller_name(device_enumeration,
                                                            device_index, name))
@@ -4042,6 +4323,13 @@ def get_enumerate_device_stage_name(
     :return: stage name
     :rtype: str
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     name = c_char_p(r'\0'*128)
     _check_result(lib.get_enumerate_device_stage_name(device_enumeration,
                                                       device_index, name))
@@ -4062,6 +4350,13 @@ def get_enumerate_device_network_information(
     :return: device network information data
     :rtype: device_network_information_t
     """
+    if not isinstance(device_enumeration, POINTER(device_enumeration_t)):
+        raise TypeError("device_enumeration must be of type"
+                        " POINTER(device_enumeration_t). <{}> was got."
+                        .format(type(device_enumeration)))
+    if not isinstance(device_index, int):
+        raise TypeError("device_index must be of type int."
+                        " <{}> was got.".format(type(device_enumeration)))
     device_network_information = device_network_information_t()
     _check_result(
         lib.get_enumerate_device_network_information(
@@ -4086,6 +4381,9 @@ def command_wait_for_stop(device_id: DeviceT,
     :type refresh_interval_ms: int
     """
     _check_device_id(device_id)
+    if not isinstance(refresh_interval_ms, int):
+        raise TypeError("refresh_interval_ms must be of type int."
+                        " <{}> was got.".format(type(refresh_interval_ms)))
     _check_result(lib.command_wait_for_stop(device_id,
                                             c_uint32(refresh_interval_ms)))
 
@@ -4110,6 +4408,9 @@ def set_bindy_key(keyfilepath: str) -> None:
     enumerate_devices and open_device functions.
     :type keyfilepath: str
     """
+    if not isinstance(keyfilepath, str):
+        raise TypeError("keyfilepath must be of type str."
+                        " <{}> was got.".format(type(keyfilepath)))
     _check_result(lib.set_bindy_key(keyfilepath))
 
 
@@ -4133,6 +4434,9 @@ def open_device(uri: str) -> DeviceT:
     :type uri: str
     :raises ConnectionError:
     """
+    if not isinstance(uri, str):
+        raise TypeError("uri must be of type str."
+                        " <{}> was got.".format(type(uri)))
     device_id = DeviceT(lib.open_device(uri.encode()))
     if (device_id < 0):
         raise ConnectionError(
@@ -4165,6 +4469,7 @@ def get_position(device_id: DeviceT) -> GetPosition:
     :return: GetPosition objects
     :rtype: GetPosition
     """
+    _check_device_id(device_id)
     position = get_position_t()
     _check_result(lib.get_position(device_id, byref(position)))
     return GetPosition(position.Position,
@@ -4176,6 +4481,12 @@ def command_move(device_id: DeviceT,
                  position: int,
                  uposition: int) -> None:
     _check_device_id(device_id)
+    if not isinstance(position, int):
+        raise TypeError("position must be of type int."
+                        " <{}> was got.".format(type(position)))
+    if not isinstance(uposition, int):
+        raise TypeError("uposition must be of type int."
+                        " <{}> was got.".format(type(uposition)))
     _check_result(lib.command_move(device_id, position, uposition))
 
 
