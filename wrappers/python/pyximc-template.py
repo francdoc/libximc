@@ -2,7 +2,7 @@
 from ctypes import WinDLL, CDLL, RTLD_GLOBAL, POINTER, byref, cast
 from ctypes import (c_double, c_int, c_uint, c_uint8, c_uint32,
                     c_ulonglong, c_float, c_char, c_char_p, c_long,
-                    c_longlong)
+                    c_longlong, c_ubyte)
 from ctypes import Structure, LittleEndianStructure
 import os
 import platform
@@ -7766,7 +7766,7 @@ def enumerate_devices(enumerate_flags: int,
     if not isinstance(hints, str):
         raise TypeError("hints must be of type str."
                         " <{}> was got.".format(type(hints)))
-    device_enumeration = lib.enumerate_devices(enumerate_flags, hints)
+    device_enumeration = lib.enumerate_devices(enumerate_flags, hints.encode())
     return device_enumeration
 
 
