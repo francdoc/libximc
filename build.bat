@@ -20,9 +20,11 @@
 
 @if "%1" == "cleandist" call :CLEAN ; exit /B 0
 
-:: JDK_HOME must be set
-@echo JDK home is %JDK_HOME%
-@if "x%JDK_HOME%"=="x" goto FAIL
+@if not defined NO_JAVA (
+    :: JDK_HOME must be set
+    @echo JDK home is %JDK_HOME%
+    @if "x%JDK_HOME%"=="x" goto FAIL
+)
 
 :: read vers
 for /F %%i in (' c:\cygwin\bin\bash.exe --login -c "sed '3q;d' `cygpath '%BASEDIR%\version'`" ') do set XIBRIDGEVER=%%i
@@ -47,11 +49,13 @@ echo Configuration %CONFIGURATION%
 @if "%VSINSTALLDIR%" == "" call "%VCINSTALLDIR%/vcvarsall.bat" x86_amd64
 @if not %errorlevel% == 0 goto FAIL
 
-call :CLEAN
+@if not defined NO_CLEAN call :CLEAN
 @if not %errorlevel% == 0 goto FAIL
-call :LIB
+
+@if not defined NO_LIB call :LIB
 @if not %errorlevel% == 0 goto FAIL
-call :EXAMPLES
+
+@if not defined NO_EXAMPLES call :EXAMPLES
 @if not %errorlevel% == 0 goto FAIL
 
 :: it is an exit
@@ -89,23 +93,23 @@ call :DEPS_MINIUPNPC win64 x64
 call :DEPS_MINIUPNPC win32 Win32
 @if not %errorlevel% == 0 goto FAIL
 
-
 :SKIP_DEPS
 call :LIBXIMC win32 Win32
 @if not %errorlevel% == 0 goto FAIL
 call :LIBXIMC win64 x64
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_JAVA win32 Win32 "%JDK32_HOME%"
+
+@if not defined NO_JAVA call :WRAPPER_JAVA win32 Win32 "%JDK32_HOME%"
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_JAVA win64 x64 "%JDK_HOME%"
+@if not defined NO_JAVA call :WRAPPER_JAVA win64 x64 "%JDK_HOME%"
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_CSHARP win32 Win32
+@if not defined NO_CSHARP call :WRAPPER_CSHARP win32 Win32
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_CSHARP win64 x64
+@if not defined NO_CSHARP call :WRAPPER_CSHARP win64 x64
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_DELPHI
+@if not defined NO_DELPHI call :WRAPPER_DELPHI
 @if not %errorlevel% == 0 goto FAIL
-call :WRAPPER_MATLAB
+@if not defined NO_MATLAB call :WRAPPER_MATLAB
 @if not %errorlevel% == 0 goto FAIL
 goto :eof
 
@@ -231,6 +235,7 @@ if not exist %CONFIGURATION%\xigen.exe goto FAIL
 cd %BASEDIR%
 @echo Building xigen for %ARCH% completed
 @goto :eof
+
 :: --------------------------------------
 :: -------------- libximc ---------------
 :LIBXIMC
