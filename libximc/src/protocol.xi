@@ -1504,7 +1504,7 @@ fields:
 	* Настройки ПИД.
 	* Эта структура содержит коэффициенты для ПИД регулятора.
 	* Они определяют работу ПИД контура напряжения.
-	* Эти коэффициенты хранятся во flash памяти памяти контроллера.
+	* Эти коэффициенты хранятся во flash памяти контроллера.
 	* Пожалуйста, загружайте новые настройки, когда вы меняете мотор или позиционер.
 	* Помните, что неправильные настройки ПИД контуров могут повредить оборудование.
 	* \endrussian
@@ -2567,7 +2567,7 @@ fields:
 	* Настройки EMF.
 	* Эта структура содержит данные электромеханических характеристик(EMF) двигателя.
 	* Они определяют индуктивность, сопротивление и электромеханический коэффициент двигателя.
-	* Эти данные хранятся во flash памяти памяти контроллера.
+	* Эти данные хранятся во flash памяти контроллера.
 	* Пожалуйста, загружайте новые настройки, когда вы меняете мотор.
 	* Помните, что неправильные настройки EMF могут повредить оборудование.
 	* \endrussian
@@ -2584,30 +2584,30 @@ fields:
 
 /**  $XIR
 	* \english
-	* Read engine advanced settings.
-	* @see set_engine_advanced_setup
+	* Read engine advansed settings.
+	* @see set_engine_advansed_setup
 	* @param id an identifier of device
-	* @param[out] engine_advanced_setup EAS settings
+	* @param[out] engine_advansed_setup EAS settings
 	* \endenglish
 	* \russian
 	* Чтение расширенных настроек. 
-	* @see set_engine_advanced_setup
+	* @see set_engine_advansed_setup
 	* @param id идентификатор устройства
-	* @param[out] engine_advanced_setup настройки EAS
+	* @param[out] engine_advansed_setup настройки EAS
 	* \endrussian
 	*/
 /**  $XIW
 	* \english
-	* Set engine advanced settings.
-	* @see get_engine_advanced_setup
+	* Set engine advansed settings.
+	* @see get_engine_advansed_setup
 	* @param id an identifier of device
-	* @param[in] engine_advanced_setup EAS settings
+	* @param[in] engine_advansed_setup EAS settings
 	* \endenglish
 	* \russian
 	* Запись расширенных настроек. 
-	* @see get_engine_advanced_setup
+	* @see get_engine_advansed_setup
 	* @param id идентификатор устройства
-	* @param[in] engine_advanced_setup настройки EAS
+	* @param[in] engine_advansed_setup настройки EAS
 	* \endrussian
 	*/
 /**  $XIS
@@ -2618,12 +2618,12 @@ fields:
 	* \russian
 	* Настройки EAS.
 	* Эта структура предназначена для настройки параметров алгоритмов, которые невозможно отнести к стандартным Kp, Ki, Kd и L, R, Km.
-	* Эти данные хранятся во flash памяти памяти контроллера.
+	* Эти данные хранятся во flash памяти контроллера.
 	* \endrussian
-	* @see set_engine_advanced_setup
-	* @see get_engine_advanced_setup
+	* @see set_engine_advansed_setup
+	* @see get_engine_advansed_setup
 	*/
-command "engine_advanced_setup" universal "eas" (54)
+command "engine_advansed_setup" universal "eas" (54)
 fields:	
 	int16u stepcloseloop_Kw			/**< \english Mixing ratio of the actual and set speed, range [0, 100], default value 50. \endenglish \russian Коэффициент смешения реальной и заданной скорости, диапазон [0, 100], значение по умолчанию 50. \endrussian */
 	int16u stepcloseloop_Kp_low		/**< \english Position feedback in the low-speed zone, range [0, 65535], default value 1000. \endenglish \russian Обратная связь по позиции в зоне малых скоростей, диапазон [0, 65535], значение по умолчанию 1000. \endrussian */
