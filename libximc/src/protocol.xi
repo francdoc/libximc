@@ -11,7 +11,7 @@ defaults with crc, answer, public
 	\endrussian
 	*/
 flagset EnumerateFlags:
-ENUMERATE_PROBE		= 0x01	/**< \english Check if a device with OS name name is XIMC device. Be carefuly with this flag because it sends some data to the device.  \endenglish \russian Проверять, является ли устройство XIMC-совместимым. Будте осторожны с этим флагом, т.к. он отправляет данные в устройство.  \endrussian */
+ENUMERATE_PROBE		= 0x01	/**< \english Check if a device with OS name name is XIMC device. Be carefully with this flag because it sends some data to the device.  \endenglish \russian Проверять, является ли устройство XIMC-совместимым. Будьте осторожны с этим флагом, т.к. он отправляет данные в устройство.  \endrussian */
 ENUMERATE_ALL_COM	= 0x02	/**< \english Check all COM devices \endenglish \russian Проверять все COM-устройства \endrussian */
 ENUMERATE_NETWORK	= 0x04	/**< \english Check network devices \endenglish \russian Проверять сетевые устройства \endrussian */
 
@@ -154,7 +154,7 @@ STATE_ENC_B						= 0x00004000	/**< \english State of encoder B pin. \endenglish 
 	*/
 flagset EncodeStatus:
 ENC_STATE_ABSENT	= 0x00	/**< \english Encoder is absent. \endenglish \russian Энкодер не подключен. \endrussian */
-ENC_STATE_UNKNOWN	= 0x01	/**< \english Encoder state is unknown. \endenglish \russian Cостояние энкодера неизвестно. \endrussian */
+ENC_STATE_UNKNOWN	= 0x01	/**< \english Encoder state is unknown. \endenglish \russian Состояние энкодера неизвестно. \endrussian */
 ENC_STATE_MALFUNC	= 0x02	/**< \english Encoder is connected and malfunctioning. \endenglish \russian Энкодер подключен и неисправен. \endrussian */
 ENC_STATE_REVERS	= 0x03	/**< \english Encoder is connected and operational but counts in other direction. \endenglish \russian Энкодер подключен и исправен, но считает в другую сторону. \endrussian */
 ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \endenglish \russian Энкодер подключен и работает должным образом. \endrussian */
@@ -174,11 +174,11 @@ ENC_STATE_OK		= 0x04	/**< \english Encoder is connected and working properly. \e
 	*/
 flagset WindStatus:
 WIND_A_STATE_ABSENT		= 0x00	/**< \english Winding A is disconnected. \endenglish \russian Обмотка A не подключена. \endrussian */
-WIND_A_STATE_UNKNOWN	= 0x01	/**< \english Winding A state is unknown. \endenglish \russian Cостояние обмотки A неизвестно. \endrussian */
+WIND_A_STATE_UNKNOWN	= 0x01	/**< \english Winding A state is unknown. \endenglish \russian Состояние обмотки A неизвестно. \endrussian */
 WIND_A_STATE_MALFUNC	= 0x02	/**< \english Winding A is short-circuited. \endenglish \russian Короткое замыкание на обмотке A. \endrussian */
 WIND_A_STATE_OK			= 0x03	/**< \english Winding A is connected and working properly. \endenglish \russian Обмотка A работает адекватно. \endrussian */
 WIND_B_STATE_ABSENT		= 0x00	/**< \english Winding B is disconnected. \endenglish \russian Обмотка B не подключена. \endrussian */
-WIND_B_STATE_UNKNOWN	= 0x10	/**< \english Winding B state is unknown. \endenglish \russian Cостояние обмотки B неизвестно. \endrussian */
+WIND_B_STATE_UNKNOWN	= 0x10	/**< \english Winding B state is unknown. \endenglish \russian Состояние обмотки B неизвестно. \endrussian */
 WIND_B_STATE_MALFUNC	= 0x20	/**< \english Winding B is short-circuited. \endenglish \russian Короткое замыкание на обмотке B. \endrussian */
 WIND_B_STATE_OK			= 0x30	/**< \english Winding B is connected and working properly. \endenglish \russian Обмотка B работает адекватно. \endrussian */
 
@@ -193,7 +193,7 @@ WIND_B_STATE_OK			= 0x30	/**< \english Winding B is connected and working proper
 	* @name Состояние команды движения
 	* Это битовая маска для побитовых операций.
 	* Состояние команды движения (касается command_move, command_movr, command_left, command_right, command_stop, command_home, command_loft, command_sstp)
-	* и статуса её выполнения (выполяется, завершено, ошибка)
+	* и статуса её выполнения (выполняется, завершено, ошибка)
 	* \endrussian
 	* @see get_status
 	*/
@@ -222,7 +222,7 @@ MVCMD_RUNNING	= 0x80	/**< \english Move command state (0 - move command have fin
 	* @name Флаги параметров движения
 	* Это битовая маска для побитовых операций.
 	* Определяют настройки параметров движения.
-	* Возращаются командой get_move_settings.
+	* Возвращаются командой get_move_settings.
 	* \endrussian
 	* @see set_move_settings
 	* @see get_move_settings
@@ -241,7 +241,7 @@ RPM_DIV_1000		= 0x01	/**< \english This flag indicates that the operating speed 
 	* @name Флаги параметров мотора
 	* Это битовая маска для побитовых операций.
 	* Определяют настройки движения и работу ограничителей.
-	* Возращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
+	* Возвращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
 	* @see set_engine_settings
 	* @see get_engine_settings
@@ -267,7 +267,7 @@ ENGINE_LIMIT_RPM	= 0x0080	/**< \english Maximum motor speed limit enable flag. \
 	* @name Флаги параметров микрошагового режима
 	* Это битовая маска для побитовых операций.
 	* Определяют деление шага в микрошаговом режиме. Используются с шаговыми моторами.
-	* Возращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
+	* Возвращаются командой get_engine_settings. Могут быть объединены с помощью логического ИЛИ.
 	* \endrussian
 	* @see engine_settings_t::flags
 	* @see set_engine_settings
@@ -295,7 +295,7 @@ MICROSTEP_MODE_FRAC_256	= 0x09	/**< \english 1/256 step mode. \endenglish \russi
 	* @name Флаги, определяющие тип мотора
 	* Это битовая маска для побитовых операций.
 	* Определяют тип мотора.
-	* Возращаются командой get_entype_settings.
+	* Возвращаются командой get_entype_settings.
 	* \endrussian
 	* @see engine_settings_t::flags
 	* @see set_entype_settings
@@ -320,7 +320,7 @@ ENGINE_TYPE_BRUSHLESS	= 0x05	/**< \english Brushless motor. \endenglish \russian
 	* @name Флаги, определяющие тип силового драйвера
 	* Это битовая маска для побитовых операций.
 	* Определяют тип силового драйвера.
-	* Возращаются командой get_entype_settings.
+	* Возвращаются командой get_entype_settings.
 	* \endrussian
 	* @see engine_settings_t::flags
 	* @see set_entype_settings
@@ -480,7 +480,7 @@ SYNCOUT_ONPERIOD	= 0x40	/**< \english Generate synchronization pulse every SyncO
 	*/
 flagset ExtioSetupFlags:
 EXTIO_SETUP_OUTPUT	= 0x01	/**< \english EXTIO works as output if flag is set, works as input otherwise. \endenglish \russian Если флаг установлен, то ножка в состоянии вывода, иначе - ввода. \endrussian */
-EXTIO_SETUP_INVERT	= 0x02	/**< \english Interpret EXTIO states and fronts inverted if flag is set. Falling front as input event and low logic level as active state. \endenglish \russian Eсли флаг установлен, то нули считаются активным состоянием выхода, а спадающие фронты как момент подачи входного сигнала. \endrussian */
+EXTIO_SETUP_INVERT	= 0x02	/**< \english Interpret EXTIO states and fronts inverted if flag is set. Falling front as input event and low logic level as active state. \endenglish \russian Если флаг установлен, то нули считаются активным состоянием выхода, а спадающие фронты как момент подачи входного сигнала. \endrussian */
 
 /**
 	* \english
@@ -496,14 +496,14 @@ EXTIO_SETUP_INVERT	= 0x02	/**< \english Interpret EXTIO states and fronts invert
 	* @see set_extio_settings
 	*/
 flagset ExtioModeFlags:
-EXTIO_SETUP_MODE_IN_BITS            = 0x0F  /**< \english Bits of the behaviour selector when the signal on input goes to the active state. \endenglish \russian Биты, отвечающие за поведение при переходе сигнала в активное состояние. \endrussian */
+EXTIO_SETUP_MODE_IN_BITS            = 0x0F  /**< \english Bits of the behavior selector when the signal on input goes to the active state. \endenglish \russian Биты, отвечающие за поведение при переходе сигнала в активное состояние. \endrussian */
 EXTIO_SETUP_MODE_IN_NOP             = 0x00  /**< \english Do nothing. \endenglish \russian Ничего не делать. \endrussian */
 EXTIO_SETUP_MODE_IN_STOP            = 0x01  /**< \english Issue STOP command, ceasing the engine movement. \endenglish \russian По переднему фронту входного сигнала делается остановка двигателя (эквивалент команды STOP). \endrussian */
 EXTIO_SETUP_MODE_IN_PWOF            = 0x02  /**< \english Issue PWOF command, powering off all engine windings. \endenglish \russian Выполняет команду PWOF, обесточивая обмотки двигателя. \endrussian */
 EXTIO_SETUP_MODE_IN_MOVR            = 0x03  /**< \english Issue MOVR command with last used settings. \endenglish \russian Выполняется команда MOVR с последними настройками. \endrussian */
 EXTIO_SETUP_MODE_IN_HOME            = 0x04  /**< \english Issue HOME command. \endenglish \russian Выполняется команда HOME. \endrussian */
 EXTIO_SETUP_MODE_IN_ALARM           = 0x05  /**< \english Set Alarm when the signal goes to the active state. \endenglish \russian Войти в состояние ALARM при переходе сигнала в активное состояние. \endrussian */
-EXTIO_SETUP_MODE_OUT_BITS           = 0xF0  /**< \english Bits of the output behaviour selection. \endenglish \russian Биты выбора поведения на выходе. \endrussian */
+EXTIO_SETUP_MODE_OUT_BITS           = 0xF0  /**< \english Bits of the output behavior selection. \endenglish \russian Биты выбора поведения на выходе. \endrussian */
 EXTIO_SETUP_MODE_OUT_OFF            = 0x00  /**< \english EXTIO pin always set in inactive state. \endenglish \russian Ножка всегда в неактивном состоянии. \endrussian */
 EXTIO_SETUP_MODE_OUT_ON             = 0x10  /**< \english EXTIO pin always set in active state. \endenglish \russian Ножка всегда в активном состоянии. \endrussian */
 EXTIO_SETUP_MODE_OUT_MOVING         = 0x20  /**< \english EXTIO pin stays active during moving state. \endenglish \russian Ножка находится в активном состоянии при движении. \endrussian */
@@ -514,7 +514,7 @@ EXTIO_SETUP_MODE_OUT_MOTOR_ON       = 0x40  /**< \english EXTIO pin stays active
 	* \english
 	* @name Border flags
 	* This is a bit mask for bitwise operations.
-	* Specify types of borders and motor behaviour on borders.
+	* Specify types of borders and motor behavior on borders.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
@@ -536,7 +536,7 @@ BORDERS_SWAP_MISSET_DETECTION	= 0x08	/**< \english Motor should stop on both bor
 	* \english
 	* @name Limit switches flags
 	* This is a bit mask for bitwise operations.
-	* Specify electrical behaviour of limit switches like order and pulled positions.
+	* Specify electrical behavior of limit switches like order and pulled positions.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
@@ -550,14 +550,14 @@ BORDERS_SWAP_MISSET_DETECTION	= 0x08	/**< \english Motor should stop on both bor
 	*/
 flagset EnderFlags:
 ENDER_SWAP				= 0x01	/**< \english First limit switch on the right side, if set; otherwise on the left side. \endenglish \russian Если флаг установлен, первый концевой выключатель находится справа; иначе - слева. \endrussian */
-ENDER_SW1_ACTIVE_LOW	= 0x02	/**< \english 1 - Limit switch connnected to pin SW1 is triggered by a low level on pin. \endenglish \russian 1 - Концевик, подключенный к ножке SW1, считается сработавшим по низкому уровню на контакте. \endrussian */
-ENDER_SW2_ACTIVE_LOW	= 0x04	/**< \english 1 - Limit switch connnected to pin SW2 is triggered by a low level on pin. \endenglish \russian 1 - Концевик, подключенный к ножке SW2, считается сработавшим по низкому уровню на контакте. \endrussian */
+ENDER_SW1_ACTIVE_LOW	= 0x02	/**< \english 1 - Limit switch connected to pin SW1 is triggered by a low level on pin. \endenglish \russian 1 - Концевик, подключенный к ножке SW1, считается сработавшим по низкому уровню на контакте. \endrussian */
+ENDER_SW2_ACTIVE_LOW	= 0x04	/**< \english 1 - Limit switch connected to pin SW2 is triggered by a low level on pin. \endenglish \russian 1 - Концевик, подключенный к ножке SW2, считается сработавшим по низкому уровню на контакте. \endrussian */
 
 /**
 	* \english
 	* @name Brake settings flags
 	* This is a bit mask for bitwise operations.
-	* Specify behaviour of brake.
+	* Specify behavior of brake.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
@@ -641,7 +641,7 @@ CTP_ERROR_CORRECTION    = 0x10 /**< \english Correct errors which appear when sl
 	* \english
 	* @name Home settings flags
 	* This is a bit mask for bitwise operations.
-	* Specify behaviour for home command.
+	* Specify behavior for home command.
 	* May be combined with bitwise OR.
 	* \endenglish
 	* \russian
@@ -747,7 +747,7 @@ MB_POWERED_HOLD					= 0x02	/**< \english If this flag is set the magnetic brake 
 	*/
 flagset TSSettingsFlags:
 TS_TYPE_BITS					= 0x07	/**< \english Bits of the temperature sensor type \endenglish \russian Биты, отвечающие за тип температурного датчика. \endrussian */
-TS_TYPE_UNKNOWN					= 0x00	/**< \english Unknow type of sensor \endenglish \russian Неизвестный сенсор \endrussian */
+TS_TYPE_UNKNOWN					= 0x00	/**< \english Unknown type of sensor \endenglish \russian Неизвестный сенсор \endrussian */
 TS_TYPE_THERMOCOUPLE			= 0x01	/**< \english Thermocouple \endenglish \russian Термопара \endrussian */
 TS_TYPE_SEMICONDUCTOR			= 0x02	/**< \english The semiconductor temperature sensor \endenglish \russian Полупроводниковый температурный датчик \endrussian */
 TS_AVAILABLE					= 0x08	/**< \english If flag is set the temperature sensor is available \endenglish \russian Если флаг установлен, то датчик температуры доступен \endrussian */
@@ -763,10 +763,10 @@ TS_AVAILABLE					= 0x08	/**< \english If flag is set the temperature sensor is a
 	* \endrussian
 	*/
 flagset LSFlags:
-LS_ON_SW1_AVAILABLE				= 0x01	/**< \english If flag is set the limit switch connnected to pin SW1 is available \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW1, доступен \endrussian */
-LS_ON_SW2_AVAILABLE				= 0x02	/**< \english If flag is set the limit switch connnected to pin SW2 is available \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, доступен \endrussian */
-LS_SW1_ACTIVE_LOW				= 0x04	/**< \english If flag is set the limit switch connnected to pin SW1 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW1, считается сработавшим по низкому уровню на контакте \endrussian */
-LS_SW2_ACTIVE_LOW				= 0x08	/**< \english If flag is set the limit switch connnected to pin SW2 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, считается сработавшим по низкому уровню на контакте \endrussian */
+LS_ON_SW1_AVAILABLE				= 0x01	/**< \english If flag is set the limit switch connected to pin SW1 is available \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW1, доступен \endrussian */
+LS_ON_SW2_AVAILABLE				= 0x02	/**< \english If flag is set the limit switch connected to pin SW2 is available \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, доступен \endrussian */
+LS_SW1_ACTIVE_LOW				= 0x04	/**< \english If flag is set the limit switch connected to pin SW1 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW1, считается сработавшим по низкому уровню на контакте \endrussian */
+LS_SW2_ACTIVE_LOW				= 0x08	/**< \english If flag is set the limit switch connected to pin SW2 is triggered by a low level on pin \endenglish \russian Если флаг установлен, то концевик, подключенный к ножке SW2, считается сработавшим по низкому уровню на контакте \endrussian */
 LS_SHORTED						= 0x10	/**< \english If flag is set the Limit switches is shorted \endenglish \russian Если флаг установлен, то концевики замкнуты. \endrussian */
 
 /**
@@ -889,7 +889,7 @@ fields:
 	* \english
 	* Position calibration settings.
 	* This structure contains settings used in position calibrating.
-	* It specify behaviour of calibrating position.
+	* It specify behavior of calibrating position.
 	* \endenglish
 	* \russian
 	* Настройки калибровки позиции.
@@ -939,7 +939,7 @@ fields:
 	* \english
 	* Position calibration settings which use user units.
 	* This structure contains settings used in position calibrating.
-	* It specify behaviour of calibrating position.
+	* It specify behavior of calibrating position.
 	* \endenglish
 	* \russian
 	* Настройки калибровки позиции с использованием пользовательских единиц.
@@ -1005,7 +1005,7 @@ fields:
 	* @param calibration user unit settings
 	* \endenglish
 	* \russian
-	* Команда чтения настроек перемещения  с использованием пользовательских единиц(скорость, ускорение, threshold и скорость в режиме антилюфта).
+	* Команда чтения настроек перемещения с использованием пользовательских единиц(скорость, ускорение, threshold и скорость в режиме антилюфта).
 	* @param id идентификатор устройства
 	* @param[out] move_settings_calb структура, содержащая настройки движения: скорость, ускорение, и т.д.
 	* @param calibration настройки пользовательских единиц
@@ -1332,7 +1332,7 @@ fields:
 	* Read border and limit switches settings.
 	* @see set_edges_settings
 	* @param id an identifier of device
-	* @param[out] edges_settings edges settings, specify types of borders, motor behaviour and electrical behaviour of limit switches
+	* @param[out] edges_settings edges settings, specify types of borders, motor behavior and electrical behavior of limit switches
 	* \endenglish
 	* \russian
 	* Чтение настроек границ и концевых выключателей.
@@ -1346,7 +1346,7 @@ fields:
 	* Set border and limit switches settings.
 	* @see get_edges_settings
 	* @param id an identifier of device
-	* @param[in] edges_settings edges settings, specify types of borders, motor behaviour and electrical behaviour of limit switches
+	* @param[in] edges_settings edges settings, specify types of borders, motor behavior and electrical behavior of limit switches
 	* \endenglish
 	* \russian
 	* Запись настроек границ и концевых выключателей.
@@ -1376,7 +1376,7 @@ fields:
 	* Read border and limit switches settings which use user units.
 	* @see set_edges_settings_calb
 	* @param id an identifier of device
-	* @param[out] edges_settings_calb edges settings, specify types of borders, motor behaviour and electrical behaviour of limit switches
+	* @param[out] edges_settings_calb edges settings, specify types of borders, motor behavior and electrical behavior of limit switches
 	* @param calibration user unit settings
 	* 
 	* \note
@@ -1400,7 +1400,7 @@ fields:
 	* Set border and limit switches settings which use user units.
 	* @see get_edges_settings_calb
 	* @param id an identifier of device
-	* @param[in] edges_settings_calb edges settings, specify types of borders, motor behaviour and electrical behaviour of limit switches
+	* @param[in] edges_settings_calb edges settings, specify types of borders, motor behavior and electrical behavior of limit switches
 	* @param calibration user unit settings
 	* 
 	* \note
@@ -1437,8 +1437,8 @@ fields:
 	*/
 command "edges_settings" universal "eds" (26)
 fields:
-	int8u flag BorderFlags	of BorderFlags	/**< \english Border flags, specify types of borders and motor behaviour on borders. This is a bit mask for bitwise operations. \endenglish \russian Флаги, определяющие тип границ и поведение мотора при их достижении. Это битовая маска для побитовых операций. \endrussian */
-	int8u flag EnderFlags of EnderFlags		/**< \english Ender flags, specify electrical behaviour of limit switches like order and pulled positions. This is a bit mask for bitwise operations. \endenglish \russian Флаги, определяющие настройки концевых выключателей. Это битовая маска для побитовых операций. \endrussian */
+	int8u flag BorderFlags	of BorderFlags	/**< \english Border flags, specify types of borders and motor behavior on borders. This is a bit mask for bitwise operations. \endenglish \russian Флаги, определяющие тип границ и поведение мотора при их достижении. Это битовая маска для побитовых операций. \endrussian */
+	int8u flag EnderFlags of EnderFlags		/**< \english Ender flags, specify electrical behavior of limit switches like order and pulled positions. This is a bit mask for bitwise operations. \endenglish \russian Флаги, определяющие настройки концевых выключателей. Это битовая маска для побитовых операций. \endrussian */
 	calb cfloat LeftBorder					/**< \english Left border position, used if BORDER_IS_ENCODER flag is set. Corrected by the table. \endenglish \russian Позиция левой границы, используется если установлен флаг BORDER_IS_ENCODER. Корректируется таблицей. \endrussian */
 	normal int32s LeftBorder				/**< \english Left border position, used if BORDER_IS_ENCODER flag is set. \endenglish \russian Позиция левой границы, используется если установлен флаг BORDER_IS_ENCODER. \endrussian */
 	normal int16s uLeftBorder				/**< \english Left border position in microsteps(used with stepper motor only). Microstep size and the range of valid values for this field depend on selected step division mode (see MicrostepMode field in engine_settings). \endenglish \russian Позиция левой границы в микрошагах (используется только с шаговым двигателем). Величина микрошага и диапазон допустимых значений для данного поля зависят от выбранного режима деления шага (см. поле MicrostepMode в engine_settings). \endrussian */
@@ -1451,7 +1451,7 @@ fields:
 	* \english
 	* Read PID settings.
 	* This function fill structure with set of motor PID settings stored in controller's memory.
-	* These settings specify behaviour of PID routine for positioner.
+	* These settings specify behavior of PID routine for positioner.
 	* These factors are slightly different for different positioners.
 	* All boards are supplied with standard set of PID setting on controller's flash memory.
 	* @see set_pid_settings
@@ -1471,7 +1471,7 @@ fields:
 	* \english
 	* Set PID settings.
 	* This function send structure with set of PID factors to controller's memory.
-	* These settings specify behaviour of PID routine for positioner.
+	* These settings specify behavior of PID routine for positioner.
 	* These factors are slightly different for different positioners.
 	* All boards are supplied with standard set of PID setting on controller's flash memory.
 	* Please use it for loading new PID settings when you change positioner.
@@ -1494,7 +1494,7 @@ fields:
 	* \english
 	* PID settings.
 	* This structure contains factors for PID routine.
-	* It specify behaviour of PID routine for voltage.
+	* It specify behavior of PID routine for voltage.
 	* These factors are slightly different for different positioners.
 	* All boards are supplied with standard set of PID setting on controller's flash memory.
 	* Please load new PID settings when you change positioner.
@@ -1525,7 +1525,7 @@ fields:
 /**  $XIR
 	* \english
 	* Read input synchronization settings.
-	* This function fill structure with set of input synchronization settings, modes, periods and flags, that specify behaviour of input synchronization.
+	* This function fill structure with set of input synchronization settings, modes, periods and flags, that specify behavior of input synchronization.
 	* All boards are supplied with standard set of these settings.
 	* @see set_sync_in_settings
 	* @param id an identifier of device
@@ -1542,7 +1542,7 @@ fields:
 /**  $XIW
 	* \english
 	* Set input synchronization settings.
-	* This function send structure with set of input synchronization settings, that specify behaviour of input synchronization, to controller's memory.
+	* This function send structure with set of input synchronization settings, that specify behavior of input synchronization, to controller's memory.
 	* All boards are supplied with standard set of these settings.
 	* @see get_sync_in_settings
 	* @param id an identifier of device
@@ -1560,7 +1560,7 @@ fields:
 	* \english
 	* Synchronization settings.
 	* This structure contains all synchronization settings, modes, periods and flags.
-	* It specifes behaviour of input synchronization.
+	* It specifes behavior of input synchronization.
 	* All boards are supplied with standard set of these settings.
 	* \endenglish
 	* \russian
@@ -1573,7 +1573,7 @@ fields:
 /**  $XIRC
 	* \english
 	* Read input synchronization settings which use user units.
-	* This function fill structure with set of input synchronization settings, modes, periods and flags, that specify behaviour of input synchronization.
+	* This function fill structure with set of input synchronization settings, modes, periods and flags, that specify behavior of input synchronization.
 	* All boards are supplied with standard set of these settings.
 	* @see set_sync_in_settings_calb
 	* @param id an identifier of device
@@ -1592,7 +1592,7 @@ fields:
 /**  $XIWC
 	* \english
 	* Set input synchronization settings which use user units.
-	* This function send structure with set of input synchronization settings, that specify behaviour of input synchronization, to controller's memory.
+	* This function send structure with set of input synchronization settings, that specify behavior of input synchronization, to controller's memory.
 	* All boards are supplied with standard set of these settings.
 	* @see get_sync_in_settings_calb
 	* @param id an identifier of device
@@ -1612,7 +1612,7 @@ fields:
 	* \english
 	* Synchronization settings which use user units.
 	* This structure contains all synchronization settings, modes, periods and flags.
-	* It specifes behaviour of input synchronization.
+	* It specifes behavior of input synchronization.
 	* All boards are supplied with standard set of these settings.
 	* \endenglish
 	* \russian
@@ -1638,7 +1638,7 @@ fields:
 /** $XIR
 	* \english
 	* Read output synchronization settings.
-	* This function fill structure with set of output synchronization settings, modes, periods and flags, that specify behaviour of output synchronization.
+	* This function fill structure with set of output synchronization settings, modes, periods and flags, that specify behavior of output synchronization.
 	* All boards are supplied with standard set of these settings.
 	* @see set_sync_out_settings
 	* @param id an identifier of device
@@ -1652,7 +1652,7 @@ fields:
 /** $XIW
 	* \english
 	* Set output synchronization settings.
-	* This function send structure with set of output synchronization settings, that specify behaviour of output synchronization, to controller's memory.
+	* This function send structure with set of output synchronization settings, that specify behavior of output synchronization, to controller's memory.
 	* All boards are supplied with standard set of these settings.
 	* @see get_sync_out_settings
 	* @param id an identifier of device
@@ -1670,7 +1670,7 @@ fields:
 	* \english
 	* Synchronization settings.
 	* This structure contains all synchronization settings, modes, periods and flags.
-	* It specifes behaviour of output synchronization.
+	* It specifes behavior of output synchronization.
 	* All boards are supplied with standard set of these settings.
 	* \endenglish
 	* \russian
@@ -1683,7 +1683,7 @@ fields:
 /** $XIRC
 	* \english
 	* Read output synchronization settings which use user units.
-	* This function fill structure with set of output synchronization settings, modes, periods and flags, that specify behaviour of output synchronization.
+	* This function fill structure with set of output synchronization settings, modes, periods and flags, that specify behavior of output synchronization.
 	* All boards are supplied with standard set of these settings.
 	* @see set_sync_in_settings_calb
 	* @param id an identifier of device
@@ -1702,7 +1702,7 @@ fields:
 /** $XIWC
 	* \english
 	* Set output synchronization settings which use user units.
-	* This function send structure with set of output synchronization settings, that specify behaviour of output synchronization, to controller's memory.
+	* This function send structure with set of output synchronization settings, that specify behavior of output synchronization, to controller's memory.
 	* All boards are supplied with standard set of these settings.
 	* @see get_sync_in_settings_calb
 	* @param id an identifier of device
@@ -1722,7 +1722,7 @@ fields:
 	* \english
 	* Synchronization settings which use user units.
 	* This structure contains all synchronization settings, modes, periods and flags.
-	* It specifes behaviour of output synchronization.
+	* It specifes behavior of output synchronization.
 	* All boards are supplied with standard set of these settings.
 	* \endenglish
 	* \russian
@@ -2584,30 +2584,30 @@ fields:
 
 /**  $XIR
 	* \english
-	* Read engine advansed settings.
-	* @see set_engine_advansed_setup
+	* Read engine advanced settings.
+	* @see set_engine_advanced_setup
 	* @param id an identifier of device
-	* @param[out] engine_advansed_setup EAS settings
+	* @param[out] engine_advanced_setup EAS settings
 	* \endenglish
 	* \russian
 	* Чтение расширенных настроек. 
-	* @see set_engine_advansed_setup
+	* @see set_engine_advanced_setup
 	* @param id идентификатор устройства
-	* @param[out] engine_advansed_setup настройки EAS
+	* @param[out] engine_advanced_setup настройки EAS
 	* \endrussian
 	*/
 /**  $XIW
 	* \english
-	* Set engine advansed settings.
-	* @see get_engine_advansed_setup
+	* Set engine advanced settings.
+	* @see get_engine_advanced_setup
 	* @param id an identifier of device
-	* @param[in] engine_advansed_setup EAS settings
+	* @param[in] engine_advanced_setup EAS settings
 	* \endenglish
 	* \russian
 	* Запись расширенных настроек. 
-	* @see get_engine_advansed_setup
+	* @see get_engine_advanced_setup
 	* @param id идентификатор устройства
-	* @param[in] engine_advansed_setup настройки EAS
+	* @param[in] engine_advanced_setup настройки EAS
 	* \endrussian
 	*/
 /**  $XIS
@@ -2620,10 +2620,10 @@ fields:
 	* Эта структура предназначена для настройки параметров алгоритмов, которые невозможно отнести к стандартным Kp, Ki, Kd и L, R, Km.
 	* Эти данные хранятся во flash памяти памяти контроллера.
 	* \endrussian
-	* @see set_engine_advansed_setup
-	* @see get_engine_advansed_setup
+	* @see set_engine_advanced_setup
+	* @see get_engine_advanced_setup
 	*/
-command "engine_advansed_setup" universal "eas" (54)
+command "engine_advanced_setup" universal "eas" (54)
 fields:	
 	int16u stepcloseloop_Kw			/**< \english Mixing ratio of the actual and set speed, range [0, 100], default value 50. \endenglish \russian Коэффициент смешения реальной и заданной скорости, диапазон [0, 100], значение по умолчанию 50. \endrussian */
 	int16u stepcloseloop_Kp_low		/**< \english Position feedback in the low-speed zone, range [0, 65535], default value 1000. \endenglish \russian Обратная связь по позиции в зоне малых скоростей, диапазон [0, 65535], значение по умолчанию 1000. \endrussian */
@@ -2791,7 +2791,7 @@ fields:
 	* \endenglish
 	* \russian
 	* Немедленное отключение питания двигателя вне зависимости от его состояния.
-	* Команда предначена для ручного управления питанием двигателя.
+	* Команда предназначена для ручного управления питанием двигателя.
 	* Не следует использовать эту команду для отключения двигателя во время движения, так как питание может снова включиться для завершения движения.
 	* Для автоматического управления питанием двигателя и его отключении после остановки следует использовать систему управления электропитанием.
 	* @param id идентификатор устройства
@@ -2906,7 +2906,7 @@ fields:
 	*
 	* \note
 	* Конечная координата вычисляемая с помощью DeltaPosition, корректируется таблицей коррекции.
-	* Для корректного рассчета координат, при использовании корректирующей таблицы, не нужно выполнять команды movr пакетами.
+	* Для корректного расчета координат, при использовании корректирующей таблицы, не нужно выполнять команды movr пакетами.
 	*
 	* \endrussian
 	*/
@@ -2961,7 +2961,7 @@ command "command_home" writer "home" (4)
 
 /** $XIW
 	* \english
-	* Start continous moving to the left.
+	* Start continuous moving to the left.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
@@ -2973,7 +2973,7 @@ command "command_left" writer "left" (4)
 
 /** $XIW
 	* \english
-	* Start continous moving to the right.
+	* Start continuous moving to the right.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
@@ -3029,13 +3029,13 @@ command "command_sstp" writer "sstp" (4)
 	* Reads the value position in steps and micro for stepper motor and encoder steps
 	* all engines.
 	* @param id an identifier of device
-	* @param[out] the_get_position structure contains move settings: speed, acceleration, deceleration etc.
+	* @param[out] get_position structure contains motor position.
 	* \endenglish
 	* \russian
 	* Считывает значение положения в шагах и микрошагах для шагового двигателя и в шагах энкодера
 	* всех двигателей.
 	* @param id идентификатор устройства
-	* @param[out] position структура, содержащая настройки движения: скорость, ускорение, и т.д.
+	* @param[out] position структура, содержащая позицию мотора.
 	* \endrussian
 	*/
 /** $XIS
@@ -3056,22 +3056,22 @@ command "command_sstp" writer "sstp" (4)
 	* Reads position value in user units for stepper motor and encoder steps
 	* all engines.
 	* @param id an identifier of device
-	* @param[out] the_get_position_calb structure contains move settings: speed, acceleration, deceleration etc.
+	* @param[out] get_position_calb structure contains motor position.
 	* @param calibration user unit settings
 	* 
 	* \note
-	* Attention! Some parameters of the the_get_position_calb structure are corrected by the coordinate correction table.
+	* Attention! Some parameters of the get_position_calb structure are corrected by the coordinate correction table.
 	*
 	* \endenglish
 	* \russian
 	* Считывает значение положения в пользовательских единицах для шагового двигателя и в шагах энкодера
 	* всех двигателей.
 	* @param id идентификатор устройства
-	* @param[out] the_get_position_calb структура, содержащая настройки движения: скорость, ускорение, и т.д.
+	* @param[out] get_position_calb структура, содержащая позицию мотора.
 	* @param calibration настройки пользовательских единиц
 	*
 	* \note
-	* Внимание! Некоторые параметры структуры the_get_position_calb корректируются таблицей коррекции координат.  
+	* Внимание! Некоторые параметры структуры get_position_calb корректируются таблицей коррекции координат.  
 	*
 	* \endrussian
 	*/
@@ -3101,14 +3101,14 @@ fields:
 	* and encoder steps of all engines. It means, that changing main
 	* indicator of position.
 	* @param id an identifier of device
-	* @param[out] the_set_position structure contains move settings: speed, acceleration, deceleration etc.
+	* @param[out] set_position structure contains motor position.
 	* \endenglish
 	* \russian
 	* Устанавливает произвольное значение положения в шагах и
 	* микрошагах для шагового двигателя и в шагах энкодера всех
 	* двигателей. То есть меняется основной показатель положения.
 	* @param id идентификатор устройства
-	* @param[out] position структура, содержащая настройки движения: скорость, ускорение, и т.д.
+	* @param[out] position структура, содержащая позицию мотора.
 	* \endrussian
 	*/
 /** $XIS
@@ -3130,14 +3130,14 @@ fields:
 	* and encoder value of all engines which use user units. It means, that changing main
 	* indicator of position.
 	* @param id an identifier of device
-	* @param[out] the_set_position_calb structure contains move settings: speed, acceleration, deceleration etc.
+	* @param[out] set_position_calb structure contains motor position.
 	* @param calibration user unit settings
 	* \endenglish
 	* \russian
 	* Устанавливает произвольное значение положения и значение энкодера всех
 	* двигателей с использованием пользовательских единиц. То есть меняется основной показатель положения.
 	* @param id идентификатор устройства
-	* @param[out] the_set_position_calb структура, содержащая настройки движения: скорость, ускорение, и т.д.
+	* @param[out] set_position_calb структура, содержащая позицию мотора.
 	* @param calibration настройки пользовательских единиц
 	* \endrussian
 	*/
@@ -3252,7 +3252,7 @@ command "read_robust_settings" writer "rers" (4)
 
 /** $XIW
 	* \english
-	* Save settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn`t change without it mechanical reconstruction.
+	* Save settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn't change without it mechanical reconstruction.
 	* Can be used by manufacturer only.
 	* @param id an identifier of device
 	* \endenglish
@@ -3266,7 +3266,7 @@ command "eesave_settings" writer "eesv" (4)
 
 /** $XIW
 	* \english
-	* Read settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn`t change without it mechanical reconstruction.
+	* Read settings from controller's RAM to stage's EEPROM memory, which spontaneity connected to stage and it isn't change without it mechanical reconstruction.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
@@ -3360,7 +3360,7 @@ fields:
 	int16s Upwr							/**< \english Power supply voltage, tens of mV. \endenglish \russian Напряжение на силовой части, десятки мВ. \endrussian */
 	int16s Iusb							/**< \english USB current, mA. \endenglish \russian Ток потребления по USB, мА. \endrussian */
 	int16s Uusb							/**< \english USB voltage, tens of mV. \endenglish \russian Напряжение на USB, десятки мВ. \endrussian */
-	int16s CurT							/**< \english Temperature in tenths of degrees C. \endenglish \russian Температура процессора в десятых долях градусов цельсия. \endrussian */
+	int16s CurT							/**< \english Temperature in tenths of degrees C. \endenglish \russian Температура процессора в десятых долях градусов Цельсия. \endrussian */
 	int32u flag Flags of StateFlags		/**< \english Set of flags specify motor shaft movement algorithm and list of limitations. This is a bit mask for bitwise operations. \endenglish \russian Флаги состояний. Это битовая маска для побитовых операций. \endrussian */
 	int32u flag GPIOFlags of GPIOFlags	/**< \english Set of flags of gpio states. This is a bit mask for bitwise operations. \endenglish \russian Флаги состояний GPIO входов. Это битовая маска для побитовых операций. \endrussian */
 	int8u CmdBufFreeSpace				/**< \english This field is a service field. It shows the amount of free cells buffer synchronization chain. \endenglish \russian Данное поле служебное. Оно показывает количество свободных ячеек буфера цепочки синхронизации. \endrussian */
@@ -3389,8 +3389,8 @@ command "start_measurements" writer "stms" (4)
   * \endenglish
   * \russian
   * Команда чтения буфера данных для построения графиков скорости и ошибки следования. Заполнение буфера начинается по команде "start_measurements".
-  * Буффер вмещает 25 точек, точки снимаются с периодом 1 мс. Для создания устойчивой системы следует считывать данные каждые 20 мс, если буффер
-  * полностью заполнен, то рекомендуется повторять считывания каждые 5 мс до момента пока буффер вновь не станет заполнен 20-ю точками.
+  * Буфер вмещает 25 точек, точки снимаются с периодом 1 мс. Для создания устойчивой системы следует считывать данные каждые 20 мс, если буфер
+  * полностью заполнен, то рекомендуется повторять считывания каждые 5 мс до момента пока буфер вновь не станет заполнен 20-ю точками.
   * @see measurements_t
   * @param id идентификатор устройства
   * @param[out] measurements структура с буфером и его длинной.
@@ -3401,7 +3401,7 @@ command "start_measurements" writer "stms" (4)
   * The buffer holds no more than 25 points. The exact length of the received buffer is reflected in the Length field.
   * \endenglish
   * \russian
-  * Буфер вмещает не более 25и точек. Точная длина полученного буффера отражена в поле Length.
+  * Буфер вмещает не более 25и точек. Точная длина полученного буфера отражена в поле Length.
   * \endrussian
   * @see measurements
   */
@@ -3474,7 +3474,7 @@ fields:
 	* \russian
 	* Команда чтения информации о контроллере.
 	* Контроллер отвечает на эту команду в любом состоянии. Поле Manufacturer для всех XI**
-	* девайсов должно содержать строку "XIMC" (по нему производится валидация).
+	* устройств должно содержать строку "XIMC" (по нему производится валидация).
 	* Остальные поля содержат информацию об устройстве.
 	* \endrussian
 	* @see get_device_information
@@ -3665,7 +3665,7 @@ fields:
 	int16s ACurrent			/**< \english "Winding A current" calibrated data (in mA). \endenglish \russian "Ток через обмотку А" откалиброванные данные (в мА). \endrussian */
 	int16s BCurrent			/**< \english "Winding B current" calibrated data (in mA). \endenglish \russian "Ток через обмотку B" откалиброванные данные (в мА). \endrussian */
 	int16s FullCurrent		/**< \english "Full current" calibrated data (in mA). \endenglish \russian "Полный ток" откалиброванные данные (в мА). \endrussian */
-	int16s Temp				/**< \english Temperature, calibrated data (in tenths of degrees Celcius). \endenglish \russian Температура, откалиброванные данные (в десятых долях градуса Цельсия). \endrussian */
+	int16s Temp				/**< \english Temperature, calibrated data (in tenths of degrees Celsius). \endenglish \russian Температура, откалиброванные данные (в десятых долях градуса Цельсия). \endrussian */
 	int16s Joy				/**< \english Joystick, calibrated data. Range: 0..10000 \endenglish \russian Джойстик во внутренних единицах. Диапазон: 0..10000 \endrussian */
 	int16s Pot				/**< \english Analog input, calibrated data. Range: 0..10000 \endenglish \russian Аналоговый вход во внутренних единицах. Диапазон: 0..10000 \endrussian */
 	int16s L5				/**< \english USB supply voltage after the current sense resistor (in tens of mV). \endenglish \russian Напряжение питания USB после current sense резистора (в десятках мВ). \endrussian */
@@ -3798,7 +3798,7 @@ without answer, public, crc
 	*/
 command "stage_name" universal "nme" (30)
 fields:
-	char PositionerName[16]			/**< \english User positioner name. Can be set by user for his/her convinience. Max string length: 16 chars. \endenglish \russian Пользовательское имя подвижки. Может быть установлено пользователем для его удобства. Максимальная длина строки: 16 символов. \endrussian */
+	char PositionerName[16]			/**< \english User positioner name. Can be set by user for his/her convenience. Max string length: 16 chars. \endenglish \russian Пользовательское имя подвижки. Может быть установлено пользователем для его удобства. Максимальная длина строки: 16 символов. \endrussian */
 	reserved 8
 
 /** $XIR
@@ -4242,7 +4242,7 @@ fields:
 	*/
 /** $XIS
 	* \english
-	* Gear setings.
+	* Gear settings.
 	* \endenglish
 	* \russian
 	* Настройки редуктора.
