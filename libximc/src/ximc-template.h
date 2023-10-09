@@ -397,7 +397,7 @@ extern "C"
 		* @param[in] uri - a device uri.
 		* Device uri has form "xi-com:port" or "xi-net://host/serial" or "xi-emu:///abs_path_to_file". For POSIX systems one can ommit root-slash in abs_path; for example, "xi-emu://home/user/virt_controller.bin". 
 		* In case of USB-COM port the "port" is the OS device uri.
-		* For example "xi-com:\\\.\COM3" in Windows or "xi-com:///dev/tty.s123" in Linux/Mac.
+		* For example "xi-com:\\\.\COM3" (taking into account '\' must be written as '\\' - "xi-com:\\\\\\.\\COM3") in Windows or "xi-com:///dev/tty.s123" in Linux/Mac.
 		* In case of network device the "host" is an IPv4 address or fully qualified domain uri (FQDN), "serial" is the device serial number in hexadecimal system.
 		* For example "xi-net://192.168.0.1/00001234" or "xi-net://hostname.com/89ABCDEF".
 		* In case of UDP protocol, use "xi-udp://<ip/host>:<port>.
@@ -411,7 +411,7 @@ extern "C"
 		* @param[in] uri - уникальный идентификатор устройства.
 		* Uri устройства имеет вид "xi-com:port" или "xi-net://host/serial" или "xi-emu:///abs_path_to_file". На POSIX системах допускается пропуск "рутовского" слэша; например, "xi-emu://home/user/virt_controller.bin".
 		* Для USB-COM устройства "port" это uri устройства в ОС.
-		* Например "xi-com:\\\.\COM3" в Windows или "xi-com:///dev/tty.s123" в Linux/Mac.
+		* Например "xi-com:\\\.\COM3" (с учётом экранировния '\' - "xi-com:\\\\\\.\\COM3") в Windows или "xi-com:///dev/tty.s123" в Linux/Mac.
 		* Для сетевого устройства "host" это IPv4 адрес или полностью определённое имя домена, "serial" это серийный номер устройства в шестнадцатеричной системе.
 		* Например "xi-net://192.168.0.1/00001234" или "xi-net://hostname.com/89ABCDEF".
 		* Для работы по UDP протоколу используйте "xi-udp://<ip/host>:<port>.
