@@ -530,7 +530,7 @@ flagset BorderFlags:
 BORDER_IS_ENCODER				= 0x01	/**< \english Borders are fixed by predetermined encoder values, if set; borders position on limit switches, if not set. \endenglish \russian Если флаг установлен, границы определяются предустановленными точками на шкале позиции. Если флаг сброшен, границы определяются концевыми выключателями. \endrussian */
 BORDER_STOP_LEFT				= 0x02	/**< \english Motor should stop on left border. \endenglish \russian Если флаг установлен, мотор останавливается при достижении левой границы. \endrussian */
 BORDER_STOP_RIGHT				= 0x04	/**< \english Motor should stop on right border. \endenglish \russian Если флаг установлен, мотор останавливается при достижении правой границы. \endrussian */
-BORDERS_SWAP_MISSET_DETECTION	= 0x08	/**< \english Motor should stop on both borders. Need to save motor then wrong border settings is set\endenglish \russian Если флаг установлен, мотор останавливается при достижении обоих границ. Нужен для предотвращения поломки двигателя при неправильных настройках концевиков \endrussian */
+BORDERS_SWAP_MISSET_DETECTION	= 0x08	/**< \english Motor should stop on both borders. Need to save motor then wrong border settings is set\endenglish \russian Если флаг установлен, мотор останавливается при достижении обоих границ. Нужен для предотвращения поломки двигателя при неправильных настройках концевых выключателей \endrussian */
 
 /**
 	* \english
@@ -1844,15 +1844,16 @@ fields:
 
 /** $XIR
 	* \english
-	* Read settings of motor control.
-	* When choosing CTL_MODE = 1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i = 0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE = 2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+	* Read motor control settings.
+	*
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* @param id an identifier of device
 	* @param[out] control_settings structure contains settings motor control by joystick or buttons left/right.
 	* \endenglish
@@ -1872,15 +1873,16 @@ fields:
 	*/
 /** $XIW
 	* \english
-	* Set settings of motor control.
-	* When choosing CTL_MODE = 1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i = 0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE = 2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+	* Read motor control settings.
+	*
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* @param id an identifier of device
 	* @param[in] control_settings structure contains settings motor control by joystick or buttons left/right.
 	* \endenglish
@@ -1902,15 +1904,14 @@ fields:
 	* \english
 	* Control settings.
 	* This structure contains control parameters.
-	* When choosing CTL_MODE=1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i=0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE=2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout[i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i+1] to acceleration, as usual.
-	* The figure above shows the sensitivity of the joystick feature on its position.
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* \endenglish
 	* \russian
 	* Настройки управления.
@@ -1928,15 +1929,16 @@ fields:
 	*/
 /** $XIRC
 	* \english
-	* Read settings of motor control which use user units.
-	* When choosing CTL_MODE = 1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i = 0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE = 2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+	* Set calibrated motor control settings.
+	*
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* @param id an identifier of device
 	* @param[out] control_settings_calb structure contains settings motor control by joystick or buttons left/right.
 	* @param calibration user unit settings
@@ -1958,15 +1960,16 @@ fields:
 	*/
 /** $XIWC
 	* \english
-	* Set settings of motor control which use user units.
-	* When choosing CTL_MODE = 1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i = 0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE = 2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout [i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i +1] to acceleration, as usual.
+	* Set motor control settings.
+	*
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* @param id an identifier of device
 	* @param[in] control_settings_calb structure contains settings motor control by joystick or buttons left/right.
 	* @param calibration user unit settings
@@ -1990,15 +1993,14 @@ fields:
 	* \english
 	* Control settings which use user units.
 	* This structure contains control parameters.
-	* When choosing CTL_MODE=1 switches motor control with the joystick.
-	* In this mode, the joystick to the maximum engine tends
-	* Move at MaxSpeed [i], where i=0 if the previous use
-	* This mode is not selected another i. Buttons switch the room rate i.
-	* When CTL_MODE=2 is switched on motor control using the
-	* Left / right. When you click on the button motor starts to move in the appropriate direction at a speed MaxSpeed [0],
-	* at the end of time Timeout[i] motor move at a speed MaxSpeed [i+1]. at
-	* Transition from MaxSpeed [i] on MaxSpeed [i+1] to acceleration, as usual.
-	* The figure above shows the sensitivity of the joystick feature on its position.
+        * In case of CTL_MODE=1 joystick motor control is enabled. In this mode while the joystick is maximally displaced
+        * the engine tends to move at MaxSpeed[i]. i=0 if other value hasn't been set at the previous usage. To change
+        * speed index i use buttons.
+	*
+        * In case of CTL_MODE=2 the motor is controlled by the left/right buttons. When you click on the button, motor
+        * starts moving in the appropriate direction at a speed MaxSpeed[0]. After Timeout[i] motor moves at speed
+        * MaxSpeed[i+1]. At transition between MaxSpeed[i] and MaxSpeed[i+1] the motor just accelerates/decelerates, as
+        * usual.
 	* \endenglish
 	* \russian
 	* Настройки управления с использованием пользовательских единиц.
@@ -2030,17 +2032,12 @@ fields:
 /** $XIR
 	* \english
 	* Read settings of joystick.
-	* If joystick position is outside DeadZone limits from the central position a movement with speed,
-	* defined by the joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits
-	* correspond to zero speed (soft stop of motion) and positions beyond Low and High limits correspond MaxSpeed [i]
-	* or -MaxSpeed [i] (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL).
-	* If next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list shouldn't be zero.
-	* The DeadZone ranges are illustrated on the following picture.
-	* !/attachments/download/5563/range25p.png!
-	* The relationship between the deviation and the rate is exponential,
-	* allowing no switching speed combine high mobility and accuracy. The following picture illustrates this:
-	* !/attachments/download/3092/ExpJoystick.png!
-	* The nonlinearity parameter is adjustable. Setting it to zero makes deviation/speed relation linear.
+	* If joystick position is outside DeadZone limits from the central position a movement with speed, defined by the
+        * joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits correspond to zero
+        * speed (soft stop of motion) and positions beyond Low and High limits correspond to MaxSpeed[i] or -MaxSpeed[i]
+        * (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL). If
+        * next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list
+        * shouldn't be zero. See Joystick control section on https://doc.xisupport.com for more information.
 	* @param id an identifier of device
 	* @param[out] joystick_settings structure contains joystick settings
 	* \endenglish
@@ -2052,12 +2049,8 @@ fields:
 	* использованием этого режима не было выбрано другое i.
 	* Если следующая скорость в таблице скоростей нулевая (целая и микрошаговая части), то перехода на неё не происходит.
 	* DeadZone вычисляется в десятых долях процента отклонения
-	* от центра (JoyCenter) до правого или левого максимума. Расчёт DeadZone проиллюстрирован на графике: !/attachments/download/5563/range25p.png!
-	* Зависимость между отклонением и скоростью экспоненциальная,
-	* что позволяет без переключения режимов скорости сочетать высокую подвижность и точность. На графике ниже показан
-	* пример экспоненциальной зависимости скорости и работы мертвой зоны.
-	* !/attachments/download/3092/ExpJoystick.png!
-	* Параметр нелинейнойсти можно менять. Нулевой параметр нелинейности соответствует линейной зависимости.
+	* от центра (JoyCenter) до правого или левого максимума. Подробнее см. раздел "Управление с помощью джойстика" на сайте
+	* https://doc.xisupport.com.
 	* @param id идентификатор устройства
 	* @param[out] joystick_settings структура, содержащая настройки джойстика
 	* \endrussian
@@ -2065,17 +2058,12 @@ fields:
 /** $XIW
 	* \english
 	* Set settings of joystick.
-	* If joystick position is outside DeadZone limits from the central position a movement with speed,
-	* defined by the joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits
-	* correspond to zero speed (soft stop of motion) and positions beyond Low and High limits correspond MaxSpeed [i]
-	* or -MaxSpeed [i] (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL).
-	* If next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list shouldn't be zero.
-	* The DeadZone ranges are illustrated on the following picture.
-	* !/attachments/download/5563/range25p.png!
-	* The relationship between the deviation and the rate is exponential,
-	* allowing no switching speed combine high mobility and accuracy. The following picture illustrates this:
-	* !/attachments/download/3092/ExpJoystick.png!
-	* The nonlinearity parameter is adjustable. Setting it to zero makes deviation/speed relation linear.
+	* If joystick position is outside DeadZone limits from the central position a movement with speed, defined by the
+        * joystick DeadZone edge to 100% deviation, begins. Joystick positions inside DeadZone limits correspond to zero
+        * speed (soft stop of motion) and positions beyond Low and High limits correspond to MaxSpeed[i] or -MaxSpeed[i]
+        * (see command SCTL), where i = 0 by default and can be changed with left/right buttons (see command SCTL). If
+        * next speed in list is zero (both integer and microstep parts), the button press is ignored. First speed in list
+        * shouldn't be zero. See Joystick control section on https://doc.xisupport.com for more information.
 	* @param id an identifier of device
 	* @param[in] joystick_settings structure contains joystick settings
 	* \endenglish
@@ -2087,12 +2075,8 @@ fields:
 	* использованием этого режима не было выбрано другое i.
 	* Если следующая скорость в таблице скоростей нулевая (целая и микрошаговая части), то перехода на неё не происходит.
 	* DeadZone вычисляется в десятых долях процента отклонения
-	* от центра (JoyCenter) до правого или левого максимума. Расчёт DeadZone проиллюстрирован на графике: !/attachments/download/5563/range25p.png!
-	* Зависимость между отклонением и скоростью экспоненциальная,
-	* что позволяет без переключения режимов скорости сочетать высокую подвижность и точность. На графике ниже показан
-	* пример экспоненциальной зависимости скорости и работы мертвой зоны.
-	* !/attachments/download/3092/ExpJoystick.png!
-	* Параметр нелинейнойсти можно менять. Нулевой параметр нелинейности соответствует линейной зависимости.
+	* от центра (JoyCenter) до правого или левого максимума. Подробнее см. раздел "Управление с помощью джойстика" на сайте
+	* https://doc.xisupport.com.
 	* @param id идентификатор устройства
 	* @param[in] joystick_settings структура, содержащая настройки джойстика
 	* \endrussian
@@ -2696,11 +2680,11 @@ fields:
 
 /**  $XIW
 	* \english
-	* Immediately stop the engine, the transition to the STOP, mode
-	* key BREAK (winding short-circuited), the regime "retention" is
-	* deactivated for DC motors, keeping current in the windings for
-	* stepper motors (with Power management settings).
-	* When this command is called, the ALARM flag is reset.
+	* Immediately stops the engine, moves it to the STOP state, sets switches to BREAK mode (winding
+        * short-circuited). The holding regime is deactivated for DC motors, keeping current in the windings
+        * for stepper motors (to control it see Power management settings).
+	*
+        * When this command is called, the ALARM flag is reset.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
@@ -2920,36 +2904,40 @@ fields:
 
 /** $XIW
 	* \english
-	* The positive direction is to the right. A value of zero reverses the direction of the
-	* direction of the flag, the set speed.
-	* Restriction imposed by the trailer, act the same, except that the limit switch contact
-	* does not stop. Limit the maximum speed, acceleration and deceleration function.
-	* 1) moves the motor according to the speed FastHome, uFastHome and flag HOME_DIR_FAST until
-	* limit switch, if the flag is set HOME_STOP_ENDS, until the signal from the input synchronization if
-	* the flag HOME_STOP_SYNC (as accurately as possible is important to catch the moment of operation limit switch)
-	* or until the signal is received from the speed sensor, if the flag HOME_STOP_REV_SN
-	* 2) then moves according to the speed SlowHome, uSlowHome and flag HOME_DIR_SLOW until
-	* signal from the clock input, if the flag HOME_MV_SEC. If the flag HOME_MV_SEC reset
-	* skip this paragraph.
-	* 3) then move the motor according to the speed FastHome, uFastHome and flag HOME_DIR_SLOW a distance
-	* HomeDelta, uHomeDelta.
-	* description of flags and variable see in description for commands GHOM/SHOM
+	* Moving to home position.
+	*
+        * Moving algorithm:
+	*
+        * 1) moves the motor according to the speed FastHome, uFastHome and flag HOME_DIR_FAST until limit switch, if the
+        * flag is set HOME_STOP_ENDS. Or moves the motor  until the signal from the input synchronization if the flag HOME_STOP_SYNC.
+        * Or until the signal is received from the revolution sensor, if the flag HOME_STOP_REV_SN
+	*
+        * 2) then moves according to the speed SlowHome, uSlowHome and flag HOME_DIR_SLOW until signal from the clock
+        * input, if the flag HOME_MV_SEC. If the flag HOME_MV_SEC is reset, skip this step.
+	*
+        * 3) then move the motor according to the speed FastHome, uFastHome and flag HOME_DIR_SLOW a distance HomeDelta,
+        * uHomeDelta. Description of flags and variable see in description for commands GHOM/SHOM
+	*
+        * Moving settings can be set by set_home_settings/set_home_settings_calb.
 	* @param id an identifier of device
 	* \endenglish
 	* \russian
-	* Поля скоростей знаковые. Положительное направление это вправо. Нулевое значение флага
-	* направления инвертирует направление, заданное скоростью.
-	* Ограничение, накладываемые концевиками, действуют так же, за исключением того, что касание
-	* концевика не приводит к остановке. Ограничения максимальной скорости, ускорения и замедления действуют.
+	* Движение в домашнюю позицию.
+	*
+	* Алгоритм движения:
+	*
 	* 1) Двигает мотор согласно скоростям FastHome, uFastHome и флагу HOME_DIR_FAST до достижения
-	* концевика, если флаг HOME_STOP_ENDS установлен, до достижения сигнала с входа синхронизации, если
-	* установлен флаг HOME_STOP_SYNC (важно как можно точнее поймать момент срабатывания концевика)
-	* или  до поступления сигнала с датчика оборотов, если установлен флаг HOME_STOP_REV_SN
+	* концевого выключателя, если флаг HOME_STOP_ENDS установлен. Или двигает  до достижения сигнала
+	* с входа синхронизации, если установлен флаг HOME_STOP_SYNC. Или до поступления сигнала с датчика
+	* оборотов, если установлен флаг HOME_STOP_REV_SN
+	*
 	* 2) далее двигает согласно скоростям SlowHome, uSlowHome и флагу HOME_DIR_SLOW до достижения
 	* сигнала с входа синхронизации, если установлен флаг HOME_MV_SEC. Если флаг HOME_MV_SEC сброшен,
 	* пропускаем этот пункт.
+	*
 	* 3) далее двигает мотор согласно скоростям FastHome, uFastHome и флагу HOME_DIR_SLOW на расстояние
 	* HomeDelta, uHomeDelta.
+	*
 	* Описание флагов и переменных см. описание команд GHOM/SHOM
 	* @param id идентификатор устройства
 	* \endrussian
@@ -3097,16 +3085,14 @@ fields:
 
 /** $XIW
 	* \english
-	* Sets any position value in steps and micro for stepper motor
-	* and encoder steps of all engines. It means, that changing main
-	* indicator of position.
+	* Sets position in steps and microsteps for stepper motor. Sets encoder position for all engines.
 	* @param id an identifier of device
 	* @param[out] set_position structure contains motor position.
 	* \endenglish
 	* \russian
 	* Устанавливает произвольное значение положения в шагах и
-	* микрошагах для шагового двигателя и в шагах энкодера всех
-	* двигателей. То есть меняется основной показатель положения.
+	* микрошагах для шагового двигателя и в шагах энкодера для всех
+	* двигателей.
 	* @param id идентификатор устройства
 	* @param[out] position структура, содержащая позицию мотора.
 	* \endrussian
@@ -3126,16 +3112,14 @@ fields:
 	*/
 /** $XIWC
 	* \english
-	* Sets any position value
-	* and encoder value of all engines which use user units. It means, that changing main
-	* indicator of position.
+	* Sets any position value and encoder value of all engines which use user units.
 	* @param id an identifier of device
 	* @param[out] set_position_calb structure contains motor position.
 	* @param calibration user unit settings
 	* \endenglish
 	* \russian
 	* Устанавливает произвольное значение положения и значение энкодера всех
-	* двигателей с использованием пользовательских единиц. То есть меняется основной показатель положения.
+	* двигателей с использованием пользовательских единиц.
 	* @param id идентификатор устройства
 	* @param[out] set_position_calb структура, содержащая позицию мотора.
 	* @param calibration настройки пользовательских единиц
@@ -4310,7 +4294,7 @@ fields:
 	float TSMax						/**< \english The maximum measured temperature (degrees Celsius) Data type: float. \endenglish \russian Максимальная измеряемая температура (град Цельсия) Тип данных: float. \endrussian */ 
 	float TSGrad					/**< \english The temperature gradient (V/degrees Celsius). Data type: float. \endenglish \russian Температурный градиент (В/град Цельсия). Тип данных: float. \endrussian */ 
 	int32u flag TSSettings of TSSettingsFlags 	/**< \english Flags of temperature sensor settings. This is a bit mask for bitwise operations. \endenglish \russian Флаги настроек температурного датчика. Это битовая маска для побитовых операций. \endrussian */ 
-	int32u flag LimitSwitchesSettings of LSFlags	/**< \english Flags of limit switches settings. This is a bit mask for bitwise operations. \endenglish \russian Флаги настроек концевиков. Это битовая маска для побитовых операций. \endrussian */ 
+	int32u flag LimitSwitchesSettings of LSFlags	/**< \english Flags of limit switches settings. This is a bit mask for bitwise operations. \endenglish \russian Флаги настроек концевых выключателей. Это битовая маска для побитовых операций. \endrussian */ 
 	reserved 24	
 	
 //@}
