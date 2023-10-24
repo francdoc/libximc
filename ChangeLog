@@ -1,3 +1,10 @@
+libximc (2.15.8-1)
+  * Released: Tue, 24 Oct 2023 10:58:59 +0300
+  * Version bump
+  * version bump
+  * Install xigen to deps directory
+  * Experimental building changes in build.bat. See #85413
+
 libximc (2.15.7-1)
   * Released: Thu, 24 Aug 2023 19:21:44 +0300
   * Version bump
